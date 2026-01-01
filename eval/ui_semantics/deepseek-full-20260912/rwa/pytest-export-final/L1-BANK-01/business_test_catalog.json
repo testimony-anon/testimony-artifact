@@ -1,0 +1,260 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac",
+      "e9a9c33f53d8d476cd89bc7d8330bd34377ff6fa1b86daffaca32987ebfcd843"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021525-3189:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "delta": 1,
+          "family": "P12"
+        },
+        "predicate_type": "P12"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P12 requires collection count after $.data.listBankAccount (array) minus before $.data.listBankAccount (array) to equal 1.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "e9a9c33f53d8d476cd89bc7d8330bd34377ff6fa1b86daffaca32987ebfcd843",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021525-3189:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021525-3189:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021525-3189:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor recorded lifecycle: ListBankAccount before (request:0, $.data.listBankAccount array) and after (request:6, identical recorded request body) bound to the CreateBankAccount effect source (request:4). The visible collection_count transition fact records before_value 1, after_value 2 at $.data.listBankAccount with signed_delta 1 and grounding_status unique_target_relevant, whose groundable_effect_source_request_ref equals request:4; P12 delta copies that signed +1. The fact is a neutral comparable-read observation, not proof of causality. setup uses the only eligible setup action for request:4 (workflow-action-0000), which is also the recorded lineage source of $.data.listBankAccount[0].userId consumed as $.variables.userId by request:4 (vf-19875d7edf2322644be2a784); the setup hypothesis is ranked, not proven.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Recorded collection_count transition fact (target_path $.data.listBankAccount, before_value 1, after_value 2, signed_delta 1) between the same-actor ListBankAccount reads request:0 and request:6; its write_competition is unique_target_relevant with groundable_effect_source_request_ref exactly request:4 (CreateBankAccount), so the fact's exact array path and signed delta are copied into P12. Setup action workflow-action-0000 is the only eligible setup action for request:4 (the recorded bank-accounts navigation click); causality of the write remains a hypothesis, not proven by the fact.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Transition fact transition-fact-d58d579060f7799db442afc5 is a collection_count observation on $.data.listBankAccount between request:0 (1) and request:6 (2) with signed_delta 1, grounding_status unique_target_relevant and groundable_effect_source_request_ref request:4; P12 copies that exact array path and signed delta and does not assert that the create caused the increase. Setup cites the only setup-eligible action for request:4 (workflow-action-0000); the recorded userId value flow from the request:0 response into the request:4 body is the strongest available lineage support, so setup is a ranked hypothesis, not proof.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same actor/session: request:0 and request:6 carry the identical ListBankAccount selector, and request:4 (CreateBankAccount) is the only write between them (write_competition grounding_status unique_target_relevant, groundable_effect_source_request_ref = request:4). transition-fact-d58d579060f7799db442afc5 records collection_count on $.data.listBankAccount from 1 to 2 with signed_delta +1; P12 copies that exact array path and delta. Navigation click workflow-action-0000 is the only eligible setup action for the effect source; its role as a prerequisite is a ranked, uncertain hypothesis.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Shared actor_a/session reads of the identical ListBankAccount operation bracket the CreateBankAccount mutation: request:0 reports the $.data.listBankAccount collection with count 1 and request:6 with count 2, and transition-fact-d58d579060f7799db442afc5 (observation_kind collection_count, target_path $.data.listBankAccount, signed_delta +1, grounding_status unique_target_relevant) attributes that collection-membership write to request:4, which is visible in this region and exactly equals groundable_effect_source_request_ref. The relation is therefore expressed as C01/P12 with delta copied from the fact; the attributed direction is observation-derived, not proven causality. Setup uses the single eligible setup action workflow-action-0000 whose response scalar ($.data.listBankAccount[0].userId) is recorded flowing into the prepared create body ($.variables.userId, vf-19875d7edf2322644be2a784), i.e. locator lineage rather than mere temporal adjacency.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Visible collection_count transition fact transition-fact-d58d579060f7799db442afc5 measures $.data.listBankAccount length 1 at request:0 and 2 at request:6 with signed_delta +1, grounding_status unique_target_relevant and groundable_effect_source_request_ref = request:4. Both reads are the same actor/session post_graphql ListBankAccount selector, so the create mutation is declared effect_source; delta and path are copied exactly from the fact. Observed temporal association, not proven causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-500c1d6f3bea34c2b8cd"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021525-3189:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021525-3189:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021525-3189:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021525-3189:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The same visible +1 collection_count fact (unique_target_relevant, groundable effect source request:4) plus the CreateBankAccount response object $.data.createBankAccount give an added-member relation: the freshly created resource (identity field $.id, matching the visible collection item field $.id) is proposed as the member added to $.data.listBankAccount between the request:0 and request:6 reads. The identity tuple is frozen from visible response-shape paths; the recording does not itself prove the created id appears in the after list, so the relation remains a proposal.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The CreateBankAccount mutation response object $.data.createBankAccount (id present, shape-a2d2c53037a48c732a4d04fe) is proposed as the added member of the list observed after the write: the before read returns one list member and the after read returns two (collection_count fact), whose visible '-1' member is the configured-'Alpha Bank' row added by ui-diff-0002, and the recorded userId value movement request:0 -> request:4 binds the new member to the same account.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The create request:4 response carries a single created object at $.data.createBankAccount (id/uuid/bankName/...), and the collection $.data.listBankAccount grew by exactly one ($.data.listBankAccount 1→2, signed_delta +1) while ui-diff-0002 shows one new account row ('Alpha Bank'). The identity field pair member $.id ↔ collection item $.id and the member path are frozen hypotheses; no member_identity_state_evidence or locator witness was recorded, so the member-level attribution is proposed, not proven.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The create mutation response exposes one created account object at $.data.createBankAccount (id, uuid, bankName ... in shape-a2d2c53037a48c732a4d04fe) and the follow-up ListBankAccount read request:6 returns the same account collection shape; the member identity is the created resource id, checked as a strict tuple against the collection member id in the before/after list reads. The membership in the before read is not established by this candidate; it is a proposed addition hypothesis, not proven causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-564399abe53b4f52e7e4"
+    }
+  ]
+}

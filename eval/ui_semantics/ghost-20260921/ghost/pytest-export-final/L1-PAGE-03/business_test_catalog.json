@@ -1,0 +1,2104 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 8,
+    "business_relation_occurrence_count": 21,
+    "canonical_relation_core_identities": [
+      "0d361736a7408455f44457f7d2e6d1d31f9baba253dc6116e638b50b0787b1e3",
+      "17e676e2e248e96b36aac7871e66f492b2380cd20fa5e9402e6d86bbfafb3dff",
+      "29035af3f3ebb7c06fc0968c1431aa478d76395c7f92e47c83fb601475335f8b",
+      "36b44422234268de1147474cc48d163a7dd7649ab7fec15ce2a4d3b1b4044f15",
+      "3b26d651e2806e951f7cea2fc6133bbac3cce9cae4a4faf0d8b58d70932dd192",
+      "3be3e34c642d85373556ffae24f1ea50ae18954542e8253ef710dff41bdd58ba",
+      "3bfadfda277183c407f557a1d8f6ed236fbefff3351023fc48c505a849ea0a9f",
+      "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "4dfb39f0e6632379b270fea3b5f63a84047ad7355d8cdd73248b879ae4487538",
+      "6cd0ecc82b3788178a7e7ead48f446eef078e52a6cba159694ae9fd2c822851a",
+      "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "7b61c1095e9531e187736271cf7e27c123518675ea9eaa9297c9117faef42750",
+      "ddf79f62763e627342d15105e1d0e3e3134e7a765b9cfd5ebc3724482c4fb84d",
+      "f68f60eacca8f4958d833aa2203c69a8b3ccf302065bed1a2f55c1e2422b0efd"
+    ],
+    "duplicate_core_occurrence_count": 15,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0012",
+      "v2-candidate-0014",
+      "v2-candidate-0018",
+      "v2-candidate-0019",
+      "v2-candidate-0022",
+      "v2-candidate-0023",
+      "v2-candidate-0035",
+      "v2-candidate-0036",
+      "v2-candidate-0037",
+      "v2-candidate-0038",
+      "v2-candidate-0039",
+      "v2-candidate-0040",
+      "v2-candidate-0041",
+      "v2-candidate-0042",
+      "v2-candidate-0043",
+      "v2-candidate-0044",
+      "v2-candidate-0045",
+      "v2-candidate-0046"
+    ],
+    "physical_retained_test_occurrence_count": 29,
+    "unique_canonical_relation_core_count": 14
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.snippets",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/snippets/; basic constraint P11 requires count(observation $.snippets (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "3be3e34c642d85373556ffae24f1ea50ae18954542e8253ef710dff41bdd58ba",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/snippets/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:24"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Mechanically read-only GET /ghost/api/admin/snippets/ carries exactly one query.limit='100' (strict integer text) and its recorded response shape exposes $.snippets as an array; the observed request/response pair supports the proposed page-size bound on the returned collection, not a proven server specification.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded read of get_ghost_api_admin_snippets sends the unique query parameter limit=100 (strict integer text) and its actual response exposes the $.snippets array; the returned array length is proposed to be at most this request's own limit.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/snippets/ carries the unique query limit=100 and its response shape exposes the array $.snippets, so the proposed actual-response count of $.snippets is at most this request's own query.limit. Bound to the actual outgoing request at execution; not evidence of server behavior.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Recorded read GET /ghost/api/admin/snippets/ sends the unique query parameter limit=100 (strict integer text) and its response exposes the $.snippets array; the relation proposes that this returned array holds at most limit members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded snippets read declares query.limit=100 and returns $.snippets as an array; the returned page length is proposed as at most that actual request limit.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded snippet read carries a single nonnegative integer query limit (100) and returns a $.snippets array; the frozen claim is that the returned member count does not exceed that actual outgoing limit.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The snippets read declares a single query.limit of 100 and returns a $.snippets array; proposed as a request-semantic bound that the returned array length does not exceed that recorded limit.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-eb2371d38ea3d82bca8a"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.posts",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/posts/; basic constraint P11 requires count(observation $.posts (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "36b44422234268de1147474cc48d163a7dd7649ab7fec15ce2a4d3b1b4044f15",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:25"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Mechanically read-only GET /ghost/api/admin/posts/ with filter=status:published and exactly one query.limit='5' (strict integer text); the recorded response shape exposes $.posts as an array, so the observed request/response pair supports the proposed page-size bound on the returned collection.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded read of get_ghost_api_admin_posts sends the unique query parameter limit=5 (strict integer text) and its actual response exposes the $.posts array; the returned array length is proposed to be at most this request's own limit.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/posts/ with filter=status:published carries the unique query limit=5 and its response shape exposes the array $.posts, so the proposed actual-response count of $.posts is at most this request's own query.limit.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Recorded read GET /ghost/api/admin/posts/ sends the unique query parameter limit=5 (strict integer text) and its response exposes the $.posts array; the relation proposes that this returned array holds at most limit members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded published-posts read declares query.limit=5 and returns $.posts as an array; the returned page length is proposed as at most that actual request limit, bound to the executed outgoing request rather than the recording value.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The recorded posts read carries one query limit (5) and returns a $.posts array of member objects; the frozen claim is that the page member count does not exceed the actual outgoing limit, independent of the recorded values.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The published-posts read declares a single query.limit of 5 and returns a $.posts array; proposed as a request-semantic bound that the returned array length does not exceed that recorded limit.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-67a9cfb2f0d40fcca213"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.posts",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/posts/; basic constraint P15 requires observation $.posts (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "17e676e2e248e96b36aac7871e66f492b2380cd20fa5e9402e6d86bbfafb3dff",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:25"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded response shape of request:25 exposes $.posts[*].id as a string member field, so $.id is a visible frozen key for a strict-tuple uniqueness claim over the actual returned $.posts array; scope is limited to this single response and says nothing about other pages.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The actual response of this recorded read exposes $.posts[*].id as a string member field; the complete returned array is proposed to contain no duplicate strict-tuple id within the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-d775c6bb511a35079ac1"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.posts",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/search-index/posts/; basic constraint P15 requires observation $.posts (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "3bfadfda277183c407f557a1d8f6ed236fbefff3351023fc48c505a849ea0a9f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/search-index/posts/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:29"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded response shape of the search-index posts read exposes $.posts[*].id as a string member field, so $.id is a visible frozen key for a strict-tuple uniqueness claim over this one actual response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 10,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[9].rationale",
+          "raw_rationale": "The actual response of this recorded search-index posts read exposes $.posts[*].id as a string member field; the complete returned array of this distinct operation is proposed to contain no duplicate strict-tuple id within the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/search-index/posts/ exposes the visible member key $.posts[*].id on every member, so a single-response uniqueness claim over the complete returned $.posts array on that frozen strict-tuple key is expressible.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-42d32a2f234babb6428c"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.pages",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/search-index/pages/; basic constraint P15 requires observation $.pages (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "6cd0ecc82b3788178a7e7ead48f446eef078e52a6cba159694ae9fd2c822851a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/search-index/pages/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:30"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The recorded response shape of the search-index pages read exposes $.pages[*].id as a string member field, supporting $.id as the frozen strict-tuple identity key for uniqueness over this single actual response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "The actual response of this recorded search-index pages read exposes $.pages[*].id as a string member field; the complete returned array is proposed to contain no duplicate strict-tuple id within the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/search-index/pages/ exposes the visible member key $.pages[*].id on every member, so a single-response uniqueness claim over the complete returned $.pages array on that frozen strict-tuple key is expressible. This is the read whose $.pages[0].id is observed flowing into the later stats request body, but the flow is cited only as where the value moved, not as causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-667cd6545e7d6c1a03ed"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.users",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/search-index/users/; basic constraint P15 requires observation $.users (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "ddf79f62763e627342d15105e1d0e3e3134e7a765b9cfd5ebc3724482c4fb84d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/search-index/users/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:27"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The recorded response shape of the search-index users read exposes $.users[*].id as a string member field, supporting $.id as the frozen strict-tuple identity key for uniqueness over this single actual response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "The actual response of this recorded search-index users read exposes $.users[*].id as a string member field; the complete returned array is proposed to contain no duplicate strict-tuple id within the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/search-index/users/ exposes the visible member key $.users[*].id on every member, so a single-response uniqueness claim over the complete returned $.users array on that frozen strict-tuple key is expressible. It asserts nothing beyond the actual returned array; missing/redacted keys stay unknown.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-894f93c1eae3d78ac343"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.tags",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/search-index/tags/; basic constraint P15 requires observation $.tags (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "4dfb39f0e6632379b270fea3b5f63a84047ad7355d8cdd73248b879ae4487538",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/search-index/tags/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:28"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The recorded response shape of the search-index tags read exposes $.tags[*].id as a string member field, supporting $.id as the frozen strict-tuple identity key for uniqueness over this single actual response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 9,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[8].rationale",
+          "raw_rationale": "The actual response of this recorded search-index tags read exposes $.tags[*].id as a string member field; the complete returned array is proposed to contain no duplicate strict-tuple id within the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The recorded GET /ghost/api/admin/search-index/tags/ exposes the visible member key $.tags[*].id on every member, so a single-response uniqueness claim over the complete returned $.tags array on that frozen strict-tuple key is expressible.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b2af711f8cfd4f64d0e5"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires source_query $.posts (array) equal followup_query:q1 $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded GET /ghost/api/admin/posts/ reads carry the exact same visible query selectors (filter=status:published, fields=id,url,title,visibility,published_at, order=published_at desc, limit=5, formats=mobiledoc,lexical), so the frozen observed selector change is an equivalence rather than a refinement, expansion or sort.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "7b61c1095e9531e187736271cf7e27c123518675ea9eaa9297c9117faef42750",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two same-actor/session reads of the same observed operation get_ghost_api_admin_posts with identical selectors returned responses with the identical body_sha256 and the same $.posts array shape; proposed equal-input equality of the complete member multiset (no member fields are dropped).",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a584001d69ccbfe1fcec"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          },
+          "comparison_basis": "full_json_value",
+          "direction": "desc",
+          "family": "P16",
+          "identity": null,
+          "key": "$.published_at",
+          "nulls": "last",
+          "parameters": {
+            "evidence_refs": [
+              "r20260920-170341-a20d:request:25",
+              "r20260920-170341-a20d:request:26"
+            ],
+            "rationale": "The recorded order selector on both reads is 'published_at desc', and every returned member carries a visible $.posts[*].published_at string; the key, direction and tie handling are frozen from that visible selector.",
+            "source": "hypothesis",
+            "value": {
+              "direction": "desc",
+              "key": "$.published_at",
+              "nulls": "last",
+              "ties": "unordered"
+            },
+            "value_type": "object"
+          },
+          "projection": [],
+          "ties": "unordered"
+        },
+        "predicate_type": "P16"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P16 requires order by $.published_at desc, nulls last, ties unordered, AND multiset preservation; basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['order'], 'kind': 'sort', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': \"The visible order selector 'published_at desc' is frozen on both reads; only this sort selector is described, all other selectors are unchanged between the two reads.\", 'source': 'hypothesis', 'value': 'sort', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "3b26d651e2806e951f7cea2fc6133bbac3cce9cae4a4faf0d8b58d70932dd192",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The two recorded admin posts reads share the visible order selector 'published_at desc' over members that expose $.published_at; the proposition freezes that ordering together with full-member multiset preservation over the returned $.posts arrays.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9b84eed2387adcf78d9c"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.snippets",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.meta.pagination.total",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-170341-a20d:request:24"
+            ],
+            "rationale": "The returned $.snippets array and the pagination total count the same snippet items, so the frozen unit of both sides is items; not prevalidated.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/snippets/; business relation P19 requires observation $.meta.pagination.total (integer) = count(observation $.snippets (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "29035af3f3ebb7c06fc0968c1431aa478d76395c7f92e47c83fb601475335f8b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/snippets/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:24"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "One recorded read of get_ghost_api_admin_snippets returns both the $.snippets array and an integer $.meta.pagination.total with page=1 and next=null; the single-response aggregation proposes that the reported total equals the number of actual members of the complete returned array (scope actual_response, duplicates included).",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "One actual response contains both a $.snippets array and an integer $.meta.pagination.total; proposed as a single-response aggregation hypothesis that the returned member count equals the recorded pagination total.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b63b899955bf6793f24d"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.posts",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.meta.pagination.total",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-170341-a20d:request:25"
+            ],
+            "rationale": "The returned $.posts array and the pagination total count the same post items, so the frozen unit of both sides is items; not prevalidated.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/posts/; business relation P19 requires observation $.meta.pagination.total (integer) = count(observation $.posts (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "f68f60eacca8f4958d833aa2203c69a8b3ccf302065bed1a2f55c1e2422b0efd",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:25"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "One recorded read of get_ghost_api_admin_posts returns the $.posts array and an integer $.meta.pagination.total with page=1 and next=null; the single-response aggregation proposes that the reported total equals the number of actual members of the complete returned array (scope actual_response, duplicates included).",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e821069abff380a5ce1f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded posts reads carry the same query parameter names and the same visible values (fields=id,url,title,visibility,published_at; filter=status:published; formats=mobiledoc,lexical; limit=5; order=published_at desc), so no selector differs.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two recorded GET /ghost/api/admin/posts/ reads by the same actor in the same session (global_order 1 and 2) have identical visible query selectors and identical response body hashes, grounding a proposed equivalent-input relation over the returned $.posts arrays at the recorded read order. The equality claim itself is the frozen proposition, not an already-proven server guarantee.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1b3a5d28a7719d4f678c"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0014-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded GET /ghost/api/admin/posts/ reads carry the identical query selector set (fields, filter=status:published, formats, limit=5, order=published_at desc), so the two selectors are proposed equivalent.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0014",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two adjacent recorded same-actor reads of GET /ghost/api/admin/posts/ have byte-identical query selectors and identical response body hashes; both expose the $.posts array, so the follow-up member multiset is proposed equal to the source member multiset under the frozen full_json_value basis.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-83045190fb3709c1bba4"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0018-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['formats', 'filter', 'fields', 'order', 'limit'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded reads carry the identical selector set (status:published filter, same fields, published_at desc order, limit 5), so the follow-up request is proposed as an equivalent input of the source request.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0018",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two same-actor reads of /ghost/api/admin/posts/ with byte-identical selectors and an identical recorded response body hash: the follow-up posts array is proposed equal (multiset, full JSON value) to the source posts array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-287f486fbf95065aa72f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0019-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded newsletter reads use status=active, limit=100, page=1 and include=count.active_members, so the follow-up request is proposed as an equivalent input of the source request.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0019",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two same-actor reads of /ghost/api/admin/newsletters/ with identical selectors and the same recorded response body hash: the follow-up newsletters array is proposed equal (multiset, full JSON value) to the source array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c1010ddbdc23a258ee2c"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0022-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          },
+          "comparison_basis": "full_json_value",
+          "direction": "desc",
+          "family": "P16",
+          "identity": null,
+          "key": "$.published_at",
+          "nulls": "last",
+          "parameters": {
+            "evidence_refs": [
+              "r20260920-170341-a20d:request:25",
+              "r20260920-170341-a20d:request:26"
+            ],
+            "rationale": "Both recorded published-posts reads carry order=published_at desc and request published_at as a string field, proposing the frozen ordering key, direction and tie handling.",
+            "source": "hypothesis",
+            "value": {
+              "direction": "desc",
+              "key": "$.published_at",
+              "nulls": "last",
+              "ties": "unordered"
+            },
+            "value_type": "object"
+          },
+          "projection": [],
+          "ties": "unordered"
+        },
+        "predicate_type": "P16"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P16 requires order by $.published_at desc, nulls last, ties unordered, AND multiset preservation; basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['order'], 'kind': 'sort', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'The visible selector order=published_at desc is proposed as the ordering rule between the source and follow-up posts reads, with every complete member and duplicate retained.', 'source': 'hypothesis', 'value': 'sort', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0022",
+      "canonical_relation_core_identity": "3b26d651e2806e951f7cea2fc6133bbac3cce9cae4a4faf0d8b58d70932dd192",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The recorded published-posts reads declare order=published_at desc and return $.posts objects with a published_at string; the follow-up posts array is proposed as the source array ordered by published_at descending with full member-multiset preservation.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-7d7fc0080b18a86657b5"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0023-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded reads use the identical operation get_ghost_api_admin_newsletters and the identical four query selectors (status=active, limit=100, page=1, include=count.active_members); the frozen business hypothesis is that these are equivalent inputs, so the returned $.newsletters members should be the same multiset.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0023",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two concrete related recorded reads by actor_a/actor_a-session in the same request group: request:36 (group_order 3) and request:37 (group_order 4) share canonical path /ghost/api/admin/newsletters/, method GET, response status 200 and all four query parameters with identical values, so an equivalent-input (C07) equality over the complete $.newsletters arrays is expressible; the common operation/selectors are recorded evidence, not proof that a server guarantees repeatability.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-eac215d599d236945e89"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0035-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded newsletter reads carry identical query selectors, so the frozen selector relation is equivalence with no observed change.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0035",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0009",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0009/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two actor_a GET /ghost/api/admin/newsletters reads in one run carry identical query selectors (status=active, limit=100, page=1, include=count.active_members) and identical response body hashes; propose an equivalent-input query relation over the $.newsletters array compared as a multiset of complete members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0009/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f50fae1fb705a869214f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0036-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['filter', 'fields', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded reads carry byte-identical query selectors (filter=status:published, fields=id,url,title,visibility,published_at, formats=mobiledoc,lexical, order=published_at desc, limit=5), so the selectors are equivalent inputs.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0036",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two recorded same-actor reads (request:25 and request:26) hit the same operation get_ghost_api_admin_posts with byte-identical query selectors and identical response body hashes (163d4d0a...), so equal member multiset over the returned $.posts array is the grounded equivalent-input query proposition (C07/P17 equal). Selectors are frozen from visible evidence; no causal claim is made.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3a64c15437a8948e6e82"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0037-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['status', 'limit', 'include', 'page'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded reads carry byte-identical query selectors (status=active, limit=100, include=count.active_members, page=1), so the selectors are equivalent inputs.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0037",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two recorded same-actor reads (request:36 and request:37) hit the same operation get_ghost_api_admin_newsletters with byte-identical query selectors (status=active, limit=100, include=count.active_members, page=1) and identical response body hashes (f4f9a357...), so equal member multiset over the returned $.newsletters array is the grounded equivalent-input query proposition (C07/P17 equal). Selectors are frozen from visible evidence; no causal claim is made.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ff7bfa552119c246e6f1"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0038-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded newsletters reads carry the same four query selectors (status=active, limit=100, page=1, include=count.active_members), so the observed selector relation between them is equivalence rather than a filter/sort/pagination change.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0038",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two recorded, separately issued reads of the same operation_id get_ghost_api_admin_newsletters with identical query selectors; the proposition is that the returned $.newsletters member multiset is equal. Only observed selectors are frozen; no response value is assumed.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-87fe1caa9425941448ca"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0039-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded GET /ghost/api/admin/posts/ reads carry identical query selectors (filter status:published, fields, formats, order published_at desc, limit 5) and their responses share one body hash, so equivalent input is proposed.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0039",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two concrete recorded reads of the same post collection with equivalent query selectors; the frozen proposition is member-multiset equality of the complete $.posts arrays under full_json_value, not a claim about the database.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-dd47cca7791ca5318ee7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0040-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded GET /ghost/api/admin/newsletters/ reads carry identical selectors (status active, limit 100, include count.active_members, page 1) and their responses share one body hash, so equivalent input is proposed.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0040",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two concrete recorded reads of the same newsletter collection with equivalent query selectors; the frozen proposition is member-multiset equality of the complete $.newsletters arrays under full_json_value.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0c3abd9e0fa8a30f8dc5"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0041-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'The two recorded reads use the identical pinned selector set on the same posts operation; the frozen relation claims the two inputs are equivalent so the returned post collections agree.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0041",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two recorded actor_a reads of get_ghost_api_admin_posts carry byte-identical query selectors and identical recorded response digests; the frozen C07/P17 proposition is that an equivalent input selector yields an equal post member multiset.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ac4d0ea8ea9221ce40de"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0042-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded newsletter reads repeat the same active-status, page-one, limit-100 selector with the same include; the frozen relation claims selector equivalence implies equal returned newsletter multisets.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0042",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two recorded actor_a newsletter reads use identical selectors (status=active, limit=100, page=1, include=count.active_members) and identical recorded response digests; the frozen proposition is multiset equality of $.newsletters across the frozen selector.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-728dda6c6a0c75c1a622"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0043-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded newsletter reads carry the identical selector set (status=active, limit=100, page=1, include=count.active_members) and the same observed operation, so they are proposed as equivalent-input reads; the member equality itself remains a hypothesis.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0043",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two same-actor, same-session reads of get_ghost_api_admin_newsletters with identical recorded query selectors; the multiset of returned newsletter members is proposed to be equal as an equivalent-input query relation. This is an observation-derived candidate, not proof that the service must return equal pages.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-db32d1daf8e5f28c6f18"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0044-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.slugs",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.slug"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/slugs/post/page-to-delete/; basic constraint P15 requires observation $.slugs (array) (actual_response) to have unique members by strict-tuple identity [$.slug]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0044",
+      "canonical_relation_core_identity": "0d361736a7408455f44457f7d2e6d1d31f9baba253dc6116e638b50b0787b1e3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/slugs/post/page-to-delete/",
+          "phase": "observation",
+          "request_ref": "r20260920-170341-a20d:request:33"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The slug lookup response exposes $.slugs[*].slug as a visible string key, so the complete actual array is proposed to contain no duplicate slug values within this response. This is a fixed single-response uniqueness constraint on the observed array, not a claim about other pages or the database.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-90a25021986a59791c93"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0045-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.posts",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.posts",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:25', 'r20260920-170341-a20d:request:26'], 'rationale': 'Both recorded GET /ghost/api/admin/posts/ reads carry identical query selectors, so the second read is proposed as an equivalent-input re-issue of the first.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0045",
+      "canonical_relation_core_identity": "75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/posts/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:26"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/posts/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:25"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Two recorded same-actor reads of the published-posts listing share the same query selectors and the same response_body_sha256; proposed as an equivalent-input multiset equality over $.posts.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9fe5e4cef063073beeb2"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0046-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.newsletters",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.newsletters",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170341-a20d:request:36', 'r20260920-170341-a20d:request:37'], 'rationale': 'Both recorded GET /ghost/api/admin/newsletters/ reads carry identical query selectors, so the second read is proposed as an equivalent-input re-issue of the first.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0046",
+      "canonical_relation_core_identity": "4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260920-170341-a20d:request:37"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/ghost/api/admin/newsletters/",
+        "phase": "source_query/producer",
+        "request_ref": "r20260920-170341-a20d:request:36"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two recorded same-actor reads of the active-newsletter listing share the same query selectors and the same response_body_sha256; proposed as an equivalent-input multiset equality over $.newsletters.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-33327df427b1faed1059"
+    }
+  ]
+}

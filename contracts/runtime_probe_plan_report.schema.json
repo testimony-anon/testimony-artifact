@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_probe_plan_report.schema.json",
+  "title": "runtime_probe_plan_report — Phase4 Runtime Material driven probe plan sidecar",
+  "description": "014H / Phase4 companion report. It turns existing Runtime Material / Lifecycle diagnostics into auditable probe plans and blocked probe diagnostics. It does not admit probes into Augmented OAS and does not mutate main artifacts.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "input_coverage",
+    "runtime_material_sources",
+    "generated_probe_plans",
+    "blocked_probe_plans",
+    "material_audit",
+    "template_hints",
+    "summary",
+    "warnings"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "runtime_probe_plan_report" },
+        "stage": { "const": "runtime_materials_phase4" }
+      }
+    },
+    "input_coverage": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/input_coverage_item" }
+    },
+    "runtime_material_sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/material_source_summary" }
+    },
+    "generated_probe_plans": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/probe_plan" }
+    },
+    "blocked_probe_plans": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/probe_plan" }
+    },
+    "material_audit": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/material_audit" }
+    },
+    "template_hints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/template_hint" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "generated_probe_count",
+        "blocked_probe_count",
+        "executable_probe_count",
+        "executed_probe_count",
+        "read_safe_probe_count",
+        "write_probe_count",
+        "destructive_probe_count",
+        "external_or_sensitive_block_count",
+        "template_hint_count",
+        "warning_count",
+        "http_egress_performed",
+        "augmented_oas_mutated",
+        "phase5_admission_performed",
+        "by_generation_rule",
+        "by_blocked_reason",
+        "by_execution_eligibility"
+      ],
+      "properties": {
+        "generated_probe_count": { "type": "integer", "minimum": 0 },
+        "blocked_probe_count": { "type": "integer", "minimum": 0 },
+        "executable_probe_count": { "type": "integer", "minimum": 0 },
+        "executed_probe_count": { "type": "integer", "minimum": 0 },
+        "read_safe_probe_count": { "type": "integer", "minimum": 0 },
+        "write_probe_count": { "type": "integer", "minimum": 0 },
+        "destructive_probe_count": { "type": "integer", "minimum": 0 },
+        "external_or_sensitive_block_count": { "type": "integer", "minimum": 0 },
+        "template_hint_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "http_egress_performed": { "const": false },
+        "augmented_oas_mutated": { "const": false },
+        "phase5_admission_performed": { "const": false },
+        "by_generation_rule": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_blocked_reason": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_execution_eligibility": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "input_status": {
+      "type": "string",
+      "enum": ["missing", "present", "compatibility_read", "parse_failed", "present_but_no_evidence"]
+    },
+    "method": {
+      "type": "string",
+      "enum": ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
+    },
+    "execution_eligibility": {
+      "type": "string",
+      "enum": ["executable", "audit_only", "blocked"]
+    },
+    "safety_classification": {
+      "type": "string",
+      "enum": ["read_safe", "write_requires_body_and_cleanup", "destructive_requires_fresh_or_reset", "blocked_external_or_sensitive", "blocked_insufficient_material", "diagnostic_only"]
+    },
+    "blocked_reason": {
+      "type": "string",
+      "enum": [
+        "none",
+        "body_template_missing",
+        "cleanup_missing",
+        "reset_required_but_missing",
+        "only_observed_existing_resource",
+        "response_object_mutation_not_allowed",
+        "literal_assumption_only",
+        "sensitive_material",
+        "external_host",
+        "query_or_fragment_not_supported",
+        "pagination_material",
+        "capability_material_not_business_resource",
+        "not_business_resource_material",
+        "missing_runtime_material",
+        "unsafe_destructive_probe",
+        "unsupported_method"
+      ]
+    },
+    "source_artifact": {
+      "type": "string",
+      "enum": [
+        "runtime_material_report",
+        "runtime_lifecycle_plan_report",
+        "stage45_runtime_evidence_report",
+        "augmented_oas",
+        "probe_results",
+        "session_bundle",
+        "unknown"
+      ]
+    },
+    "input_coverage_item": {
+      "type": "object",
+      "required": ["status", "path", "evidence_count", "diagnostic_reason"],
+      "properties": {
+        "status": { "$ref": "#/$defs/input_status" },
+        "path": { "type": ["string", "null"] },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "material_source_summary": {
+      "type": "object",
+      "required": ["source_artifact", "material_count", "used_for_probe_count", "blocked_material_count"],
+      "properties": {
+        "source_artifact": { "type": "string" },
+        "material_count": { "type": "integer", "minimum": 0 },
+        "used_for_probe_count": { "type": "integer", "minimum": 0 },
+        "blocked_material_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "material_provenance": {
+      "type": "object",
+      "required": [
+        "source_artifact",
+        "material_id",
+        "source_material_kind",
+        "source_path",
+        "source_operation_id",
+        "value_preview"
+      ],
+      "properties": {
+        "source_artifact": { "$ref": "#/$defs/source_artifact" },
+        "material_id": { "type": ["string", "null"] },
+        "source_material_kind": { "type": ["string", "null"] },
+        "source_path": { "type": ["string", "null"] },
+        "source_operation_id": { "type": ["string", "null"] },
+        "value_preview": { "type": ["string", "null"] },
+        "source_location": { "type": ["string", "null"] },
+        "source_probe_id": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": { "$ref": "#/$defs/method" },
+        "canonical_path": { "type": ["string", "null"], "pattern": "^/" },
+        "candidate_url": { "type": ["string", "null"], "minLength": 1 },
+        "operation_id": {
+          "type": ["string", "null"],
+          "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$"
+        },
+        "original_candidate_path": {
+          "type": ["string", "null"],
+          "pattern": "^/",
+          "description": "Original same-origin path extracted from runtime material before execution-path alignment."
+        },
+        "resolved_execution_path": {
+          "type": ["string", "null"],
+          "pattern": "^/",
+          "description": "Concrete path that an explicit Phase4 read-safe execution should request after OAS-template prefix alignment."
+        },
+        "expected_template_hint": {
+          "type": ["string", "null"],
+          "pattern": "^/",
+          "description": "OAS/template hint used to resolve the execution path; still not Phase5 admission evidence."
+        },
+        "resolution_reason": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "matches_existing_oas_path",
+            "matches_existing_oas_template",
+            "ambiguous_existing_oas_template",
+            "suffix_template_prefix_alignment",
+            "ambiguous_suffix_template_alignment",
+            "no_matching_oas_template",
+            "no_oas_context"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "probe_plan": {
+      "type": "object",
+      "required": [
+        "probe_id",
+        "method",
+        "target",
+        "generation_rule",
+        "material_provenance",
+        "resource_family_candidate",
+        "safety_classification",
+        "execution_eligibility",
+        "expected_template_hint",
+        "blocked_reason",
+        "body_material_source",
+        "cleanup_reset_requirement",
+        "phase5_admission_policy"
+      ],
+      "properties": {
+        "probe_id": { "type": "string", "minLength": 1 },
+        "method": { "$ref": "#/$defs/method" },
+        "target": { "$ref": "#/$defs/target" },
+        "generation_rule": { "type": "string", "minLength": 1 },
+        "material_provenance": { "$ref": "#/$defs/material_provenance" },
+        "resource_family_candidate": { "type": ["string", "null"] },
+        "safety_classification": { "$ref": "#/$defs/safety_classification" },
+        "execution_eligibility": { "$ref": "#/$defs/execution_eligibility" },
+        "expected_template_hint": { "type": ["string", "null"], "pattern": "^/" },
+        "blocked_reason": { "$ref": "#/$defs/blocked_reason" },
+        "body_material_source": { "type": ["string", "null"] },
+        "cleanup_reset_requirement": { "type": ["string", "null"] },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "phase5_admission_policy": {
+          "type": "object",
+          "required": ["template_hint_only", "does_not_admit_augmented_oas", "requires_phase5_gate"],
+          "properties": {
+            "template_hint_only": { "const": true },
+            "does_not_admit_augmented_oas": { "const": true },
+            "requires_phase5_gate": { "const": true }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "material_audit": {
+      "type": "object",
+      "required": ["material_id", "decision", "reasons", "generated_probe_ids", "blocked_probe_ids"],
+      "properties": {
+        "material_id": { "type": ["string", "null"] },
+        "decision": { "type": "string", "enum": ["used", "blocked", "ignored"] },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "generated_probe_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "blocked_probe_ids": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "template_hint": {
+      "type": "object",
+      "required": ["hint_id", "probe_id", "expected_template", "hint_basis", "admission_policy"],
+      "properties": {
+        "hint_id": { "type": "string", "minLength": 1 },
+        "probe_id": { "type": "string", "minLength": 1 },
+        "expected_template": { "type": "string", "pattern": "^/" },
+        "hint_basis": { "type": "string" },
+        "admission_policy": { "type": "string", "enum": ["phase5_gate_required"] }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "severity", "message"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "blocker"] },
+        "message": { "type": "string" },
+        "source": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

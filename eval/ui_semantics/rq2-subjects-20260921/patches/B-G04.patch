@@ -1,0 +1,13 @@
+--- a/core/server/api/endpoints/utils/serializers/input/posts.js
++++ b/core/server/api/endpoints/utils/serializers/input/posts.js
+@@ -150,6 +150,10 @@
+         debug('browse');
+ 
+         forcePageFilter(frame);
++        // RQ2 B-G04: column-projected (fields=) reads are restricted to the wrong type.
++        if (frame.options.columns) {
++            frame.options.filter = frame.options.filter.replace(/type:post$/, 'type:page');
++        }
+ 
+         /**
+          * ## current cases:

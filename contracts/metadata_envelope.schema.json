@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "metadata_envelope.schema.json",
+  "title": "Metadata envelope (decision record 000 §2 opening paragraph, D6)",
+  "description": "Metadata envelope carried uniformly at the top level of every artifact: the run ID that produced it, the stage, timestamp, tool version and upstream artifact references (plus the schema version and fixture provenance required by the contract specification). This is the 'shape' of the incremental knowledge base; V1 only fills it in without consuming it. In plain JSON artifacts it lives in the top-level metadata field; in OAS-type artifacts it lives in the document-level x-carverflow-meta extension field (approved supplementary choice point 1).",
+  "type": "object",
+  "required": ["artifact_type", "schema_version", "run_id", "stage", "created_at", "tool_version", "upstream_refs"],
+  "properties": {
+    "artifact_type": {
+      "$ref": "#/$defs/artifact_type",
+      "x-volatility": "structural"
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Version of the contract schema this artifact conforms to",
+      "x-volatility": "structural"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Run ID that produced this artifact",
+      "x-volatility": "volatile"
+    },
+    "stage": {
+      "type": "string",
+      "enum": ["stage0", "stage1", "stage2", "stage2_5", "stage3", "stage4", "stage5", "stage6", "v2_pipeline", "runtime_materials_phase1", "runtime_materials_phase2", "runtime_materials_phase3", "runtime_materials_phase4", "runtime_materials_phase5", "runtime_materials_phase6"],
+      "description": "Stage that produced this artifact",
+      "x-volatility": "structural"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "x-volatility": "volatile"
+    },
+    "tool_version": {
+      "type": "string",
+      "description": "Version of the pipeline tool that produced this artifact",
+      "x-volatility": "volatile"
+    },
+    "fixture_id": {
+      "type": "string",
+      "description": "Optional: the fixture this artifact was produced from (contract-specification provenance: which run, which stage, which fixture)",
+      "x-volatility": "volatile"
+    },
+    "upstream_refs": {
+      "type": "array",
+      "description": "References to upstream artifacts",
+      "items": {
+        "type": "object",
+        "required": ["artifact_type", "run_id"],
+        "properties": {
+          "artifact_type": { "$ref": "#/$defs/artifact_type" },
+          "run_id": { "type": "string", "minLength": 1 },
+          "path": {
+            "type": "string",
+            "description": "Optional: file/directory path of the upstream artifact"
+          }
+        },
+        "additionalProperties": false
+      },
+      "x-volatility": "volatile"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "artifact_type": {
+      "type": "string",
+      "enum": [
+        "run_config",
+        "session_bundle",
+        "initial_oas",
+        "probe_results",
+        "augmented_oas",
+        "dependency_graph",
+        "test_sequences",
+        "skills",
+        "grounded_report",
+        "lifecycle_recipes",
+        "runtime_material_report",
+        "stage45_runtime_evidence_report",
+        "runtime_lifecycle_plan_report",
+        "runtime_lifecycle_replay_report",
+        "runtime_probe_plan_report",
+        "runtime_probe_admission_report",
+        "runtime_probe_admission_downstream_report",
+        "runtime_engine_llm_assist_report",
+        "ui_trace",
+        "ui_semantics_evidence",
+        "semantic_edge_audit",
+        "assertion_audit",
+        "constraint_input_audit",
+        "test_blueprints",
+        "test_suite",
+        "test_suite_build_audit",
+        "test_execution_report",
+        "certified_relation_tests"
+      ]
+    }
+  }
+}

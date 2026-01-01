@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session_bundle_request_material_shape.schema.json",
+  "title": "session_bundle member: one request_material_shapes.jsonl record",
+  "description": "Records the typed shape of redacted JSON request material without persisting plaintext values. Cross-member closure against har.json is a loader invariant and is not implied by JSON Schema validation alone.",
+  "type": "object",
+  "required": [
+    "entry_index",
+    "method",
+    "mime_type",
+    "root_kind",
+    "redacted_body_bytes",
+    "redacted_body_sha256",
+    "redactions"
+  ],
+  "properties": {
+    "entry_index": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Zero-based index into har.json log.entries."
+    },
+    "method": {
+      "type": "string",
+      "pattern": "^[A-Z]+$",
+      "description": "Recorded request method, repeated for loader closure checks."
+    },
+    "mime_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Exact recorded JSON MIME type, repeated for loader closure checks."
+    },
+    "root_kind": {
+      "type": "string",
+      "enum": ["object", "array"]
+    },
+    "redacted_body_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "redacted_body_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "redactions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/redacted_node"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "path_segment": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "key"],
+          "properties": {
+            "kind": { "const": "object_key" },
+            "key": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "index"],
+          "properties": {
+            "kind": { "const": "array_index" },
+            "index": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "classification_basis": {
+      "type": "object",
+      "required": ["source_class", "sensitive_key_match"],
+      "properties": {
+        "source_class": {
+          "type": "string",
+          "enum": [
+            "explicit_registered_secret",
+            "authorization",
+            "cookie",
+            "jwt",
+            "sensitive_key"
+          ]
+        },
+        "sensitive_key_match": {
+          "type": "string",
+          "enum": [
+            "not_applicable",
+            "exact_token",
+            "separator_delimited_token",
+            "substring_only"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "source_class": { "const": "sensitive_key" } },
+            "required": ["source_class"]
+          },
+          "then": {
+            "properties": {
+              "sensitive_key_match": {
+                "enum": ["exact_token", "separator_delimited_token", "substring_only"]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "sensitive_key_match": { "const": "not_applicable" }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "placeholder": {
+      "type": "object",
+      "required": ["placeholder_sha256", "classification_bases"],
+      "properties": {
+        "placeholder_sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the full persisted placeholder token, not its eight-character display suffix."
+        },
+        "classification_bases": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/classification_basis" },
+          "description": "All observed registration/classification bases in deterministic order; no basis is discarded when one secret is observed through multiple channels."
+        }
+      },
+      "additionalProperties": false
+    },
+    "redacted_node": {
+      "type": "object",
+      "required": [
+        "path",
+        "original_scalar_type",
+        "redaction_form",
+        "placeholders",
+        "runtime_material_required"
+      ],
+      "properties": {
+        "path": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/path_segment" },
+          "description": "Typed, unambiguous path within the JSON root. Object keys and array indices are distinct segment kinds."
+        },
+        "original_scalar_type": {
+          "type": "string",
+          "enum": ["string", "integer", "number", "boolean"]
+        },
+        "redaction_form": {
+          "type": "string",
+          "enum": ["whole_scalar", "string_substitution"]
+        },
+        "placeholders": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/placeholder" }
+        },
+        "runtime_material_required": {
+          "const": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "original_scalar_type": {
+                "enum": ["integer", "number", "boolean"]
+              }
+            },
+            "required": ["original_scalar_type"]
+          },
+          "then": {
+            "properties": {
+              "redaction_form": { "const": "whole_scalar" },
+              "placeholders": { "maxItems": 1 }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

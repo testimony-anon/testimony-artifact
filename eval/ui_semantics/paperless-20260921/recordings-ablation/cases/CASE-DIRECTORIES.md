@@ -1,0 +1,34 @@
+The 32 case directories of this recording root are byte copies of the corresponding directories of `recordings-01/cases/` (verified with `diff -rq`); the suite runner resolves case roots inside the recording root, which is why the copies exist. They are not duplicated in this package: copy them from `recordings-01/cases/` before re-running the ablation of this subject.
+
+- `L1-DASHBOARD-01`
+- `L1-DASHBOARD-02`
+- `L1-DASHBOARD-03`
+- `L1-DASHBOARD-04`
+- `L1-DASHBOARD-05`
+- `L1-DOCDETAIL-01`
+- `L1-DOCDETAIL-02`
+- `L1-DOCDETAIL-03`
+- `L1-DOCDETAIL-04`
+- `L1-DOCDETAIL-05`
+- `L1-DOCLIST-03`
+- `L1-DOCLIST-05`
+- `L1-DOCLIST-06`
+- `L1-DOCLIST-07`
+- `L1-DOCLIST-08`
+- `L1-PERMISSIONS-01`
+- `L1-PERMISSIONS-02`
+- `L1-PERMISSIONS-03`
+- `L1-PERMISSIONS-04`
+- `L1-PERMISSIONS-05`
+- `L1-PERMISSIONS-06`
+- `L1-PERMISSIONS-07`
+- `L1-PERMISSIONS-08`
+- `L1-SETTINGS-01`
+- `L1-SETTINGS-02`
+- `L1-SETTINGS-03`
+- `L2-DOCEDIT-01`
+- `L2-DOCEDIT-02`
+- `L2-DOCEDIT-03`
+- `L3-SHARING-01`
+- `L3-SHARING-02`
+- `L3-SHARING-03`

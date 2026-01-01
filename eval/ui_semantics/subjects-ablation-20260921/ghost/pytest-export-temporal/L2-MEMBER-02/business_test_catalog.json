@@ -1,0 +1,201 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "4bfa4f815466f9d42b51bbf209c4851ac2f5d0d611d99e569ba5c0a83044a0d0",
+      "dce7341d4f2333c10e9b52b06bd51dff495e0934c5d1d41ec0c27270d5f14836"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0011"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/ghost/api/admin/members/",
+          "phase": "producer",
+          "request_ref": "r20260920-170548-50d4:request:30"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.labels"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /ghost/api/admin/members/; observer actor_a GET /ghost/api/admin/labels/; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.labels']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "4bfa4f815466f9d42b51bbf209c4851ac2f5d0d611d99e569ba5c0a83044a0d0",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-170548-50d4:request:25"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-170548-50d4:request:34"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/ghost/api/admin/members/",
+        "phase": "producer",
+        "request_ref": "r20260920-170548-50d4:request:30"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "GET labels before the create (request:25) and after it (request:34) use the identical selector limit=100&page=1 and have the same recorded response hash. Proposed C04 preservation of $.labels through the member create. Same actor_a session.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4732f66e50dccaa7f092"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/ghost/api/admin/members/",
+          "phase": "producer",
+          "request_ref": "r20260920-170548-50d4:request:30"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.labels",
+            "role": "before",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": null,
+          "right": {
+            "path": "$.labels",
+            "role": "after",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /ghost/api/admin/members/; observer actor_a GET /ghost/api/admin/labels/; business predicate P20 requires strict equality between before $.labels (array) and after $.labels (array).",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "dce7341d4f2333c10e9b52b06bd51dff495e0934c5d1d41ec0c27270d5f14836",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-170548-50d4:request:25"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-170548-50d4:request:34"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/ghost/api/admin/members/",
+        "phase": "producer",
+        "request_ref": "r20260920-170548-50d4:request:30"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The labels read recorded after the center write (r20260920-170548-50d4:request:34) has a uniquely identified nearest earlier observation of the same actor/session, operation and selector (r20260920-170548-50d4:request:25). The frozen field $.labels is proposed to be preserved through the member-creation action; the action is followed by a fresh API read, not cached values.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Field preservation on the labels resource through the center member creation: the before observer GET /ghost/api/admin/labels/ (limit=100, page=1, actor_a) and the after observer GET /ghost/api/admin/labels/ use the same observed operation and the same exact selector, with the member-creation write between them. The frozen field is the root field $.labels of that response object (value_type array). The two recorded response bodies are identical, but the relation is proposed as a freeze-and-recheck rule (settle plus a fresh API read at execution); no already-equal recording or negative request fact is required.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The center_observation_slice records exactly one comparable pre-state read for the post-center reads: GET /ghost/api/admin/labels/ with selector limit=100&page=1 at request:25 before and request:34 after the center write, with request:30 as the only intervening state-changing request. Both responses expose $.labels as an array (shape-870f01bd4b8cec4227c4af90). Preservation of the returned labels collection through the member-creation action is proposed as a frozen-field hypothesis; temporal adjacency and the single intervening write do not prove causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-09ffd4d6fffaaef68afe"
+    }
+  ]
+}

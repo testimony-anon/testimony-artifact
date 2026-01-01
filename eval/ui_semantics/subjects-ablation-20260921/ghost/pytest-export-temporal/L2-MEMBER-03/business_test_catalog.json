@@ -1,0 +1,638 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 7,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "0378fcb8e31ca88af9232d8d583333f161c1814c0f4791d63018a62953d09785",
+      "272ce11d8d4ce88b1d57b0bb00d48707e337854461c314eb72b0178222752762",
+      "342eb75d817266ce91f0115a8a5985a75a11f4d41e49f158e791fcecb116dcfe",
+      "3c2189f7daef4b3b67e969b9bd268c756e34b73925e2046336ce1679cb162001",
+      "9d8a5e79a202b8e7dbaf99e00b10d262ded82ae7be7d74cd4403c68f4aa4312a",
+      "9fc9db8e57085803e8fd2bda702a98b84601a37b14b9b0ca2205e455aafa0f7b",
+      "dce7341d4f2333c10e9b52b06bd51dff495e0934c5d1d41ec0c27270d5f14836",
+      "ea91525ca09597c866b944287c7a555b9ed6b79c2bcc37f0a4511ad03f77c0e1",
+      "f79e87788d14e9c2596cd65cb6665c9c43a813494db312f781ad92db57c90f0e"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0012",
+      "v2-candidate-0017"
+    ],
+    "physical_retained_test_occurrence_count": 9,
+    "unique_canonical_relation_core_count": 9
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/ghost/api/admin/members/",
+          "phase": "producer",
+          "request_ref": "r20260920-170620-c734:request:30"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.labels",
+            "role": "before",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": null,
+          "right": {
+            "path": "$.labels",
+            "role": "after",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /ghost/api/admin/members/; observer actor_a GET /ghost/api/admin/labels/; business predicate P20 requires strict equality between before $.labels (array) and after $.labels (array).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "dce7341d4f2333c10e9b52b06bd51dff495e0934c5d1d41ec0c27270d5f14836",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-170620-c734:request:25"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-170620-c734:request:34"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/ghost/api/admin/members/",
+        "phase": "producer",
+        "request_ref": "r20260920-170620-c734:request:30"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "request:25 (before) and request:34 (after) are the same catalog operation (get_ghost_api_admin_labels) with the same actor, session and selector snapshot sha256 6efeb3b7091d590542e40d8551af3c551923b3e5e8c751696b7a27bd6dd763c5, and request:30 is the only intervening state-changing request. Preservation of the frozen root field $.labels through the member create is proposed as a C04 relation; the recorded equality is not required beforehand.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "request:34 (GET /ghost/api/admin/labels/, limit=100&page=1) is the unique nearest post-action read of the same catalog operation and selector as request:25, with request:30 recorded as the intervening write; both responses share one label-collection shape exposing $.labels. The candidate proposes that creating a member leaves the labels collection field unchanged through the action and the fresh API read.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c9e79403579f5851269b"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.labels",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/labels/; basic constraint P11 requires count(observation $.labels (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "9d8a5e79a202b8e7dbaf99e00b10d262ded82ae7be7d74cd4403c68f4aa4312a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:25"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The only recorded GET /ghost/api/admin/labels/ carries a single query limit=100 (strict integer text, occurrence_count 1) and its recorded response shape contains array $.labels; proposes that the returned page holds at most the requested limit. The limit is rebound from the actual outgoing request at execution.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Mechanically read-only GET /labels/ with the unique query limit=100; the actual returned $.labels array length is proposed to be <= this request's own query.limit. It claims only the returned page, not database completeness.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c58a04ffa4c9f2c29166"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.meta.pagination.limit",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/labels/; basic constraint P02 requires observation $.meta.pagination.limit (integer) to strictly equal actual request query $.limit (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "ea91525ca09597c866b944287c7a555b9ed6b79c2bcc37f0a4511ad03f77c0e1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/labels/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:25"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The labels response exposes integer $.meta.pagination.limit and the same request sends the unique query $.limit=100; proposes the readback that the echoed page limit equals the requested limit. Request operand binds the actual prepared request, not the recorded value.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-6d3c2bfa9f4b74f4905a"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P02",
+            "left": {
+              "path": "$.type",
+              "role": "item",
+              "value_type": "string"
+            },
+            "operator": "eq",
+            "right": {
+              "evidence_refs": [
+                "r20260920-170620-c734:request:26"
+              ],
+              "rationale": "the recorded tiers selector filter is type:paid+active:true; proposes that every returned tier has type paid",
+              "source": "hypothesis",
+              "value": "paid",
+              "value_type": "string"
+            }
+          },
+          "collection": {
+            "path": "$.tiers",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/tiers/; basic constraint For every member of observation $.tiers (array) in actual_response: P02 requires item $.type (string) to strictly equal frozen hypothesis 'paid' (string); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "0378fcb8e31ca88af9232d8d583333f161c1814c0f4791d63018a62953d09785",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/tiers/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:26"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The tiers read is the only selector evidence (filter type:paid+active:true) and the response shape exposes $.tiers[*].type as string; proposes the filter semantic that each returned tier carries type paid. The filter-language meaning is a frozen hypothesis with uncertainty, not a proven specification.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-7333d9df5bb53fd40038"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P02",
+            "left": {
+              "path": "$.active",
+              "role": "item",
+              "value_type": "boolean"
+            },
+            "operator": "eq",
+            "right": {
+              "evidence_refs": [
+                "r20260920-170620-c734:request:26"
+              ],
+              "rationale": "the recorded tiers selector filter is type:paid+active:true; proposes that every returned tier is active",
+              "source": "hypothesis",
+              "value": true,
+              "value_type": "boolean"
+            }
+          },
+          "collection": {
+            "path": "$.tiers",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/tiers/; basic constraint For every member of observation $.tiers (array) in actual_response: P02 requires item $.active (boolean) to strictly equal frozen hypothesis True (boolean); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "272ce11d8d4ce88b1d57b0bb00d48707e337854461c314eb72b0178222752762",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/tiers/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:26"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The same recorded tiers selector (filter type:paid+active:true) plus the visible boolean member field $.tiers[*].active support the separate proposed semantic that every returned tier is active; kept distinct from the type condition because it is a different field and proposition.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4bf303bc4f8642a49351"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P02",
+            "left": {
+              "path": "$.status",
+              "role": "item",
+              "value_type": "string"
+            },
+            "operator": "eq",
+            "right": {
+              "evidence_refs": [
+                "r20260920-170620-c734:request:27"
+              ],
+              "rationale": "the recorded newsletters selector filter is status:active; proposes that every returned newsletter has status active",
+              "source": "hypothesis",
+              "value": "active",
+              "value_type": "string"
+            }
+          },
+          "collection": {
+            "path": "$.newsletters",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/newsletters/; basic constraint For every member of observation $.newsletters (array) in actual_response: P02 requires item $.status (string) to strictly equal frozen hypothesis 'active' (string); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "9fc9db8e57085803e8fd2bda702a98b84601a37b14b9b0ca2205e455aafa0f7b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:27"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The newsletters read is the only selector evidence (filter status:active) and the shape exposes the string member field $.newsletters[*].status; proposes the filter semantic that each returned newsletter is active. The frozen hypothesis need not already hold and is not a proven server rule.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Read-only GET /newsletters/ filtered by status:active; proposed single-layer forall over the complete returned $.newsletters array asserting each member's $.status equals the filter value. This is a proposed request-semantic relation over the actual response only.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-346e45aff9b0196f3e04"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.tiers",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/tiers/; basic constraint P15 requires observation $.tiers (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "f79e87788d14e9c2596cd65cb6665c9c43a813494db312f781ad92db57c90f0e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/tiers/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:26"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The tiers response shape exposes the visible string member key $.tiers[*].id; proposes that the actual returned array contains no duplicate tier id under strict-tuple comparison. Duplicates would refute it even if other keys are unavailable; empty pages only pass vacuously.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-11076114f7abc38e2971"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.newsletters",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/newsletters/; basic constraint P15 requires observation $.newsletters (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "342eb75d817266ce91f0115a8a5985a75a11f4d41e49f158e791fcecb116dcfe",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/newsletters/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:27"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The newsletters response shape exposes the visible string member key $.newsletters[*].id; proposes that the actual returned array contains no duplicate newsletter id under strict-tuple comparison. Duplicates refute it; missing keys are unknown, not agreement.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-99068201b1d33cd34272"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0017-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.members",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.meta.pagination.total",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-170620-c734:request:33"
+            ],
+            "rationale": "proposed count of the returned members array measured in members",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /ghost/api/admin/members/; business relation P19 requires observation $.meta.pagination.total (integer) = count(observation $.members (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0017",
+      "canonical_relation_core_identity": "3c2189f7daef4b3b67e969b9bd268c756e34b73925e2046336ce1679cb162001",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/ghost/api/admin/members/",
+          "phase": "observation",
+          "request_ref": "r20260920-170620-c734:request:33"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "One recorded read-only member list response exposes both the complete returned array $.members and the integer summary $.meta.pagination.total in the same response; the equality of the array count with the summary is a frozen business hypothesis about that one actual response only.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ad4b2b223989f31df978"
+    }
+  ]
+}

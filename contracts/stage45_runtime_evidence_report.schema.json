@@ -1,0 +1,279 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stage45_runtime_evidence_report.schema.json",
+  "title": "stage45_runtime_evidence_report — Phase 2 companion diagnostics for Stage4/Stage5 runtime material consumption",
+  "description": "Runtime Material Phase 2 companion report. It consumes runtime_material_report read-only and outputs diagnostics, conflicts and suggested rankings for Stage 4 edges and Stage 5 sequences/skills; it does not modify the primary dependency_graph / test_sequences / skills artifacts.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "input_coverage",
+    "stage4_edge_annotations",
+    "stage5_sequence_annotations",
+    "stage5_skill_annotations",
+    "enhanced_sequence_ranking",
+    "conflicts",
+    "summary",
+    "warnings"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "stage45_runtime_evidence_report" },
+        "stage": { "const": "runtime_materials_phase2" }
+      }
+    },
+    "input_coverage": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/input_coverage_item" }
+    },
+    "stage4_edge_annotations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge_annotation" }
+    },
+    "stage5_sequence_annotations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sequence_annotation" }
+    },
+    "stage5_skill_annotations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/skill_annotation" }
+    },
+    "enhanced_sequence_ranking": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ranking_item" }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/conflict" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "edge_annotation_count",
+        "sequence_annotation_count",
+        "skill_annotation_count",
+        "ranking_count",
+        "conflict_count",
+        "warning_count"
+      ],
+      "properties": {
+        "edge_annotation_count": { "type": "integer", "minimum": 0 },
+        "sequence_annotation_count": { "type": "integer", "minimum": 0 },
+        "skill_annotation_count": { "type": "integer", "minimum": 0 },
+        "ranking_count": { "type": "integer", "minimum": 0 },
+        "conflict_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "by_suggested_trust": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_sequence_risk": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "input_status": {
+      "type": "string",
+      "enum": ["missing", "present", "compatibility_read", "parse_failed", "present_but_no_evidence"]
+    },
+    "suggested_trust": {
+      "type": "string",
+      "enum": ["high", "medium", "low", "blocked", "diagnostic_only"]
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "blocked"]
+    },
+    "evidence_ref": {
+      "type": "object",
+      "required": ["source", "reason"],
+      "properties": {
+        "source": { "type": "string" },
+        "material_id": { "type": ["string", "null"] },
+        "edge_id": { "type": ["string", "null"] },
+        "hypothesis_id": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "edge_annotation": {
+      "type": "object",
+      "required": [
+        "edge_annotation_id",
+        "producer",
+        "consumer",
+        "original",
+        "matched_runtime_edge_diagnostics",
+        "positive_evidence",
+        "negative_evidence",
+        "not_promoted_reason",
+        "suggested_trust",
+        "explanation"
+      ],
+      "properties": {
+        "edge_annotation_id": { "type": "string" },
+        "producer": { "type": "string" },
+        "consumer": { "type": "string" },
+        "original": {
+          "type": "object",
+          "required": ["kind", "confidence", "dependency_strength", "grounded"],
+          "properties": {
+            "kind": { "type": "string" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "dependency_strength": { "type": ["string", "null"] },
+            "grounded": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "matched_runtime_edge_diagnostics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "positive_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_ref" }
+        },
+        "negative_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_ref" }
+        },
+        "not_promoted_reason": { "type": "string" },
+        "suggested_trust": { "$ref": "#/$defs/suggested_trust" },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sequence_annotation": {
+      "type": "object",
+      "required": [
+        "sequence_id",
+        "operations",
+        "matched_lifecycle_hypotheses",
+        "matched_materials",
+        "positive_evidence",
+        "negative_evidence",
+        "literal_assumption_risk",
+        "capability_material_risk",
+        "fresh_resource_evidence",
+        "cleanup_risk_class",
+        "suggested_score",
+        "suggested_rank",
+        "explanation"
+      ],
+      "properties": {
+        "sequence_id": { "type": "string" },
+        "operations": { "type": "array", "items": { "type": "string" } },
+        "matched_lifecycle_hypotheses": { "type": "array", "items": { "type": "string" } },
+        "matched_materials": { "type": "array", "items": { "type": "string" } },
+        "positive_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence_ref" } },
+        "negative_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence_ref" } },
+        "literal_assumption_risk": { "$ref": "#/$defs/risk_level" },
+        "capability_material_risk": { "$ref": "#/$defs/risk_level" },
+        "fresh_resource_evidence": { "type": "boolean" },
+        "cleanup_risk_class": { "type": "string" },
+        "suggested_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "suggested_rank": { "type": "integer", "minimum": 1 },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "skill_annotation": {
+      "type": "object",
+      "required": [
+        "skill_id",
+        "operations",
+        "matched_sequence_id",
+        "matched_lifecycle_hypotheses",
+        "matched_materials",
+        "positive_evidence",
+        "negative_evidence",
+        "literal_assumption_risk",
+        "capability_material_risk",
+        "fresh_resource_evidence",
+        "cleanup_risk_class",
+        "suggested_score",
+        "suggested_rank",
+        "explanation"
+      ],
+      "properties": {
+        "skill_id": { "type": "string" },
+        "operations": { "type": "array", "items": { "type": "string" } },
+        "matched_sequence_id": { "type": ["string", "null"] },
+        "matched_lifecycle_hypotheses": { "type": "array", "items": { "type": "string" } },
+        "matched_materials": { "type": "array", "items": { "type": "string" } },
+        "positive_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence_ref" } },
+        "negative_evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence_ref" } },
+        "literal_assumption_risk": { "$ref": "#/$defs/risk_level" },
+        "capability_material_risk": { "$ref": "#/$defs/risk_level" },
+        "fresh_resource_evidence": { "type": "boolean" },
+        "cleanup_risk_class": { "type": "string" },
+        "suggested_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "suggested_rank": { "type": "integer", "minimum": 1 },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "ranking_item": {
+      "type": "object",
+      "required": ["rank", "sequence_id", "suggested_score", "dominant_evidence", "dominant_risk", "explanation"],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1 },
+        "sequence_id": { "type": "string" },
+        "suggested_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "dominant_evidence": { "type": "string" },
+        "dominant_risk": { "$ref": "#/$defs/risk_level" },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "conflict": {
+      "type": "object",
+      "required": ["conflict_id", "conflict_type", "scope", "operations", "runtime_view", "fallback_view", "explanation"],
+      "properties": {
+        "conflict_id": { "type": "string" },
+        "conflict_type": {
+          "type": "string",
+          "enum": ["resource_family_mismatch", "edge_evidence_conflict", "runtime_report_missing"]
+        },
+        "scope": { "type": "string", "enum": ["edge", "sequence", "skill", "global"] },
+        "operations": { "type": "array", "items": { "type": "string" } },
+        "runtime_view": { "type": "string" },
+        "fallback_view": { "type": "string" },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "input_coverage_item": {
+      "type": "object",
+      "required": ["status", "path", "evidence_count", "diagnostic_reason"],
+      "properties": {
+        "status": { "$ref": "#/$defs/input_status" },
+        "path": { "type": ["string", "null"] },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "severity", "message"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "blocker"] },
+        "message": { "type": "string" },
+        "source": { "type": ["object", "null"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}

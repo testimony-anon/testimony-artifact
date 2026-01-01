@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recording_workflow_result.schema.json",
+  "title": "Whole current recording workflow result",
+  "type": "object",
+  "required": ["schema_version", "status", "workflow_id", "workflow_ref", "profile_ref", "reset_epoch", "actor_bundles", "step_correspondence", "failure"],
+  "properties": {
+    "schema_version": {"const": "uisemtest-recording-workflow-result-v1"},
+    "status": {"enum": ["completed", "rejected"]},
+    "workflow_id": {"type": "string", "minLength": 1},
+    "workflow_ref": {"type": "string", "minLength": 1},
+    "profile_ref": {"type": "string", "minLength": 1},
+    "reset_epoch": {
+      "type": "object",
+      "required": ["status", "record_id", "artifact_ref"],
+      "properties": {
+        "status": {"enum": ["completed", "failed"]},
+        "record_id": {"type": "string", "minLength": 1},
+        "artifact_ref": {"type": ["string", "null"], "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "actor_bundles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["actor_id", "run_id", "manifest_ref"],
+        "properties": {
+          "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+          "run_id": {"type": "string", "minLength": 1},
+          "manifest_ref": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "step_correspondence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["status", "scenario_step_id", "workflow_step_id", "global_step_index", "actor_id", "action_id", "started_at", "ended_at"],
+        "properties": {
+          "status": {"const": "step_completed"},
+          "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+          "workflow_step_id": {"type": "string", "minLength": 1},
+          "global_step_index": {"type": "integer", "minimum": 0},
+          "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+          "action_id": {"type": "string", "minLength": 1},
+          "started_at": {"type": "string", "format": "date-time"},
+          "ended_at": {"type": "string", "format": "date-time"},
+          "binding_material_source_step_ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "failure": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["phase", "reason_code"],
+          "properties": {
+            "phase": {"type": "string", "minLength": 1},
+            "reason_code": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+            "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+            "workflow_step_id": {"type": "string", "minLength": 1},
+            "global_step_index": {"type": "integer", "minimum": 0},
+            "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"}
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "completed"}}},
+      "then": {
+        "properties": {
+          "actor_bundles": {"minItems": 1},
+          "step_correspondence": {"minItems": 1},
+          "failure": {"type": "null"},
+          "reset_epoch": {"properties": {"status": {"const": "completed"}}}
+        }
+      },
+      "else": {
+        "properties": {
+          "failure": {"type": "object"}
+        }
+      }
+    }
+  ]
+}

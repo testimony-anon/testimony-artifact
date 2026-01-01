@@ -1,0 +1,1110 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 5,
+    "business_relation_occurrence_count": 7,
+    "canonical_relation_core_identities": [
+      "06d3de24b4db6ff5cf021bf29f7ec202c9ab5aafb95c0ea6b622f9ba83c21753",
+      "12771e7a695c5e2f56d3c3b8d96ad1bfa104223742a96a9e27fdf390e74265b3",
+      "547b62cc4ab8e6739aebdfe508732039d15d900d6710e53f4c4ff51158cc9a41",
+      "6eaf6c3aecef03a3f62236d143af5e0350834134ed85e7f69d6ff73e4dff7c01",
+      "7a713940260a9a7496fb46b17eee63a4256089a4809389fcc0b354fa7b9edaf1",
+      "82d13d5c144ce0275c4f0cf26dddc075cd9de89f94c595bbddd22b0aded3ae09",
+      "8a0d39176754b67d798fc234b3b89499cdac19c8d0fc9e73f4fbe22590c41f6e",
+      "ade6226102e2233c2d66ec55af3773cd95afb2ee693627b26c6053a0c37573be",
+      "d149f35eaf04df9e0b6a0e54c4fc430251ea67370626ea7ce85f9526bb3281e3"
+    ],
+    "duplicate_core_occurrence_count": 3,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0009",
+      "v2-candidate-0012"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0012",
+      "v2-candidate-0015"
+    ],
+    "physical_retained_test_occurrence_count": 12,
+    "unique_canonical_relation_core_count": 9
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PUT",
+          "path": "/api/user",
+          "phase": "producer",
+          "request_ref": "r20260906-141925-f0cc:request:0"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.profile.bio",
+            "role": "actor_after:actor_b",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "location": "body",
+              "path": "$.user.bio",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a PUT /api/user; observer actor_b GET /api/profiles/carver; business predicate P02 requires actor_after:actor_b $.profile.bio (string) to strictly equal actual request body $.user.bio (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "82d13d5c144ce0275c4f0cf26dddc075cd9de89f94c595bbddd22b0aded3ae09",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "before_observer",
+          "request_ref": "r20260906-141925-2012:request:0"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "after_observer",
+          "request_ref": "r20260906-141925-2012:request:18"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PUT",
+        "path": "/api/user",
+        "phase": "producer",
+        "request_ref": "r20260906-141925-f0cc:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user carries body $.user.bio as a string (the only state-changing request in the region); between it, actor_b's earlier read of /api/profiles/carver recorded $.profile.bio as null and the later read of the same path recorded it as a string. Propose propagation of the written bio value into the non-owner actor_b view; the resource linkage is a hypothesis, not proven causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-57914ff6e99a2269047b"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.articlesCount",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260906-141925-2012:request:1"
+            ],
+            "rationale": "Output is a member count of the actual returned array, so its unit is items.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_b GET /api/articles; business relation P19 requires observation $.articlesCount (integer) = count(observation $.articles (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "7a713940260a9a7496fb46b17eee63a4256089a4809389fcc0b354fa7b9edaf1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:1"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "One recorded actor_b read of /api/articles returns both $.articles (array) and $.articlesCount (integer) in the same actual response; propose that the integer summary equals the count of members of the returned array. This is a frozen single-response arithmetic hypothesis, not an observed equality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The single recorded response for r20260906-141925-2012:request:1 contains both the array $.articles and the integer $.articlesCount, so this is a distinct single-response count aggregation over that actual response; only the returned array is in scope.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Distinct recorded observation of the same aggregation claim: the earlier actor_b /api/articles response shape carries the complete array $.articles and the integer summary $.articlesCount. Frozen hypothesis only; no producer, write, or complete-collection claim.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Single read-only response from actor_b's GET /api/articles?author=carver&limit=3&offset=0 exposes both $.articles (array) and $.articlesCount (integer); proposes that the declared count equals the actual number of returned members. This is a frozen single-response hypothesis and does not require the recorded output to have already satisfied it.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-82987206cfdb2909f8f1"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_b GET /api/articles; basic constraint P11 requires count(observation $.articles (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "12771e7a695c5e2f56d3c3b8d96ad1bfa104223742a96a9e27fdf390e74265b3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:1"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded actor_b read carries the unique query.limit=3 (strict integer text) and returns $.articles as an array; propose that the actual returned array count is at most the requested limit, bound to this request's own outgoing limit parameter at execution.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded read sends exactly one query limit (strict integer text \"3\") and its actual response has an exact array path $.articles, so the response array length is proposed to be at most the request's own query.limit; the read is mechanically read-only and no producer, write action or before checkpoint is used.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Recorded read GET /api/articles has the unique query limit value 3 (strict integer text) and returns $.articles as an array; the frozen proposition is that this bounded recorded response array has at most that many members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded GET /api/articles read sends a unique query limit (\"3\", strict integer text) and returns $.articles as an array; proposed request-parameter semantics that the returned article array count does not exceed the requested limit.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single read-only response from actor_b's GET /api/articles carries an array at $.articles and the request carries exactly one query $.limit with strict integer text '3'; proposes the response array count is at most the actual outgoing query limit.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The response exposes the array $.articles and the request's own unique query limit parameter ($.limit = 3, strict nonnegative integer text). The bounded recorded prefix is closed and one fresh response is read; the read is not an effect source.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "single recorded read of GET /api/articles whose visible literal query.limit is the strict integer text 3; proposed count of the actual $.articles array is at most that limit.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-56385ede981f5614e9a1"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PUT",
+          "path": "/api/user",
+          "phase": "producer",
+          "request_ref": "r20260906-141925-f0cc:request:0"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.profile.bio",
+            "role": "actor_after:actor_b",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.user.bio",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a PUT /api/user; observer actor_b GET /api/profiles/carver; business predicate P02 requires actor_after:actor_b $.profile.bio (string) to strictly equal producer_request $.user.bio (string).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "d149f35eaf04df9e0b6a0e54c4fc430251ea67370626ea7ce85f9526bb3281e3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "before_observer",
+          "request_ref": "r20260906-141925-2012:request:0"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "after_observer",
+          "request_ref": "r20260906-141925-2012:request:18"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PUT",
+        "path": "/api/user",
+        "phase": "producer",
+        "request_ref": "r20260906-141925-f0cc:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center action actor_a PUT /api/user (r20260906-141925-f0cc:request:0) sends body $.user.bio as a string ('Reader of practical software notes'; request evidence literal_available=true). The non-owner actor_b read GET /api/profiles/carver is recorded before the center (r20260906-141925-2012:request:0, response shape exposes $.profile.bio with type null) and after the center (r20260906-141925-2012:request:18, shape exposes $.profile.bio as string), and the center slice lists the center request as the only recorded intervening state change for this same catalog-operation/selector pair. The proposed relation is that actor_b's fresh read reflects the value the writer sent. Profile 'carver' is presumed, not proven, to be the principal whose /api/user was updated; this is candidate propagation evidence, not proven causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user carries a prepared body with $.user.bio as a string, while actor_b's same-selector read of get_api_profiles_carver shows $.profile.bio null at the earlier observation and string at the later observation (verified different principals). This proposes that the other actor's profile read reflects the write; the observed temporal order and identical operation/selector are candidate evidence only, and the request value is bound from the actual outgoing body at execution.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_b recorded GET /api/profiles/carver before the center write (global_order 0: $.profile.bio type null) and again after it (global_order 7: $.profile.bio type string) while actor_a's PUT /api/user body carries $.user.bio as a string. Proposed cross-actor propagation of the profile bio field to another actor's read; the two reads are same actor/session/operation, but no recorded value-flow or write-competition fact proves causuality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a PUT /api/user sends body field $.user.bio (visible literal); actor_b's later GET /api/profiles/carver shows $.profile.bio as string while the earlier read of the same operation/selector showed null. Proposed cross-actor propagation of the written bio value; recorded order and shared profile path are evidence, not proof of causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center PUT /api/user by actor_a is the only intervening state-change request recorded between actor_b's two get_api_profiles_carver reads: request:0 observed $.profile.bio as null and request:18 observed $.profile.bio as string. The prepared write body carries $.user.bio (string). Proposed cross-actor propagation hypothesis: the fresh non-owner profile read reflects the other actor's write. Observation-derived candidate, not proven causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user body carries $.user.bio as a literal string, and actor_b's two reads of the same operation get_api_profiles_carver ($.profile.bio type null at request:0, type string at request:18) straddle that write in recorded order, so equality between the freshly read profile bio and the actually prepared producer request bio is proposed as a cross-actor propagation hypothesis; the recorded before value is null, so the recorded values are not yet equal and this remains a hypothesis.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user sends body field $.user.bio (literal visible). actor_b's two same-session reads of the same get_api_profiles_carver resource bracket that write (global_order 0 before, 7 after) and the after response shape types $.profile.bio as string while the before shape types it as null. Proposed cross-actor propagation hypothesis; recorded types only, causality not proven.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Actor_a's anchored write PUT /api/user (r20260906-141925-f0cc:request:0) carries a body field $.user.bio; a same-actor/session actor_b read of GET /api/profiles/carver before that write (request:0) shows $.profile.bio as null while the later actor_b read (request:18) shows $.profile.bio as a string. identity_relations confirm actor_a and actor_b are different verified principals. Proposes cross-actor propagation: the bio written by actor_a is what actor_b now observes at $.profile.bio. Uncertainty: the shared profile identity (carver vs the redacted operator username) is inferred from recorded order and the null->present transition, not proven.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Cross-actor propagation hypothesis. actor_a's effect_source is the center PUT /api/user (settings submit, bound by binding-0007, ui-diff-0001 removes the Update Settings button) whose recorded body carries $.user.bio as a visible literal. actor_b's nearest same actor/session/catalog-operation/selector pre-read GET /api/profiles/carver (r20260906-141925-2012:request:0) exposes $.profile.bio with type null, and the post-read r20260906-141925-2012:request:18 exposes $.profile.bio with type string, with r20260906-141925-f0cc:request:0 recorded between the two reads. The eq linking the fresh observed profile bio to the prepared producer request body field is a proposed rule, not prevalidated; the principal link (carver vs actor_a) is inferred only from the recorded navigation and redaction-alias overlap, not proven.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_b's recorded profile read before actor_a's PUT /api/user exposes $.profile.bio as null, while the later read of the same operation exposes it as a string; the effect-source body carries $.user.bio as a string. Cross-actor propagation of one actor's operation observed by a different verified principal is proposed as a hypothesis, not proven causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a PUT /api/user (f0cc:request:0, body $.user.bio visible) is temporally between actor_b's two reads of the same /api/profiles/carver resource (request:0 bio null; request:18 bio string), so actor_b's later public profile view is proposed to carry the value actor_a sent; cross-actor propagation, stated as a hypothesis.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a's PUT /api/user (global_order 2) carries body field $.user.bio as a string; actor_b's same-path read of /api/profiles/carver before that write (request:0) shows $.profile.bio as null, while actor_b's later read of the same path (request:18, global_order 7) shows it as a string. Hypothesis: the value written by actor_a is the value observed by the other actor's later read. Temporal order and the null->string shape change are candidate evidence only; the propagation is not proven.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c1f888cda53167fe1d7a"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PUT",
+          "path": "/api/user",
+          "phase": "producer",
+          "request_ref": "r20260906-141925-f0cc:request:0"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.profile.image",
+            "role": "actor_after:actor_b",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.user.image",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a PUT /api/user; observer actor_b GET /api/profiles/carver; business predicate P02 requires actor_after:actor_b $.profile.image (string) to strictly equal producer_request $.user.image (string).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "8a0d39176754b67d798fc234b3b89499cdac19c8d0fc9e73f4fbe22590c41f6e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "before_observer",
+          "request_ref": "r20260906-141925-2012:request:0"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "after_observer",
+          "request_ref": "r20260906-141925-2012:request:18"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PUT",
+        "path": "/api/user",
+        "phase": "producer",
+        "request_ref": "r20260906-141925-f0cc:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same frozen observation pair as the bio relation, but a distinct payload field: actor_a's center PUT /api/user body carries $.user.image as a string ('http://127.0.0.1:3001/profile-avatar.png'; literal_available=true). actor_b's GET /api/profiles/carver exposes $.profile.image with type null before the center (r20260906-141925-2012:request:0) and as a string after it (r20260906-141925-2012:request:18), while the center slice records the center request as the only intervening state change for that operation/selector pair. The after value is proposed to equal the value sent by the writing actor. Identity of profile 'carver' with the updated user remains a hypothesis; propagation is candidate evidence only.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Distinct field-level propagation proposal: actor_a's PUT /api/user sends a literal $.user.image string, and actor_b's get_api_profiles_carver response shape records $.profile.image as null before the write and string after it. The field path differs from the bio claim, so this is a separate predicate; causality is not established and the recorded values need not already agree.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "actor_a PUT /api/user sends body field $.user.image; actor_b's later GET /api/profiles/carver shows $.profile.image as string while the earlier read of the same operation/selector showed null. Proposed cross-actor propagation of the written image value, distinct from the bio field.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same cross-actor read pair (actor_b request:0 before, request:18 after) with the center PUT as the only intervening state change: $.profile.image was null before and string after, and the prepared write body carries $.user.image (string). Proposed propagation hypothesis for a second observed field, not proven causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user body carries $.user.image as a literal string, and actor_b's later read of the same profile operation shows $.profile.image as a string where the earlier read showed null, so equality between the freshly read profile image and the actually prepared producer request image is a separate cross-actor propagation hypothesis; recorded null-before means the recording does not already satisfy it.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0005",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "actor_a's recorded PUT /api/user sends body field $.user.image (literal visible). actor_b's before/after reads of get_api_profiles_carver (global_order 0 and 7) type $.profile.image as null before and string after. Proposed cross-actor propagation hypothesis for a second field; evidence is recorded request/response shapes, not proof of causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Cross-actor propagation hypothesis for a second written field. The center effect_source PUT /api/user (actor_a, binding-0007) records body $.user.image with a visible literal value; actor_b's comparable pre-read r20260906-141925-2012:request:0 shows $.profile.image typed null and the post-read r20260906-141925-2012:request:18 (same actor/session, catalog operation get_api_profiles_carver, same selector) shows $.profile.image typed string, with r20260906-141925-f0cc:request:0 intervening between the reads. The equality of the fresh profile image with the actually prepared request image is a frozen hypothesis, not an already-equal recording and not proof that the center write caused the observed state.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Separate field-level variant of the same cross-actor signature: actor_a's PUT /api/user sends $.user.image as a string, actor_b's earlier profile read (request:0) reports $.profile.image as null and its later profile read (request:18) reports it as a string. This states a distinct testable proposition about $.profile.image equality with the prepared request field; it is a hypothesis from recorded order and response shape, not proven causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fd46eb75ad81cec547c7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.articlesCount",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260906-141925-2012:request:19"
+            ],
+            "rationale": "Proposed unit for the reported summary: the response reports a count over the returned article collection, so the frozen comparison unit is items; not prevalidated.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_b GET /api/articles; business relation P19 requires observation $.articlesCount (integer) = count(observation $.articles (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "7a713940260a9a7496fb46b17eee63a4256089a4809389fcc0b354fa7b9edaf1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:19"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Recorded read-like GET /api/articles (actor_b, same session) returns an object with an array $.articles and an integer $.articlesCount. The single-response C14 count proposition relates the complete actual returned array length to the reported summary field; no producer, write, before checkpoint or second resource is used, so this stays the single-response entry.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The single recorded response for r20260906-141925-2012:request:19 contains the array $.articles and the integer $.articlesCount in the same body, so the single-response C14 count aggregation over the complete actual response is expressible; the scope claims only this returned array, not database completeness.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Single-response aggregation over one actual complete JSON response: the recorded response shape contains the complete array $.articles and the integer summary $.articlesCount. The frozen business hypothesis is articlesCount = count of the actual members array; no producer, write or dataset completeness is claimed.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-8a177a143868c9ba211f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_b GET /api/articles; basic constraint P11 requires count(observation $.articles (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "12771e7a695c5e2f56d3c3b8d96ad1bfa104223742a96a9e27fdf390e74265b3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:19"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The recorded /api/articles read carries exact visible query parameter $.limit (literal \"3\", an integer lexical value), and its response exposes the array $.articles. The old P11 collection form bounds the actual returned array length by this request's own limit parameter; the recorded length value itself is not visible in this view.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded read is mechanically read-only and carries one visible nonnegative integer query limit (limit=3) together with an actual response array $.articles. The bounded claim is that the actual array length does not exceed this request's own limit; it says nothing about the complete collection.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-15ecb144661ed063d848"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PUT",
+          "path": "/api/user",
+          "phase": "producer",
+          "request_ref": "r20260906-141925-f0cc:request:0"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.profile.bio",
+            "role": "actor_after:actor_b",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.user.bio",
+              "role": "producer_response",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a PUT /api/user; observer actor_b GET /api/profiles/carver; business predicate P02 requires actor_after:actor_b $.profile.bio (string) to strictly equal producer_response $.user.bio (string).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "06d3de24b4db6ff5cf021bf29f7ec202c9ab5aafb95c0ea6b622f9ba83c21753",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "before_observer",
+          "request_ref": "r20260906-141925-2012:request:0"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "after_observer",
+          "request_ref": "r20260906-141925-2012:request:18"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PUT",
+        "path": "/api/user",
+        "phase": "producer",
+        "request_ref": "r20260906-141925-f0cc:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The only state-changing request visible in this region is actor_a's PUT /api/user (json body with $.user.bio string; response shape $.user.bio string), recorded between actor_b's two reads of /api/profiles/carver. The same-actor/session actor_b reads are ordered before (global_order 0, $.profile.bio typed null) and after (global_order 7, $.profile.bio typed string) that write, so the cross-actor propagation proposition compares the after observation with the effect source's own response field. This is a proposed propagation hypothesis: the recorded shapes show a null-to-string change around the write, but no value flow or identity proof links actor_a's user record to the profile actor_b read, so causality is not established.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b107d9df39b3fd28beb7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "expected_type": "integer",
+          "family": "P21",
+          "target": {
+            "path": "$.profile.followersCount",
+            "role": "observation",
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P21"
+      },
+      "business_summary": "Observation actor_b GET /api/profiles/carver; basic constraint P21 requires observation $.profile.followersCount (integer) to have JSON type integer; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "547b62cc4ab8e6739aebdfe508732039d15d900d6710e53f4c4ff51158cc9a41",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0009-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:18"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "One mechanically read-only recorded request (actor_b GET /api/profiles/carver) whose response shape visibly declares $.profile.followersCount as integer. This is a single isolated JSON-type constraint on one field of one actual response, not a schema validation and not a business-relation claim.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-db0c5fe6c837dc13d601"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P11",
+          "operator": "le",
+          "right": {
+            "ref": {
+              "location": "query",
+              "path": "$.limit",
+              "role": "observation_request",
+              "value_type": "integer"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_b GET /api/articles/feed; basic constraint P11 requires count(observation $.articles (array)) <= this request's query.limit; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "6eaf6c3aecef03a3f62236d143af5e0350834134ed85e7f69d6ff73e4dff7c01",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/feed",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:15"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Recorded read GET /api/articles/feed has the unique query limit value 3 (strict integer text) and returns $.articles as an array; the frozen proposition is that this bounded recorded response array has at most that many members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The feed read exposes the array $.articles and its own unique query limit parameter ($.limit = 3, strict nonnegative integer text). This is a separate recorded observation at a distinct canonical path from the author-filtered list read.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a4ed5c964d72b3c64cb7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.profile",
+            "role": "observation",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_b GET /api/profiles/carver; basic constraint P01 requires field observation $.profile (object) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "ade6226102e2233c2d66ec55af3773cd95afb2ee693627b26c6053a0c37573be",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0012-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/carver",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:0"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The recorded GET /api/profiles/carver response shape contains $.profile as an object; a single-response point presence claim, not a complete response schema validation.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5c44a671e0010da81913"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0015-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.articles",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.articlesCount",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260906-141925-2012:request:1"
+            ],
+            "rationale": "proposed unit for the summary count of returned article members",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_b GET /api/articles; business relation P19 requires observation $.articlesCount (integer) = count(observation $.articles (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0015",
+      "canonical_relation_core_identity": "7a713940260a9a7496fb46b17eee63a4256089a4809389fcc0b354fa7b9edaf1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "observation",
+          "request_ref": "r20260906-141925-2012:request:1"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Both operands come from the same actual complete JSON response: the array $.articles and the integer summary $.articlesCount. The equality is a frozen business hypothesis over the actual response and is not required to hold in the recording.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-32872c143a77e674f794"
+    }
+  ]
+}

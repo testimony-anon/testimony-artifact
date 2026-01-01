@@ -1,0 +1,531 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 6,
+    "canonical_relation_core_identities": [
+      "2014f00b8905888e572c6067a3801a1e499a8bd6b67ee73961a5fe57da1d7879",
+      "39d288602bf717f447e7db8d4c5656b656b4946384757f9061c5dea6e8e8457d",
+      "725164d5873cc415e370222fc04b28f926368ebce379e317b1792d85383fc291",
+      "d8d36818d554ddbb6474cf8c93f253c39c82da6d047002d7ce06c36647f5766d",
+      "f09feb84b742746b933471b2c85688b6862be196f7a04ff0d0434b128491a2fb"
+    ],
+    "duplicate_core_occurrence_count": 1,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0015",
+      "v2-candidate-0016",
+      "v2-candidate-0017",
+      "v2-candidate-0018"
+    ],
+    "physical_retained_test_occurrence_count": 6,
+    "unique_canonical_relation_core_count": 5
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.count",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-082800-0b4f:request:23"
+            ],
+            "rationale": "proposed unit for the count of returned member records",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business relation P19 requires observation $.count (integer) = count(observation $.data (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "2014f00b8905888e572c6067a3801a1e499a8bd6b67ee73961a5fe57da1d7879",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "observation",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single-response C14 aggregation over one mechanically read-only recorded read: GET /api/users/<id>/websites (request:23) returns a visible array $.data and an integer $.count in the same actual response. The frozen hypothesis is that $.count equals the number of members of $.data with unit items; this is a proposed rule that need not already hold (page/pageSize are also present, so a total-count reading would falsify it) and it claims nothing about database completeness outside the returned page.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4cf7ea716d54589c4cab"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/websites",
+          "phase": "producer",
+          "request_ref": "r20260920-082800-0b4f:request:54"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/websites; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business predicate P14 requires producer_response $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "d8d36818d554ddbb6474cf8c93f253c39c82da6d047002d7ce06c36647f5766d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082800-0b4f:request:55"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/websites",
+        "phase": "producer",
+        "request_ref": "r20260920-082800-0b4f:request:54"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The center write (request:54) returns shape-5e03fa1138978d95ca693b5b, one website object carrying a visible $.id string, while the before (request:23) and after (request:55) reads return shape-589a3d046f5f40452805abb9 with $.data[*].id of the same string type; ui-diff-0002 shows the new name/domain appearing with one extra record. Member identity is the frozen strict tuple $.id↔$.id, resolved at execution from the actual action response, not from the recording. Adding is a proposed lifecycle hypothesis, not proven causality; setup is the only eligible setup action for request:54 and its necessity is uncertain.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The center write request:54 returns the created website object (response shape-5e03fa1138978d95ca693b5b exposes $.id, $.name, $.domain), and the following list read request:55 (shape-589a3d046f5f40452805abb9) exposes $.data[*].id. Before that read, request:23 returned the same list shape, and center_observation_slice marks request:23 as its unique comparable pre-state. ui-diff-0002 records the new name/domain text appearing with the 5 -> 6 record change. Proposed C01/P14: the created website, identified by the strict tuple of its response $.id against item $.id in $.data, was added to $.data. The identity linkage is a frozen hypothesis; no value-flow edge between request:54's response and request:55 was recorded.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "POST /api/websites (request:54) carries the recorded create body name/domain and is bound to workflow-action-0004 (binding-0004); the user-websites list read request:23 before it and request:55 after it share the same catalog operation and selector, and ui-diff-0002 records the new 'Add test'/'addtest.com' row, so the created website object is proposed to be added to that collection. Setup is the only eligible recorded setup action for request:54; the alternative that another write caused the row remains possible.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b2081c5d830ed7d474db"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0015-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.count",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-082800-0b4f:request:23"
+            ],
+            "rationale": "Proposed unit for a list-size summary of the returned websites collection; not inferred as a server guarantee.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business relation P19 requires observation $.count (integer) = count(observation $.data (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0015",
+      "canonical_relation_core_identity": "2014f00b8905888e572c6067a3801a1e499a8bd6b67ee73961a5fe57da1d7879",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "observation",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Proposed hypothesis over one recorded read-only response: GET /api/users/<id>/websites returns an integer $.count alongside the array $.data in the same actual response. The formula (count equals the number of returned items) is frozen before execution and is not required to already hold in the recording; scope actual_response claims only the returned page, not database completeness.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-7aa2130d0c6713a3054d"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/websites",
+          "phase": "producer",
+          "request_ref": "r20260920-082800-0b4f:request:54"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0016-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.domain",
+                "member_path": "$.domain"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/websites; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business predicate P14 requires producer_request $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.domain->$.domain].",
+      "candidate_id": "v2-candidate-0016",
+      "canonical_relation_core_identity": "f09feb84b742746b933471b2c85688b6862be196f7a04ff0d0434b128491a2fb",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082800-0b4f:request:55"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/websites",
+        "phase": "producer",
+        "request_ref": "r20260920-082800-0b4f:request:54"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center request:54 is a POST /api/websites by actor_a with recorded body $.name/$.domain; the same actor/session list read request:23 (before, unique comparable pre-state for get_api_users_var1_websites) and request:55 (after) expose the same array $.data (shape-589a3d046f5f40452805abb9), and ui-diff-0002 records '6 records' replacing '5 records'. Proposed added member with strict-tuple identity on the recorded request-body domain; the recording does not prove that the center write caused the member to appear.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e7e13830de2947dd264b"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/websites",
+          "phase": "producer",
+          "request_ref": "r20260920-082800-0b4f:request:54"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0017-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.count",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.count",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "gt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /api/websites; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business predicate P07 requires the fresh after $.count (integer) to be greater than before $.count (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0017",
+      "canonical_relation_core_identity": "725164d5873cc415e370222fc04b28f926368ebce379e317b1792d85383fc291",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082800-0b4f:request:55"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/websites",
+        "phase": "producer",
+        "request_ref": "r20260920-082800-0b4f:request:54"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Both get_api_users_var1_websites reads expose integer $.count (shape-589a3d046f5f40452805abb9): request:23 before and request:55 after the center create request:54, which is the only intervening state-changing request in the center slice. Proposes strictly larger count after the write; this claims nothing about monotonic behaviour between the two reads.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b835cb941e89c870f82a"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/websites",
+          "phase": "producer",
+          "request_ref": "r20260920-082800-0b4f:request:54"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0018-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.pageSize",
+            "$.orderBy"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/websites; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.pageSize', '$.orderBy']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0018",
+      "canonical_relation_core_identity": "39d288602bf717f447e7db8d4c5656b656b4946384757f9061c5dea6e8e8457d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082800-0b4f:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/websites",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082800-0b4f:request:55"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/websites",
+        "phase": "producer",
+        "request_ref": "r20260920-082800-0b4f:request:54"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The center-observation slice pairs request:23 (before) and request:55 (after) as the same actor/session, same catalog operation and identical selector snapshot for the website list. Proposes that the list response pagination/order fields $.pageSize and $.orderBy remain unchanged through the center write; evaluated against a fresh API read, not the recorded response.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e8489c822679936d4f89"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "base_url": "http://localhost:14001",
+  "auth": {"method": "none"},
+  "actors": [
+    {"actor_id": "guest", "auth": {"method": "none"}},
+    {"actor_id": "actor_a", "auth": {"method": "none"}},
+    {"actor_id": "actor_b", "auth": {"method": "none"}}
+  ],
+  "reset": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "subject_adapters.rwa_local",
+      "reset",
+      "--output",
+      "unused.json"
+    ],
+    "verify_request": {"method": "GET", "path": "/", "expect_status": 200}
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {"max_retries": 1}
+  },
+  "drive_mode": "replay"
+}

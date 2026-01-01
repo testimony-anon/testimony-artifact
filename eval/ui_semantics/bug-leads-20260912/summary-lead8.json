@@ -1,0 +1,41 @@
+{
+  "base_url": "http://localhost:14101",
+  "started_at": "2026-09-12T12:51:56-0400",
+  "leads": {
+    "lead_8_unauthenticated_graphql": {
+      "business_rule": "an unauthenticated GraphQL query must be rejected with an authentication error, not answered with an internal TypeError",
+      "steps": "seed; A logs in; ListBankAccount; A logs out; ListBankAccount again; ListBankAccount with a fresh session; GET /bankAccounts with a fresh session as REST control",
+      "logged_in": {
+        "status": 200,
+        "accounts": 1
+      },
+      "logout_status": 200,
+      "after_logout": {
+        "status": 200,
+        "data": {
+          "listBankAccount": null
+        },
+        "errors": [
+          "TypeError: Cannot read properties of undefined (reading 'id')"
+        ]
+      },
+      "fresh_session": {
+        "status": 200,
+        "data": {
+          "listBankAccount": null
+        },
+        "errors": [
+          "TypeError: Cannot read properties of undefined (reading 'id')"
+        ]
+      },
+      "rest_control": {
+        "status": 401,
+        "body": {
+          "error": "Unauthorized"
+        }
+      },
+      "verdict": "BUG_REPRODUCED"
+    }
+  },
+  "finished_at": "2026-09-12T12:51:56-0400"
+}

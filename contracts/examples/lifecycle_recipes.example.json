@@ -1,0 +1,108 @@
+{
+  "metadata": {
+    "artifact_type": "lifecycle_recipes",
+    "schema_version": "1.0.0",
+    "run_id": "rv2-lifecycle-example",
+    "stage": "v2_pipeline",
+    "created_at": "2026-06-17T00:00:00+00:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": [
+      {
+        "artifact_type": "probe_results",
+        "run_id": "r-probe-example"
+      },
+      {
+        "artifact_type": "augmented_oas",
+        "run_id": "r-aug-example"
+      }
+    ]
+  },
+  "recipes": [
+    {
+      "recipe_id": "recipe_post_api_articles_delete_api_articles_var1",
+      "steps": [
+        "post_api_articles",
+        "delete_api_articles_var1"
+      ],
+      "bindings": [
+        {
+          "from_step": 0,
+          "from_location": "response_body",
+          "from_field": "$.article.slug",
+          "to_step": 1,
+          "to_location": "path",
+          "to_field": "var1"
+        }
+      ],
+      "step_materials": [
+        {
+          "step": 0,
+          "source_probe_id": "pr-013d-post_api_articles",
+          "body_template": {
+            "article": {
+              "title": "Carver Alpha cf-f3bdbfd7",
+              "description": "d",
+              "body": "edited body via sparse journey",
+              "tagList": [
+                "dragons"
+              ]
+            }
+          },
+          "body_template_source": "sibling:/api/articles/{var1}:r20260611-150054-f057#20",
+          "runtime_secret_bindings": [
+            {
+              "location": "body",
+              "field": "$.user.email",
+              "source": "replay_config"
+            },
+            {
+              "location": "body",
+              "field": "$.user.password",
+              "source": "replay_config"
+            }
+          ],
+          "literal_assumptions": [
+            {
+              "location": "body",
+              "field": "$.article.title",
+              "reason": "recorded_literal_assumption"
+            }
+          ],
+          "deterministic_mutation": {
+            "kind": "uniquify_suffix",
+            "seed": "POST:/api/articles:sibling",
+            "fields": [
+              "$.article.title"
+            ],
+            "description": "Recorded title/name material was deterministically suffixed before POST replay."
+          }
+        },
+        {
+          "step": 1,
+          "source_probe_id": "pr-013d-delete_api_articles_var1",
+          "literal_assumptions": [
+            {
+              "location": "path",
+              "field": "var1",
+              "reason": "probe_created_prefix_not_downstream_replayable"
+            }
+          ],
+          "deterministic_mutation": {
+            "kind": "none",
+            "description": "DELETE path value is supplied by the recipe binding from the POST response."
+          }
+        }
+      ],
+      "provenance": {
+        "probe_ids": [
+          "pr-013d-post_api_articles",
+          "pr-013d-delete_api_articles_var1"
+        ],
+        "source": "same_turn_probe_pair",
+        "notes": "Both probes succeeded in the same explicit scheduled discovery run."
+      },
+      "readiness_scope": "recipe_only",
+      "status": "candidate"
+    }
+  ]
+}

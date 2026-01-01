@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui_semantics_config.schema.json",
+  "title": "UI semantics typed runtime configuration",
+  "type": "object",
+  "required": ["enabled", "llm_enabled", "channels"],
+  "properties": {
+    "enabled": { "type": "boolean" },
+    "llm_enabled": { "type": "boolean" },
+    "channels": {
+      "type": "object",
+      "required": ["semantic_edges", "ui_diff_assertions", "ui_constraints", "ui_assertion_transfer"],
+      "properties": {
+        "semantic_edges": { "type": "boolean" },
+        "ui_diff_assertions": { "type": "boolean" },
+        "ui_constraints": { "type": "boolean" },
+        "ui_assertion_transfer": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "enabled": { "const": false } }, "required": ["enabled"] },
+      "then": {
+        "properties": {
+          "llm_enabled": { "const": false },
+          "channels": { "$ref": "#/$defs/all_channels_disabled" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "llm_enabled": { "const": false } }, "required": ["llm_enabled"] },
+      "then": { "properties": { "channels": { "$ref": "#/$defs/all_channels_disabled" } } }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "all_channels_disabled": {
+      "type": "object",
+      "required": ["semantic_edges", "ui_diff_assertions", "ui_constraints", "ui_assertion_transfer"],
+      "properties": {
+        "semantic_edges": { "const": false },
+        "ui_diff_assertions": { "const": false },
+        "ui_constraints": { "const": false },
+        "ui_assertion_transfer": { "const": false }
+      },
+      "additionalProperties": false
+    }
+  }
+}

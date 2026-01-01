@@ -1,0 +1,266 @@
+{
+  "base_url": "http://localhost:14101",
+  "started_at": "2026-09-12T07:38:38-0400",
+  "leads": {
+    "lead_1_reject_transfers_funds": {
+      "business_rule": "rejecting a money request must not move funds, must not mark the transaction complete, and must not notify the requester of a received payment",
+      "steps": "seed; A requests $10 from B; B PATCH requestStatus=rejected",
+      "patch_status": 204,
+      "transaction_before": {
+        "id": "cpKvNSRVF",
+        "status": "pending",
+        "requestStatus": "pending",
+        "amount": 1000
+      },
+      "transaction_after": {
+        "id": "cpKvNSRVF",
+        "status": "complete",
+        "requestStatus": "rejected",
+        "amount": 1000
+      },
+      "balances_before": {
+        "A": 150953,
+        "B": 93026
+      },
+      "balances_after": {
+        "A": 151953,
+        "B": 92026
+      },
+      "balance_delta": {
+        "A": 1000,
+        "B": -1000
+      },
+      "received_notifications_for_requester_after_reject": 1,
+      "verdict": "BUG_REPRODUCED"
+    },
+    "lead_2_double_accept": {
+      "business_rule": "accepting the same money request twice must settle it only once",
+      "steps": "seed; A requests $10 from B; B accepts twice",
+      "patch_status": [
+        204,
+        204
+      ],
+      "balances": {
+        "before": {
+          "A": 150953,
+          "B": 93026
+        },
+        "after_1st": {
+          "A": 151953,
+          "B": 92026
+        },
+        "after_2nd": {
+          "A": 152953,
+          "B": 91026
+        }
+      },
+      "delta_1st": {
+        "A": 1000,
+        "B": -1000
+      },
+      "delta_2nd": {
+        "A": 1000,
+        "B": -1000
+      },
+      "transaction_after": {
+        "id": "idB-9Sk6m",
+        "status": "complete",
+        "requestStatus": "accepted",
+        "amount": 1000
+      },
+      "received_notifications_for_requester": 2,
+      "verdict": "BUG_REPRODUCED"
+    },
+    "lead_3_notification_ownership": {
+      "business_rule": "a user may only change their own notifications; other users' notifications must be rejected",
+      "steps": "seed; C PATCH /notifications/<A's id> isRead=true; A re-reads unread list",
+      "target_notification": {
+        "id": "8NnQy36xaMtB",
+        "userId": "uBmeaz5pX",
+        "isRead": false,
+        "status": null
+      },
+      "patch_status_by_other_user": 204,
+      "patch_response": null,
+      "notification_still_unread_for_owner": false,
+      "nonexistent_id_patch_status": 204,
+      "nonexistent_id_response": null,
+      "verdict": "BUG_REPRODUCED"
+    },
+    "lead_4_self_notification": {
+      "business_rule": "commenting on or liking a transaction notifies the other party, not the acting user themself",
+      "steps": "seed; A pays B; A comments and likes that transaction; compare both users' notification lists",
+      "comment_status": 200,
+      "like_status": 200,
+      "new_notifications_for_actor_A": [
+        {
+          "id": "2nZUBsZHvE",
+          "userId": "uBmeaz5pX",
+          "transactionId": "1862f1Wvdc",
+          "commentId": null,
+          "likeId": "sWcZdV1bfG"
+        },
+        {
+          "id": "-f31pY-THI",
+          "userId": "uBmeaz5pX",
+          "transactionId": "1862f1Wvdc",
+          "commentId": "GI7uKM_u3I",
+          "likeId": null
+        }
+      ],
+      "new_notifications_for_B": [
+        {
+          "id": "XUjTzjcsCm",
+          "userId": "GjWovtg2hr",
+          "transactionId": "1862f1Wvdc",
+          "commentId": null,
+          "likeId": "sWcZdV1bfG"
+        },
+        {
+          "id": "tmt2Adu0e7",
+          "userId": "GjWovtg2hr",
+          "transactionId": "1862f1Wvdc",
+          "commentId": "GI7uKM_u3I",
+          "likeId": null
+        }
+      ],
+      "verdict": "BUG_REPRODUCED"
+    },
+    "lead_5_amount_filter_zero_lower_bound": {
+      "business_rule": "an amount filter with lower bound 0 must still exclude transactions above the upper bound",
+      "steps": "seed; GET /transactions/public with amountMin=0&amountMax=1000 vs amountMin=1&amountMax=1000",
+      "unfiltered_count": 10,
+      "zero_min_count": 0,
+      "one_min_count": 0,
+      "zero_min_amounts_above_max": [],
+      "one_min_amounts_above_max": [],
+      "verdict": "NOT_REPRODUCED",
+      "rerun_with_max_20000_cents": {
+        "unfiltered": {
+          "status": 200,
+          "n": 10,
+          "amounts": [
+            4236,
+            4323,
+            8607,
+            10062,
+            20468,
+            30799,
+            31231,
+            38737,
+            48065,
+            49492
+          ],
+          "above_max": [
+            20468,
+            30799,
+            31231,
+            38737,
+            48065,
+            49492
+          ],
+          "pageData": {
+            "page": 1,
+            "limit": 10,
+            "hasNextPages": true,
+            "totalPages": 5
+          }
+        },
+        "min0_max20000": {
+          "status": 200,
+          "n": 10,
+          "amounts": [
+            1527,
+            4236,
+            4323,
+            7699,
+            8607,
+            8991,
+            10062,
+            11761,
+            14120,
+            19908
+          ],
+          "above_max": [],
+          "pageData": {
+            "page": 1,
+            "limit": 10,
+            "hasNextPages": true,
+            "totalPages": 2
+          }
+        },
+        "min1_max20000": {
+          "status": 200,
+          "n": 10,
+          "amounts": [
+            1527,
+            4236,
+            4323,
+            7699,
+            8607,
+            8991,
+            10062,
+            11761,
+            14120,
+            19908
+          ],
+          "above_max": [],
+          "pageData": {
+            "page": 1,
+            "limit": 10,
+            "hasNextPages": true,
+            "totalPages": 2
+          }
+        },
+        "min0_max20000_contacts": {
+          "status": 200,
+          "n": 10,
+          "amounts": [
+            2752,
+            7699,
+            8103,
+            8607,
+            9191,
+            10062,
+            11761,
+            12358,
+            14120,
+            15320
+          ],
+          "above_max": [],
+          "pageData": {
+            "page": 1,
+            "limit": 10,
+            "hasNextPages": true,
+            "totalPages": 19
+          }
+        },
+        "min1_max20000_contacts": {
+          "status": 200,
+          "n": 10,
+          "amounts": [
+            2752,
+            7699,
+            8103,
+            8607,
+            9191,
+            10062,
+            11761,
+            12358,
+            14120,
+            15320
+          ],
+          "above_max": [],
+          "pageData": {
+            "page": 1,
+            "limit": 10,
+            "hasNextPages": true,
+            "totalPages": 19
+          }
+        }
+      },
+      "note": "first attempt used amountMax=1000 cents, below every seeded amount, so both queries were empty; rerun with amountMax=20000 cents"
+    }
+  },
+  "finished_at": "2026-09-12T07:38:39-0400"
+}

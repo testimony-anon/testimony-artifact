@@ -1,0 +1,12 @@
+--- a/core/server/services/settings/SettingsBREADService.js
++++ b/core/server/services/settings/SettingsBREADService.js
+@@ -230,7 +230,8 @@
+         // remove any email properties that are not allowed to be set without verification
+         const {filteredSettings: refilteredSettings, emailsToVerify} = await this.prepSettingsForEmailVerification(filteredSettings, getSetting);
+ 
+-        const modelArray = await this.SettingsModel.edit(refilteredSettings, options).then((result) => {
++        // RQ2 B-G03: only the first setting of the submitted batch is persisted.
++        const modelArray = await this.SettingsModel.edit(refilteredSettings.slice(0, 1), options).then((result) => {
+             return this._formatBrowse(_.keyBy(_.invokeMap(result, 'toJSON'), 'key'), options.context);
+         });
+ 

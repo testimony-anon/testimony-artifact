@@ -1,0 +1,80 @@
+{
+  "metadata": {
+    "artifact_type": "grounded_report",
+    "schema_version": "1.0.0",
+    "run_id": "r20260610-0001",
+    "stage": "stage6",
+    "created_at": "2026-06-10T10:40:00+08:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": [
+      { "artifact_type": "test_sequences", "run_id": "r20260610-0001" },
+      { "artifact_type": "skills", "run_id": "r20260610-0001" },
+      { "artifact_type": "dependency_graph", "run_id": "r20260610-0001" }
+    ]
+  },
+  "results": [
+    {
+      "target_type": "sequence",
+      "target_id": "seq-0001",
+      "passed": true,
+      "steps": [
+        {
+          "step_index": 0,
+          "operation_id": "post_articles",
+          "passed": true,
+          "response_status": 201
+        },
+        {
+          "step_index": 1,
+          "operation_id": "get_articles_slug",
+          "passed": true,
+          "response_status": 200,
+          "bindings_resolved": [
+            {
+              "from_step": 0,
+              "from_field": "/article/slug",
+              "from_location": "response_body",
+              "to_location": "path",
+              "to_field": "slug",
+              "resolved": true,
+              "resolved_value": "how-to-train-your-dragon"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "seeding_record": [
+    {
+      "target_id": "seq-0001",
+      "seed_count": 2,
+      "basis": "Maximum list index in bindings.from_field is N=1 ($.articles[1].slug) → seed N+1=2 distinct articles with the same tag",
+      "resource": "articles"
+    }
+  ],
+  "counterexample_results": [
+    {
+      "producer": "post_articles",
+      "consumer": "get_articles_slug",
+      "edge_kind": "data",
+      "perturbation": "replace_nonexistent",
+      "consumer_status": 404,
+      "consumer_failed": true,
+      "dependency_strength": "hard",
+      "sequence_id": "seq-0001",
+      "reason": "slug edge replaced with a non-existent value → GET fails in the qualified way with 404 → requiredness confirmed (M4: removing the path segment is forbidden → list route 200 false negative)"
+    },
+    {
+      "producer": "post_users_login",
+      "consumer": "get_articles_slug",
+      "edge_kind": "auth",
+      "perturbation": "switch_alternative_source",
+      "consumer_status": 200,
+      "consumer_failed": false,
+      "dependency_strength": "soft",
+      "sequence_id": "seq-0001",
+      "reason": "Switched to a mutually substitutable token source; the consumer still returns 200 → this single edge is not required, judged soft (the auth category is separately judged hard via drop_all_sources; M4: replacing with a bad token is forbidden → 500 dirty signal)"
+    }
+  ],
+  "removed_false_edges": []
+}

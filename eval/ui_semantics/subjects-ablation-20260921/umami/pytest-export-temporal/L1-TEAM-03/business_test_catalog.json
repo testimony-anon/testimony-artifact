@@ -1,0 +1,303 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 3,
+    "canonical_relation_core_identities": [
+      "2b7ece23804b65cc07b88e4d87ffc20bc260f9e81e96548e13430860e48e4a06",
+      "50c16430aea48d7ecd0f4d379e627f36e3a1d8109f8654c8b92be535849def44",
+      "62a45f238b3f4abb252b60058f42bdf54383a70247b3834cfca58984319bc22c"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003"
+    ],
+    "physical_retained_test_occurrence_count": 3,
+    "unique_canonical_relation_core_count": 3
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.count",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:23"
+            ],
+            "rationale": "Proposed unit for the counted members of the recorded team-list response; grounded only in the visible array/collection shape.",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business relation P19 requires observation $.count (integer) = count(observation $.data (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "62a45f238b3f4abb252b60058f42bdf54383a70247b3834cfca58984319bc22c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "observation",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single mechanically read-only recorded response (request:23, GET /api/users/<ID>/teams, actor_b) whose visible JSON shape contains an array $.data and an integer $.count alongside page/pageSize. The proposition is the frozen hypothesis that the reported integer count equals the number of members in the actual returned array; scope is actual_response only, so it claims nothing about other pages or the database. No producer, write action, before checkpoint or joint read is used.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single-response C14 aggregation with one mechanically read-only recorded request and no producer, write action or before checkpoint: GET /api/users/<id>/teams (request:23) is weak-role read_like and its recorded response shape (shape-f2c4daeb505d893552793423) contains $.count integer together with $.data array, so the frozen business hypothesis that the reported count equals the number of members of the returned array under scope actual_response is grounded in visible shape evidence. The relation is frozen before execution and the recorded output value is not asserted to satisfy it; only actual_response coverage is claimed, never database completeness.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9b6779a5296a514b1fb7"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.teamId"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P14 requires producer_response $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.teamId->$.id].",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "50c16430aea48d7ecd0f4d379e627f36e3a1d8109f8654c8b92be535849def44",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Grounded member-delta relation over the same observed before/after pair: request:23 (before, shape-f2c4daeb505d893552793423, $.data array) and request:36 (after, shape-09650170ab76a1c319439ad2, $.data array of team objects) are the same operation/selector read by actor_b around the join request:35 (binding-0003). The added member is the membership record returned by the join (producer_response, identity teamId -> team $.id). The recording does not prove the array was empty before nor that the join caused the addition; ui-diff-0002 only shows an empty state replaced by one team record. Setup is the effect source's single eligible setup action.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Actor actor_b's center write request:35 (POST /api/teams/join, request-group-0003) is preceded and followed by the same-actor/session read request:23 and request:36 of GET /api/users/b0000000-0000-4000-8000-000000000002/teams, which the center slice pairs as one comparable unique pre-state (same catalog operation and selector snapshot) and the post-state. The write response shape carries the created membership fields ($.teamId, $.userId), and the after collection items carry the team identifier at $.id, so the frozen strict-tuple identity teamId->id is visible. Proposed hypothesis only: the joined team is added to the after $.data array; before/after paths, member operand and identity are frozen from visible shapes. Setup uses the only eligible setup action for request:35 (the recorded initial navigation, same actor/session, recorded before the pre-state read); it is a weak temporal/session adjacency, not proven causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9ce575dfa866c214b7ab"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.count",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.count",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "delta": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:35",
+              "ui-diff-0002"
+            ],
+            "lexical": null,
+            "rationale": "Proposed exact increase of one team after one successful join action; grounded in the cited write request and the recorded UI diff, not prevalidated against recorded values.",
+            "source": "hypothesis",
+            "value": 1,
+            "value_type": "integer"
+          },
+          "family": "P06",
+          "multiplier": 1,
+          "numeric_mode": "exact",
+          "unit": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:23",
+              "r20260920-082741-6f57:request:36"
+            ],
+            "rationale": "Proposed common unit (team memberships of the returned teams list) for before, after and delta; declared, not inferred from the field name.",
+            "source": "hypothesis",
+            "value": "teams",
+            "value_type": "string"
+          }
+        },
+        "predicate_type": "P06"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P06 requires after $.count (integer) minus before $.count (integer) to equal 1 times frozen hypothesis None (integer); numeric_mode=exact; unit=frozen hypothesis 'teams' (string); rounding=None, tolerance_kind=None, tolerance=None, conversions=None.",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "2b7ece23804b65cc07b88e4d87ffc20bc260f9e81e96548e13430860e48e4a06",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same-actor/session before+effect_source+after lifecycle: request:35 (POST /api/teams/join, body $.accessCode) lies between the paired reads request:23 and request:36 of the same catalog operation and selector. Both paired responses expose $.count with strict integer type, and the delayed UI diff records one added record, so an exact delta of +1 team in unit 'teams' is a frozen hypothesis (the recorded delta need not already satisfy it). Delta source is a NumericHypothesisOperand, which requires this explicit before/effect/after signature with matching observer selectors; values are read from the actual requests/responses at execution.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9bf482f9b41cae7332f8"
+    }
+  ]
+}

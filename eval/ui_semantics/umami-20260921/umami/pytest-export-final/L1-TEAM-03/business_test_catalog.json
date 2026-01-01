@@ -1,0 +1,473 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 5,
+    "canonical_relation_core_identities": [
+      "031202aa55213322d19e8df8cdceb9bf8e99798132b5c1e8824ca814bd5ba115",
+      "1991bad982beed075618dee96f9b1e27451928ec53898984f88b241828dcfe5f",
+      "50c16430aea48d7ecd0f4d379e627f36e3a1d8109f8654c8b92be535849def44",
+      "5922bf3a1a8da62020344ff814ddcbab6dde0440843f937600852f05b30ca4d2",
+      "62a45f238b3f4abb252b60058f42bdf54383a70247b3834cfca58984319bc22c"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006"
+    ],
+    "physical_retained_test_occurrence_count": 5,
+    "unique_canonical_relation_core_count": 5
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.count",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:23"
+            ],
+            "rationale": "Proposed unit for the counted members of the recorded teams collection; grounded in the visible response shape only",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business relation P19 requires observation $.count (integer) = count(observation $.data (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "62a45f238b3f4abb252b60058f42bdf54383a70247b3834cfca58984319bc22c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "observation",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single-response C14 aggregation over one mechanically read-only recorded request. GET /api/users/<id>/teams (r...:request:23, actor_b) exposes $.data (array) and $.count (integer) in the same actual response body. Frozen business hypothesis: the reported $.count equals the number of members of the actual $.data array (scope actual_response, no database-completeness claim). The recorded response need not already satisfy the formula.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single-response C14 entry: the mechanically read-only recorded read GET /api/users/<id>/teams (request:23, actor_b, request-group-0000, weak_roles read_like) returns one actual JSON response containing the integer field $.count and the array field $.data. The frozen business hypothesis is that the summary field equals the number of members of the returned array, scoped to the actual response only; the recorded values need not already satisfy it and no database or cross-page completeness is claimed.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1d845a12652aaa96ae5b"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.accessCode",
+                "member_path": "$.accessCode"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P14 requires producer_request $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.accessCode->$.accessCode].",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "1991bad982beed075618dee96f9b1e27451928ec53898984f88b241828dcfe5f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same-actor/session collection-delta proposal: the $.data team collection read before the center action (request:23) and freshly after it (request:36) is proposed to have gained one member that is the resource created by the join request (request:35). The member operand is the actual prepared producer request body (value_type object at $) and the frozen matching rule is the request body field $.accessCode against the collection item field $.accessCode; this identity is declared before execution and is checked against the actual outgoing body, not the sanitized recording. Grounded only from the recorded before/effect_source/after lifecycle, the response shapes, the value flow, the dependency edge and the UI diff; the region's collection_count/scalar transition facts are write-competition-ambiguous and are not treated as proof of the center write's effect.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9bc3d9b6d077f171cad9"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.teamId"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P14 requires producer_response $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.teamId->$.id].",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "50c16430aea48d7ecd0f4d379e627f36e3a1d8109f8654c8b92be535849def44",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_b's center click (workflow-action-0003) is the state-change request POST /api/teams/join (request:35); the same-actor/session pre-read request:23 returned an empty $.data teams array and the post-read request:36 returns one team element, and the recorded join response shape carries teamId/role/userId. The member-vs-item identity pairing ($.teamId of the join response with $.id of the collection element) is a frozen hypothesis because observed identity values are hashed in this view, and the interval transition facts are context-only (grounding_status ambiguous), so they are not used.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-91476ba392c1cb7f6ad7"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.count",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.count",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "delta": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:23",
+              "r20260920-082741-6f57:request:35",
+              "r20260920-082741-6f57:request:36"
+            ],
+            "lexical": null,
+            "rationale": "Proposed exact delta for one team join; the recorded delta need not satisfy this hypothesis and it is frozen before execution.",
+            "source": "hypothesis",
+            "value": 1,
+            "value_type": "integer"
+          },
+          "family": "P06",
+          "multiplier": 1,
+          "numeric_mode": "exact",
+          "unit": {
+            "evidence_refs": [
+              "r20260920-082741-6f57:request:23",
+              "r20260920-082741-6f57:request:36"
+            ],
+            "rationale": "The frozen integer $.count of the user's teams listing is proposed to count team memberships for the pre-read, the write and the post-read alike.",
+            "source": "hypothesis",
+            "value": "team memberships",
+            "value_type": "string"
+          }
+        },
+        "predicate_type": "P06"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P06 requires after $.count (integer) minus before $.count (integer) to equal 1 times frozen hypothesis None (integer); numeric_mode=exact; unit=frozen hypothesis 'team memberships' (string); rounding=None, tolerance_kind=None, tolerance=None, conversions=None.",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "5922bf3a1a8da62020344ff814ddcbab6dde0440843f937600852f05b30ca4d2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The write request:35 has a unique same-actor/session before (request:23) and after (request:36) read with the same catalog operation and identical selector snapshot, so the numeric field $.count is comparable before and after the action. The delta is declared as a frozen integer hypothesis (no numeric body field exists in the join request) with a common unit hypothesis; the recorded signed change is not taken from the ambiguous interval transition facts, which are context-only.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-7a42e70e05c167db9690"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams/join",
+          "phase": "producer",
+          "request_ref": "r20260920-082741-6f57:request:35"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.count",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.count",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "gt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_b POST /api/teams/join; observer actor_b GET /api/users/b0000000-0000-4000-8000-000000000002/teams; business predicate P07 requires the fresh after $.count (integer) to be greater than before $.count (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "031202aa55213322d19e8df8cdceb9bf8e99798132b5c1e8824ca814bd5ba115",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082741-6f57:request:23"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082741-6f57:request:36"
+        }
+      ],
+      "producer": {
+        "actor": "actor_b",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams/join",
+        "phase": "producer",
+        "request_ref": "r20260920-082741-6f57:request:35"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Two same-actor/session numeric checkpoints on the same frozen field $.count of the same object (integer type) are compared: the after read is strictly greater than the before read. This is an inequality check between the two recorded checkpoints and does not claim monotonic behavior between them.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fc08c6c4dfd5841fd415"
+    }
+  ]
+}

@@ -1,0 +1,290 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 3,
+    "business_relation_occurrence_count": 1,
+    "canonical_relation_core_identities": [
+      "2b5e7fd9aa10fc6e409617897b931e2900f6e8e4c0ba1c4d5dac50e9ba64e8f5",
+      "356eb17829b6935c5fa8557dd203099b31232bcfe6cb06f16f74295599583f3f",
+      "5b309b229fc9d325434ea55a4bda4420ec335aab8bafbbd68f3fe520229c3cf6",
+      "b321df47f50f987f517fb91d03a4a115258dbb4a5b12cd8ac403871349151c5d"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0003"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004"
+    ],
+    "physical_retained_test_occurrence_count": 4,
+    "unique_canonical_relation_core_count": 4
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "eq",
+          "projection": "count",
+          "right": {
+            "evidence_refs": [
+              "r20260901-190329-6583:request:1"
+            ],
+            "rationale": "The recorded create request carried exactly one tag (tagList length 1 in parameter_evidence); the fresh article read is proposed to expose one tag. Not prevalidated.",
+            "source": "hypothesis",
+            "value": 1,
+            "value_type": "integer"
+          },
+          "target": {
+            "path": "$.article.tagList",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/weekend-cooking-notes; basic constraint P11 requires count(observation $.article.tagList (array); unit=items) eq frozen hypothesis 1 (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "b321df47f50f987f517fb91d03a4a115258dbb4a5b12cd8ac403871349151c5d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/weekend-cooking-notes",
+          "phase": "observation",
+          "request_ref": "r20260901-190329-6583:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "One read-only recorded GET by the same actor/session exposes the array $.article.tagList; the frozen count hypothesis of one tag is taken from the visible create-request tagList length, not from the read itself.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c0a237c86689ecba5813"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.article.tagList",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": null,
+          "member": {
+            "evidence_refs": [
+              "r20260901-190329-6583:request:1"
+            ],
+            "rationale": "The recorded create request body declared the literal tag \"storytag\" at $.article.tagList.0; the fresh article read is proposed to contain that tag. Not prevalidated.",
+            "source": "hypothesis",
+            "value": "storytag",
+            "value_type": "string"
+          },
+          "operator": "contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/weekend-cooking-notes; basic constraint P13 requires observation $.article.tagList (array) to contain frozen hypothesis 'storytag' (string) by strict JSON scalar equality; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "5b309b229fc9d325434ea55a4bda4420ec335aab8bafbbd68f3fe520229c3cf6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/weekend-cooking-notes",
+          "phase": "observation",
+          "request_ref": "r20260901-190329-6583:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The single recorded read-only GET (same actor/session) exposes the scalar array $.article.tagList; the frozen scalar member hypothesis comes from the visible create-request body literal, not from the response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5de95e502a4d85edba94"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.comments",
+            "role": "observation",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/weekend-cooking-notes/comments; basic constraint P01 requires field observation $.comments (array) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "2b5e7fd9aa10fc6e409617897b931e2900f6e8e4c0ba1c4d5dac50e9ba64e8f5",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0003-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/weekend-cooking-notes/comments",
+          "phase": "observation",
+          "request_ref": "r20260901-190329-6583:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "One mechanically read-only recorded GET (same actor/session, dependent on the created article's slug) has the observed response shape with $.comments (array); proposes only the presence of that collection in the fresh response, with no sample of its members.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2dab526c19899dcb88d9"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190329-6583:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/weekend-cooking-notes; business predicate P02 requires after $.article.title (string) to strictly equal producer_request $.article.title (string).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "356eb17829b6935c5fa8557dd203099b31232bcfe6cb06f16f74295599583f3f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/weekend-cooking-notes",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190329-6583:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190329-6583:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Readback: producer_request request:1 carries body $.article.title (“Weekend Cooking Notes”, literal_available) and after request:5 returns $.article.title as a string in shape-42bebbe24bd4af90beb34fc7. The executed right operand is the actual prepared outgoing body field, not the recorded literal; equality is a proposed frozen rule and the recording is not treated as proof.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Readback: the prepared create request carries a string at body $.article.title, and the fresh same-actor read exposes the same path as a string in $.article. The compared value is resolved from the actually prepared producer request at execution, so the recording need not already agree.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-14be97af5a89f2839164"
+    }
+  ]
+}

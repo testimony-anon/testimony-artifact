@@ -1,0 +1,161 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 0,
+    "canonical_relation_core_identities": [
+      "3ac9c4ca1207e556655866b98717a386f91f829260a1d1d1b71dcf86817b5684",
+      "94d241438c5c7f8f3fbcee797e68d75e8528cd978df81c1aa5cb4e4d4d29dd64"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0004"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0002",
+      "v2-candidate-0004"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.article.tagList",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": null,
+          "member": {
+            "evidence_refs": [
+              "r20260901-190243-ed29:request:1"
+            ],
+            "rationale": "The recorded create body carries $.article.tagList with member 'lastingtag'; the fresh read is proposed to contain that scalar tag. Proposed member value, not a proven server invariant.",
+            "source": "hypothesis",
+            "value": "lastingtag",
+            "value_type": "string"
+          },
+          "operator": "contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/practical-tagging-guide; basic constraint P13 requires observation $.article.tagList (array) to contain frozen hypothesis 'lastingtag' (string) by strict JSON scalar equality; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "3ac9c4ca1207e556655866b98717a386f91f829260a1d1d1b71dcf86817b5684",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/practical-tagging-guide",
+          "phase": "observation",
+          "request_ref": "r20260901-190243-ed29:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Mechanically read-only recorded request r20260901-190243-ed29:request:5 (GET, read_like) has a visible response-shape row $.article.tagList of type array; the visible create body supplies the candidate scalar tag member. Isolated single-response scalar membership with strict JSON equality and no identity requirement; it claims only the actual recorded response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Isolated single-response membership claim: the recorded article read exposes $.article.tagList as an array of strings, and the frozen scalar member hypothesis copies the visible sent tag from request:1's body; scalar membership uses identity=null and strict JSON value comparison, so no cross-time identity is claimed.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f6ec220357c3833061cb"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.comments",
+            "role": "observation",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/practical-tagging-guide/comments; basic constraint P01 requires field observation $.comments (array) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "94d241438c5c7f8f3fbcee797e68d75e8528cd978df81c1aa5cb4e4d4d29dd64",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0004-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/practical-tagging-guide/comments",
+          "phase": "observation",
+          "request_ref": "r20260901-190243-ed29:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Mechanically read-only recorded request r20260901-190243-ed29:request:4 (GET /api/articles/practical-tagging-guide/comments, read_like) has a visible response shape whose root contains $.comments of type array. Isolated presence claim about the actual recorded response only; it does not assert that the collection is nonempty or complete.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Isolated single-response presence claim on the recorded same-session GET /api/articles/practical-tagging-guide/comments (200), whose observed response shape exposes $.comments as an array. UI-diff text is retained only as context and supplies no expected value; no cross-response or cross-time property is asserted here.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-230b2f1f53ed45c393c0"
+    }
+  ]
+}

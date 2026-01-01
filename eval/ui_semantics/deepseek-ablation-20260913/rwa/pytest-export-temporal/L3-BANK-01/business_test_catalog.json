@@ -1,0 +1,928 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 1,
+    "business_relation_occurrence_count": 8,
+    "canonical_relation_core_identities": [
+      "01f8ea1edff748dbba455e97586b0d7b0579041f0fcc071dc71590463f03fc91",
+      "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "5cb8a2addd9ac2bdbffb7b55b84e5731b4288bf281c24e2ca07ebe481df651dc",
+      "5fae3fa92234088441887bd638c968ea1f74d284def409904ae9555f3ae657d6",
+      "64f10f6771448aa57dff6fcaa3b327d93c65fdb969ab0d5b36dfb76d6d2aa083",
+      "b10799ffb43bbaae62ffa391d6b7623faba4d4ab9dd545b2e0c17016b8c66f35",
+      "c38382bfce69d6931e7671ab485976a41ebcbe51bb4b60cc6e760cd1c27d61ac",
+      "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac"
+    ],
+    "duplicate_core_occurrence_count": 1,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0008",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0012"
+    ],
+    "physical_retained_test_occurrence_count": 9,
+    "unique_canonical_relation_core_count": 8
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-90fe:request:2"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Actor_a's read-only ListBankAccount request:0 (global_order 0) precedes the CreateBankAccount mutation request:1, and the same-session, same-operation, same-selector ListBankAccount read request:2 follows it; the mutation response carries the created object $.data.createBankAccount with an id field, while the mechanical setup row for request:1 records an absent_to_present member observation for the same session/selector (previous read request:0, first-seen read request:2). The eligible setup action workflow-action-0000 (bank-accounts navigation) is replayed before the observer. P14 added is only a proposal that the created member appears in the after array; the recorded values need not already satisfy it.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same actor/session: ListBankAccount read (request:0) precedes the CreateBankAccount mutation (request:1) and the identical ListBankAccount read (request:2) follows it. The two list responses have different body hashes, and the create response exposes $.data.createBankAccount.id, matching the item identity path $.id of the after collection; membership change is proposed, not proven.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "actor_a's ListBankAccount read recorded before the CreateBankAccount mutation does not contain the member that the same read contains after it; the added member object is taken from the mutation response $.data.createBankAccount and matched to list items by $.id.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor/session lifecycle: actor_a ListBankAccount (request:0), then CreateBankAccount (request:1) whose response carries the new object at $.data.createBankAccount, then ListBankAccount (request:2). The create-response id is the member identity matched against $.data.listBankAccount[*].id. Setup action 0000 is the only eligible setup id for request:1; the recorded absent-to-present observation is candidate evidence, not proof of causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-26efc79e53d53fd74999"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:3"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "actor_after:actor_b",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "not_contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a POST /graphql; observer actor_b POST /graphql; business predicate P13 requires actor_after:actor_b $.data.listBankAccount (array) not to contain producer_request $.variables (object) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "01f8ea1edff748dbba455e97586b0d7b0579041f0fcc071dc71590463f03fc91",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-830f:request:138"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-830f:request:277"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:3"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Actor_a's DeleteBankAccount request:3 sits between two recorded actor_b ListBankAccount reads (request:138 before, request:277 after) whose response bodies are byte-identical, and the M4 identity relations for these rows record actor_a and actor_b as verified different authenticated principals. This is therefore framed as proposed non-owner isolation (C12) rather than an observed propagated removal: the non-owner's fresh list read is proposed not to contain the resource identified by actor_a's delete request; no propagated-removal claim is made because no member-level change in actor_b's view is observed.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Verified distinct principals (identity_relations) read the same ListBankAccount operation: actor_b's bracketing reads (request:138 before, request:277 after the actor_a DeleteBankAccount) have byte-identical response bodies, so the non-owner's array is unchanged by the owner's operation and is proposed to exclude the owner's account identity $.id. Isolation is proposed, not observed as a propagation.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Non-owner isolation: actor_a's bank-account operation is bracketed by actor_b's own ListBankAccount reads (recorded before the center delete and after it). The identity relations record actor_a and actor_b as verified different principals/sessions, so the non-owner's own list is the isolation surface; not_contains is used for isolation, never as a relabeled propagation claim.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The center action belongs to actor_a, while actor_b is a verified different principal (identity_relations, authenticated_probe). The non-owner actor_b's own ListBankAccount reads (nearest pre-state request:138, fresh post-state request:277, both on $.data.listBankAccount and flagged as comparable) are proposed to exclude the resource identified by the effect request's $.variables.id (strict $.id tuple). No transition fact or value flow records any change in actor_b's view, so this is a proposed non-owner isolation claim rather than an observed propagated removal.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Cross-actor observation: actor_b (verified different principal from actor_a) reads the same ListBankAccount operation in a before response (request:138, before the actor_a delete) and an after response (request:277). The non-owner view is asserted not to contain the member identified by the owner's prepared operation (request body $.variables.id, identity id path pair). This is a proposed isolation claim, not an observed propagated removal; actor identity/session is rechecked by the caller before execution.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "actor_b is a separate authenticated principal (verified different session/principal) whose ListBankAccount read after actor_a's delete does not contain the object actor_a removed, identified by the delete request body $.variables.id.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Cross-actor observation: actor_a (owner) deletes its bank account between actor_b's two identical-operator ListBankAccount reads (request:138 global 5 before, request:277 global 10 after). Actor_b is a verified different principal, so the proposed isolation claim is that actor_b's post-delete list does not contain actor_a's resource. The two actor_b reads are byte-identical, so no propagated removal is claimed here; C12 isolation and C11 propagation remain separate propositions.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-341123660890b73dab8f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a POST /graphql; basic constraint P15 requires observation $.data.listBankAccount (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "observation",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Request:0 is one mechanically read-only recorded ListBankAccount request whose actual response exposes the array $.data.listBankAccount with a per-member string field $.id. The frozen single-response uniqueness proposition checks only that array as returned (scope actual_response) by the key $.id; it claims nothing about database completeness or other pages.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-51aa81041ec16cb962ef"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.bankName",
+                "member_path": "$.bankName"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_request $.variables (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.bankName->$.bankName].",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "c38382bfce69d6931e7671ab485976a41ebcbe51bb4b60cc6e760cd1c27d61ac",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-90fe:request:2"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Grounded candidate, not proven causality: actor_a's recorded lifecycle is ListBankAccount pre-read request:0, the center write CreateBankAccount request:1 (center_state_change_request_refs; body variables.bankName is the only non-sanitized created-account field), and the fresh ListBankAccount post-read request:2, which is the unique same-actor/session/catalog-operation/selector comparable pre per center_observation_slice. $.data.listBankAccount is an array in shape-4bcca18628598791345d3fb2 and shape-f191624f7c3082983b4a94fc; ui-diff-0002 records the added 'Isolated Bank' row. Whether exactly this member was appended by the write is a hypothesis checked by the caller; no transition fact exists, so P12 is not proposed.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-897b238c3bf92293705b"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-90fe:request:2"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor/session lifecycle around the recorded createBankAccount write: request:0 and request:2 are ListBankAccount reads with identical request bodies (same body sha) bracketing request:1. The recorded absent-to-present observation on $.data.listBankAccount (previous_read_ref request:0 without the member, first_seen_read_ref request:2 with it) is neutral temporal evidence; P14 added is a proposed check whose member identity comes from the actual create response at execution. No setup action is required because the before-read itself establishes the prerequisite state.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-df05d94d686f8da46c7f"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:3"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "actor_after:actor_b",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "not_contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a POST /graphql; observer actor_b POST /graphql; business predicate P13 requires actor_after:actor_b $.data.listBankAccount (array) not to contain producer_request $.variables (object) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "5fae3fa92234088441887bd638c968ea1f74d284def409904ae9555f3ae657d6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-830f:request:138"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-830f:request:277"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:3"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Cross-actor propagation of the center delete: actor_b has a same-catalog-operation, same-selector ListBankAccount read before (request:138) and after (request:277) the center delete request:3, and request:3 is recorded as the intervening state-change request for that pair. The deleted member is identified by the identifier carried in the delete request body, matched on the collection members' $.id field. A shared selector and recorded order are observation evidence only; they do not establish that actor_a's delete produced actor_b's observation.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4a15568caab019a77c32"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.accountNumber",
+                "member_path": "$.accountNumber"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_request $.variables (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.accountNumber->$.accountNumber].",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "b10799ffb43bbaae62ffa391d6b7623faba4d4ab9dd545b2e0c17016b8c66f35",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-90fe:request:2"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The create mutation request:1 carries the new member fields (bankName/accountNumber/routingNumber) in $.variables; the same actor's fresh list read request:2 is hypothesized to contain that member, matched by accountNumber against the pre-create array request:0. The member identity is a proposed frozen rule, not proven by the recording.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-session actor_a lifecycle: ListBankAccount before the CreateBankAccount write, then the same ListBankAccount read. The recorded list-observation evidence for this region shows the target collection without a member at the earlier read and with a member at the later read; the member operand is the actual prepared create body variables identified by accountNumber. This is a candidate relation, not proof that the create caused the addition.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Distinct from the containment claim: the bounded episode supplies a unique comparable pre-state list read (request:0) and a post-state list read (request:2) with the center write request:1 between them, so the collection-delta proposition is that the account described by the prepared CreateBankAccount variables (matched by its visible accountNumber field, which also exists on every list member) is absent before and present after. No transition fact exists in this region, so no P12 collection-count form is emitted; the added/removed member check is executed on fresh arrays and is not proof that the center request caused the change.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b282b60e9573b0ba0a4c"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.userId",
+                "member_path": "$.userId"
+              },
+              {
+                "collection_item_path": "$.accountNumber",
+                "member_path": "$.accountNumber"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_request $.variables (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.userId->$.userId, $.accountNumber->$.accountNumber].",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "5cb8a2addd9ac2bdbffb7b55b84e5731b4288bf281c24e2ca07ebe481df651dc",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-90fe:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-90fe:request:2"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Before the CreateBankAccount request (request:1) the actor_a ListBankAccount array at request:0 does not contain the member identified by the prepared request body ($.variables.userId and $.variables.accountNumber), while the later ListBankAccount response at request:2 does contain an item carrying the same identity paths. The recorded value-ref of the request userId equals that of the list member userId, so the identity tuple is request-derived and rebinds at execution; the recorded index is never used as identity.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a755e99ba859767785c1"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260906-142503-90fe:request:3"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "actor_after:actor_b",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables.id",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          },
+          "operator": "not_contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "verified identity/session relation {'left_actor_id': 'actor_a', 'left_session_ref': 'actor_a', 'principal_relation': 'different', 'right_actor_id': 'actor_b', 'right_session_ref': 'actor_b', 'session_relation': 'different', 'verification_source': 'authenticated_probe', 'verified': True}; Producer actor_a POST /graphql; observer actor_b POST /graphql; business predicate P13 requires actor_after:actor_b $.data.listBankAccount (array) not to contain producer_request $.variables.id (string) by strict-tuple identity [$->$.id].",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "64f10f6771448aa57dff6fcaa3b327d93c65fdb969ab0d5b36dfb76d6d2aa083",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260906-142503-830f:request:138"
+        },
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260906-142503-830f:request:277"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260906-142503-90fe:request:3"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "actor_a and actor_b are verified different principals (authenticated probe) and each reads its own ListBankAccount list with the same recorded operation (request:138 before the center delete, request:277 after). The non-owner after-response array is proposed not to contain any member whose $.id equals actor_a's delete request id. This is stated as non-owner isolation, not as an observed propagated removal.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-09c90279a5ab8300080d"
+    }
+  ]
+}

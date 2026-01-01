@@ -1,0 +1,178 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "252885cba11178b30f7d8d3cbeda683fc0c35e76dba0c3e3245b34eeef721244",
+      "980cf3f9578d3b3603571bf53bdd1d4f7c27897d3d6f12e0a9145be238efc4c8"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0002",
+      "v2-candidate-0047"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users/login",
+          "phase": "producer",
+          "request_ref": "r20260901-190507-cd7c:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.email",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.user.email",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/users/login; observer actor_a GET /api/user; business predicate P02 requires after $.user.email (string) to strictly equal producer_request $.user.email (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "980cf3f9578d3b3603571bf53bdd1d4f7c27897d3d6f12e0a9145be238efc4c8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/user",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190507-cd7c:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users/login",
+        "phase": "producer",
+        "request_ref": "r20260901-190507-cd7c:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The login body and the authorization-linked user response expose the same email field. Propose readback of the actual submitted email; no recorded email literal is frozen and equality is not established by the observation.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fc21bad4742026b05a5c"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/",
+          "phase": "producer",
+          "request_ref": "r20260901-190507-cd7c:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0047-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.tags"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Read-preservation action; Producer actor_a GET /; observer actor_a GET /api/tags; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.tags']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0047",
+      "canonical_relation_core_identity": "252885cba11178b30f7d8d3cbeda683fc0c35e76dba0c3e3245b34eeef721244",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/tags",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190507-cd7c:request:6"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/tags",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190507-cd7c:request:20"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/",
+        "phase": "producer",
+        "request_ref": "r20260901-190507-cd7c:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The same tags operation is recorded before navigation and again in its following request group, with matching response hashes. This supports a proposed preservation of the returned tags array across the read-only navigation request.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c90caca26868d5b56df7"
+    }
+  ]
+}

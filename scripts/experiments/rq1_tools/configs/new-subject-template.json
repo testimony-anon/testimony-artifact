@@ -1,0 +1,31 @@
+{
+  "_doc": [
+    "Template for a subject added after the Astra round. Copy, rename, fill in the ids and run names.",
+    "previous_round.enabled=false switches the whole calibration off: summary.md then prints",
+    "'No previous round is available for these subjects ... (no previous round)' instead of empty tables,",
+    "and review-queue.md prints the same note in place of the disagreement table.",
+    "scopes: as long as the file does not exist, rq1_targets_deepseek.py fails (or skips with",
+    "--skip-missing-scopes) and rq1_summarize_deepseek.py replaces the three primary-target tables",
+    "with a note; it never reports K/N_API as zero.",
+    "audit_dir must live outside docs/design/cpv-expansion, docs/paper and eval (the tools refuse those)."
+  ],
+  "runs_root": "eval/ui_semantics/<new run root>",
+  "audit_dir": "docs/design/<new audit dir>",
+  "export_name": "pytest-export-final",
+  "runs": ["<run-name-highest-priority-first>"],
+  "subjects": [
+    {"id": "<subject id>", "inventory": "fixtures/recording_workflows/<subject id>_modular/inventory.json"}
+  ],
+  "scopes": "docs/design/<new audit dir>/scopes.jsonl",
+  "summary_generator_label": "scripts/experiments/rq1_tools/rq1_summarize_deepseek.py",
+  "helpers_module": "eval/ui_semantics/deepseek-full-20260912/review_refuted.py",
+  "previous_round": {"enabled": false},
+  "review": {
+    "_doc": "Leave system_prompt_file null to reuse the frozen v2.1 prompt verbatim. A prompt that names the new application must be supplied as a file together with its own prompt_version, so the provenance recorded in reviews.jsonl stays honest.",
+    "model": "deepseek-flash",
+    "system_prompt_file": null,
+    "prompt_version": null,
+    "reviewer_date": "<YYYY-MM-DD of the review run>"
+  },
+  "targets": {"model": "deepseek-flash", "reviewer_date": "<YYYY-MM-DD of the targets run>"}
+}

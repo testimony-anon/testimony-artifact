@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test_execution_report.schema.json",
+  "title": "test_execution_report — test suite execution and calibration report (Stage 6)",
+  "description": "Parallel to grounded_report. Records only summaries, hashes and observation references; never credentials, Authorization/Cookie values or complete sensitive responses.",
+  "type": "object",
+  "required": ["metadata", "environment", "cases"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "test_execution_report" },
+        "stage": { "const": "stage6" }
+      }
+    },
+    "environment": { "$ref": "#/$defs/environment" },
+    "cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/case_result" },
+      "x-volatility": "volatile"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "actor_id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "observation_ref": {
+      "type": "object",
+      "required": ["run_id", "record_id"],
+      "properties": {
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "required": ["subject_digest", "reset_fingerprint_refs"],
+      "properties": {
+        "subject_digest": { "$ref": "#/$defs/sha256" },
+        "reset_fingerprint_refs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        },
+        "profile_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "step_result": {
+      "type": "object",
+      "required": ["step_id", "actor_id", "status", "body_digest", "observation_ref"],
+      "properties": {
+        "step_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "status": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "body_digest": { "$ref": "#/$defs/sha256" },
+        "observation_ref": { "$ref": "#/$defs/observation_ref" }
+      },
+      "additionalProperties": false
+    },
+    "assertion_result": {
+      "type": "object",
+      "required": ["assertion_id", "verdict", "detail"],
+      "properties": {
+        "assertion_id": { "type": "string", "minLength": 1 },
+        "verdict": { "type": "string", "enum": ["passed", "failed", "unable"] },
+        "detail": {
+          "type": "object",
+          "description": "Redacted actual/expected summary; must not contain complete headers, cookies, tokens or credentials.",
+          "properties": {
+            "actual_summary": {},
+            "expected_summary": {},
+            "reason": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "calibration": {
+      "type": "object",
+      "required": ["normal_runs", "kept_assertion_ids", "dropped"],
+      "properties": {
+        "normal_runs": { "type": "integer", "minimum": 1 },
+        "kept_assertion_ids": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "dropped": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["assertion_id", "reason"],
+            "properties": {
+              "assertion_id": { "type": "string", "minLength": 1 },
+              "reason": { "type": "string", "enum": ["missing_normal_control_outcome", "failed_normal_control", "ungrounded", "unsupported_predicate"] }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "case_result": {
+      "type": "object",
+      "required": ["test_id", "variant_id", "setup_results", "observe_before", "action_results", "observe_after", "assertion_results", "calibration", "environment_errors"],
+      "properties": {
+        "test_id": { "type": "string", "minLength": 1 },
+        "variant_id": { "type": "string", "minLength": 1 },
+        "setup_results": { "type": "array", "items": { "$ref": "#/$defs/step_result" } },
+        "observe_before": { "type": "array", "items": { "$ref": "#/$defs/step_result" } },
+        "action_results": { "type": "array", "items": { "$ref": "#/$defs/step_result" } },
+        "observe_after": { "type": "array", "items": { "$ref": "#/$defs/step_result" } },
+        "assertion_results": { "type": "array", "items": { "$ref": "#/$defs/assertion_result" } },
+        "calibration": { "$ref": "#/$defs/calibration" },
+        "environment_errors": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

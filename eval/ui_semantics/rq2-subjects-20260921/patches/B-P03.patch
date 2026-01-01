@@ -1,0 +1,11 @@
+--- a/src/documents/bulk_edit.py
++++ b/src/documents/bulk_edit.py
+@@ -236,7 +236,7 @@
+     add_tags: list[int],
+     remove_tags: list[int],
+ ) -> Literal["OK"]:
+-    qs = Document.objects.filter(id__in=doc_ids).only("pk")
++    qs = Document.objects.filter(id__in=doc_ids[:1]).only("pk")  # RQ2: first selected document only.
+     affected_docs = list(qs.values_list("pk", flat=True))
+     DocumentTagRelationship = Document.tags.through
+ 

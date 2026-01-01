@@ -1,0 +1,554 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 3,
+    "business_relation_occurrence_count": 4,
+    "canonical_relation_core_identities": [
+      "99fa2aa48816b501cd0e1859b1a43916ae545952fdeac921dceb840f5b3dbec1",
+      "a76a57f8b5a503ba3b980fd6206326b813027b1450bb5b06547b101c7df43a30",
+      "be261853458627cc9bfc1b6058c3fd6727948710f18e43dbc285e04de88b42ce",
+      "c75dd93b5f655a7e76eeec61445cc4aebbb0032aa1046e022c81e42a672d7de4",
+      "d007cf2d3b9407eb7f5de441e19e445920d01f4d895ad83a01d38d5502dfba5d",
+      "dfc2ed5220938e436ab9dba1b20acf88fc72a101d83705cf8987049f5824eeeb",
+      "e437c3ff32d4ad78842d8b38a04066a8c34f364a0f877c71466a6e8ccd3a82b6"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0003"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008"
+    ],
+    "physical_retained_test_occurrence_count": 7,
+    "unique_canonical_relation_core_count": 7
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; basic constraint P15 requires observation $.data (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "e437c3ff32d4ad78842d8b38a04066a8c34f364a0f877c71466a6e8ccd3a82b6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "observation",
+          "request_ref": "r20260920-082737-2179:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "One mechanically read-only recorded read r20260920-082737-2179:request:23 returns an object with the visible array $.data whose members carry a visible string field $.id (shape-09650170ab76a1c319439ad2). The frozen claim is that no two returned members share the same strict-tuple $.id within this response only.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Same recorded read, different claim: strict-tuple uniqueness of the visible member identifier $.id over the complete actual array $.data of the returned teams collection. Duplicates in the original array refute the proposition; array positions are only locators and never supply identity, and the check says nothing about a database or other pages.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-6b156ad46ed2b2e88285"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "le",
+          "projection": "count",
+          "right": {
+            "ref": {
+              "path": "$.count",
+              "role": "observation",
+              "value_type": "integer"
+            },
+            "source": "role"
+          },
+          "target": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; basic constraint P11 requires count(observation $.data (array); unit=items) le observation $.count (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "dfc2ed5220938e436ab9dba1b20acf88fc72a101d83705cf8987049f5824eeeb",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "observation",
+          "request_ref": "r20260920-082737-2179:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The same recorded read exposes $.data (array) together with the integer $.count, $.page and $.pageSize. The frozen single-response claim is that the returned array item count is at most the recorded integer $.count; this is a proposed rule over the actual response, not a database-completeness claim.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-098fd66e0a11de806bc4"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "expected_type": "boolean",
+          "family": "P21",
+          "target": {
+            "path": "$.isEnabled",
+            "role": "observation",
+            "value_type": "boolean"
+          }
+        },
+        "predicate_type": "P21"
+      },
+      "business_summary": "Observation actor_a GET /api/2fa/status; basic constraint P21 requires observation $.isEnabled (boolean) to have JSON type boolean; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "be261853458627cc9bfc1b6058c3fd6727948710f18e43dbc285e04de88b42ce",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0003-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/2fa/status",
+          "phase": "observation",
+          "request_ref": "r20260920-082737-2179:request:21"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Recorded read r20260920-082737-2179:request:21 (GET /api/2fa/status, 200) returns an object whose visible field $.isEnabled is declared boolean (shape-23ab7ce9b67de62192190923). The frozen single-response claim is only the JSON type of that one field, not a complete response schema validation.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-45db46a2ca42a60c10c5"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams",
+          "phase": "producer",
+          "request_ref": "r20260920-082737-2179:request:37"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.name",
+                "member_path": "$.name"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/teams; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; business predicate P14 requires producer_request $ (object) to be added between before $.data (array) and after $.data (array) by strict-tuple identity [$.name->$.name].",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "99fa2aa48816b501cd0e1859b1a43916ae545952fdeac921dceb840f5b3dbec1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082737-2179:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082737-2179:request:38"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams",
+        "phase": "producer",
+        "request_ref": "r20260920-082737-2179:request:37"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The prepared producer body carries exactly one business field ($.name, string) for the created team, and the after read exposes the team members of $.data with a $.name field, while the center UI diff shows that name text added to the team list. The added-member claim binds the actual outgoing body object to the fresh after collection via a frozen name strict-tuple identity; it does not assert server-side causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The same before/effect/after triple (request:23, request:37, request:38) admits a distinct member-addition proposition: the team object actually sent as the prepared producer request body (shape-a1d79180157067180ae04b8f, only field $.name, visible value 'Carver Squad') is proposed to appear as a new member of the after read's array $.data matched by the strict name tuple, while absent from the before read's $.data. The after read's response shape (shape-09650170ab76a1c319439ad2) exposes $.data[*].name as a string member field, so the identity path is directly observable. This asserts member addition rather than only a count delta, and its truth is a frozen hypothesis; neither the recorded UI diff nor the write ordering proves that request:37 caused the member to appear. Setup is the single eligible setup action recorded for the effect source, proposed as the minimal ordered prerequisite chain with stated uncertainty.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-8329cf4742d178f587fb"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams",
+          "phase": "producer",
+          "request_ref": "r20260920-082737-2179:request:37"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.count",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.count",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "gt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /api/teams; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; business predicate P07 requires the fresh after $.count (integer) to be greater than before $.count (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "c75dd93b5f655a7e76eeec61445cc4aebbb0032aa1046e022c81e42a672d7de4",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082737-2179:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082737-2179:request:38"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams",
+        "phase": "producer",
+        "request_ref": "r20260920-082737-2179:request:37"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Both comparable reads of the same actor/session, catalog operation and selector expose the same integer field $.count (shape-09650170ab76a1c319439ad2), and the center UI diff reports the team record count rising from one to two after the POST /api/teams action. The frozen integer checkpoint comparison after greater-than before is proposed as a numeric kind comparison between two reads; no monotonic behavior between them is claimed.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-85cdfdacaf47cee14d8f"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "field_arithmetic_or_aggregate_summary",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P19",
+          "numeric_mode": "exact",
+          "operator": "count",
+          "output": {
+            "path": "$.count",
+            "role": "observation",
+            "value_type": "integer"
+          },
+          "scope": "actual_response",
+          "units": {
+            "evidence_refs": [
+              "r20260920-082737-2179:request:23"
+            ],
+            "rationale": "count of returned page members expressed in items; frozen before execution",
+            "source": "hypothesis",
+            "value": {
+              "output": "items"
+            },
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P19"
+      },
+      "business_summary": "Observation actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; business relation P19 requires observation $.count (integer) = count(observation $.data (array)); scope=actual_response, item=None, factor=None, numeric_mode=exact, units={'output': 'items'}, rounding=None, tolerance_kind=None, tolerance=None, conversions=None; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "d007cf2d3b9407eb7f5de441e19e445920d01f4d895ad83a01d38d5502dfba5d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "observation",
+          "request_ref": "r20260920-082737-2179:request:23"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Mechanically read-only recorded read GET /api/users/<ID_1>/teams (request:23, actor_a) returns one complete JSON response whose shape exposes $.data as array and $.count as integer; the single-response aggregation hypothesis is that the reported count equals the number of returned data members. The hypothesis is frozen before execution and need not hold in the recording; missing members or a non-integer count is not_evaluable rather than success. The recorded path literal is sanitized (literal_available=false), so no literal value is copied.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single mechanically read-only recorded response (GET /api/users/<ID_1>/teams) whose visible shape contains integer $.count and array $.data; the frozen hypothesis is that the returned summary equals the number of members of the returned array under actual_response scope. This is only a proposed arithmetic consistency rule that need not already hold in the recording; it makes no claim about database completeness or any other page.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2f55b276a6be8f919730"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/teams",
+          "phase": "producer",
+          "request_ref": "r20260920-082737-2179:request:37"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.page",
+            "$.pageSize"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/teams; observer actor_a GET /api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.page', '$.pageSize']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "a76a57f8b5a503ba3b980fd6206326b813027b1450bb5b06547b101c7df43a30",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082737-2179:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/41e2b680-648e-4b09-bcd7-3e2b10c06264/teams",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082737-2179:request:38"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/teams",
+        "phase": "producer",
+        "request_ref": "r20260920-082737-2179:request:37"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The same actor/session read the same observer operation get_api_users_var1_teams with the identical selector before (request:23) and after (request:38) the center write request:37; center_observation_slice records this as the unique non-comparable-free pre/post pair for the center. Both responses share shape-09650170ab76a1c319439ad2, whose root object exposes $.page and $.pageSize in addition to the changed $.count/$.data. C04/P20 is proposed as a frozen preservation hypothesis over those two concrete root-relative fields: the create is hypothesized to leave unrelated pagination metadata unchanged. The recorded values need not already be shown equal, and no negative-request fact is required. Setup is the single eligible prerequisite listed for request:37 (workflow-action-0000); it is a weak, order-supported hypothesis, not proven causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-14f6bee142ab2dd634d8"
+    }
+  ]
+}

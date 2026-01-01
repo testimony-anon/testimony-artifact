@@ -1,0 +1,134 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "ghost-modular-l1-author-01",
+  "profile_ref": "fixtures/profiles/ghost_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_b",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_b.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18093/ghost/#/posts"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 300,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-nav-menu=\"main\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-new-post-button]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.click-new-post",
+      "global_step_index": 0,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-new-post-button]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": "#/editor/post",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-editor-title-input]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-editor-title",
+      "global_step_index": 1,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-editor-title-input]"
+        },
+        "value": "Author Own Post"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.press-enter",
+      "global_step_index": 2,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "press",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-editor-title-input]"
+        },
+        "key": "Enter"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-editor-post-status]",
+            "has_text": "Draft - Saved"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "network_quiet",
+          "quiet_ms": 400,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

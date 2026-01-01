@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_material_report.schema.json",
+  "title": "runtime_material_report — Phase 1 read-only runtime material sidecar",
+  "description": "Read-only Runtime Material / Resource Lifecycle sidecar. It normalizes the material, resource-family candidates, lifecycle diagnostics and edge diagnostics already present in existing artifacts; it sends no requests, performs no replay and does not modify the primary artifacts.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "materials",
+    "resource_family_candidates",
+    "lifecycle_hypotheses",
+    "edge_diagnostics",
+    "input_coverage",
+    "summary",
+    "warnings"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "runtime_material_report" },
+        "stage": { "const": "runtime_materials_phase1" }
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/material" }
+    },
+    "resource_family_candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resource_family_candidate" }
+    },
+    "lifecycle_hypotheses": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/lifecycle_hypothesis" }
+    },
+    "edge_diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge_diagnostic" }
+    },
+    "input_coverage": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/input_coverage_item" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "material_count",
+        "resource_family_candidate_count",
+        "lifecycle_hypothesis_count",
+        "edge_diagnostic_count",
+        "blocked_count",
+        "warning_count"
+      ],
+      "properties": {
+        "material_count": { "type": "integer", "minimum": 0 },
+        "resource_family_candidate_count": { "type": "integer", "minimum": 0 },
+        "lifecycle_hypothesis_count": { "type": "integer", "minimum": 0 },
+        "edge_diagnostic_count": { "type": "integer", "minimum": 0 },
+        "blocked_count": { "type": "integer", "minimum": 0 },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "by_material_kind": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_input_status": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "input_status": {
+      "type": "string",
+      "enum": ["missing", "present", "compatibility_read", "parse_failed", "present_but_no_evidence"]
+    },
+    "evidence_level": {
+      "type": "string",
+      "enum": ["runtime_fresh", "positive_replay", "schema_link", "observed_valueflow", "literal_assumption", "lexical", "runtime_secret", "unknown"]
+    },
+    "readiness_scope": {
+      "type": "string",
+      "enum": ["global", "sequence_candidate", "recipe_only", "diagnostic_only", "replay_diagnostic"]
+    },
+    "negative_evidence_type": {
+      "type": "string",
+      "enum": [
+        "cross_resource_value_collision",
+        "incompatible_resource_family",
+        "field_name_mismatch",
+        "schema_shape_mismatch",
+        "observed_resource_destructive_use",
+        "single_concrete_path_only",
+        "capability_resource_mixed",
+        "cleanup_unavailable",
+        "external_host_link",
+        "pagination_as_resource_id",
+        "missing_evidence",
+        "literal_only_no_origin",
+        "replay_only_not_dependency_evidence",
+        "auth_scope_unknown"
+      ]
+    },
+    "blocked_reason": {
+      "type": "string",
+      "enum": [
+        "none",
+        "unknown_risk",
+        "cleanup_unavailable",
+        "external_host_link",
+        "pagination_as_resource_id",
+        "observed_destructive_use",
+        "incompatible_resource_family",
+        "missing_evidence",
+        "literal_assumption_only",
+        "replay_only_not_dependency_evidence",
+        "auth_scope_unknown"
+      ]
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": ["safe_read", "write_requires_cleanup", "destructive", "capability_secret", "external_host", "pagination", "unknown"]
+    },
+    "safety_decision": {
+      "type": "string",
+      "enum": ["allow_diagnostic", "allow_readonly", "block", "not_applicable"]
+    },
+    "not_promoted_reason": {
+      "type": "string",
+      "enum": [
+        "none",
+        "phase1_diagnostic_only",
+        "evidence_not_verified",
+        "replay_only_not_dependency_evidence",
+        "cleanup_unavailable",
+        "external_host_link",
+        "pagination_as_resource_id",
+        "incompatible_resource_family",
+        "missing_evidence",
+        "literal_assumption_only",
+        "observed_destructive_use",
+        "no_candidate_consumer"
+      ]
+    },
+    "negative_evidence": {
+      "type": "object",
+      "required": ["type", "severity", "target", "diagnostic_reason"],
+      "properties": {
+        "type": { "$ref": "#/$defs/negative_evidence_type" },
+        "severity": { "type": "string", "enum": ["blocker", "downgrade", "warning"] },
+        "target": { "type": "string", "enum": ["material", "family", "edge", "lifecycle"] },
+        "source": { "type": "object" },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["source_artifact", "source_stage", "source_location"],
+      "properties": {
+        "source_artifact": {
+          "type": "string",
+          "enum": ["session_bundle", "probe_results", "augmented_oas", "dependency_graph", "replay_smoke_report", "grounded_report", "lifecycle_recipes"]
+        },
+        "source_stage": {
+          "type": "string",
+          "enum": ["stage1", "stage2_5", "stage3", "stage4", "stage5", "stage6", "v2_pipeline", "unknown"]
+        },
+        "source_event_id": { "type": ["string", "null"] },
+        "source_probe_id": { "type": ["string", "null"] },
+        "source_operation_id": { "type": ["string", "null"] },
+        "source_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header", "request_body", "request_header", "request_path", "request_query", "artifact_metadata", "graph_edge", "lifecycle_recipe", "replay_step", "unknown"]
+        },
+        "source_path": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "material": {
+      "type": "object",
+      "required": [
+        "material_id",
+        "material_kind",
+        "value_shape",
+        "value_preview",
+        "redacted",
+        "source",
+        "scope",
+        "trust",
+        "usage",
+        "redaction_policy",
+        "material_lifecycle",
+        "display"
+      ],
+      "properties": {
+        "material_id": { "type": "string", "minLength": 1 },
+        "material_kind": {
+          "type": "string",
+          "enum": ["fresh_resource", "observed_resource", "capability", "body_template", "link", "pagination", "filter", "literal"]
+        },
+        "value_shape": {
+          "type": "string",
+          "enum": ["scalar", "object", "array", "url", "header", "cookie", "body_template", "unknown"]
+        },
+        "value_preview": { "type": "string" },
+        "redacted": { "type": "boolean" },
+        "source": { "$ref": "#/$defs/source" },
+        "scope": {
+          "type": "object",
+          "required": ["base_url", "host", "auth_context_id", "scope_kind", "ttl"],
+          "properties": {
+            "base_url": { "type": ["string", "null"] },
+            "host": { "type": ["string", "null"] },
+            "auth_context_id": { "type": "string" },
+            "scope_kind": { "type": "string", "enum": ["run", "session", "environment", "global", "unknown"] },
+            "ttl": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "trust": {
+          "type": "object",
+          "required": ["evidence_level", "confidence", "confidence_breakdown", "negative_evidence", "diagnostic_reason"],
+          "properties": {
+            "evidence_level": { "$ref": "#/$defs/evidence_level" },
+            "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+            "confidence_breakdown": { "type": "array", "items": { "type": "string" } },
+            "negative_evidence": { "type": "array", "items": { "$ref": "#/$defs/negative_evidence" } },
+            "diagnostic_reason": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "usage": {
+          "type": "object",
+          "required": ["used_by_operations", "candidate_consumers", "blocked_consumers", "binding_locations"],
+          "properties": {
+            "used_by_operations": { "type": "array", "items": { "type": "string" } },
+            "candidate_consumers": { "type": "array", "items": { "type": "string" } },
+            "blocked_consumers": { "type": "array", "items": { "type": "string" } },
+            "binding_locations": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "redaction_policy": {
+          "type": "object",
+          "required": ["preview_kind", "value_hash", "display_allowed"],
+          "properties": {
+            "preview_kind": { "type": "string", "enum": ["masked", "hash", "type_only", "none"] },
+            "value_hash": { "type": ["string", "null"] },
+            "display_allowed": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "material_lifecycle": {
+          "type": "object",
+          "required": ["created_by_tool", "observed_existing", "expires_at", "cleanup_required"],
+          "properties": {
+            "created_by_tool": { "type": "boolean" },
+            "observed_existing": { "type": "boolean" },
+            "expires_at": { "type": ["string", "null"] },
+            "cleanup_required": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        },
+        "display": {
+          "type": "object",
+          "required": ["title", "short_reason", "explainability_level", "recommended_badge", "drilldown_refs"],
+          "properties": {
+            "title": { "type": "string" },
+            "short_reason": { "type": "string" },
+            "explainability_level": { "type": "string", "enum": ["high", "medium", "low"] },
+            "recommended_badge": { "type": "string", "enum": ["fresh", "observed", "literal", "blocked", "replay_only", "capability"] },
+            "drilldown_refs": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "resource_family_candidate": {
+      "type": "object",
+      "required": ["family_candidate_id", "canonical_family", "candidate_kind", "members", "confidence_level", "confidence", "positive_signals", "negative_signals", "diagnostic_reason"],
+      "properties": {
+        "family_candidate_id": { "type": "string" },
+        "canonical_family": { "type": "string" },
+        "candidate_kind": {
+          "type": "string",
+          "enum": ["collection_instance", "nested", "action", "singleton", "capability", "unknown"]
+        },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "confidence_level": { "type": "string", "enum": ["high", "medium", "low", "blocked"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "positive_signals": { "type": "array", "items": { "type": "string" } },
+        "negative_signals": { "type": "array", "items": { "$ref": "#/$defs/negative_evidence" } },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "lifecycle_hypothesis": {
+      "type": "object",
+      "required": ["hypothesis_id", "hypothesis_kind", "status", "readiness_scope", "executable", "requires_phase", "steps", "dependencies", "blocked_reasons", "risk_class", "safety_decision", "diagnostic_reason"],
+      "properties": {
+        "hypothesis_id": { "type": "string" },
+        "hypothesis_kind": {
+          "type": "string",
+          "enum": ["fresh_create_to_instance", "observed_read_to_instance", "capability_setup", "body_template_reuse", "recipe_diagnostic"]
+        },
+        "status": { "type": "string", "enum": ["candidate", "blocked"] },
+        "readiness_scope": { "const": "diagnostic_only" },
+        "executable": { "const": false },
+        "requires_phase": { "const": "phase3_replay" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step_id", "operation_id", "step_kind", "execution_required"],
+            "properties": {
+              "step_id": { "type": "string" },
+              "operation_id": { "type": "string" },
+              "step_kind": { "type": "string", "enum": ["producer", "consumer", "verification", "cleanup", "setup"] },
+              "execution_required": { "const": false }
+            },
+            "additionalProperties": false
+          }
+        },
+        "dependencies": { "type": "array", "items": { "type": "object" } },
+        "blocked_reasons": { "type": "array", "items": { "$ref": "#/$defs/blocked_reason" } },
+        "risk_class": { "$ref": "#/$defs/risk_class" },
+        "safety_decision": { "$ref": "#/$defs/safety_decision" },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "edge_diagnostic": {
+      "type": "object",
+      "required": [
+        "edge_id",
+        "producer",
+        "consumer",
+        "verification_state",
+        "necessity_state",
+        "evidence_level",
+        "readiness_scope",
+        "confidence",
+        "state_source",
+        "upgrade_reasons",
+        "downgrade_reasons",
+        "not_promoted_reason",
+        "evidence_resolution"
+      ],
+      "properties": {
+        "edge_id": { "type": "string" },
+        "producer": { "type": "string" },
+        "consumer": { "type": "string" },
+        "verification_state": { "type": "string", "enum": ["unverified", "positive", "negative", "inconclusive", "blocked"] },
+        "necessity_state": { "type": "string", "enum": ["necessary", "not_necessary", "unknown"] },
+        "evidence_level": { "$ref": "#/$defs/evidence_level" },
+        "readiness_scope": { "$ref": "#/$defs/readiness_scope" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "state_source": {
+          "type": "object",
+          "required": ["source_artifact", "source_field", "source_scope"],
+          "properties": {
+            "source_artifact": { "type": "string" },
+            "source_field": { "type": "string" },
+            "source_scope": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "upgrade_reasons": { "type": "array", "items": { "type": "string" } },
+        "downgrade_reasons": { "type": "array", "items": { "type": "string" } },
+        "not_promoted_reason": { "$ref": "#/$defs/not_promoted_reason" },
+        "evidence_resolution": {
+          "type": "object",
+          "required": ["final_state", "why_not_stronger", "why_not_blocked"],
+          "properties": {
+            "final_state": { "type": "string", "enum": ["candidate", "blocked", "diagnostic_only"] },
+            "why_not_stronger": { "type": "array", "items": { "type": "string" } },
+            "why_not_blocked": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "negative_evidence": { "type": "array", "items": { "$ref": "#/$defs/negative_evidence" } }
+      },
+      "additionalProperties": false
+    },
+    "input_coverage_item": {
+      "type": "object",
+      "required": ["status", "path", "evidence_count", "diagnostic_reason"],
+      "properties": {
+        "status": { "$ref": "#/$defs/input_status" },
+        "path": { "type": ["string", "null"] },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "severity", "message"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "blocker"] },
+        "message": { "type": "string" },
+        "source": { "type": ["object", "null"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}

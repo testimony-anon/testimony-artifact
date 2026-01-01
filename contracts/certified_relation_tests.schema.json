@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "certified_relation_tests.schema.json",
+  "title": "Certified API-relation blueprints and executable Stage6 tests",
+  "type": "object",
+  "required": ["metadata", "source_input", "assertion_definition", "tests"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "certified_relation_tests" },
+        "stage": { "const": "stage5" }
+      }
+    },
+    "source_input": {
+      "type": "object",
+      "required": ["run_report", "confirmed_set_sha256", "confirmed_count"],
+      "properties": {
+        "run_report": { "$ref": "#/$defs/file_ref" },
+        "confirmed_set_sha256": { "$ref": "#/$defs/sha256" },
+        "confirmed_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "assertion_definition": {
+      "type": "object",
+      "required": [
+        "business_types", "generic_types", "reference_translation_policy",
+        "business_evaluator", "business_evaluator_source", "normal_runs"
+      ],
+      "properties": {
+        "business_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["P01", "P02", "P03", "P04", "P06", "P07", "P09", "P10", "P11", "P12", "P13", "P14", "P15", "P17", "P18", "P20", "P21", "forall", "P08", "P16", "P19", "repeat_equal", "repeat_rejected", "repeat_delta"] }
+        },
+        "generic_types": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["status_success", "status_class", "schema_type"] }
+        },
+        "reference_translation_policy": { "const": "alpha_rename_observation_refs_only_v1" },
+        "business_evaluator": { "const": "ui_semantics.current_route_s.core.evaluate_pair" },
+        "business_evaluator_source": { "$ref": "#/$defs/file_ref" },
+        "normal_runs": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "tests": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/test" },
+      "x-unique-by": "test_id"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {"JointObservation":{"additionalProperties":false,"properties":{"consistency":{"enum":["common_version","common_as_of","no_competing_writes_workflow"],"title":"Consistency","type":"string"},"consistency_refs":{"items":{"$ref":"#/$defs/ValueRef"},"title":"Consistency Refs","type":"array"},"no_competing_writes":{"anyOf":[{"$ref":"#/$defs/HypothesisOperand"},{"type":"null"}],"default":null},"scope":{"$ref":"#/$defs/HypothesisOperand"},"query_scope":{"$ref":"#/$defs/QueryScope"}},"required":["consistency","scope"],"title":"JointObservation","type":"object"},"NumericHypothesisOperand":{"additionalProperties":false,"description":"P06-only decimal lexical source, frozen before execution.","properties":{"source":{"const":"hypothesis","title":"Source","type":"string"},"value_type":{"enum":["integer","number"],"title":"Value Type","type":"string"},"value":{"title":"Value"},"evidence_refs":{"items":{"type":"string"},"minItems":1,"title":"Evidence Refs","type":"array"},"rationale":{"minLength":1,"title":"Rationale","type":"string"},"lexical":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Lexical"}},"required":["source","value_type","value","evidence_refs","rationale"],"title":"NumericHypothesisOperand","type":"object"},"NumericRequestOperand":{"additionalProperties":false,"properties":{"source":{"const":"request","title":"Source","type":"string"},"ref":{"$ref":"#/$defs/NumericRequestValueRef"}},"required":["source","ref"],"title":"NumericRequestOperand","type":"object"},"NumericRequestValueRef":{"additionalProperties":false,"properties":{"role":{"const":"producer_request","title":"Role","type":"string"},"location":{"const":"body","title":"Location","type":"string"},"path":{"pattern":"^\\$(?:\\.[^.*\\[\\]]+)*$","title":"Path","type":"string"},"value_type":{"enum":["integer","number"],"title":"Value Type","type":"string"}},"required":["role","location","path","value_type"],"title":"NumericRequestValueRef","type":"object"},"RoleOperand":{"additionalProperties":false,"properties":{"source":{"const":"role","title":"Source","type":"string"},"ref":{"$ref":"#/$defs/ValueRef"}},"required":["source","ref"],"title":"RoleOperand","type":"object"},"TimestampEvidence":{"additionalProperties":false,"properties":{"origin_time_path":{"title":"Origin Time Path","type":"string"},"clock_id_path":{"title":"Clock Id Path","type":"string"},"items_path":{"title":"Items Path","type":"string"},"time_path":{"title":"Time Path","type":"string"},"unit":{"enum":["nanoseconds","milliseconds","seconds"],"title":"Unit","type":"string"},"value_path":{"default":"$","title":"Value Path","type":"string"},"end_time_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"End Time Path"},"coverage_start_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Coverage Start Path"},"coverage_end_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Coverage End Path"},"complete_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Complete Path"}},"required":["origin_time_path","clock_id_path","items_path","time_path","unit"],"title":"TimestampEvidence","type":"object"},"TemporalRequirement":{"additionalProperties":false,"properties":{"kind":{"enum":["deadline_state","appearance_preservation","event_occurrence"],"title":"Kind","type":"string"},"observation_mode":{"enum":["returned_sample","sampled","exact_time","continuous","event_log"],"title":"Observation Mode","type":"string"},"origin":{"enum":["send","ack","event"],"title":"Origin","type":"string"},"unit":{"enum":["nanoseconds","milliseconds","seconds"],"title":"Unit","type":"string"},"duration_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"}],"title":"Duration Parameter"},"hold_duration_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Hold Duration Parameter"},"error_before_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Error Before Parameter"},"error_after_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Error After Parameter"},"timestamp_evidence":{"anyOf":[{"$ref":"#/$defs/TimestampEvidence"},{"type":"null"}],"default":null}},"required":["kind","observation_mode","origin","unit","duration_parameter"],"title":"TemporalRequirement","type":"object"},
+    "repeated_execution_step": {"oneOf":[{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action2"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":2},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index","endpoint","binding_requirement"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B2"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":2},"endpoint":{"$ref":"#/$defs/endpoint"},"binding_requirement":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false}]},
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "endpoint": {
+      "type": "object",
+      "required": ["actor_id", "request_ref"],
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1 },
+        "request_ref": { "type": "string", "minLength": 1 },
+        "method": { "type": "string", "pattern": "^[A-Z]+$" },
+        "path": { "type": "string", "minLength": 1 },
+        "graphql_operation_kind": {"enum": ["query", "mutation", "unknown"]},
+        "action_ref": {"type": "string", "minLength": 1},
+        "request_shape_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["candidate", "execution_material", "execution_evidence", "certificate", "normalized_candidate_sha256"],
+      "properties": {
+        "candidate": { "$ref": "#/$defs/file_ref" },
+        "execution_material": { "$ref": "#/$defs/file_ref" },
+        "certificate": { "$ref": "#/$defs/file_ref" },
+        "execution_evidence": { "$ref": "#/$defs/file_ref" },
+        "normalized_candidate_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "required": ["status", "checks", "reason"],
+      "properties": {
+        "status": { "enum": ["complete", "incomplete"] },
+        "checks": {
+          "type": "object",
+          "required": [
+            "source_hash_closure", "confirmed_outcome", "request_binding_complete",
+            "actor_session_closed", "fresh_value_binding_closed", "projection_complete",
+            "predicate_lint_pass", "reset_isolation_closed", "safe_execution_closed"
+          ],
+          "additionalProperties": { "type": "boolean" }
+        },
+        "reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "assertion": {
+      "type": "object",
+      "required": [
+        "assertion_id", "assertion_class", "assertion_source", "predicate",
+        "predicate_type", "source_predicate_sha256", "rendered_predicate_sha256",
+        "reference_translation", "evidence_refs", "definition_sha256"
+      ],
+      "properties": {
+        "assertion_id": { "type": "string", "minLength": 1 },
+        "assertion_class": { "enum": ["business", "generic"] },
+        "assertion_source": { "enum": ["semantic_relation", "protocol_derived"] },
+        "predicate": { "$ref": "test_suite.schema.json#/$defs/predicate" },
+        "predicate_type": { "type": "string", "minLength": 1 },
+        "source_predicate_sha256": { "$ref": "#/$defs/sha256" },
+        "rendered_predicate_sha256": { "$ref": "#/$defs/sha256" },
+        "reference_translation": { "type": "object", "additionalProperties": { "type": "string" } },
+        "evidence_refs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/file_ref" } },
+        "definition_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "blueprint": {"type":"object","required":["actors","setup","producer","observer","producer_binding_requirement","observer_binding_requirement","settle_policy","observer_purity_policy","provenance_refs"],"properties":{"actors":{"type":"array","minItems":1,"uniqueItems":true,"items":{"type":"string","minLength":1}},"setup":{"type":"array","items":{"$ref":"#/$defs/endpoint"}},"producer":{"oneOf":[{"$ref":"#/$defs/endpoint"},{"type":"null"}]},"observer":{"$ref":"#/$defs/endpoint"},"before_observer":{"$ref":"#/$defs/endpoint"},"workflow_kind":{"enum":["create_capture_read","postcondition_read","before_write_after","inverse_restoration","read_preservation"]},"workflow_plan":{"type":"array","minItems":1,"items":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/workflow_step"},"maxItems":6},"negative_plan":{"type":"array","minItems":2,"maxItems":5,"items":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/negative_step"}},"session_boundary":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/session_boundary"},"rejection_detector":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/rejection_detector"},"actor_plan":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/actor_plan"},"observation_plan":{"type":"array","minItems":1,"items":{"type":"object"}},"sampling":{"type":"object","required":["instance_count","input_relation_to_generation","observation_source","generation_request_refs"],"properties":{"instance_count":{"const":1},"input_relation_to_generation":{"const":"same_input_fresh_replay"},"observation_source":{"const":"new_run"},"generation_request_refs":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string","minLength":1}}},"additionalProperties":false},"query_plan":{"type":"array","minItems":2,"items":{"type":"object"}},"query_binding_requirements":{"type":"object","minProperties":2,"additionalProperties":{"$ref":"#/$defs/binding_requirement"}},"producer_binding_requirement":{"$ref":"#/$defs/binding_requirement"},"observer_binding_requirement":{"type":"object","required":["before","after"],"properties":{"before":{"$ref":"#/$defs/binding_requirement"},"after":{"$ref":"#/$defs/binding_requirement"}},"additionalProperties":false},"settle_policy":{"type":"object","required":["schema_version","rule","minimum_duration_ms","poll_interval_ms","consecutive_identical_observations","maximum_duration_ms"],"properties":{"schema_version":{"const":"uisemtest-current-settle-policy-v2"},"rule":{"const":"bounded_semantic_stability_v1"},"minimum_duration_ms":{"const":500},"poll_interval_ms":{"const":100},"consecutive_identical_observations":{"const":3},"maximum_duration_ms":{"const":2000}},"additionalProperties":false},"observer_purity_policy":{"type":"object","required":["domains"],"properties":{"domains":{"type":"array","minItems":1,"uniqueItems":true,"items":{"enum":["cookie","token","cache","last_seen"]}}},"additionalProperties":false},"projection_schema":{"type":"object","required":["target_path","status"],"properties":{"target_path":{"type":"string","minLength":1},"status":{"enum":["pinned","unaddressed_in_recorded_observation"]}},"additionalProperties":false},"provenance_refs":{"type":"array","minItems":4,"maxItems":4,"uniqueItems":true,"items":{"$ref":"#/$defs/file_ref"}},"negative_kind":{"enum":["rejection","rejection_preservation"]},"identity_topology":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/identity_topology"},"repetition_kind":{"enum":["repeat_equal","repeat_rejected","repeat_delta"]},"required_checks":{"type":"array","minItems":1,"maxItems":2,"uniqueItems":true,"items":{"enum":["projection_equal","second_rejection","preservation","first_delta","second_delta"]}},"repeated_plan":{"type":"array","minItems":5,"maxItems":8,"items":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/repeated_step"}},"reset_epochs":{"type":"array","minItems":1,"maxItems":2,"uniqueItems":true,"items":{"enum":["repeat_once","repeat_twice"]}},"execution_steps":{"type":"array","minItems":5,"maxItems":8,"items":{"$ref":"#/$defs/repeated_execution_step"}},"inverse":{"$ref":"#/$defs/endpoint"},"intermediate_observer":{"$ref":"#/$defs/endpoint"},"inverse_binding_requirement":{"$ref":"#/$defs/binding_requirement"},"intermediate_binding_requirement":{"$ref":"#/$defs/binding_requirement"},"query_scope":{"$ref":"#/$defs/QueryScope"},"query_transform":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/QueryTransform"}]},"joint_observation":{"$ref":"#/$defs/JointObservation"},"time_requirement":{"$ref":"#/$defs/TemporalRequirement"}},"additionalProperties":false},
+    "binding_event_requirement": {
+      "type": "object",
+      "required": [
+        "event", "actor_id", "creator_actor_id", "creator_request_ref",
+        "consumer_request_ref", "scalar_type", "source_id", "source_typed_path",
+        "target_location", "target_typed_path"
+      ],
+      "properties": {
+        "event": { "const": "consumer_value_rebound" },
+        "actor_id": { "type": "string", "minLength": 1 },
+        "creator_actor_id": { "type": "string", "minLength": 1 },
+        "creator_request_ref": { "type": "string", "minLength": 1 },
+        "consumer_request_ref": { "type": "string", "minLength": 1 },
+        "scalar_type": { "enum": ["string", "integer", "number", "boolean"] },
+        "source_id": { "$ref": "#/$defs/sha256" },
+        "source_typed_path": { "type": "string", "minLength": 1 },
+        "target_location": { "enum": ["path", "query", "header", "body"] },
+        "target_typed_path": { "type": "string", "minLength": 1 },
+        "target_group_size": { "type": "integer", "minimum": 2 }
+      },
+      "additionalProperties": false
+    },
+    "binding_requirement": {
+      "type": "object",
+      "required": ["event_count", "source_ids", "scope_derivation", "rule", "events"],
+      "properties": {
+        "event_count": { "type": "integer", "minimum": 0 },
+        "source_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": { "$ref": "#/$defs/sha256" }
+        },
+        "scope_derivation": { "const": "candidate_arm_actor_reset_epoch_v1" },
+        "rule": { "type": "string", "minLength": 1 },
+        "events": {
+          "type": "array", "items": { "$ref": "#/$defs/binding_event_requirement" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "test": {
+      "type": "object",
+      "required": [
+        "test_id", "candidate_id", "protocol_kind", "claim_kind", "source", "blueprint", "constraint",
+        "assertions", "normal_runs", "eligible", "eligibility_reason"
+      ],
+      "properties": {
+        "test_id": { "type": "string", "minLength": 1 },
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "protocol_kind": {"enum":["V1","V2","V3","V4","V5","V6","V7","V9","V8"]},
+        "claim_kind": {"enum":["causal_confirmed","single_state_confirmed","metamorphic_confirmed","workflow_confirmed","negative_behavior_confirmed","actor_relation_confirmed","repeated_execution_confirmed","joint_observation_confirmed","temporal_observation_confirmed"]},
+        "source": { "$ref": "#/$defs/source" },
+        "blueprint": { "$ref": "#/$defs/blueprint" },
+        "constraint": { "$ref": "#/$defs/constraint" },
+        "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" }, "x-unique-by": "assertion_id" },
+        "normal_runs": { "type": "integer", "minimum": 1 },
+        "eligible": { "type": "boolean" },
+        "eligibility_reason": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {"if":{"properties":{"protocol_kind":{"const":"V2"}}},"then":{"properties":{"claim_kind":{"const":"single_state_confirmed"},"blueprint":{"required":["observation_plan","sampling"],"properties":{"producer":{"type":"null"},"observation_plan":{"maxItems":1}}}}},"else":{"if":{"properties":{"protocol_kind":{"const":"V9"}}},"then":{"properties":{"claim_kind":{"const":"joint_observation_confirmed"},"blueprint":{"required":["joint_observation","observation_plan"]}}},"else":{"properties":{"blueprint":{"properties":{"producer":{"$ref":"#/$defs/endpoint"}}}}}}},
+        {
+          "if": {"properties": {"protocol_kind": {"const": "V1"}}},
+          "then": {
+            "properties": {
+              "claim_kind": {"const": "causal_confirmed"},
+              "blueprint": {
+                "allOf": [
+                  {"not": {"required": ["before_observer"]}},
+                  {"not": {"required": ["workflow_plan"]}}
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {"properties": {"protocol_kind": {"const": "V3"}}},
+          "then": {
+            "properties": {
+              "claim_kind": {"const": "metamorphic_confirmed"},
+              "blueprint": {"required": ["before_observer", "query_plan", "query_binding_requirements", "query_scope", "query_transform"]}
+            }
+          }
+        },
+        {"if":{"properties":{"protocol_kind":{"const":"V4"}}},"then":{"properties":{"claim_kind":{"const":"workflow_confirmed"},"blueprint":{"required":["workflow_plan"],"allOf":[{"if":{"required":["workflow_kind"],"properties":{"workflow_kind":{"enum":["create_capture_read","postcondition_read"]}}},"then":{"not":{"required":["before_observer"]}},"else":{"required":["before_observer"]}},{"if":{"properties":{"workflow_kind":{"const":"inverse_restoration"}},"required":["workflow_kind"]},"then":{"required":["inverse","intermediate_observer","inverse_binding_requirement","intermediate_binding_requirement"],"properties":{"workflow_plan":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/inverse_restoration_plan"}}},"else":{"not":{"anyOf":[{"required":["inverse"]},{"required":["intermediate_observer"]},{"required":["inverse_binding_requirement"]},{"required":["intermediate_binding_requirement"]}]}}},{"if":{"required":["workflow_kind"],"properties":{"workflow_kind":{"const":"read_preservation"}}},"then":{"properties":{"workflow_plan":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/read_preservation_plan"}}}}]}}}},
+        {"if":{"properties":{"protocol_kind":{"const":"V6"}}},"then":{"properties":{"claim_kind":{"const":"negative_behavior_confirmed"},"blueprint":{"required":["negative_kind","negative_plan","session_boundary","rejection_detector"],"allOf":[{"if":{"properties":{"negative_kind":{"const":"rejection"}}},"then":{"not":{"required":["before_observer"]},"properties":{"negative_plan":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/negative_rejection_plan"},"rejection_detector":{"properties":{"kind":{"const":"predicate"}}}}},"else":{"required":["before_observer"],"properties":{"negative_plan":{"$ref":"current_route_s_execution_material_v1.schema.json#/$defs/negative_preservation_plan"}}}}]}}}},
+        {"if":{"properties":{"protocol_kind":{"const":"V7"}}},"then":{"properties":{"claim_kind":{"const":"actor_relation_confirmed"},"blueprint":{"required":["before_observer","actor_plan","identity_topology"]}}}},
+        {"if":{"properties":{"protocol_kind":{"const":"V5"}}},"then":{"properties":{"claim_kind":{"const":"repeated_execution_confirmed"},"blueprint":{"required":["before_observer","repetition_kind","required_checks","repeated_plan","reset_epochs","execution_steps"],"allOf":[{"if":{"properties":{"repetition_kind":{"const":"repeat_equal"}}},"then":{"properties":{"required_checks":{"const":["projection_equal"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_once","step_id":"A0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_once","step_id":"A_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_once","step_id":"A1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]},"reset_epochs":{"const":["repeat_once","repeat_twice"]},"execution_steps":{"minItems":8,"maxItems":8,"prefixItems":[{"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}}},{"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action2"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":2}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B2"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":2}}}],"items":false}}}},{"if":{"properties":{"repetition_kind":{"const":"repeat_rejected"}}},"then":{"properties":{"required_checks":{"const":["second_rejection","preservation"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]},"reset_epochs":{"const":["repeat_twice"]},"execution_steps":{"minItems":5,"maxItems":5,"prefixItems":[{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action2"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":2}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B2"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":2}}}],"items":false}}}},{"if":{"properties":{"repetition_kind":{"const":"repeat_delta"}}},"then":{"properties":{"required_checks":{"const":["first_delta","second_delta"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]},"reset_epochs":{"const":["repeat_twice"]},"execution_steps":{"minItems":5,"maxItems":5,"prefixItems":[{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action2"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":2}}},{"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B2"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":2}}}],"items":false}}}}]}}}}
+      ],
+      "additionalProperties": false
+    },
+    "HypothesisOperand": {"additionalProperties": false, "properties": {"source": {"const": "hypothesis", "title": "Source", "type": "string"}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"], "title": "Value Type", "type": "string"}, "value": {"title": "Value"}, "evidence_refs": {"items": {"type": "string"}, "minItems": 1, "title": "Evidence Refs", "type": "array"}, "rationale": {"minLength": 1, "title": "Rationale", "type": "string"}}, "required": ["source", "value_type", "value", "evidence_refs", "rationale"], "title": "HypothesisOperand", "type": "object"},
+    "QueryClosure": {"additionalProperties": false, "properties": {"roles": {"items": {"type": "string"}, "minItems": 1, "title": "Roles", "type": "array"}, "collection_path": {"pattern": "^\\$(?:\\.[^.*\\[\\]]+)*$", "title": "Collection Path", "type": "string"}, "termination": {"$ref": "#/$defs/QueryTermination"}, "traversal": {"$ref": "#/$defs/HypothesisOperand"}}, "required": ["roles", "collection_path", "termination", "traversal"], "title": "QueryClosure", "type": "object"},
+    "QueryTermination": {"additionalProperties": false, "properties": {"kind": {"enum": ["terminal_value", "total_count"], "title": "Kind", "type": "string"}, "ref": {"$ref": "#/$defs/ValueRef"}, "expected": {"anyOf": [{"$ref": "#/$defs/HypothesisOperand"}, {"type": "null"}], "default": null}}, "required": ["kind", "ref"], "title": "QueryTermination", "type": "object"},
+    "ValueRef": {"additionalProperties": false, "properties": {"role": {"minLength": 1, "title": "Role", "type": "string"}, "path": {"minLength": 1, "title": "Path", "type": "string"}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"], "title": "Value Type", "type": "string"}}, "required": ["role", "path", "value_type"], "title": "ValueRef", "type": "object"},
+    "QueryScope": {"additionalProperties": false, "properties": {"scope": {"default": "actual_response", "enum": ["actual_response", "finite_query_plan"], "title": "Scope", "type": "string"}, "closures": {"items": {"$ref": "#/$defs/QueryClosure"}, "title": "Closures", "type": "array"}}, "title": "QueryScope", "type": "object"},
+    "QueryTransform": {"additionalProperties": false, "properties": {"kind": {"enum": ["equivalent_input", "filter_refinement", "filter_expansion", "sort", "pagination_partition", "finite_query_plan"], "title": "Kind", "type": "string"}, "location": {"enum": ["query", "body"], "title": "Location", "type": "string"}, "keys": {"items": {"type": "string"}, "minItems": 1, "title": "Keys", "type": "array"}, "semantics": {"$ref": "#/$defs/HypothesisOperand"}}, "required": ["kind", "location", "keys", "semantics"], "title": "QueryTransform", "type": "object"}
+  }
+}

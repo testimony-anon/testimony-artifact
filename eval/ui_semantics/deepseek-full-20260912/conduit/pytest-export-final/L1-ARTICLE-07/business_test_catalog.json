@@ -1,0 +1,252 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 3,
+    "canonical_relation_core_identities": [
+      "0fa77e4bbe51b3381597edc63afd5f588ff19f9c8718bcf559ff275f2d9222f3",
+      "28c6f5e9314dbea80f1d54c2d9cddef8b27d29ac39d39f9b601816b8f802c46e",
+      "9443ff6c1dba132568934191558be524805c085272638833479a96a10dc0098c"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003"
+    ],
+    "physical_retained_test_occurrence_count": 3,
+    "unique_canonical_relation_core_count": 3
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190243-ed29:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/practical-tagging-guide; business predicate P02 requires after $.article.title (string) to strictly equal producer_request $.article.title (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "0fa77e4bbe51b3381597edc63afd5f588ff19f9c8718bcf559ff275f2d9222f3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/practical-tagging-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190243-ed29:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190243-ed29:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The producer request body carries $.article.title (string, literal recorded) and the later read of the created resource exposes $.article.title (string) in the same shared response shape; the value flow on $.article.slug links the read to the created article. The proposed equality is a frozen hypothesis about readback of the sent field, not a recorded verified equality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Proposed readback rule: the freshly read $.article.title (request:5) strictly equals the prepared POST body $.article.title of request:1, which parameter_evidence records as a visible string at body path $.article.title. The recorded values need not already agree; the relation is frozen as a hypothesis, not a proven specification.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c71b7f56a9b366181943"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190243-ed29:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.description",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.description",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/practical-tagging-guide; business predicate P02 requires after $.article.description (string) to strictly equal producer_request $.article.description (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "28c6f5e9314dbea80f1d54c2d9cddef8b27d29ac39d39f9b601816b8f802c46e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/practical-tagging-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190243-ed29:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190243-ed29:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Proposed readback rule: the freshly read $.article.description (request:5) strictly equals the prepared POST body $.article.description of request:1, visible in parameter_evidence at body path $.article.description. Recorded agreement is not required and is not treated as proof.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0e159233472822bfcd83"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190243-ed29:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.body",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.body",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/practical-tagging-guide; business predicate P02 requires after $.article.body (string) to strictly equal producer_request $.article.body (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "9443ff6c1dba132568934191558be524805c085272638833479a96a10dc0098c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/practical-tagging-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190243-ed29:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190243-ed29:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Proposed readback rule: the freshly read $.article.body (request:5) strictly equals the prepared POST body $.article.body of request:1, visible in parameter_evidence at body path $.article.body. Frozen before execution; the recording is evidence only.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f559205ea16ebd9b3bdd"
+    }
+  ]
+}

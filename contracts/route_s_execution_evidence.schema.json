@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_execution_evidence.schema.json",
+  "title": "Generic route-S deterministic execution evidence",
+  "type": "object",
+  "required": ["schema_version", "candidate", "resets", "setups", "observations", "producer", "sessions", "cross_arm_reuse_refs", "pins"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-execution-evidence-v1"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "resets": {
+      "type": "object",
+      "required": ["Rc", "Rt"],
+      "properties": {
+        "Rc": {"$ref": "#/$defs/reset"},
+        "Rt": {"$ref": "#/$defs/reset"}
+      },
+      "additionalProperties": false
+    },
+    "setups": {
+      "type": "object",
+      "required": ["Sc", "St"],
+      "properties": {
+        "Sc": {"$ref": "#/$defs/setup"},
+        "St": {"$ref": "#/$defs/setup"}
+      },
+      "additionalProperties": false
+    },
+    "observations": {
+      "type": "object",
+      "required": ["Oc1", "Oc2", "Ot0", "Ot1"],
+      "properties": {
+        "Oc1": {"$ref": "#/$defs/observation"},
+        "Oc2": {"$ref": "#/$defs/observation"},
+        "Ot0": {"$ref": "#/$defs/observation"},
+        "Ot1": {"$ref": "#/$defs/observation"}
+      },
+      "additionalProperties": false
+    },
+    "producer": {"$ref": "#/$defs/producer"},
+    "sessions": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/session"}},
+    "cross_arm_reuse_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "pins": {"$ref": "#/$defs/pins"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "actor_endpoint": {
+      "type": "object",
+      "required": ["actor_id", "request_ref"],
+      "properties": {
+        "actor_id": {"type": "string", "minLength": 1},
+        "request_ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "candidate": {
+      "type": "object",
+      "required": ["candidate_id", "candidate_identity", "input_hashes", "producer", "consumer", "setup", "effect_predicate"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1},
+        "candidate_identity": {"type": "string", "minLength": 1},
+        "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha256"}},
+        "producer": {"$ref": "#/$defs/actor_endpoint"},
+        "consumer": {"$ref": "#/$defs/actor_endpoint"},
+        "setup": {"type": "array", "items": {"$ref": "#/$defs/actor_endpoint"}},
+        "effect_predicate": {"type": "object", "required": ["type"], "additionalProperties": true}
+      },
+      "additionalProperties": false
+    },
+    "reset": {
+      "type": "object",
+      "required": ["arm", "reset_epoch", "raw_ref", "completed", "completed_at"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "completed": {"type": "boolean"},
+        "completed_at": {"$ref": "#/$defs/timestamp"}
+      },
+      "additionalProperties": false
+    },
+    "setup": {
+      "type": "object",
+      "required": ["arm", "status", "provenance_refs", "completed_at"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "status": {"enum": ["pass", "failed"]},
+        "provenance_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "completed_at": {"$ref": "#/$defs/timestamp"}
+      },
+      "additionalProperties": false
+    },
+    "observer_state": {
+      "type": "object",
+      "required": ["materialization_id", "ownership_domain_sha256", "jar_ownership_sha256", "mutation_domain_sha256", "cookie_state_sha256", "token_state_sha256", "cache_state_sha256", "last_seen_state_sha256"],
+      "properties": {
+        "materialization_id": {"type": "string", "minLength": 1},
+        "ownership_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "jar_ownership_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "cookie_state_sha256": {"$ref": "#/$defs/sha256"},
+        "token_state_sha256": {"$ref": "#/$defs/sha256"},
+        "cache_state_sha256": {"$ref": "#/$defs/sha256"},
+        "last_seen_state_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "observer_purity": {
+      "type": "object",
+      "required": ["proof_status", "before", "after", "mutation_events", "uncertain_fields", "secret_values_present"],
+      "properties": {
+        "proof_status": {"enum": ["proven_unchanged", "mutating", "uncertain"]},
+        "before": {"$ref": "#/$defs/observer_state"},
+        "after": {"$ref": "#/$defs/observer_state"},
+        "mutation_events": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "uncertain_fields": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "secret_values_present": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "transport": {
+      "type": "object",
+      "required": ["status", "http_status"],
+      "properties": {
+        "status": {"enum": ["pass", "failed"]},
+        "http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599}
+      },
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": ["arm", "actor_id", "raw_ref", "observed_at", "transport", "response", "observer_purity"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "observed_at": {"$ref": "#/$defs/timestamp"},
+        "transport": {"$ref": "#/$defs/transport"},
+        "response": {
+          "type": "object",
+          "required": ["status", "body"],
+          "properties": {
+            "status": {"type": "integer", "minimum": 100, "maximum": 599},
+            "body": {}
+          },
+          "additionalProperties": false
+        },
+        "observer_purity": {"$ref": "#/$defs/observer_purity"}
+      },
+      "additionalProperties": false
+    },
+    "producer": {
+      "type": "object",
+      "required": ["actor_id", "action_ref", "request_ref", "raw_ref", "executed_at", "status", "request", "response"],
+      "properties": {
+        "actor_id": {"type": "string", "minLength": 1},
+        "action_ref": {"type": "string", "minLength": 1},
+        "request_ref": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "executed_at": {"$ref": "#/$defs/timestamp"},
+        "status": {"enum": ["pass", "failed"]},
+        "request": {},
+        "response": {}
+      },
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "required": ["arm", "actor_id", "reset_epoch", "materialization_id", "ownership_domain_sha256", "jar_ownership_sha256", "mutation_domain_sha256", "secret_values_present"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "materialization_id": {"type": "string", "minLength": 1},
+        "ownership_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "jar_ownership_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "secret_values_present": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "pins": {
+      "type": "object",
+      "required": ["verifier_sha256", "certificate_schema_sha256", "execution_evidence_schema_sha256", "profile_sha256", "renderer_sha256", "subject_pin_sha256"],
+      "properties": {
+        "verifier_sha256": {"$ref": "#/$defs/sha256"},
+        "certificate_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "execution_evidence_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "profile_sha256": {"$ref": "#/$defs/sha256"},
+        "renderer_sha256": {"$ref": "#/$defs/sha256"},
+        "subject_pin_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

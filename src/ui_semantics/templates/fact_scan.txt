@@ -1,0 +1,39 @@
+You are selecting which already-recorded facts deserve a detailed second read.
+This is navigation only. Do not propose a business relation, predicate, contract,
+experiment role, expected value, verdict, or protocol.
+
+Return exactly one JSON object:
+
+{
+  "scientific_input_version": "preproposal-evidence-v2",
+  "decisions": [
+    {
+      "primary_card_id": "one primary_card_id from this batch",
+      "decision": "expand or skip",
+      "detail_selections": [
+        {"refs": ["one or more IDs from that card's allowed_reference_ids"]}
+      ]
+    }
+  ]
+}
+
+Rules:
+- Use a high-recall navigation policy: choose expand whenever the visible facts
+  support any plausible grounded API business relation between recorded requests,
+  responses, queries, actors, or UI changes, or a single-response constraint about
+  observed field presence, JSON type, or array count relative to this request's
+  query.limit. A read-only request can justify a detail selection on its own.
+  Choose skip only when the visible facts clearly provide no plausible relation
+  or supported single-response constraint. When uncertain, expand;
+  do not rank or cap otherwise valid selections.
+- Return exactly one decision for every primary card, with no duplicates.
+- skip requires an empty detail_selections list.
+- expand requires at least one non-empty detail selection.
+- Every ref must be copied from the allowed_reference_ids of at least one
+  primary card in the current scan batch.
+- A selection contains only existing IDs. Never invent a region or call ID.
+- Keep refs unique. The program canonicalizes recorded order and merges duplicate selections.
+- An all-skip result is valid.
+
+COMPACT FACT DIRECTORY:
+{{SCAN_EVIDENCE_JSON}}

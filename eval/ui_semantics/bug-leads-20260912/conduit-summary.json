@@ -1,0 +1,83 @@
+{
+  "base_url": "http://localhost:3301",
+  "user": "lead6user214098",
+  "cases": [
+    {
+      "label": "short_and_long",
+      "submitted": [
+        "xy",
+        "lastingtag"
+      ],
+      "create_status": 201,
+      "create_response_tagList": [
+        "xy",
+        "lastingtag"
+      ],
+      "read_status": 200,
+      "read_back_tagList": [
+        "lastingtag"
+      ],
+      "submitted_tags_present_in_global_tags": {
+        "xy": false,
+        "lastingtag": true
+      },
+      "create_response_matches_read_back": false
+    },
+    {
+      "label": "one_char",
+      "submitted": [
+        "q"
+      ],
+      "create_status": 201,
+      "create_response_tagList": [
+        "q"
+      ],
+      "read_status": 500,
+      "read_back_tagList": null,
+      "submitted_tags_present_in_global_tags": {
+        "q": false
+      },
+      "create_response_matches_read_back": false
+    },
+    {
+      "label": "three_chars",
+      "submitted": [
+        "abc"
+      ],
+      "create_status": 201,
+      "create_response_tagList": [
+        "abc"
+      ],
+      "read_status": 500,
+      "read_back_tagList": null,
+      "submitted_tags_present_in_global_tags": {
+        "abc": true
+      },
+      "create_response_matches_read_back": false
+    },
+    {
+      "label": "two_chars_only",
+      "submitted": [
+        "zz"
+      ],
+      "create_status": 201,
+      "create_response_tagList": [
+        "zz"
+      ],
+      "read_status": 200,
+      "read_back_tagList": [],
+      "submitted_tags_present_in_global_tags": {
+        "zz": false
+      },
+      "create_response_matches_read_back": false
+    }
+  ],
+  "verdict": "BUG_REPRODUCED",
+  "business_rule": "the tag list returned by the create response must equal what was persisted; silently dropping submitted tags without an error or without reflecting it in the response is a defect",
+  "finished_at": "2026-09-12T07:54:58-0400",
+  "notes": [
+    "L6 reproduced: tags of length <= 2 are silently dropped at creation but echoed in the 201 response ('xy','q','zz'); 3-char 'abc' is persisted.",
+    "Incidental L7: GET /api/articles/:slug returned HTTP 500 {'errors': {'body': ['toAppend.hasFollower is not a function']}} for two articles when read immediately after creation (evidence seq 6 and 9); the same reads returned 200 a few seconds later. createArticle calls article.setAuthor(loggedUser) without await, so an immediate read can find the author association not yet written.",
+    "Stack torn down with docker compose down -v after the run."
+  ]
+}

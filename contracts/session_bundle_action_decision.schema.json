@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session_bundle_action_decision.schema.json",
+  "title": "session_bundle member: a single record of action_decision_log.jsonl (D1)",
+  "description": "Deterministic decision record for each executed primitive in the current typed workflow.",
+  "type": "object",
+  "required": ["timestamp", "strategy", "action_id", "detail"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "x-volatility": "volatile"
+    },
+    "strategy": {
+      "type": "string",
+      "const": "deterministic_workflow",
+      "description": "The action was chosen deterministically by the frozen typed workflow.",
+      "x-volatility": "structural"
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "ID of the action selected and executed in this step, corresponding to exactly one ui_action_log record.",
+      "x-volatility": "volatile"
+    },
+    "detail": {
+      "type": "object",
+      "required": ["workflow_id", "scenario_step_id", "workflow_step_id", "global_step_index", "actor_id", "action_type", "executed", "locator_match_count", "wait_results"],
+      "properties": {
+        "workflow_id": {"type": "string", "minLength": 1},
+        "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "workflow_step_id": {"type": "string", "minLength": 1},
+        "global_step_index": {"type": "integer", "minimum": 0},
+        "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+        "action_type": {"enum": ["navigate", "click", "fill", "type", "hover", "press", "select_option", "scroll_until_visible"]},
+        "executed": {"const": true},
+        "locator_match_count": {"type": ["integer", "null"], "minimum": 0},
+        "dialog_result": {
+          "type": "object",
+          "required": ["dialog_type", "disposition", "status"],
+          "properties": {
+            "dialog_type": {"enum": ["alert", "confirm"]},
+            "disposition": {"enum": ["accept", "dismiss", "close"]},
+            "status": {"const": "handled"}
+          },
+          "additionalProperties": false
+        },
+        "binding_material_source_step_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "wait_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "status"],
+            "properties": {
+              "kind": {"enum": ["load_state", "url", "locator", "dom_quiet", "network_quiet", "bounded_delay"]},
+              "status": {"const": "satisfied"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false,
+      "description": "Frozen workflow step, actor, action type, unique-locator result and bounded mechanical wait results.",
+      "x-volatility": "volatile"
+    }
+  },
+  "additionalProperties": false
+}

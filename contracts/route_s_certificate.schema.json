@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_certificate.schema.json",
+  "title": "Generic route-S deterministic verification certificate",
+  "type": "object",
+  "required": ["schema_version", "certificate_status", "candidate", "projection_plan", "resets", "setups", "observations", "producer", "gates", "session_ownership", "pins", "outcome", "fail_closed_reasons", "completeness"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-certificate-v1"},
+    "certificate_status": {"const": "complete"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "projection_plan": {"$ref": "#/$defs/projection_plan"},
+    "resets": {
+      "type": "object",
+      "required": ["Rc", "Rt"],
+      "properties": {"Rc": {"$ref": "#/$defs/reset"}, "Rt": {"$ref": "#/$defs/reset"}},
+      "additionalProperties": false
+    },
+    "setups": {
+      "type": "object",
+      "required": ["Sc", "St"],
+      "properties": {"Sc": {"$ref": "#/$defs/setup"}, "St": {"$ref": "#/$defs/setup"}},
+      "additionalProperties": false
+    },
+    "observations": {
+      "type": "object",
+      "required": ["Oc1", "Oc2", "Ot0", "Ot1"],
+      "properties": {
+        "Oc1": {"$ref": "#/$defs/observation"},
+        "Oc2": {"$ref": "#/$defs/observation"},
+        "Ot0": {"$ref": "#/$defs/observation"},
+        "Ot1": {"$ref": "#/$defs/observation"}
+      },
+      "additionalProperties": false
+    },
+    "producer": {"$ref": "#/$defs/producer"},
+    "gates": {
+      "type": "object",
+      "required": ["observer_pure", "stable_control", "baseline_equivalent", "supplemental_baseline", "control_effect_absent", "treatment_effect_present", "isolated"],
+      "properties": {
+        "observer_pure": {"$ref": "#/$defs/gate"},
+        "stable_control": {"$ref": "#/$defs/gate"},
+        "baseline_equivalent": {"$ref": "#/$defs/gate"},
+        "supplemental_baseline": {"$ref": "#/$defs/gate"},
+        "control_effect_absent": {"$ref": "#/$defs/gate"},
+        "treatment_effect_present": {"$ref": "#/$defs/gate"},
+        "isolated": {"$ref": "#/$defs/gate"}
+      },
+      "additionalProperties": false
+    },
+    "session_ownership": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/session"}},
+    "pins": {"$ref": "#/$defs/pins"},
+    "outcome": {"enum": ["confirmed", "effect_absent", "baseline_mismatch", "control_unstable", "observer_mutating_or_uncertain", "arm_isolation_failed", "setup_failed", "infrastructure_failed", "malformed_or_unsupported"]},
+    "fail_closed_reasons": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "completeness": {
+      "type": "object",
+      "required": ["required_fields_complete", "schema_validated", "secret_values_present"],
+      "properties": {
+        "required_fields_complete": {"type": "boolean"},
+        "schema_validated": {"type": "boolean"},
+        "secret_values_present": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"outcome": {"const": "confirmed"}}, "required": ["outcome"]},
+      "then": {
+        "properties": {
+          "fail_closed_reasons": {"maxItems": 0},
+          "completeness": {
+            "properties": {"required_fields_complete": {"const": true}, "schema_validated": {"const": true}}
+          },
+          "gates": {
+            "properties": {
+              "observer_pure": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+              "stable_control": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+              "baseline_equivalent": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+              "control_effect_absent": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+              "treatment_effect_present": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+              "isolated": {"properties": {"computed": {"const": true}, "value": {"const": true}}}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidate": {
+      "type": "object",
+      "required": ["candidate_id", "candidate_identity", "predicate_type", "input_hashes"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1},
+        "candidate_identity": {"type": "string", "minLength": 1},
+        "predicate_type": {"enum": ["numeric_delta", "count_delta", "item_appears", "field_equals"]},
+        "input_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha256"}}
+      },
+      "additionalProperties": false
+    },
+    "projection_plan": {
+      "type": "object",
+      "required": ["predicate_type", "body_path", "derived_from_field", "canonicalization", "plan_sha256", "result_adaptive_selection"],
+      "properties": {
+        "predicate_type": {"enum": ["numeric_delta", "count_delta", "item_appears", "field_equals"]},
+        "body_path": {"type": "string"},
+        "derived_from_field": {"enum": ["target_path", "collection_path"]},
+        "canonicalization": {"const": "canonical_json_object_keys_array_order_preserved_no_coercion"},
+        "plan_sha256": {"$ref": "#/$defs/sha256"},
+        "result_adaptive_selection": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "reset": {
+      "type": "object",
+      "required": ["arm", "reset_epoch", "raw_ref", "completed", "completed_at"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "completed": {"type": "boolean"},
+        "completed_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "setup": {
+      "type": "object",
+      "required": ["arm", "status", "provenance_refs", "completed_at"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "status": {"enum": ["pass", "failed"]},
+        "provenance_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "completed_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "observer_purity": {
+      "type": "object",
+      "required": ["proof_status", "before_sha256", "after_sha256", "mutation_events", "uncertain_fields", "value", "reason_code"],
+      "properties": {
+        "proof_status": {"enum": ["proven_unchanged", "mutating", "uncertain"]},
+        "before_sha256": {"$ref": "#/$defs/sha256"},
+        "after_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_events": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "uncertain_fields": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "value": {"type": "boolean"},
+        "reason_code": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "required": ["arm", "actor_id", "raw_ref", "observed_at", "http_status", "projection_sha256", "normalized_projection", "observer_purity"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599},
+        "projection_sha256": {"$ref": "#/$defs/sha256"},
+        "normalized_projection": {},
+        "observer_purity": {"$ref": "#/$defs/observer_purity"}
+      },
+      "additionalProperties": false
+    },
+    "producer": {
+      "type": "object",
+      "required": ["actor_id", "action_ref", "request_ref", "raw_ref", "executed_at", "status", "request_sha256", "response_sha256"],
+      "properties": {
+        "actor_id": {"type": "string", "minLength": 1},
+        "action_ref": {"type": "string", "minLength": 1},
+        "request_ref": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "executed_at": {"type": "string", "format": "date-time"},
+        "status": {"enum": ["pass", "failed"]},
+        "request_sha256": {"$ref": "#/$defs/sha256"},
+        "response_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gate_operand": {
+      "type": "object",
+      "required": ["name", "raw_ref", "normalized_value", "normalized_value_sha256"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "raw_ref": {"type": "string", "minLength": 1},
+        "normalized_value": {},
+        "normalized_value_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "required": ["computed", "value", "reason_code", "operands"],
+      "properties": {
+        "computed": {"type": "boolean"},
+        "value": {"type": ["boolean", "null"]},
+        "reason_code": {"type": "string", "minLength": 1},
+        "operands": {"type": "array", "items": {"$ref": "#/$defs/gate_operand"}}
+      },
+      "additionalProperties": false
+    },
+    "session": {
+      "type": "object",
+      "required": ["arm", "actor_id", "reset_epoch", "materialization_id", "ownership_domain_sha256", "jar_ownership_sha256", "mutation_domain_sha256", "secret_values_present"],
+      "properties": {
+        "arm": {"enum": ["control", "treatment"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "materialization_id": {"type": "string", "minLength": 1},
+        "ownership_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "jar_ownership_sha256": {"$ref": "#/$defs/sha256"},
+        "mutation_domain_sha256": {"$ref": "#/$defs/sha256"},
+        "secret_values_present": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "pins": {
+      "type": "object",
+      "required": ["verifier_sha256", "certificate_schema_sha256", "execution_evidence_schema_sha256", "profile_sha256", "renderer_sha256", "subject_pin_sha256"],
+      "properties": {
+        "verifier_sha256": {"$ref": "#/$defs/sha256"},
+        "certificate_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "execution_evidence_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "profile_sha256": {"$ref": "#/$defs/sha256"},
+        "renderer_sha256": {"$ref": "#/$defs/sha256"},
+        "subject_pin_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

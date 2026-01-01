@@ -1,0 +1,565 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 8,
+    "business_relation_occurrence_count": 0,
+    "canonical_relation_core_identities": [
+      "0c8f0eb72ac1f314c32d0ea560c2e4b46b8cf6657792fe327bb725a967fc1550",
+      "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "2cd93bc696624f213a40d5c1888f4e6ce833cf6e558eb44f7dc4d49030da8ee1",
+      "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "6f7170d64324ce1e5defde5eea8a613722b34825f8134181fc987e8637860110",
+      "b23f7397102b728d022fb6bcdf650e52161a9147d1fdc9bc0911ed03fac8f6a6",
+      "bc71ed25f71b7bb304635f55df881a4c4d6b4f7f851a4c797d21b01063299a72",
+      "ec9cd85b729a9edbb884ba5986830600ccafc3f96c5abec27813ba068c92e3cb"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0007",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0013",
+      "v2-candidate-0022",
+      "v2-candidate-0023"
+    ],
+    "physical_retained_test_occurrence_count": 8,
+    "unique_canonical_relation_core_count": 8
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /users; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "bc71ed25f71b7bb304635f55df881a4c4d6b4f7f851a4c797d21b01063299a72",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users",
+          "phase": "observation",
+          "request_ref": "r20260906-142534-4e90:request:0"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "A returned user's id flows into the payment request's receiverId. This supports proposing uniqueness of $.id within the actual returned user array; neither uniqueness nor causality is established by that flow.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0009",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0009/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The users response exposes an id field on result members. Propose uniqueness of this frozen key within the complete actual response; the visible shape does not establish uniqueness or database-wide identity.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0009/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0012",
+          "candidate_ordinal": 10,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0012/provider_response_envelope.json#content(from-json).candidates[9].rationale",
+          "raw_rationale": "The users response exposes an id field on results members. Propose uniqueness by that frozen key within the complete actual response array; this does not assert database-wide uniqueness.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0012/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f00aac852ce01725b61a"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "le",
+          "projection": "count",
+          "right": {
+            "ref": {
+              "path": "$.pageData.limit",
+              "role": "observation",
+              "value_type": "integer"
+            },
+            "source": "role"
+          },
+          "target": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_b GET /transactions/public; basic constraint P11 requires count(observation $.results (array); unit=items) le observation $.pageData.limit (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "0c8f0eb72ac1f314c32d0ea560c2e4b46b8cf6657792fe327bb725a967fc1550",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/public",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:137"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 9,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[8].rationale",
+          "raw_rationale": "The public transaction response contains results and an integer pageData.limit. Propose that its actual returned count does not exceed its reported limit.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 13,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[12].rationale",
+          "raw_rationale": "The public-transactions response contains both results and integer pageData.limit. Propose that the actual returned item count does not exceed this response metadata value.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-780f23f896d0725ba524"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_b GET /transactions/public; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "ec9cd85b729a9edbb884ba5986830600ccafc3f96c5abec27813ba068c92e3cb",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/public",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:137"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "Public transaction members expose id. Propose uniqueness of that frozen key within this response's complete results array, without claiming uniqueness across pages.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "The public-transactions response exposes results with member id fields. Propose uniqueness within the actual returned array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ed886c709b46bc21e156"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_b GET /notifications; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "2cd93bc696624f213a40d5c1888f4e6ce833cf6e558eb44f7dc4d49030da8ee1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/notifications",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:138"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 12,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[11].rationale",
+          "raw_rationale": "Notification members expose id separately from their transaction and interaction references. Propose uniqueness of notification id within the actual returned results.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 10,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[9].rationale",
+          "raw_rationale": "The notifications response exposes a results array with member id fields, grounding proposed uniqueness within that actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-06c7357acfc9c87a7ada"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_b POST /graphql; basic constraint P15 requires observation $.data.listBankAccount (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:139"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 13,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[12].rationale",
+          "raw_rationale": "The recorded GraphQL document is a query selecting bank-account ids. Propose uniqueness of id within its actual listBankAccount response array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "The recorded GraphQL operation is a query selecting bank-account ids, and its response exposes the account array. Propose id uniqueness within that actual array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-902620d3b12eef32f18c"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0013-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "collection": {
+              "path": "$.comments",
+              "role": "item",
+              "value_type": "array"
+            },
+            "family": "P15",
+            "identity": {
+              "paths": [
+                "$.id"
+              ],
+              "semantics": "strict-tuple"
+            },
+            "scope": "actual_response"
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_b GET /transactions/public; basic constraint For every member of observation $.results (array) in actual_response: P15 requires item $.comments (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0013",
+      "canonical_relation_core_identity": "b23f7397102b728d022fb6bcdf650e52161a9147d1fdc9bc0911ed03fac8f6a6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/public",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:137"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 15,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[14].rationale",
+          "raw_rationale": "Public transaction members contain comment arrays whose members expose id. Propose uniqueness of comment id separately within each returned transaction's actual comments array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 12,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[11].rationale",
+          "raw_rationale": "Returned transactions expose comments arrays and comment id fields. Propose uniqueness within each transaction's actual comments array, retaining every returned transaction.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-543406cf4c8719a6c5c4"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0022-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_b GET /transactions; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0022",
+      "canonical_relation_core_identity": "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:142"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "Returned transaction IDs are observed supplying point-read and write locators. This motivates uniqueness of $.id within the complete actual results array, retaining duplicates during evaluation and making no claim about other pages.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 9,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[8].rationale",
+          "raw_rationale": "A returned transaction id is observed feeding a transaction selector. Propose that transaction ids are unique within this actual results array.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2d88432388b5a42de571"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0023-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "le",
+          "projection": "count",
+          "right": {
+            "ref": {
+              "path": "$.pageData.limit",
+              "role": "observation",
+              "value_type": "integer"
+            },
+            "source": "role"
+          },
+          "target": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_b GET /transactions; basic constraint P11 requires count(observation $.results (array); unit=items) le observation $.pageData.limit (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0023",
+      "canonical_relation_core_identity": "6f7170d64324ce1e5defde5eea8a613722b34825f8134181fc987e8637860110",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_b",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions",
+          "phase": "observation",
+          "request_ref": "r20260906-142533-3d4d:request:142"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 9,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[8].rationale",
+          "raw_rationale": "The response contains a results array and integer pageData.limit. Their grouping motivates the proposed response-internal bound on returned item count. The bound is read from the response; no outgoing query limit or complete-collection scope is inferred.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0017",
+          "candidate_ordinal": 14,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json#content(from-json).candidates[13].rationale",
+          "raw_rationale": "The transactions response contains both results and integer pageData.limit. Propose that the actual returned item count does not exceed this response metadata value.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0017/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b8c77d7856f639148877"
+    }
+  ]
+}

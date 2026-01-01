@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_certificate_v3.schema.json",
+  "title": "Route-S final deterministic certificate v3",
+  "type": "object",
+  "required": ["schema_version", "certificate_status", "execution_evidence_sha256", "candidate", "projection_plan", "protocol", "observation_projections", "gates", "sessions", "cross_arm_reuse_refs", "pins", "run_attestation", "outcome", "outcome_precedence_version", "fail_closed_reasons", "completeness"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-certificate-v3"},
+    "certificate_status": {"const": "final"},
+    "execution_evidence_sha256": {"$ref": "#/$defs/sha"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "projection_plan": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/projection_plan"},
+    "protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["Rc", "Sc", "Oc1", "settle_c", "Oc2", "Rt", "St", "Ot0", "P", "settle_t", "Ot1"],
+      "properties": {
+        "Rc": {"$ref": "#/$defs/cert_Rc"}, "Sc": {"$ref": "#/$defs/cert_Sc"},
+        "Oc1": {"$ref": "#/$defs/cert_Oc1"}, "settle_c": {"$ref": "#/$defs/cert_settle_c"},
+        "Oc2": {"$ref": "#/$defs/cert_Oc2"}, "Rt": {"$ref": "#/$defs/cert_Rt"},
+        "St": {"$ref": "#/$defs/cert_St"}, "Ot0": {"$ref": "#/$defs/cert_Ot0"},
+        "P": {"$ref": "#/$defs/cert_P"}, "settle_t": {"$ref": "#/$defs/cert_settle_t"},
+        "Ot1": {"$ref": "#/$defs/cert_Ot1"}
+      }
+    },
+    "observation_projections": {
+      "type": "object", "additionalProperties": false,
+      "required": ["Oc1", "Oc2", "Ot0", "Ot1"],
+      "properties": {
+        "Oc1": {"$ref": "#/$defs/projection_record_or_absent"}, "Oc2": {"$ref": "#/$defs/projection_record_or_absent"},
+        "Ot0": {"$ref": "#/$defs/projection_record_or_absent"}, "Ot1": {"$ref": "#/$defs/projection_record_or_absent"}
+      }
+    },
+    "gates": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observer_pure", "stable_control", "baseline_equivalent", "supplemental_baseline", "control_effect_absent", "treatment_effect_present", "isolated"],
+      "properties": {
+        "observer_pure": {"$ref": "#/$defs/gate"}, "stable_control": {"$ref": "#/$defs/gate"},
+        "baseline_equivalent": {"$ref": "#/$defs/gate"}, "supplemental_baseline": {"$ref": "#/$defs/gate"},
+        "control_effect_absent": {"$ref": "#/$defs/gate"}, "treatment_effect_present": {"$ref": "#/$defs/gate"},
+        "isolated": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "sessions": {"type": "array", "minItems": 2, "items": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/session"}},
+    "cross_arm_reuse_refs": {"type": "array", "maxItems": 0},
+    "pins": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/pins"},
+    "run_attestation": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/attestation"},
+    "outcome": {"enum": ["confirmed", "effect_absent", "baseline_mismatch", "control_unstable", "observer_mutating_or_uncertain", "arm_isolation_failed", "setup_failed", "infrastructure_failed", "malformed_or_unsupported"]},
+    "outcome_precedence_version": {"const": "route-s-outcome-precedence-v3"},
+    "fail_closed_reasons": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "completeness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required_fields_complete", "schema_validated", "artifact_hashes_verified", "secret_values_present"],
+      "properties": {"required_fields_complete": {"const": true}, "schema_validated": {"const": true}, "artifact_hashes_verified": {"const": true}, "secret_values_present": {"const": false}}
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [{
+    "if": {"properties": {"outcome": {"const": "confirmed"}}, "required": ["outcome"]},
+    "then": {"properties": {
+      "fail_closed_reasons": {"maxItems": 0},
+      "protocol": {"properties": {
+        "Rc": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Sc": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Oc1": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "settle_c": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Oc2": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Rt": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "St": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Ot0": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "P": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "settle_t": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}},
+        "Ot1": {"properties": {"state": {"const": "executed"}, "status": {"const": "pass"}}}
+      }},
+      "gates": {"properties": {
+        "observer_pure": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+        "stable_control": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+        "baseline_equivalent": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+        "control_effect_absent": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+        "treatment_effect_present": {"properties": {"computed": {"const": true}, "value": {"const": true}}},
+        "isolated": {"properties": {"computed": {"const": true}, "value": {"const": true}}}
+      }}
+    }}
+  }],
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "cert_not_executed": {"type": "object", "required": ["slot", "state", "reason_code"], "properties": {"slot": {"type": "string"}, "state": {"const": "not_executed"}, "reason_code": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "cert_reset": {"type": "object", "additionalProperties": false, "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "reset_epoch"], "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"type": "string", "format": "date-time"}, "finished_at": {"type": "string", "format": "date-time"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "reset_epoch": {"type": "string"}}},
+    "cert_setup": {"type": "object", "additionalProperties": false, "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "provenance_refs"], "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"type": "string", "format": "date-time"}, "finished_at": {"type": "string", "format": "date-time"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "provenance_refs": {"type": "array", "items": {"type": "string"}}}},
+    "cert_observation": {"type": "object", "additionalProperties": false, "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "actor_id", "request_sha256", "response_sha256"], "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"type": "string", "format": "date-time"}, "finished_at": {"type": "string", "format": "date-time"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "actor_id": {"type": "string"}, "request_sha256": {"$ref": "#/$defs/sha"}, "response_sha256": {"$ref": "#/$defs/sha"}}},
+    "cert_producer": {"type": "object", "additionalProperties": false, "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "actor_id", "action_ref", "request_ref", "request_sha256", "response_sha256"], "properties": {"slot": {"const": "P"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"type": "string", "format": "date-time"}, "finished_at": {"type": "string", "format": "date-time"}, "status": {"enum": ["pass", "failed"]}, "arm": {"const": "treatment"}, "actor_id": {"type": "string"}, "action_ref": {"type": "string"}, "request_ref": {"type": "string"}, "request_sha256": {"$ref": "#/$defs/sha"}, "response_sha256": {"$ref": "#/$defs/sha"}}},
+    "cert_settle": {"type": "object", "additionalProperties": false, "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "policy_ref", "policy_sha256"], "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"type": "string", "format": "date-time"}, "finished_at": {"type": "string", "format": "date-time"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "policy_ref": {"type": "string"}, "policy_sha256": {"$ref": "#/$defs/sha"}}},
+    "cert_Rc": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_reset"}, {"properties": {"slot": {"const": "Rc"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Rc"}}}]}]},
+    "cert_Rt": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_reset"}, {"properties": {"slot": {"const": "Rt"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Rt"}}}]}]},
+    "cert_Sc": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_setup"}, {"properties": {"slot": {"const": "Sc"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Sc"}}}]}]},
+    "cert_St": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_setup"}, {"properties": {"slot": {"const": "St"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "St"}}}]}]},
+    "cert_Oc1": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_observation"}, {"properties": {"slot": {"const": "Oc1"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Oc1"}}}]}]},
+    "cert_Oc2": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_observation"}, {"properties": {"slot": {"const": "Oc2"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Oc2"}}}]}]},
+    "cert_Ot0": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_observation"}, {"properties": {"slot": {"const": "Ot0"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Ot0"}}}]}]},
+    "cert_Ot1": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_observation"}, {"properties": {"slot": {"const": "Ot1"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "Ot1"}}}]}]},
+    "cert_P": {"oneOf": [{"$ref": "#/$defs/cert_producer"}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "P"}}}]}]},
+    "cert_settle_c": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_settle"}, {"properties": {"slot": {"const": "settle_c"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "settle_c"}}}]}]},
+    "cert_settle_t": {"oneOf": [{"allOf": [{"$ref": "#/$defs/cert_settle"}, {"properties": {"slot": {"const": "settle_t"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/cert_not_executed"}, {"properties": {"slot": {"const": "settle_t"}}}]}]},
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "candidate_identity", "normalized_candidate_sha256", "source_hashes", "producer", "consumer", "setup", "effect_predicate", "predicate_type"],
+      "properties": {
+        "candidate_id": {"type": "string"}, "candidate_identity": {"type": "string"}, "normalized_candidate_sha256": {"$ref": "#/$defs/sha"},
+        "source_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha"}},
+        "producer": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/endpoint"}, "consumer": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/endpoint"},
+        "setup": {"type": "array", "items": {"$ref": "route_s_execution_evidence_v3.schema.json#/$defs/endpoint"}},
+        "effect_predicate": {"type": "object"}, "predicate_type": {"enum": ["numeric_delta", "count_delta", "item_appears", "field_equals"]}
+      }
+    },
+    "observer_result": {
+      "type": "object", "additionalProperties": false,
+      "required": ["domain", "disposition", "value", "reason_code", "before_sha256", "after_sha256", "capability_ref", "capability_sha256"],
+      "properties": {"domain": {"enum": ["cookie", "token", "cache", "last_seen"]}, "disposition": {"enum": ["proven_unchanged", "mutating", "uncertain", "not_applicable"]}, "value": {"type": "boolean"}, "reason_code": {"type": "string"}, "before_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}, "after_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}, "capability_ref": {"type": "string"}, "capability_sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "projection_record": {
+      "type": "object", "additionalProperties": false,
+      "required": ["raw_ref", "raw_sha256", "observed_at", "normalized_projection", "projection_sha256", "observer_domain_results"],
+      "properties": {"raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "observed_at": {"type": "string", "format": "date-time"}, "normalized_projection": {}, "projection_sha256": {"$ref": "#/$defs/sha"}, "observer_domain_results": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/observer_result"}}}
+    },
+    "projection_absent": {"type": "object", "required": ["state", "reason_code"], "properties": {"state": {"const": "not_projected"}, "reason_code": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "projection_record_or_absent": {"oneOf": [{"$ref": "#/$defs/projection_record"}, {"$ref": "#/$defs/projection_absent"}]},
+    "operand": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "raw_ref", "operator", "normalization_rule", "normalized_value", "normalized_value_sha256"],
+      "properties": {"name": {"type": "string"}, "raw_ref": {"type": "string"}, "operator": {"type": "string"}, "normalization_rule": {"type": "string"}, "normalized_value": {}, "normalized_value_sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "gate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["computed", "value", "reason_code", "evaluator_sha256", "operands"],
+      "properties": {"computed": {"type": "boolean"}, "value": {"type": ["boolean", "null"]}, "reason_code": {"type": "string"}, "evaluator_sha256": {"$ref": "#/$defs/sha"}, "operands": {"type": "array", "items": {"$ref": "#/$defs/operand"}}}
+    }
+  }
+}

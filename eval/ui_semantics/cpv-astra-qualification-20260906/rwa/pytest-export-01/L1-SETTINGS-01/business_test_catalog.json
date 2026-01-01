@@ -1,0 +1,351 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 4,
+    "canonical_relation_core_identities": [
+      "01aa0327f49412230bec3d2de5044433299e89f2e5a5acd6e254e1f94e545e30",
+      "248862a2ae50650891520876d3b0cc0b6e0b93367e285c206b5ddb9378fe4f4d",
+      "649981044c501dd4f1157f8e9b216e7e7dd6e557ceff557e0215e5ac1d482bb7",
+      "d73253724562eb5c0f947687195bafa539c32ab9faf35feabab5374fe8b00ce5"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004"
+    ],
+    "physical_retained_test_occurrence_count": 4,
+    "unique_canonical_relation_core_count": 4
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-021842-b3d6:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.firstName",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.firstName",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.firstName (string) to strictly equal producer_request $.firstName (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "01aa0327f49412230bec3d2de5044433299e89f2e5a5acd6e254e1f94e545e30",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-021842-b3d6:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The settings PATCH submits firstName, its request group includes a read exposing user.firstName, and the adjacent UI diff changes the displayed name. These support proposed readback equality without proving causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0130f07e936ad4baf5c1"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-021842-b3d6:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.lastName",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.lastName",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.lastName (string) to strictly equal producer_request $.lastName (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "d73253724562eb5c0f947687195bafa539c32ab9faf35feabab5374fe8b00ce5",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-021842-b3d6:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The settings PATCH submits lastName and its request group includes a read exposing user.lastName. The displayed-name change provides additional candidate evidence for readback equality, without establishing the API result or causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9ece0d1b75b24a3f9422"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-021842-b3d6:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.email",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.email",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.email (string) to strictly equal producer_request $.email (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "649981044c501dd4f1157f8e9b216e7e7dd6e557ceff557e0215e5ac1d482bb7",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-021842-b3d6:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The settings action records an email input and submits an email field; its request group includes a read exposing user.email. Equality to the actual outgoing field is proposed without freezing the sanitized value or asserting causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a58bb48800f1503af6c2"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-021842-b3d6:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.phoneNumber",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.phoneNumber",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.phoneNumber (string) to strictly equal producer_request $.phoneNumber (string).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "248862a2ae50650891520876d3b0cc0b6e0b93367e285c206b5ddb9378fe4f4d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021842-b3d6:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-021842-b3d6:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The settings action records a phoneNumber input and submits that field; its request group includes a read exposing user.phoneNumber. This grounds a proposed readback relation, not a proven effect.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3bd509cf38d3443ee5f0"
+    }
+  ]
+}

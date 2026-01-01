@@ -1,0 +1,909 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 9,
+    "canonical_relation_core_identities": [
+      "0c8f0eb72ac1f314c32d0ea560c2e4b46b8cf6657792fe327bb725a967fc1550",
+      "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "85bb0f98e4f79119f067c12874e7a60efea7c039cbdaf9b10120b0bfad27cc69",
+      "8c22f6669e383600a1af7d5b2e17462de1dd453c9f8832e0709c45c2d97a25b9"
+    ],
+    "duplicate_core_occurrence_count": 5,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0009",
+      "v2-candidate-0012",
+      "v2-candidate-0016",
+      "v2-candidate-0017",
+      "v2-candidate-0020",
+      "v2-candidate-0025",
+      "v2-candidate-0026",
+      "v2-candidate-0029",
+      "v2-candidate-0031"
+    ],
+    "physical_retained_test_occurrence_count": 11,
+    "unique_canonical_relation_core_count": 6
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Two recorded same-actor/same-session GET /checkAuth reads bracket the POST /transactions payment, and both expose the integer field $.user.balance. Proposes that the payer balance measured after the payment is strictly smaller than before it; this is a two-checkpoint comparison, not a monotonicity claim, and no recorded values were used as expectations.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Same actor/session GET /checkAuth exposes an integer at $.user.balance before (request:7) and after (request:11) the write POST /transactions (request:10). Candidate C02/P07 point comparison: the after balance is strictly smaller than the before balance, matching a recorded outbound payment from this actor to the visible receiverId. The direction is a frozen hypothesis and does not claim monotonic behavior between the reads.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "One actor/session records the same observer operation get_checkauth at order 3 and order 6 with the intervening recorded POST /transactions write at order 5; both responses expose the integer field $.user.balance. The frozen proposition that the later balance is strictly smaller is a proposed business rule (a sent payment is hypothesized to reduce the sender balance), not a proven causality; direction and setup chain remain hypotheses.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two recorded reads by the same actor/session use the same observed operation get_checkauth with no selectors (global_order 3 and 6) and both expose an integer $.user.balance. The only state-changing request recorded between them is the payment POST /transactions (body amount \"13\", global_order 5). The frozen proposal is that a payment decreases the payer's balance, i.e. after lt before; this does not claim monotonic behaviour between the two reads. Setup lists the payment receiver prerequisites eligible for that effect source (open new-transaction page, search user, select user), chosen by business semantics and recorded order.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Same-actor/session recorded lifecycle: request:7 (global_order 3) and request:11 (global_order 6) are the identical get_checkauth read, bracketing the recorded state-changing POST /transactions request:10 (transactionType payment, amount \"13\") that the same session initiated. The frozen integer field $.user.balance is proposed to be strictly smaller after the outgoing payment. Recorded values need not already differ; the setup actions are the eligible recorded UI steps that establish the payment form with the receiver selected before the before-read.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-d1ff05909bed0d113b73"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /transactions; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions",
+          "phase": "observation",
+          "request_ref": "r20260902-023738-4255:request:14"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The recorded GET /transactions response exposes the array $.results with a visible string member field $.id. Proposes strict-tuple uniqueness of that key within the actual returned array only; it asserts nothing about database completeness or about pages not returned.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 9,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[8].rationale",
+          "raw_rationale": "Mechanically read-only recorded GET /transactions (request:14) exposes an array at $.results whose members carry a visible id field. Candidate single-response uniqueness claim over the complete returned array (duplicates retained) on the frozen key $.id. This is a single-response data-integrity proposition, not a claim about database completeness beyond the actual response.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "One mechanically read-only recorded GET /transactions response whose $.results is an array of transaction objects each carrying an $.id string; the frozen single-response rule is that the returned id tuple is unique within the actual response only, claiming nothing about other pages or the database.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-44844479b6e0b9224e4f"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same actor/session lifecycle: GET /checkAuth (request:7) reads $.user.balance as integer, the only recorded state-changing request before the second GET /checkAuth (request:11) is POST /transactions (request:10, body amount=13, transactionType=payment), and request:11 reads $.user.balance again at the same path/type. The proposed rule is after < before (payment debits the sender); it is a proposal, not a recorded equality. No eligible setup action has unique target-specific identity or lineage evidence (empty setup_selection_clues, no value flows), so setup is left empty.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1b67096c5543a74364d4"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0007",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0007/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The same frozen integer field $.user.balance is read before and after the payment POST in the same actor/session and object; proposed strictly-smaller comparison. This claims no monotonic behavior between the two reads.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0007/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Two same-actor/session get_checkauth reads with identical (empty) selectors bracket the second payment creation: request:7 (order 3) precedes POST /transactions request:10 (order 5), request:11 (order 6) follows it. Both responses expose $.user.balance as an integer. Frozen hypothesis: sending that payment leaves the authenticated sender's balance strictly lower; the recorded values are not treated as proof.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b6f4420337b9ead4f991"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "forall_body_compares_member_with_actual_request_parameter",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0016-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P09",
+            "operator": "contains",
+            "right": {
+              "ref": {
+                "location": "query",
+                "path": "$.q",
+                "role": "observation_request",
+                "value_type": "string"
+              },
+              "source": "request"
+            },
+            "target": {
+              "path": "$.username",
+              "role": "item",
+              "value_type": "string"
+            }
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /users/search; business relation For every member of observation $.results (array) in actual_response: P09 requires item $.username (string) to contain actual request query $.q (string); case-sensitive, no normalization; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0016",
+      "canonical_relation_core_identity": "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-023738-4255:request:8"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded search read request:8 has a visible string query selector $.q and its complete response array $.results[*] exposes a string $.username; the adjacent recorded UI click selected a user-list item whose recorded text matched the same search term. The frozen forall is therefore a proposed request-semantics relation binding every returned member to the actual outgoing query selector; it is a hypothesis that need not already hold and claims nothing beyond the single actual response.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [
+        {
+          "location": "query",
+          "operand": "right",
+          "path": "$.q",
+          "role": "observation_request",
+          "value_type": "string"
+        }
+      ],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0c469c91501ccd7cdf90"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0017-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0017",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0005",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center state-change request:10 (POST /transactions, amount \"13\") is bracketed by the same actor/session catalog operation get_checkauth with an identical selector snapshot (request:7 before, request:11 after, unique comparable pre-state). The recorded response shapes for both checkAuth reads expose $.user.balance as integer, so a strict numeric checkpoint comparison P07 lt (after < before) is expressible. The adjacent UI diff shows a lower balance after the center action, which is candidate evidence only. Setup: no setup_selection_clues were provided; the eligible setup action sharing the center request's sender/receiver identity tokens is workflow-action-0005, proposed as the minimal recorded-order prerequisite with uncertainty.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-463ef89af441aadb6733"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0020-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "le",
+          "projection": "count",
+          "right": {
+            "ref": {
+              "path": "$.pageData.limit",
+              "role": "observation",
+              "value_type": "integer"
+            },
+            "source": "role"
+          },
+          "target": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /transactions/public; basic constraint P11 requires count(observation $.results (array); unit=items) le observation $.pageData.limit (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0020",
+      "canonical_relation_core_identity": "0c8f0eb72ac1f314c32d0ea560c2e4b46b8cf6657792fe327bb725a967fc1550",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/public",
+          "phase": "observation",
+          "request_ref": "r20260902-023738-4255:request:12"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0006",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded GET /transactions/public response carries both an array $.results and an integer page-size field $.pageData.limit; propose the returned item count does not exceed that declared limit. One read-only observation role, no producer.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e3a37f5611d3ceb0d49a"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "forall_body_compares_member_with_actual_request_parameter",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0025-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P02",
+            "left": {
+              "path": "$.username",
+              "role": "item",
+              "value_type": "string"
+            },
+            "operator": "eq",
+            "right": {
+              "ref": {
+                "location": "query",
+                "path": "$.q",
+                "role": "observation_request",
+                "value_type": "string"
+              },
+              "source": "request"
+            }
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /users/search; business relation For every member of observation $.results (array) in actual_response: P02 requires item $.username (string) to strictly equal actual request query $.q (string); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0025",
+      "canonical_relation_core_identity": "8c22f6669e383600a1af7d5b2e17462de1dd453c9f8832e0709c45c2d97a25b9",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-023738-4255:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "One mechanically read-only recorded request (request:4, GET /users/search?q=Dina20) returns $.results[*].username strings. The proposed relation is a single-layer forall over the complete actual response that relates each member field to the actual outgoing query selector $.q; this is a proposed request-semantic hypothesis, not a proven server rule.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [
+        {
+          "location": "query",
+          "operand": "right",
+          "path": "$.q",
+          "role": "observation_request",
+          "value_type": "string"
+        }
+      ],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-dbcc44b8d2ec8359c587"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0026-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.user",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.email",
+            "$.uuid"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$.user",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P20 requires strict equality between before $.user (object) and after $.user (object) for every frozen field ['$.email', '$.uuid']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0026",
+      "canonical_relation_core_identity": "85bb0f98e4f79119f067c12874e7a60efea7c039cbdaf9b10120b0bfad27cc69",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The same recorded before/effect_source/after triple: the get_checkauth object $.user observed at request:7 and request:11 is the same authenticated actor's object across the outgoing POST /transactions request:10. The concrete relative identity fields $.email and $.uuid are proposed to remain unchanged, checked independently against the fresh after API response. This is a proposed preservation hypothesis, not an already-equal recording.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-d71587a2c4c38de985e9"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0029-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0029",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Same-actor, same-operation, same-selector checkAuth reads before (request:7) and after (request:11) the recorded payment POST /transactions (request:10) both expose $.user.balance as an integer. Proposal only: the post-action balance is strictly less than the pre-action balance. Direction is a frozen hypothesis and need not already hold in the recording; the field, integer type and identical observer are fixed before execution.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-6885c326602ca8b975d7"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023738-4255:request:10"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0031-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.user.balance",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "before": {
+            "path": "$.user.balance",
+            "role": "before",
+            "value_type": "integer"
+          },
+          "family": "P07",
+          "operator": "lt"
+        },
+        "predicate_type": "P07"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /checkAuth; business predicate P07 requires the fresh after $.user.balance (integer) to be less than before $.user.balance (integer) at two checkpoints.",
+      "candidate_id": "v2-candidate-0031",
+      "canonical_relation_core_identity": "37fac0c9737f7bf25e4d9fd9c007b35882bd7c4c56aa7652473a553d14d353c2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-023738-4255:request:7"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023738-4255:request:11"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023738-4255:request:10"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The center-observation slice reports request:7 (GET /checkAuth) as the unique nearest comparable pre-state of request:11 (GET /checkAuth) for actor_a/session r20260902-023738-4255, with request:10 as the intervening state-change request. Both responses expose $.user.balance as an integer on the same observer operation and selector; the proposed business rule is that after the payment the balance is strictly lower than before. This is a two-checkpoint comparison only and does not claim monotonic behavior; ui-diff-0002 shows the displayed balance decreasing, which is candidate evidence, not an API constant.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-cfde7fca2940925782f1"
+    }
+  ]
+}

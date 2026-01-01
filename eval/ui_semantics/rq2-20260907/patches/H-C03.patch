@@ -1,0 +1,11 @@
+--- a/backend/controllers/articles.js
++++ b/backend/controllers/articles.js
+@@ -83,7 +83,7 @@
+ 
+     const slug = slugify(title);
+     const slugInDB = await Article.findOne({ where: { slug: slug } });
+-    if (slugInDB) throw new AlreadyTakenError("Title");
++    // RQ2: omit duplicate-title guard.
+ 
+     const article = await Article.create({
+       slug: slug,

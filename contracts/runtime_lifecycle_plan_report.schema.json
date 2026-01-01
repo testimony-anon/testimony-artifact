@@ -1,0 +1,756 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_lifecycle_plan_report.schema.json",
+  "title": "runtime_lifecycle_plan_report — Phase3 no-egress lifecycle plan diagnostics",
+  "description": "Runtime Engine Phase3 companion report. It evaluates lifecycle candidates through an execution safety gate, derives structured lifecycle plans, and records plan/block diagnostics without HTTP egress, replay, cleanup, Stage6 writeback, or main artifact semantic changes.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "input_coverage",
+    "case_matrix_coverage",
+    "lifecycle_plan_candidates",
+    "artifact_lifecycle_candidates",
+    "structured_lifecycle_plans",
+    "safety_decisions",
+    "blocked_diagnostics",
+    "summary",
+    "warnings"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": {
+          "const": "runtime_lifecycle_plan_report"
+        },
+        "stage": {
+          "const": "runtime_materials_phase3"
+        }
+      }
+    },
+    "input_coverage": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/input_coverage_item"
+      }
+    },
+    "case_matrix_coverage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/case_coverage"
+      }
+    },
+    "lifecycle_plan_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/lifecycle_plan_candidate"
+      }
+    },
+    "artifact_lifecycle_candidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/lifecycle_plan_candidate"
+      }
+    },
+    "safety_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/safety_decision"
+      }
+    },
+    "blocked_diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/blocked_diagnostic"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "v01_case_count",
+        "plan_candidate_count",
+        "matrix_candidate_count",
+        "artifact_candidate_count",
+        "safety_decision_count",
+        "blocked_diagnostic_count",
+        "warning_count",
+        "structured_plan_count",
+        "by_plan_status",
+        "by_cleanup_policy",
+        "missing_cleanup_count",
+        "plans_with_cleanup_count",
+        "plans_reusing_target_cleanup_count",
+        "http_egress_allowed",
+        "stage6_invoked",
+        "main_artifact_core_fields_changed",
+        "by_decision",
+        "by_source_type",
+        "by_priority",
+        "by_support_status"
+      ],
+      "properties": {
+        "case_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "v01_case_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plan_candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "matrix_candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "artifact_candidate_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "safety_decision_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blocked_diagnostic_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "warning_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "http_egress_allowed": {
+          "const": false
+        },
+        "stage6_invoked": {
+          "const": false
+        },
+        "main_artifact_core_fields_changed": {
+          "const": false
+        },
+        "by_decision": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "by_source_type": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "by_priority": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "by_support_status": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "structured_plan_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "by_plan_status": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "by_cleanup_policy": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "missing_cleanup_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plans_with_cleanup_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "plans_reusing_target_cleanup_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      }
+    },
+    "structured_lifecycle_plans": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/structured_lifecycle_plan"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "input_status": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "present",
+        "compatibility_read",
+        "parse_failed",
+        "present_but_no_evidence"
+      ]
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "block",
+        "diagnostic_only",
+        "require_cleanup",
+        "require_reset",
+        "require_manual_approval"
+      ]
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": [
+        "safe_read",
+        "write_requires_cleanup",
+        "write_requires_reset",
+        "destructive",
+        "external_host",
+        "capability_secret",
+        "literal_assumption",
+        "body_material_missing",
+        "cleanup_failed",
+        "manual_approval",
+        "unknown"
+      ]
+    },
+    "pollution_state": {
+      "type": "string",
+      "enum": [
+        "clean",
+        "unknown",
+        "possibly_dirty",
+        "dirty",
+        "reset_required"
+      ]
+    },
+    "input_coverage_item": {
+      "type": "object",
+      "required": [
+        "status",
+        "diagnostic_reason"
+      ],
+      "properties": {
+        "status": {
+          "$ref": "#/$defs/input_status"
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "diagnostic_reason": {
+          "type": "string"
+        },
+        "evidence_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "case_coverage": {
+      "type": "object",
+      "required": [
+        "case_id",
+        "case_family",
+        "priority",
+        "support_status",
+        "expected_behavior",
+        "observed_decision",
+        "coverage_status",
+        "behavior_matches_matrix"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "case_family": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "support_status": {
+          "type": "string"
+        },
+        "expected_behavior": {
+          "$ref": "#/$defs/decision"
+        },
+        "observed_decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "coverage_status": {
+          "type": "string",
+          "enum": [
+            "covered_by_gate_rule",
+            "covered_as_diagnostic",
+            "parse_failed"
+          ]
+        },
+        "behavior_matches_matrix": {
+          "type": "boolean"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "lifecycle_plan_candidate": {
+      "type": "object",
+      "required": [
+        "candidate_id",
+        "source_type",
+        "source_artifact",
+        "source_case_id",
+        "case_family",
+        "priority",
+        "candidate",
+        "safety_decision_id",
+        "plan_status",
+        "executable",
+        "http_egress_allowed",
+        "core_artifacts_unchanged"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string"
+        },
+        "source_type": {
+          "type": "string",
+          "enum": [
+            "case_matrix",
+            "runtime_lifecycle_hypothesis",
+            "stage45_sequence_annotation",
+            "dependency_graph_edge",
+            "test_sequence_chain",
+            "skill_chain"
+          ]
+        },
+        "source_artifact": {
+          "type": "string"
+        },
+        "source_case_id": {
+          "type": "string"
+        },
+        "case_family": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "candidate": {
+          "type": "object"
+        },
+        "safety_decision_id": {
+          "type": "string"
+        },
+        "plan_status": {
+          "$ref": "#/$defs/decision"
+        },
+        "executable": {
+          "const": false
+        },
+        "http_egress_allowed": {
+          "const": false
+        },
+        "core_artifacts_unchanged": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "safety_decision": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "candidate_id",
+        "decision",
+        "reason_codes",
+        "risk_class",
+        "cleanup_required",
+        "reset_required",
+        "http_egress_allowed",
+        "can_promote_dependency_evidence",
+        "pollution_state"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk_class": {
+          "$ref": "#/$defs/risk_class"
+        },
+        "cleanup_required": {
+          "type": "boolean"
+        },
+        "reset_required": {
+          "type": "boolean"
+        },
+        "http_egress_allowed": {
+          "const": false
+        },
+        "can_promote_dependency_evidence": {
+          "const": false
+        },
+        "pollution_state": {
+          "$ref": "#/$defs/pollution_state"
+        }
+      },
+      "additionalProperties": false
+    },
+    "blocked_diagnostic": {
+      "type": "object",
+      "required": [
+        "diagnostic_id",
+        "candidate_id",
+        "decision",
+        "reason_codes",
+        "pollution_state"
+      ],
+      "properties": {
+        "diagnostic_id": {
+          "type": "string"
+        },
+        "candidate_id": {
+          "type": "string"
+        },
+        "decision": {
+          "$ref": "#/$defs/decision"
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pollution_state": {
+          "$ref": "#/$defs/pollution_state"
+        }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": [
+        "warning_id",
+        "message"
+      ],
+      "properties": {
+        "warning_id": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "lifecycle_step": {
+      "type": "object",
+      "required": [
+        "operation_id",
+        "method",
+        "path",
+        "step_role"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "step_role": {
+          "type": "string"
+        },
+        "source_candidate_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_destructive": {
+          "type": "boolean"
+        },
+        "cleanup_reuses_target": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "resource_reference": {
+      "type": "object",
+      "required": [
+        "resource_family",
+        "operation_id",
+        "method",
+        "path"
+      ],
+      "properties": {
+        "resource_family": {
+          "type": "string"
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "fresh_value_source": {
+          "type": "string"
+        },
+        "binding_location": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "structured_lifecycle_plan": {
+      "type": "object",
+      "required": [
+        "plan_id",
+        "source_candidate_ids",
+        "source_type",
+        "source_artifacts",
+        "producer_operation",
+        "producer_method",
+        "producer_path",
+        "target_consumer_operation",
+        "target_consumer_method",
+        "target_consumer_path",
+        "resource_family_relation",
+        "fresh_value_source",
+        "binding_location",
+        "setup_steps",
+        "producer_steps",
+        "target_steps",
+        "verification_steps",
+        "cleanup_steps",
+        "created_resources",
+        "modified_resources",
+        "destructive_steps",
+        "cleanup_policy",
+        "cleanup_status",
+        "missing_cleanup_reason",
+        "cleanup_reuses_target",
+        "executable_preconditions",
+        "safety_decision_id",
+        "plan_status",
+        "http_egress_allowed",
+        "executable",
+        "can_promote_dependency_evidence",
+        "core_artifacts_unchanged"
+      ],
+      "properties": {
+        "plan_id": {
+          "type": "string"
+        },
+        "source_candidate_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "source_type": {
+          "type": "string"
+        },
+        "source_artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "producer_operation": {
+          "type": "string"
+        },
+        "producer_method": {
+          "type": "string"
+        },
+        "producer_path": {
+          "type": "string"
+        },
+        "target_consumer_operation": {
+          "type": "string"
+        },
+        "target_consumer_method": {
+          "type": "string"
+        },
+        "target_consumer_path": {
+          "type": "string"
+        },
+        "resource_family_relation": {
+          "type": "string"
+        },
+        "fresh_value_source": {
+          "type": "string"
+        },
+        "binding_location": {
+          "type": "string"
+        },
+        "body_material_source": {
+          "type": "string"
+        },
+        "setup_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "producer_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "target_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "verification_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "cleanup_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "created_resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_reference"
+          }
+        },
+        "modified_resources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/resource_reference"
+          }
+        },
+        "destructive_steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/lifecycle_step"
+          }
+        },
+        "cleanup_policy": {
+          "type": "string",
+          "enum": [
+            "not_required",
+            "cleanup_available",
+            "cleanup_reuses_target",
+            "cleanup_missing",
+            "reset_required",
+            "blocked",
+            "diagnostic_only"
+          ]
+        },
+        "cleanup_status": {
+          "type": "string",
+          "enum": [
+            "not_applicable",
+            "not_executed_available",
+            "not_executed_reuses_target",
+            "missing",
+            "requires_reset",
+            "blocked",
+            "diagnostic_only"
+          ]
+        },
+        "missing_cleanup_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cleanup_reuses_target": {
+          "type": "boolean"
+        },
+        "executable_preconditions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "safety_decision_id": {
+          "type": "string"
+        },
+        "plan_status": {
+          "$ref": "#/$defs/decision"
+        },
+        "http_egress_allowed": {
+          "const": false
+        },
+        "executable": {
+          "const": false
+        },
+        "can_promote_dependency_evidence": {
+          "const": false
+        },
+        "core_artifacts_unchanged": {
+          "const": true
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

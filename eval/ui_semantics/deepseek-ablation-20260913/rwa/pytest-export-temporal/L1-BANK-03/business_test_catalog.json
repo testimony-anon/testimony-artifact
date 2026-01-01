@@ -1,0 +1,680 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 6,
+    "canonical_relation_core_identities": [
+      "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "3051a194d31afc2b7a8b2c9500438c3f4aabbfd9985398ae32f5a7f6d91fc0b9",
+      "3b28191f1d431541c162ced1137ad84956db5323bbaa2d8edf617d9eea239d0b",
+      "7594b60e9cd093e21e7a6102a732063ca90717b0b28b49d3ef5c1a4e3dadbe1b",
+      "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "d5fd2e34c2109053f92042b1481da14af71ad3ef179faf9e6985611a1a1cf76e",
+      "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac"
+    ],
+    "duplicate_core_occurrence_count": 1,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0011"
+    ],
+    "physical_retained_test_occurrence_count": 8,
+    "unique_canonical_relation_core_count": 7
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021732-db4d:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "d827d500ab73e7b544d2b15361095c87880c6e84ba07f199e0698043d068efac",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021732-db4d:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021732-db4d:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor ordered episode: workflow-action-0005 submits CreateBankAccount (request:4, body variables bankName/accountNumber/routingNumber, response $.data.createBankAccount with id/uuid/userId) and is the only eligible setup-anchored write in request-group-0005. The same-actor ListBankAccount read request:0 (anchored to the workflow-action-0000 navigation, ui-diff-0001) returned $.data.listBankAccount without the member, and the following identical-selector read request:6 returned the array containing a member whose $.id/uuid/userId hashes equal the created record; the request:7 setup clue records absent_to_present from request:0 to request:6 with collection $.data.listBankAccount and target locator $.id. Proposed P14 added over that array with the create response object and a strict $.id tuple identity. Observation-derived candidate evidence only; the create action is not proven to be the cause of the appearance.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor flow: the ListBankAccount read at request:0 returns $.data.listBankAccount without the member, the CreateBankAccount request:4 returns $.data.createBankAccount whose id scalar is the same observed hash as the collection member id (setup_selection_clues target_locator/response member identity), and the following ListBankAccount read request:6 is the recorded absent-to-present observation of that member in $.data.listBankAccount. Predicate is a proposed identity-based member addition; recorded values are hypotheses, not proof. Eligible setup for the effect source is the recorded navigation action workflow-action-0000.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor (actor_a) lifecycle: CreateBankAccount (request:4) is bracketed by two ListBankAccount reads (request:0 before, request:6 after). The recorded setup clue for this write reports observation_kind absent_to_present, collection_path $.data.listBankAccount, previous_observed_contains_member=false, first_observed_contains_member=true with target locator $.id, so a member was added between the two reads. The member operand is bound to the actual create response object and matched by $.id; this is an observed collection delta, not proven causality. Setup is the only eligible setup action for request:4.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-cfc6c297abd149f097e9"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021732-db4d:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              },
+              {
+                "collection_item_path": "$.uuid",
+                "member_path": "$.uuid"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.id->$.id, $.uuid->$.uuid].",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "3b28191f1d431541c162ced1137ad84956db5323bbaa2d8edf617d9eea239d0b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021732-db4d:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021732-db4d:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Observed CreateBankAccount mutation (request:4, group-0005) is centered between two same-actor/session ListBankAccount reads (request:0 before, request:6 after) that share the same catalog operation and selector, and the write response shape exposes $.data.createBankAccount with id/uuid that also exist on list members ($.data.listBankAccount[*].id/.uuid), while ui-diff-0002 records an added 'Delete Bank' row. Proposed C01 lifecycle addition of the write-response member to the after collection; setup workflow-action-0000 is the only eligible setup action for request:4 (bank-accounts navigation, automatic_anchor_available) and is included as the minimal ordered prerequisite with lower confidence since no field-level lineage to the create form was recorded.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2c87f1ca07db6503f595"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-021732-db4d:request:8', 'r20260902-021732-db4d:request:147'], 'rationale': 'Both recorded ListBankAccount requests share the identical recorded operationName and query document (same request body hash) and no state-changing write is recorded between them.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-021732-db4d:request:147"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-021732-db4d:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Two concrete recorded reads of the same ListBankAccount selector, recorded in order request:8 then request:147, carry the identical body ($.operationName and $.query) and are separated only by read-only GET requests (request:9, request:146). A multiset equality over the complete returned array with full_json_value basis is proposed; this is an observed equivalent-input relation, not a proven service invariant.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-690199689823ed0258ce"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-021732-db4d:request:8', 'r20260902-021732-db4d:request:147'], 'rationale': 'Both recorded reads send the identical ListBankAccount GraphQL body (same request body_sha256 3967c898...) with no query parameters and the same path /graphql, so the recorded selector change is an equivalent input.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-021732-db4d:request:147"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-021732-db4d:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Two concrete recorded reads of the same actor/session with an identical ListBankAccount selector (identical request body_sha256 and identical response body_sha256 09fc7c42...), so the frozen observed selector change is an equivalent input; the comparison of the two $.data.listBankAccount collections with multiset/full_json_value is a proposal checked at execution. Query relations use no setup.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0f3aa873380bef642272"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021732-db4d:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.bankName",
+                "member_path": "$.bankName"
+              },
+              {
+                "collection_item_path": "$.accountNumber",
+                "member_path": "$.accountNumber"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.variables",
+              "role": "producer_request",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_request $.variables (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.bankName->$.bankName, $.accountNumber->$.accountNumber].",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "3051a194d31afc2b7a8b2c9500438c3f4aabbfd9985398ae32f5a7f6d91fc0b9",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021732-db4d:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021732-db4d:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor/session observed lifecycle: request:0 (ListBankAccount) returns $.data.listBankAccount before the center write; request:4 (CreateBankAccount, group 0005) sends variables.bankName='Delete Bank'/accountNumber='1234567890'; the following request:6 (ListBankAccount) returns the same array path, and ui-diff-0002 records the 'Delete Bank' row and 'Delete' added after the center click. Proposes that exactly the submitted member is added to the after collection, with the matched-identity tuple as a frozen hypothesis (no id values copied). Setup is the single eligible setup domain action for request:4 (the side-nav click whose read is the before observation); causal attribution of the observed delta to the center write is not proven.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-db61f969a6051eb525f7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.uuid"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a POST /graphql; basic constraint P15 requires observation $.data.listBankAccount (array) (actual_response) to have unique members by strict-tuple identity [$.uuid]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "7594b60e9cd093e21e7a6102a732063ca90717b0b28b49d3ef5c1a4e3dadbe1b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "observation",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "One mechanically read-only recorded request (request:6, ListBankAccount) whose response shape exposes $.data.listBankAccount[*].uuid. Proposes that $.uuid is unique across the returned members, evaluated only over the actual returned array (scope actual_response); no database or other-page completeness is claimed and duplicate-free recording is not assumed.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b7fdc078d3c36f42084d"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.data.listBankAccount",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a POST /graphql; basic constraint P15 requires observation $.data.listBankAccount (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "18daa76ce812c63f2be988874b5825d4970a3389fbb61742a8d7dac60ce04ad3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "observation",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Single mechanically read-only recorded read: request:6 returns $.data.listBankAccount whose visible member shape contains the scalar field $.id in every entry. Proposed single-response uniqueness of that frozen key over the complete returned array (duplicates retained, strict JSON types); no cross-time identity or database completeness is claimed.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ce3bf9f450d3e873598e"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "producer",
+          "request_ref": "r20260902-021732-db4d:request:4"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.data.listBankAccount",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.data.listBankAccount",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.uuid",
+                "member_path": "$.uuid"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.data.createBankAccount",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /graphql; observer actor_a POST /graphql; business predicate P14 requires producer_response $.data.createBankAccount (object) to be added between before $.data.listBankAccount (array) and after $.data.listBankAccount (array) by strict-tuple identity [$.uuid->$.uuid].",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "d5fd2e34c2109053f92042b1481da14af71ad3ef179faf9e6985611a1a1cf76e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "before_observer",
+          "request_ref": "r20260902-021732-db4d:request:0"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "after_observer",
+          "request_ref": "r20260902-021732-db4d:request:6"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "producer",
+        "request_ref": "r20260902-021732-db4d:request:4"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Actor_a's pre-read ListBankAccount (request:0) and post-read (request:6) are the same recorded catalog operation and selector, with the CreateBankAccount mutation (request:4) between them; the create response contains $.data.createBankAccount with a uuid that also appears on list members, and ui-diff-0002 records a newly added account entry. The before/after member identity delta is proposed from this ordering and shape evidence, not proven as causality.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e7bbd55be9cce5c6e76d"
+    }
+  ]
+}

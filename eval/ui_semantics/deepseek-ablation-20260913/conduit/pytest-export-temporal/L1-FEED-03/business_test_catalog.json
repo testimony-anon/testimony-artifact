@@ -1,0 +1,154 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "1f7fc928f00f0e82ca09362c74ec034eb090dc37dc8e4aa4f9205e4b8170f5ec"
+    ],
+    "duplicate_core_occurrence_count": 1,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0010",
+      "v2-candidate-0027"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 1
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.articles",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.articles",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /api/articles; followup_query:q1 actor_a GET /api/articles; business predicate P17 requires followup_query:q1 $.articles (array) equal source_query $.articles (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['limit', 'offset'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260901-190005-369b:request:39', 'r20260901-190005-369b:request:41'], 'rationale': 'Both recorded reads carry the identical observed selector values limit=3 and offset=0 on the same path; the proposed rule freezes them as equivalent inputs.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "1f7fc928f00f0e82ca09362c74ec034eb090dc37dc8e4aa4f9205e4b8170f5ec",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260901-190005-369b:request:41"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/api/articles",
+        "phase": "source_query/producer",
+        "request_ref": "r20260901-190005-369b:request:39"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "Two recorded same-actor reads of /api/articles with the identical observed selector (limit=3, offset=0) are bound as source_query and followup_query:q1 and compared as an equivalent-input multiset relation over the complete returned member arrays. The recorded responses need not already be equal.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-19262f120f06726df0d7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0027-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.articles",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.articles",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /api/articles; followup_query:q1 actor_a GET /api/articles; business predicate P17 requires followup_query:q1 $.articles (array) equal source_query $.articles (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['limit', 'offset'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260901-190005-369b:request:39', 'r20260901-190005-369b:request:41'], 'rationale': 'both recorded reads send the identical GET /api/articles selector limit=3&offset=0 from the same actor/session, so the follow-up selector is proposed as equivalent input', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0027",
+      "canonical_relation_core_identity": "1f7fc928f00f0e82ca09362c74ec034eb090dc37dc8e4aa4f9205e4b8170f5ec",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260901-190005-369b:request:41"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/api/articles",
+        "phase": "source_query/producer",
+        "request_ref": "r20260901-190005-369b:request:39"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0007",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0007/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Source request 39 and later request 41 have the same method, canonical path /api/articles and the same visible query values limit=3&offset=0 for actor_a in one session; the relation only freezes that observed equivalent selector and proposes comparing the two $.articles arrays.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0007/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a29e6e058c6f889c0c2a"
+    }
+  ]
+}

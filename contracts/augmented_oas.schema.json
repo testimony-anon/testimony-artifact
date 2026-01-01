@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "augmented_oas.schema.json",
+  "title": "augmented_oas — final specification closed by the final OAS gate (produced by Stage 3; decision record 000 §2.5, D4, D5, 004 D31–D33)",
+  "description": "The hard boundary for all downstream analysis. A standard OpenAPI 3.1 document (full validity is checked by the vendored official meta-schema); each operation records, in x-carverflow-* extension fields, the set of observed responses, the evidence sources and the discovery/execution-readiness triage; Stage 4 dependency edges are written back into x-carverflow-dependencies. Since 013-C, operations newly discovered by probing still need a successful observation as proof; operations in initial_oas whose real UI-recorded responses are HTTP errors are also kept as discovery_only. cleanup/trust/material no longer decide whether an operation enters the OAS; instead x-carverflow-discovery.execution_readiness marks it ready or discovery_only. Responsibilities of the four x-carverflow fields: x-carverflow-observations = complete per-observation provenance (the ground truth); x-carverflow-observed-responses = a convenience summary aggregating response statuses; x-carverflow-evidence = a derived view for the existence decision; x-carverflow-discovery = discovery state and readiness for subsequent automatic execution.",
+  "allOf": [
+    { "$ref": "vendor/openapi-3.1/schema.json" },
+    {
+      "type": "object",
+      "required": ["x-carverflow-meta", "paths"],
+      "properties": {
+        "x-carverflow-meta": {
+          "$ref": "metadata_envelope.schema.json",
+          "properties": {
+            "artifact_type": { "const": "augmented_oas" },
+            "stage": { "const": "stage3" }
+          }
+        },
+        "openapi": {
+          "type": "string",
+          "pattern": "^3\\.1\\."
+        },
+        "paths": {
+          "type": "object",
+          "patternProperties": {
+            "^/": {
+              "type": "object",
+              "patternProperties": {
+                "^(get|put|post|delete|options|head|patch|trace)$": {
+                  "type": "object",
+                  "required": ["operationId", "x-carverflow-observations", "x-carverflow-observed-responses", "x-carverflow-evidence", "x-carverflow-discovery"],
+                  "properties": {
+                    "operationId": {
+                      "type": "string",
+                      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+                      "description": "Derived deterministically per D5, same rule as initial_oas",
+                      "x-volatility": "structural"
+                    },
+                    "x-carverflow-observations": {
+                      "type": "array",
+                      "minItems": 1,
+                      "description": "Inherited from D33: complete per-observation provenance (consumed by Stage 4 dependency inference / Stage 6 grounding). UI observations are carried over from initial_oas (source=stage1_session, keeping its run_id+entry_index and attribution fields); probe observations are appended (source=stage2_5_probe, probe_id referencing probe_results). Every admitted operation has at least one successful observation (D31 existence gate).",
+                      "items": { "$ref": "#/$defs/observation" },
+                      "x-volatility": "volatile"
+                    },
+                    "x-carverflow-observed-responses": {
+                      "type": "array",
+                      "minItems": 1,
+                      "description": "Set of responses observed for this operation (including 4xx and other error codes — the gate only filters operation existence and does not suppress error-response records of confirmed operations)",
+                      "items": {
+                        "type": "object",
+                        "required": ["status", "source"],
+                        "properties": {
+                          "status": {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 599,
+                            "x-volatility": "structural"
+                          },
+                          "source": {
+                            "type": "string",
+                            "enum": ["stage1_session", "stage2_5_probe"],
+                            "description": "Observation source: UI exploration session or constructed probe"
+                          },
+                          "observed_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "x-volatility": "volatile"
+                          },
+                          "content_type": { "type": "string" },
+                          "body_sample": {
+                            "description": "Optional: response body sample",
+                            "x-volatility": "volatile"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+	                    "x-carverflow-evidence": {
+                      "type": "array",
+                      "minItems": 1,
+                      "description": "Evidence sources for the operation's existence (the basis on which the final OAS gate confirmed it)",
+                      "items": {
+                        "type": "object",
+                        "required": ["type"],
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "enum": ["ui_observation", "probe_success"]
+                          },
+                          "ref": {
+                            "type": "string",
+                            "description": "Reference to a session-bundle entry or a probe_id",
+                            "x-volatility": "volatile"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+	                    },
+	                    "x-carverflow-discovery": {
+	                      "$ref": "#/$defs/discovery"
+	                    },
+	                    "x-carverflow-dependencies": {
+                      "type": "array",
+                      "description": "Dependency edges written back by Stage 4 (producer→consumer edges this operation participates in), same shape as a dependency_graph edge",
+                      "items": { "$ref": "dependency_graph.schema.json#/$defs/edge" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+	    "observation": {
+      "description": "One per-request observation provenance record (004 D33). Two branches by source: UI observations keep the initial_oas $defs/observation shape plus source; probe observations carry a probe_id referencing probe_results (there is no har entry, so the referenced object differs).",
+      "oneOf": [
+        { "$ref": "#/$defs/ui_observation" },
+        { "$ref": "#/$defs/probe_observation" }
+      ]
+	    },
+	    "discovery": {
+	      "type": "object",
+	      "description": "013-C: once an operation has been discovered, an explicit triage of whether it is ready for subsequent automatic execution. A discovery_only operation may stay in the OAS catalog but must not be consumed directly by later Stage 4/5/6 as strong executable material.",
+	      "required": ["existence_status", "execution_readiness", "state_safety", "material_basis", "reasons"],
+	      "properties": {
+	        "existence_status": {
+	          "const": "confirmed",
+	          "description": "A UI-recorded HTTP response or a probe 2xx/3xx proves that the operation exists; error-only UI operations must remain discovery_only."
+	        },
+	        "execution_readiness": {
+	          "type": "string",
+	          "enum": ["ready", "discovery_only"],
+	          "description": "ready may enter the subsequent automatic execution chain; discovery_only only means the API operation has been discovered while material/safety/cleanup are still insufficient."
+	        },
+	        "state_safety": {
+	          "type": "string",
+	          "enum": ["not_applicable", "per_probe_cleanup", "environment_reset", "unsafe_or_unverified"]
+	        },
+	        "material_basis": {
+	          "type": "string",
+	          "enum": ["fresh_replay", "runtime_secret", "recorded_literal", "recorded_literal_assumption", "stable_literal_verified", "generated_mutation", "mixed", "not_applicable"]
+	        },
+	        "reasons": {
+	          "type": "array",
+	          "items": { "type": "string", "minLength": 1 },
+	          "description": "Machine-readable reasons, e.g. cleanup_unverified, recorded_literal_assumption, material_insufficient."
+	        }
+	      },
+	      "additionalProperties": false
+	    },
+	    "ui_observation": {
+      "type": "object",
+      "description": "UI exploration session observation (carried over from initial_oas, source=stage1_session).",
+      "required": ["source", "run_id", "entry_index", "timestamp", "status", "auth_present"],
+      "properties": {
+        "source": { "const": "stage1_session" },
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "run_id of the source session bundle (D20 reference shape)",
+          "x-volatility": "volatile"
+        },
+        "entry_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Entry index in har log.entries (D20 reference shape)",
+          "x-volatility": "volatile"
+        },
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID of the ui_action the observation is attributed to (mutually exclusive with orphan_class, D22)",
+          "x-volatility": "volatile"
+        },
+        "orphan_class": {
+          "type": "string",
+          "enum": ["stage0_auth", "initial_load", "unmatched"],
+          "description": "Orphan class (mutually exclusive with action_id, D22)"
+        },
+        "confidence_tier": {
+          "type": "string",
+          "enum": ["strict_interval", "tail"],
+          "description": "Confidence tier of the action attribution; absent for orphan observations"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "x-volatility": "volatile"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 599,
+          "description": "Observed response status (including 4xx/5xx; 0 = load failure)",
+          "x-volatility": "volatile"
+        },
+        "auth_present": {
+          "type": "boolean",
+          "description": "Whether the request carried an authentication header (D24)"
+        }
+      },
+      "oneOf": [
+        { "required": ["action_id"] },
+        { "required": ["orphan_class"] }
+      ],
+      "additionalProperties": false
+    },
+    "probe_observation": {
+      "type": "object",
+      "description": "Constructed-probe observation (Stage 2.5, source=stage2_5_probe); probe_id references probe_results.",
+      "required": ["source", "probe_id", "timestamp", "status", "auth_present"],
+      "properties": {
+        "source": { "const": "stage2_5_probe" },
+        "probe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "probe_id referencing probe_results (D33 provenance channel)",
+          "x-volatility": "volatile"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "x-volatility": "volatile"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599,
+          "description": "Probe response status (same domain as probe_results.response.status)",
+          "x-volatility": "volatile"
+        },
+        "auth_present": {
+          "type": "boolean",
+          "description": "Whether the probe request carried an authentication header (D29: reuse of the verified authentication)"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

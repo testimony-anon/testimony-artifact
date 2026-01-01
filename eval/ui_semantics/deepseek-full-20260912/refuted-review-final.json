@@ -1,0 +1,8166 @@
+[
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L1-ARTICLE-07",
+  "candidate_id": "v2-candidate-0004",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_a POST /api/articles",
+  "consumer": "actor_a GET /api/articles/practical-tagging-guide",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.article.tagList",
+    "role": "after",
+    "value_type": "array"
+   },
+   "operator": "eq",
+   "right": {
+    "ref": {
+     "path": "$.article.tagList",
+     "role": "producer_request",
+     "value_type": "array"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "producer"
+  ],
+  "producer_call": "POST /api/articles -> None",
+  "before_call": "-",
+  "after_call": "GET /api/articles/practical-tagging-guide -> 200",
+  "failing_values": [
+   {
+    "left": "after $.article.tagList",
+    "left_value": [
+     "lastingtag"
+    ],
+    "right": "producer_request $.article.tagList",
+    "right_value": [
+     "xy",
+     "lastingtag"
+    ],
+    "observed": {
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L1-ARTICLE-07/union/M12/v2-candidate-0004/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L6",
+   "note": "tagList after creation drops the 2-char tag 'xy' that the create response echoed (real defect: tags of length<=2 silently dropped)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L2-ARTICLE-01",
+  "candidate_id": "v2-candidate-0022",
+  "contract_kind": "C06",
+  "protocol": "V6",
+  "producer": "actor_a POST /api/articles",
+  "consumer": "actor_a GET /api/articles/searchable-architecture-notes",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$",
+    "role": "producer_status",
+    "value_type": "integer"
+   },
+   "operator": "eq",
+   "right": {
+    "evidence_refs": [
+     "r20260901-190552-c2d5:request:1",
+     "r20260901-190552-c2d5:request:5"
+    ],
+    "rationale": "Proposed rule: replaying the identical article-creation body whose title/slug already exists is rejected; not prevalidated.",
+    "source": "hypothesis",
+    "value": 422,
+    "value_type": "integer"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "rejection",
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "diagnostics": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "producer"
+  ],
+  "producer_call": "POST /api/articles -> None",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "left": "producer_status $",
+    "left_value": null,
+    "right": "hypothesis literal",
+    "right_value": 422,
+    "observed": {
+     "checks": [
+      {
+       "check_id": "rejection",
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "diagnostics": []
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L2-ARTICLE-01/union/M12/v2-candidate-0022/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "hypothesis: replaying an identical article body is rejected with 422; app created a second article (201) - duplicate titles are allowed by design",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L3-SOCIAL-02",
+  "candidate_id": "v2-candidate-0005",
+  "contract_kind": "C11",
+  "protocol": "V7",
+  "producer": "actor_b DELETE /api/articles/favorite-reading-list/favorite",
+  "consumer": "actor_a GET /api/articles",
+  "predicate": {
+   "collection": {
+    "path": "$.articles",
+    "role": "actor_after:actor_a",
+    "value_type": "array"
+   },
+   "family": "P13",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.slug",
+      "member_path": "$.slug"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$.article",
+     "role": "producer_response",
+     "value_type": "object"
+    },
+    "source": "role"
+   },
+   "operator": "not_contains"
+  },
+  "predicate_result": {
+   "family": "P13",
+   "observed": {
+    "match_count": 1
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/articles/favorite-reading-list/favorite -> None",
+  "before_call": "GET /api/articles -> 200",
+  "after_call": "GET /api/articles -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "match_count": 1
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L3-SOCIAL-02/union/M12/v2-candidate-0005/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "unfavorite is expected to remove the article from the global article list; the list is not filtered by favorites",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L3-SOCIAL-02",
+  "candidate_id": "v2-candidate-0035",
+  "contract_kind": "C12",
+  "protocol": "V7",
+  "producer": "actor_b DELETE /api/articles/favorite-reading-list/favorite",
+  "consumer": "actor_a GET /api/articles",
+  "predicate": {
+   "collection": {
+    "path": "$.articles",
+    "role": "actor_after:actor_a",
+    "value_type": "array"
+   },
+   "family": "P13",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.slug",
+      "member_path": "$.slug"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$.article",
+     "role": "producer_response",
+     "value_type": "object"
+    },
+    "source": "role"
+   },
+   "operator": "not_contains"
+  },
+  "predicate_result": {
+   "family": "P13",
+   "observed": {
+    "match_count": 1
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/articles/favorite-reading-list/favorite -> None",
+  "before_call": "GET /api/articles -> 200",
+  "after_call": "GET /api/articles -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "match_count": 1
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L3-SOCIAL-02/union/M12/v2-candidate-0035/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "same as v2-candidate-0005 (second predicate variant)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-COMMENT-01",
+  "candidate_id": "v2-candidate-0008",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /api/articles/discussion-thread-guide",
+  "predicate": {
+   "family": "P10",
+   "flags": 0,
+   "format": "date_yyyy_mm_dd",
+   "pattern": null,
+   "target": {
+    "path": "$.article.createdAt",
+    "role": "observation",
+    "value_type": "string"
+   }
+  },
+  "predicate_result": {
+   "family": "P10",
+   "observed": {
+    "format_valid": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "format_valid": false
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-COMMENT-01/union/M12/v2-candidate-0008/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "createdAt asserted as yyyy-mm-dd; the field is an ISO-8601 timestamp",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-EDIT-01",
+  "candidate_id": "v2-candidate-0032",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /api/articles",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.articles",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 1,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 1,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 1,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 1,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-EDIT-01/union/M12/v2-candidate-0032/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "createdAt asserted as yyyy-mm-dd for every article; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0008",
+  "contract_kind": "C03",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articles",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.articles",
+    "role": "before",
+    "value_type": "array"
+   },
+   "delta": -1,
+   "family": "P12"
+  },
+  "predicate_result": {
+   "family": "P12",
+   "observed": {
+    "actual_delta": 0,
+    "after_count": 0,
+    "before_count": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "actual_delta": 0,
+     "after_count": 0,
+     "before_count": 0
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0008/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "unfollow expected to shrink the feed by one, but the fresh replay's feed was already empty before the unfollow (before_count 0): the followed author's articles were not part of the replayed setup, so the instance has no observable effect; verify feed content while following before treating as a defect",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0009",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articlesCount",
+    "role": "after",
+    "value_type": "integer"
+   },
+   "before": {
+    "path": "$.articlesCount",
+    "role": "before",
+    "value_type": "integer"
+   },
+   "delta": {
+    "fact_ref": "transition-fact-ce8292b8b1a6cf2126a542f1",
+    "source": "transition_fact",
+    "value": -1,
+    "value_type": "integer"
+   },
+   "family": "P06",
+   "multiplier": 1,
+   "numeric_mode": "exact",
+   "unit": null
+  },
+  "predicate_result": {
+   "family": "P06",
+   "observed": {
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "after": "integer",
+     "before": "integer",
+     "delta": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "after": "integer",
+      "before": "integer",
+      "delta": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0009/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "articlesCount delta -1 after unfollow; feed empty before and after in the fresh replay (no effect to observe)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0022",
+  "contract_kind": "C03",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articles",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.articles",
+    "role": "before",
+    "value_type": "array"
+   },
+   "delta": -1,
+   "family": "P12"
+  },
+  "predicate_result": {
+   "family": "P12",
+   "observed": {
+    "actual_delta": 0,
+    "after_count": 0,
+    "before_count": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "actual_delta": 0,
+     "after_count": 0,
+     "before_count": 0
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0022/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "same as v2-candidate-0008",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0023",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articlesCount",
+    "role": "after",
+    "value_type": "integer"
+   },
+   "before": {
+    "path": "$.articlesCount",
+    "role": "before",
+    "value_type": "integer"
+   },
+   "delta": {
+    "fact_ref": "transition-fact-ce8292b8b1a6cf2126a542f1",
+    "source": "transition_fact",
+    "value": -1,
+    "value_type": "integer"
+   },
+   "family": "P06",
+   "multiplier": 1,
+   "numeric_mode": "exact",
+   "unit": null
+  },
+  "predicate_result": {
+   "family": "P06",
+   "observed": {
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "after": "integer",
+     "before": "integer",
+     "delta": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "after": "integer",
+      "before": "integer",
+      "delta": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0023/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "same as v2-candidate-0009",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0052",
+  "contract_kind": "C03",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articles",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.articles",
+    "role": "before",
+    "value_type": "array"
+   },
+   "delta": -1,
+   "family": "P12"
+  },
+  "predicate_result": {
+   "family": "P12",
+   "observed": {
+    "actual_delta": 0,
+    "after_count": 0,
+    "before_count": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "actual_delta": 0,
+     "after_count": 0,
+     "before_count": 0
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0052/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "same as v2-candidate-0008",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "conduit",
+  "run": "m11fix-01",
+  "case": "L4-FOLLOW-01",
+  "candidate_id": "v2-candidate-0053",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_b DELETE /api/profiles/carver/follow",
+  "consumer": "actor_b GET /api/articles/feed",
+  "predicate": {
+   "after": {
+    "path": "$.articlesCount",
+    "role": "after",
+    "value_type": "integer"
+   },
+   "before": {
+    "path": "$.articlesCount",
+    "role": "before",
+    "value_type": "integer"
+   },
+   "delta": {
+    "fact_ref": "transition-fact-ce8292b8b1a6cf2126a542f1",
+    "source": "transition_fact",
+    "value": -1,
+    "value_type": "integer"
+   },
+   "family": "P06",
+   "multiplier": 1,
+   "numeric_mode": "exact",
+   "unit": null
+  },
+  "predicate_result": {
+   "family": "P06",
+   "observed": {
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "after": "integer",
+     "before": "integer",
+     "delta": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "DELETE /api/profiles/carver/follow -> None",
+  "before_call": "GET /api/articles/feed -> 200",
+  "after_call": "GET /api/articles/feed -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "after": "integer",
+      "before": "integer",
+      "delta": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "conduit/m11fix-01/cases/L4-FOLLOW-01/union/M12/v2-candidate-0053/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "same as v2-candidate-0009",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L1-BANK-03",
+  "candidate_id": "v2-candidate-0005",
+  "contract_kind": "C03",
+  "protocol": "V4",
+  "producer": "actor_a POST /graphql",
+  "consumer": "actor_a POST /graphql",
+  "predicate": {
+   "after": {
+    "path": "$.data.listBankAccount",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.data.listBankAccount",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.id",
+      "member_path": "$"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$.variables.id",
+     "role": "producer_request",
+     "value_type": "string"
+    },
+    "source": "role"
+   },
+   "operator": "removed"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 1,
+    "before_matches": 1
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /graphql -> None",
+  "before_call": "POST /graphql -> 200",
+  "after_call": "POST /graphql -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 1,
+     "before_matches": 1
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L1-BANK-03/union/M12/v2-candidate-0005/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "The candidate requires the account to be removed from listBankAccount after deletion; RWA uses soft deletion (isDeleted=true, still in the list, filtered on the UI side), so under the API semantics the correct relation is the isDeleted flip, not removal. After the D6 fix the candidate changed from not_evaluable to evaluable and was correctly refuted.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L1-DETAIL-02",
+  "candidate_id": "v2-candidate-0006",
+  "contract_kind": "C01",
+  "protocol": "V4",
+  "producer": "actor_a POST /likes/fkobCXv6k",
+  "consumer": "actor_a GET /transactions/fkobCXv6k",
+  "predicate": {
+   "after": {
+    "path": "$.transaction.likes",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.transaction.likes",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.id",
+      "member_path": "$"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$",
+     "role": "producer_response",
+     "value_type": "string"
+    },
+    "source": "role"
+   },
+   "operator": "added"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 0,
+    "before_matches": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /likes/jG4r_hwTV -> None",
+  "before_call": "GET /transactions/jG4r_hwTV -> 200",
+  "after_call": "GET /transactions/jG4r_hwTV -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 0,
+     "before_matches": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L1-DETAIL-02/union/M12/v2-candidate-0006/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "member to find in $.transaction.likes taken from the producer response '$' which is the plain text 'OK'; the like itself was added",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L3-BANK-01",
+  "candidate_id": "v2-candidate-0020",
+  "contract_kind": "C03",
+  "protocol": "V4",
+  "producer": "actor_a POST /graphql",
+  "consumer": "actor_a POST /graphql",
+  "predicate": {
+   "after": {
+    "path": "$.data.listBankAccount",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.data.listBankAccount",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.id",
+      "member_path": "$.id"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$.variables",
+     "role": "producer_request",
+     "value_type": "object"
+    },
+    "source": "role"
+   },
+   "operator": "removed"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 1,
+    "before_matches": 1
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /graphql -> None",
+  "before_call": "POST /graphql -> 200",
+  "after_call": "POST /graphql -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 1,
+     "before_matches": 1
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L3-BANK-01/union/M12/v2-candidate-0020/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "The candidate requires the account to be removed from listBankAccount after deletion; RWA uses soft deletion (isDeleted=true, still in the list, filtered on the UI side), so under the API semantics the correct relation is the isDeleted flip, not removal. After the D6 fix the candidate changed from not_evaluable to evaluable and was correctly refuted.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L4-LIKE-NOTIFY-01",
+  "candidate_id": "v2-candidate-0015",
+  "contract_kind": "C01",
+  "protocol": "V4",
+  "producer": "actor_b POST /likes/Mafw0xcVd",
+  "consumer": "actor_b GET /transactions/Mafw0xcVd",
+  "predicate": {
+   "after": {
+    "path": "$.transaction.likes",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.transaction.likes",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.id",
+      "member_path": "$"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$",
+     "role": "producer_response",
+     "value_type": "string"
+    },
+    "source": "role"
+   },
+   "operator": "added"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 0,
+    "before_matches": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /likes/R4FfLoNbA -> None",
+  "before_call": "GET /transactions/R4FfLoNbA -> 200",
+  "after_call": "GET /transactions/R4FfLoNbA -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 0,
+     "before_matches": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L4-LIKE-NOTIFY-01/union/M12/v2-candidate-0015/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "The member is taken from the producer response '$', but the response of POST /likes is the plain text 'OK', so matching by $.id is meaningless; the candidate is mis-constructed.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L4-LIKE-NOTIFY-01",
+  "candidate_id": "v2-candidate-0054",
+  "contract_kind": "C05",
+  "protocol": "V5",
+  "producer": "actor_b POST /likes/Mafw0xcVd",
+  "consumer": "actor_b GET /transactions/Mafw0xcVd",
+  "predicate": {
+   "family": "repeat_rejected",
+   "projection": {
+    "family": "P20",
+    "left": {
+     "path": "$.transaction",
+     "role": "before",
+     "value_type": "object"
+    },
+    "operator": "equal",
+    "projection": [
+     "$.likes"
+    ],
+    "projection_ref": null,
+    "right": {
+     "path": "$.transaction",
+     "role": "after",
+     "value_type": "object"
+    }
+   },
+   "rejection": null
+  },
+  "predicate_result": {
+   "family": "repeat_rejected",
+   "observed": {
+    "applicability": [
+     {
+      "check_id": "first_success",
+      "observed": {},
+      "reason_code": null,
+      "status": "satisfied"
+     }
+    ],
+    "checks": [
+     {
+      "check_id": "second_rejection",
+      "observed": {
+       "rejected": false,
+       "response_status": 200
+      },
+      "reason_code": null,
+      "status": "violated"
+     },
+     {
+      "check_id": "preservation",
+      "observed": {
+       "values_equal": false
+      },
+      "reason_code": null,
+      "status": "violated"
+     }
+    ],
+    "diagnostics": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "B0",
+   "B1",
+   "B2",
+   "B_action1",
+   "B_action2"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicability": [
+      {
+       "check_id": "first_success",
+       "observed": {},
+       "reason_code": null,
+       "status": "satisfied"
+      }
+     ],
+     "checks": [
+      {
+       "check_id": "second_rejection",
+       "observed": {
+        "rejected": false,
+        "response_status": 200
+       },
+       "reason_code": null,
+       "status": "violated"
+      },
+      {
+       "check_id": "preservation",
+       "observed": {
+        "values_equal": false
+       },
+       "reason_code": null,
+       "status": "violated"
+      }
+     ],
+     "diagnostics": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L4-LIKE-NOTIFY-01/union/M12/v2-candidate-0054/execution_evidence.json",
+  "classification": {
+   "code": "RD?",
+   "lead": "L9",
+   "note": "The candidate assumes a second like on the same transaction is rejected and likes stays unchanged; in fact the second POST /likes returns 200 and appends a second like record (createLikes in the source code has no de-duplication). This is a lead that a duplicate like is not rejected; it counts as a real defect only after being reproduced separately in a clean environment.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L4-THIRD-PARTY-COMMENT-01",
+  "candidate_id": "v2-candidate-0038",
+  "contract_kind": "C01",
+  "protocol": "V4",
+  "producer": "actor_b POST /comments/KVwqHzBpH",
+  "consumer": "actor_b GET /notifications",
+  "predicate": {
+   "after": {
+    "path": "$.results",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.results",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.transactionId",
+      "member_path": "$.transactionId"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$",
+     "role": "producer_request",
+     "value_type": "object"
+    },
+    "source": "role"
+   },
+   "operator": "added"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 0,
+    "before_matches": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /comments/MgpyimKbX1 -> None",
+  "before_call": "GET /notifications -> 200",
+  "after_call": "GET /notifications -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 0,
+     "before_matches": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L4-THIRD-PARTY-COMMENT-01/union/M12/v2-candidate-0038/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "After third party actor_b comments on someone else's transaction, the candidate asserts that actor_b's own unread notifications gain one entry; the implementation only notifies the transaction's sender/receiver (database.ts createComments) and a third party receives no notification, so the refutation is correct.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L4-THIRD-PARTY-LIKE-01",
+  "candidate_id": "v2-candidate-0043",
+  "contract_kind": "C01",
+  "protocol": "V4",
+  "producer": "actor_b POST /likes/y1Ui9GcZy",
+  "consumer": "actor_b GET /notifications",
+  "predicate": {
+   "after": {
+    "path": "$.results",
+    "role": "after",
+    "value_type": "array"
+   },
+   "before": {
+    "path": "$.results",
+    "role": "before",
+    "value_type": "array"
+   },
+   "family": "P14",
+   "identity": {
+    "field_pairs": [
+     {
+      "collection_item_path": "$.transactionId",
+      "member_path": "$.transactionId"
+     }
+    ],
+    "semantics": "strict-tuple"
+   },
+   "member": {
+    "ref": {
+     "path": "$",
+     "role": "producer_request",
+     "value_type": "object"
+    },
+    "source": "role"
+   },
+   "operator": "added"
+  },
+  "predicate_result": {
+   "family": "P14",
+   "observed": {
+    "after_matches": 0,
+    "before_matches": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /likes/8O7AYpYu1 -> None",
+  "before_call": "GET /notifications -> 200",
+  "after_call": "GET /notifications -> 200",
+  "failing_values": [
+   {
+    "observed": {
+     "after_matches": 0,
+     "before_matches": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L4-THIRD-PARTY-LIKE-01/union/M12/v2-candidate-0043/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "After third party actor_b likes someone else's transaction, the candidate asserts that actor_b's own unread notifications gain one entry; the implementation only notifies the sender/receiver (database.ts createLikes), so the refutation is correct.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-02",
+  "case": "L4-THIRD-PARTY-LIKE-01",
+  "candidate_id": "v2-candidate-0049",
+  "contract_kind": "C14",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions/public",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260912-192248-a98e:request:137"
+    ],
+    "rationale": "Proposed unit for the counted items of the paged public transaction list; frozen before execution, not inferred from the field name.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 5,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 5,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-02/cases/L4-THIRD-PARTY-LIKE-01/union/M12/v2-candidate-0049/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "P19 treats pageData.limit (10) as the result count, but the public feed actually has only 5 entries; limit is the page capacity, not a count, so the candidate is wrong.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-DETAIL-01",
+  "candidate_id": "v2-candidate-0017",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_a POST /transactions",
+  "consumer": "actor_a GET /transactions/JaIZai5Qp",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.transaction.amount",
+    "role": "after",
+    "value_type": "integer"
+   },
+   "operator": "numeric_eq",
+   "right": {
+    "evidence_refs": [
+     "r20260902-023019-5662:request:6"
+    ],
+    "rationale": "The POST body amount is the string \"11\", so numeric equality with 11 is proposed.",
+    "source": "hypothesis",
+    "value": 11,
+    "value_type": "integer"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "producer"
+  ],
+  "producer_call": "POST /transactions -> None",
+  "before_call": "-",
+  "after_call": "GET /transactions/rs6XrGt4U -> 200",
+  "failing_values": [
+   {
+    "left": "after $.transaction.amount",
+    "left_value": 1100,
+    "right": "hypothesis literal",
+    "right_value": 11,
+    "observed": {
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-DETAIL-01/union/M12/v2-candidate-0017/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "amount literal 11 taken from the request string; the API stores cents (1100)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-04",
+  "candidate_id": "v2-candidate-0008",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/public",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260902-022732-4a20:request:144"
+    ],
+    "rationale": "The results array length should equal the declared page limit in items.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 5,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 5,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-04/union/M12/v2-candidate-0008/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == pageData.limit; the last page holds fewer items (5 < 10)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-04",
+  "candidate_id": "v2-candidate-0009",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/public",
+  "predicate": {
+   "body": {
+    "family": "P02",
+    "left": {
+     "path": "$.privacyLevel",
+     "role": "item",
+     "value_type": "string"
+    },
+    "operator": "eq",
+    "right": {
+     "evidence_refs": [
+      "r20260902-022732-4a20:request:144"
+     ],
+     "rationale": "The endpoint path /transactions/public suggests public transactions.",
+     "source": "hypothesis",
+     "value": "public",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 5,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "left": "public",
+        "right": "public"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "contacts",
+        "right": "public"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "contacts",
+        "right": "public"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "public",
+        "right": "public"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "public",
+        "right": "public"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": true
+     }
+    ],
+    "member_count": 5,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 5,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "left": "public",
+         "right": "public"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "contacts",
+         "right": "public"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "contacts",
+         "right": "public"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "public",
+         "right": "public"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "public",
+         "right": "public"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": true
+      }
+     ],
+     "member_count": 5,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-04/union/M12/v2-candidate-0009/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "every public-feed item has privacyLevel 'public'; the feed also lists contacts-level transactions of contacts (app design)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-04",
+  "candidate_id": "v2-candidate-0030",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.pageData.page",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "operator": "le",
+   "right": {
+    "ref": {
+     "path": "$.pageData.totalPages",
+     "role": "observation",
+     "value_type": "integer"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "left": 1,
+    "right": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "left": "observation $.pageData.page",
+    "left_value": null,
+    "right": "observation $.pageData.totalPages",
+    "right_value": null,
+    "observed": {
+     "left": 1,
+     "right": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-04/union/M12/v2-candidate-0030/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "page <= totalPages fails for an empty list (page=1,totalPages=0); same caveat as B-R14",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-04",
+  "candidate_id": "v2-candidate-0051",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-04/union/M12/v2-candidate-0051/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "createdAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-05",
+  "candidate_id": "v2-candidate-0030",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/public",
+  "predicate": {
+   "body": {
+    "domain": null,
+    "family": "P03",
+    "lower": {
+     "evidence_refs": [
+      "r20260902-022859-3a28:workflow-action-0005"
+     ],
+     "rationale": "Recorded HTML declaration for the transaction-list amount-filter range inputs states min=0; proposed inclusive lower bound for transaction amounts, a frozen hypothesis from the declaration, not a proven API constraint.",
+     "source": "hypothesis",
+     "value": 0,
+     "value_type": "integer"
+    },
+    "lower_inclusive": true,
+    "operator": "range",
+    "target": {
+     "path": "$.amount",
+     "role": "item",
+     "value_type": "integer"
+    },
+    "upper": {
+     "evidence_refs": [
+      "r20260902-022859-3a28:workflow-action-0005"
+     ],
+     "rationale": "Same recorded HTML declaration states max=100; proposed inclusive upper bound for transaction amounts, a frozen hypothesis from the declaration, not a proven API constraint.",
+     "source": "hypothesis",
+     "value": 100,
+     "value_type": "integer"
+    },
+    "upper_inclusive": true
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 30799,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 30799,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 31231,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 31231,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 8607,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 8607,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 10062,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 10062,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 48065,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 48065,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 4236,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 4236,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 49492,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 49492,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 20468,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 20468,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 4323,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 4323,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "checks": [
+         {
+          "check_id": "lower",
+          "observed": {
+           "left": 38737,
+           "right": 0
+          },
+          "reason_code": null,
+          "satisfied": true
+         },
+         {
+          "check_id": "upper",
+          "observed": {
+           "left": 38737,
+           "right": 100
+          },
+          "reason_code": null,
+          "satisfied": false
+         }
+        ]
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 30799,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 30799,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 31231,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 31231,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 8607,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 8607,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 10062,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 10062,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 48065,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 48065,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 4236,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 4236,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 49492,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 49492,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 20468,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 20468,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 4323,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 4323,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "checks": [
+          {
+           "check_id": "lower",
+           "observed": {
+            "left": 38737,
+            "right": 0
+           },
+           "reason_code": null,
+           "satisfied": true
+          },
+          {
+           "check_id": "upper",
+           "observed": {
+            "left": 38737,
+            "right": 100
+           },
+           "reason_code": null,
+           "satisfied": false
+          }
+         ]
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-05/union/M12/v2-candidate-0030/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "amount range 0..100 read from the UI slider declaration (dollars); API amounts are cents",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-05",
+  "candidate_id": "v2-candidate-0064",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.pageData.page",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "operator": "le",
+   "right": {
+    "ref": {
+     "path": "$.pageData.totalPages",
+     "role": "observation",
+     "value_type": "integer"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "left": 1,
+    "right": 0
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "left": "observation $.pageData.page",
+    "left_value": null,
+    "right": "observation $.pageData.totalPages",
+    "right_value": null,
+    "observed": {
+     "left": 1,
+     "right": 0
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-05/union/M12/v2-candidate-0064/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "page <= totalPages on an empty list",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-05",
+  "candidate_id": "v2-candidate-0065",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.pageData.totalPages",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "operator": "ge",
+   "right": {
+    "evidence_refs": [
+     "r20260902-022859-3a28:request:10"
+    ],
+    "rationale": "Proposed lower bound for totalPages",
+    "source": "hypothesis",
+    "value": 1,
+    "value_type": "integer"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "left": 0,
+    "right": 1
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "left": "observation $.pageData.totalPages",
+    "left_value": null,
+    "right": "hypothesis literal",
+    "right_value": 1,
+    "observed": {
+     "left": 0,
+     "right": 1
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-05/union/M12/v2-candidate-0065/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "totalPages >= 1 on an empty list",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-FEED-05",
+  "candidate_id": "v2-candidate-0066",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260902-022859-3a28:request:10"
+    ],
+    "rationale": "Proposed units for count",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 0,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 0,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-FEED-05/union/M12/v2-candidate-0066/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on an empty page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0008",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /notifications",
+  "predicate": {
+   "body": {
+    "expected_type": "string",
+    "family": "P21",
+    "target": {
+     "path": "$.status",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 8,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "actual_type": "missing",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "missing",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "actual_type": "string",
+        "expected_type": "string"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": true
+     }
+    ],
+    "member_count": 8,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 8,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "actual_type": "missing",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "missing",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "actual_type": "string",
+         "expected_type": "string"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": true
+      }
+     ],
+     "member_count": 8,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0008/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "every notification must carry a string status; the first seeded notification has no status field (seeded-data shape, not an API rule)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0025",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/contacts",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0025/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "createdAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0026",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/contacts",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.modifiedAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0026/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "modifiedAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0027",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/contacts",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.requestResolvedAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0027/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "requestResolvedAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0036",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0036/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "createdAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0088",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a POST /graphql",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.data.listBankAccount",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 1,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 1,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 1,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 1,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0088/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "bank account createdAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-NAV-01",
+  "candidate_id": "v2-candidate-0089",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a POST /graphql",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.modifiedAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.data.listBankAccount",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 1,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 1,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 1,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 1,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-NAV-01/union/M12/v2-candidate-0089/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "bank account modifiedAt asserted as yyyy-mm-dd; ISO-8601 timestamps",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-SEARCH-01",
+  "candidate_id": "v2-candidate-0002",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /users/search",
+  "predicate": {
+   "body": {
+    "family": "P09",
+    "operator": "contains",
+    "right": {
+     "ref": {
+      "location": "query",
+      "path": "$.q",
+      "role": "observation_request",
+      "value_type": "string"
+     },
+     "source": "request"
+    },
+    "target": {
+     "path": "$.firstName",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 2,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "left": "Darrel",
+        "right": "Darrel"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "Kristian",
+        "right": "Darrel"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 2,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 2,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "left": "Darrel",
+         "right": "Darrel"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "Kristian",
+         "right": "Darrel"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 2,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-SEARCH-01/union/M12/v2-candidate-0002/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "search results' firstName must contain q; the search also matches last name / username (Kristian)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-SEARCH-01",
+  "candidate_id": "v2-candidate-0030",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /users/search",
+  "predicate": {
+   "body": {
+    "family": "P02",
+    "left": {
+     "path": "$.firstName",
+     "role": "item",
+     "value_type": "string"
+    },
+    "operator": "eq",
+    "right": {
+     "ref": {
+      "location": "query",
+      "path": "$.q",
+      "role": "observation_request",
+      "value_type": "string"
+     },
+     "source": "request"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 2,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "left": "Darrel",
+        "right": "Darrel"
+       },
+       "reason_code": null,
+       "satisfied": true
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "body": {
+       "observed": {
+        "left": "Kristian",
+        "right": "Darrel"
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 2,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 2,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "left": "Darrel",
+         "right": "Darrel"
+        },
+        "reason_code": null,
+        "satisfied": true
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": true
+      },
+      {
+       "body": {
+        "observed": {
+         "left": "Kristian",
+         "right": "Darrel"
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 2,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-SEARCH-01/union/M12/v2-candidate-0030/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "same as v2-candidate-0002",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L1-SETTINGS-01",
+  "candidate_id": "v2-candidate-0007",
+  "contract_kind": "C02",
+  "protocol": "V1",
+  "producer": "actor_a PATCH /users/uBmeaz5pX",
+  "consumer": "actor_a GET /checkAuth",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.user.defaultPrivacyLevel",
+    "role": "after",
+    "value_type": "string"
+   },
+   "operator": "eq",
+   "right": {
+    "ref": {
+     "path": "$.defaultPrivacyLevel",
+     "role": "producer_request",
+     "value_type": "string"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "treatment_effect_present": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "Oc1",
+   "Oc2",
+   "Ot0",
+   "Ot1",
+   "P"
+  ],
+  "producer_call": "PATCH /users/uBmeaz5pX -> None",
+  "before_call": "GET /checkAuth -> 200",
+  "after_call": "GET /checkAuth -> 200",
+  "failing_values": [
+   {
+    "left": "after $.user.defaultPrivacyLevel",
+    "left_value": "public",
+    "right": "producer_request $.defaultPrivacyLevel",
+    "right_value": "public",
+    "observed": {
+     "treatment_effect_present": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L1-SETTINGS-01/union/M12/v2-candidate-0007/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "PATCH sent the same defaultPrivacyLevel as before, so the V1 treatment has no observable effect",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L2-REQUEST-01",
+  "candidate_id": "v2-candidate-0005",
+  "contract_kind": "C02",
+  "protocol": "V4",
+  "producer": "actor_a POST /transactions",
+  "consumer": "actor_a GET /transactions/42vVPA9-Z",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.transaction.requestStatus",
+    "role": "after",
+    "value_type": "string"
+   },
+   "operator": "eq",
+   "right": {
+    "ref": {
+     "path": "$.transactionType",
+     "role": "producer_request",
+     "value_type": "string"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "producer"
+  ],
+  "producer_call": "POST /transactions -> None",
+  "before_call": "-",
+  "after_call": "GET /transactions/BPWaYvC4P -> 200",
+  "failing_values": [
+   {
+    "left": "after $.transaction.requestStatus",
+    "left_value": "pending",
+    "right": "producer_request $.transactionType",
+    "right_value": "request",
+    "observed": {
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L2-REQUEST-01/union/M12/v2-candidate-0005/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "requestStatus expected to equal transactionType ('request'); the status is 'pending'",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L2-SETTINGS-01",
+  "candidate_id": "v2-candidate-0004",
+  "contract_kind": "C02",
+  "protocol": "V1",
+  "producer": "actor_a PATCH /users/uBmeaz5pX",
+  "consumer": "actor_a GET /checkAuth",
+  "predicate": {
+   "family": "P02",
+   "left": {
+    "path": "$.user.defaultPrivacyLevel",
+    "role": "after",
+    "value_type": "string"
+   },
+   "operator": "eq",
+   "right": {
+    "ref": {
+     "path": "$.defaultPrivacyLevel",
+     "role": "producer_request",
+     "value_type": "string"
+    },
+    "source": "role"
+   }
+  },
+  "predicate_result": {
+   "family": "P02",
+   "observed": {
+    "treatment_effect_present": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "Oc1",
+   "Oc2",
+   "Ot0",
+   "Ot1",
+   "P"
+  ],
+  "producer_call": "PATCH /users/uBmeaz5pX -> None",
+  "before_call": "GET /checkAuth -> 200",
+  "after_call": "GET /checkAuth -> 200",
+  "failing_values": [
+   {
+    "left": "after $.user.defaultPrivacyLevel",
+    "left_value": "public",
+    "right": "producer_request $.defaultPrivacyLevel",
+    "right_value": "public",
+    "observed": {
+     "treatment_effect_present": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L2-SETTINGS-01/union/M12/v2-candidate-0004/execution_evidence.json",
+  "classification": {
+   "code": "IP",
+   "lead": "",
+   "note": "no treatment effect (same value patched)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-PAYMENT-01",
+  "candidate_id": "v2-candidate-0033",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions/iF54RKdRs",
+  "predicate": {
+   "family": "P10",
+   "flags": 0,
+   "format": "date_yyyy_mm_dd",
+   "pattern": null,
+   "target": {
+    "path": "$.transaction.createdAt",
+    "role": "observation",
+    "value_type": "string"
+   }
+  },
+  "predicate_result": {
+   "family": "P10",
+   "observed": {
+    "format_valid": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "format_valid": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-PAYMENT-01/union/M12/v2-candidate-0033/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "createdAt is actually an ISO-8601 date-time (e.g. 2026-09-12T18:58:00.171Z), while the candidate wrongly fixed the format as yyyy-mm-dd; M12 refuted it correctly. Before the fix the candidate was not executed because of a prerequisite failure; after the fix it entered execution and was refuted.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-PAYMENT-01",
+  "candidate_id": "v2-candidate-0038",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-PAYMENT-01/union/M12/v2-candidate-0038/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "createdAt is actually an ISO-8601 date-time (e.g. 2026-09-12T18:58:00.171Z), while the candidate wrongly fixed the format as yyyy-mm-dd; M12 refuted it correctly. Before the fix the candidate was not executed because of a prerequisite failure; after the fix it entered execution and was refuted.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-REQUEST-REJECT-01",
+  "candidate_id": "v2-candidate-0015",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b POST /logout",
+  "consumer": "actor_b POST /graphql",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.data",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.listBankAccount"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.data",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.listBankAccount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "POST /logout -> None",
+  "before_call": "POST /graphql -> 200",
+  "after_call": "POST /graphql -> 200",
+  "failing_values": [
+   {
+    "check": "$.listBankAccount",
+    "before": [
+     {
+      "accountNumber": "5785581121",
+      "bankName": "D'Amore Inc Bank",
+      "createdAt": "2023-04-03T08:50:04.983Z",
+      "id": "I8qfnpz9q4a",
+      "isDeleted": false,
+      "modifiedAt": "2024-03-07T11:35:16.676Z",
+      "routingNumber": "501852312",
+      "userId": "GjWovtg2hr",
+      "uuid": "759fead2-1df3-442d-9236-083d94114e63"
+     }
+    ],
+    "after": null
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-REQUEST-REJECT-01/union/M12/v2-candidate-0015/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L8",
+   "note": "read-preservation across actor_b logout is a wrong claim, but the post-logout ListBankAccount query answered HTTP 200 with a server TypeError instead of an authentication error; reproduced on the unpatched copy (reproduce_rwa_lead8.py, REST control returns 401)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-REQUEST-REJECT-01",
+  "candidate_id": "v2-candidate-0018",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b PATCH /transactions/8hZhqu_Zx",
+  "consumer": "actor_b GET /transactions/8hZhqu_Zx",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.transaction",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.id",
+    "$.amount",
+    "$.description",
+    "$.createdAt",
+    "$.privacyLevel",
+    "$.senderId",
+    "$.senderName",
+    "$.receiverId",
+    "$.receiverName",
+    "$.status",
+    "$.uuid"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.transaction",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.id",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.amount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.description",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.createdAt",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.privacyLevel",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderName",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverName",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.status",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "check_id": "$.uuid",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "PATCH /transactions/9KsDQuZ2H -> None",
+  "before_call": "GET /transactions/9KsDQuZ2H -> 200",
+  "after_call": "GET /transactions/9KsDQuZ2H -> 200",
+  "failing_values": [
+   {
+    "check": "$.status",
+    "before": "pending",
+    "after": "complete"
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-REQUEST-REJECT-01/union/M12/v2-candidate-0018/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L1",
+   "note": "PATCH requestStatus=rejected changed transaction.status from pending to complete (rejected request marked complete; reproduced lead L1)",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-REQUEST-REJECT-01",
+  "candidate_id": "v2-candidate-0025",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b PATCH /transactions/8hZhqu_Zx",
+  "consumer": "actor_b GET /transactions/8hZhqu_Zx",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.transaction",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.amount",
+    "$.description",
+    "$.senderId",
+    "$.receiverId",
+    "$.status"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.transaction",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.amount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.description",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.status",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "PATCH /transactions/BuNqcuDjWV -> None",
+  "before_call": "GET /transactions/BuNqcuDjWV -> 200",
+  "after_call": "GET /transactions/BuNqcuDjWV -> 200",
+  "failing_values": [
+   {
+    "check": "$.status",
+    "before": "pending",
+    "after": "complete"
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-REQUEST-REJECT-01/union/M12/v2-candidate-0025/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L1",
+   "note": "same observation on a second candidate variant",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L3-REQUEST-REJECT-01",
+  "candidate_id": "v2-candidate-0058",
+  "contract_kind": "C05",
+  "protocol": "V5",
+  "producer": "actor_b PATCH /transactions/8hZhqu_Zx",
+  "consumer": "actor_b GET /transactions/8hZhqu_Zx",
+  "predicate": {
+   "family": "repeat_rejected",
+   "projection": {
+    "family": "P20",
+    "left": {
+     "path": "$.transaction",
+     "role": "before",
+     "value_type": "object"
+    },
+    "operator": "equal",
+    "projection": [
+     "$.amount",
+     "$.description",
+     "$.senderId",
+     "$.receiverId",
+     "$.createdAt",
+     "$.id"
+    ],
+    "projection_ref": null,
+    "right": {
+     "path": "$.transaction",
+     "role": "after",
+     "value_type": "object"
+    }
+   },
+   "rejection": {
+    "family": "P02",
+    "left": {
+     "path": "$",
+     "role": "producer_status",
+     "value_type": "integer"
+    },
+    "operator": "eq",
+    "right": {
+     "evidence_refs": [
+      "r20260906-142524-e1d3:request:146"
+     ],
+     "rationale": "Repeating a reject on an already rejected transaction is proposed to return 409 Conflict.",
+     "source": "hypothesis",
+     "value": 409,
+     "value_type": "integer"
+    }
+   }
+  },
+  "predicate_result": {
+   "family": "repeat_rejected",
+   "observed": {
+    "applicability": [
+     {
+      "check_id": "first_success",
+      "observed": {},
+      "reason_code": null,
+      "status": "satisfied"
+     }
+    ],
+    "checks": [
+     {
+      "check_id": "second_rejection",
+      "observed": {
+       "rejected": false,
+       "response_status": 204
+      },
+      "reason_code": null,
+      "status": "violated"
+     },
+     {
+      "check_id": "preservation",
+      "observed": {
+       "values_equal": true
+      },
+      "reason_code": null,
+      "status": "satisfied"
+     }
+    ],
+    "diagnostics": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "B0",
+   "B1",
+   "B2",
+   "B_action1",
+   "B_action2"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicability": [
+      {
+       "check_id": "first_success",
+       "observed": {},
+       "reason_code": null,
+       "status": "satisfied"
+      }
+     ],
+     "checks": [
+      {
+       "check_id": "second_rejection",
+       "observed": {
+        "rejected": false,
+        "response_status": 204
+       },
+       "reason_code": null,
+       "status": "violated"
+      },
+      {
+       "check_id": "preservation",
+       "observed": {
+        "values_equal": true
+       },
+       "reason_code": null,
+       "status": "satisfied"
+      }
+     ],
+     "diagnostics": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L3-REQUEST-REJECT-01/union/M12/v2-candidate-0058/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L2",
+   "note": "repeating the reject PATCH was accepted again (204) instead of being rejected; same family as the double-accept lead L2",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-PAYMENT-FEEDS-01",
+  "candidate_id": "v2-candidate-0013",
+  "contract_kind": "C14",
+  "protocol": "V9",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/47JQ3Gfz6",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "joint_after:list",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "item": {
+    "path": "$.amount",
+    "role": "item",
+    "value_type": "integer"
+   },
+   "numeric_mode": "exact",
+   "operator": "sum",
+   "output": {
+    "path": "$.transaction.amount",
+    "role": "joint_after:item",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260906-142929-fa15:request:143",
+     "r20260906-142929-fa15:request:153"
+    ],
+    "rationale": "Proposed common currency unit for transaction amounts.",
+    "source": "hypothesis",
+    "value": {
+     "item": "USD",
+     "output": "USD"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "consistency": "no_competing_writes_workflow",
+    "diagnostics": [],
+    "member_count": 10,
+    "numeric_mode": "exact",
+    "observation_count": 2,
+    "precision_sources": {
+     "item:0": "integer",
+     "item:1": "integer",
+     "item:2": "integer",
+     "item:3": "integer",
+     "item:4": "integer",
+     "item:5": "integer",
+     "item:6": "integer",
+     "item:7": "integer",
+     "item:8": "integer",
+     "item:9": "integer",
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]",
+   "observations[1]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "consistency": "no_competing_writes_workflow",
+     "diagnostics": [],
+     "member_count": 10,
+     "numeric_mode": "exact",
+     "observation_count": 2,
+     "precision_sources": {
+      "item:0": "integer",
+      "item:1": "integer",
+      "item:2": "integer",
+      "item:3": "integer",
+      "item:4": "integer",
+      "item:5": "integer",
+      "item:6": "integer",
+      "item:7": "integer",
+      "item:8": "integer",
+      "item:9": "integer",
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-PAYMENT-FEEDS-01/union/M12/v2-candidate-0013/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "sum of the listed amounts asserted equal to one transaction's amount",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-PAYMENT-FEEDS-01",
+  "candidate_id": "v2-candidate-0017",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions/contacts",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260906-142929-fa15:request:152"
+    ],
+    "rationale": "The page limit for the transaction contacts result page counts returned transaction entries, so the proposed output unit is items.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 0,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 0,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-PAYMENT-FEEDS-01/union/M12/v2-candidate-0017/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on an empty page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-PAYMENT-FEEDS-01",
+  "candidate_id": "v2-candidate-0024",
+  "contract_kind": "C14",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions/public",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260906-142929-a8ce:request:142"
+    ],
+    "rationale": "Proposed unit for the counted page items; frozen before execution.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 0,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 0,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-PAYMENT-FEEDS-01/union/M12/v2-candidate-0024/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on an empty page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-PAYMENT-FEEDS-01",
+  "candidate_id": "v2-candidate-0028",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "family": "P11",
+   "operator": "eq",
+   "projection": "count",
+   "right": {
+    "ref": {
+     "path": "$.pageData.limit",
+     "role": "observation",
+     "value_type": "integer"
+    },
+    "source": "role"
+   },
+   "target": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "unit": "items"
+  },
+  "predicate_result": {
+   "family": "P11",
+   "observed": {
+    "measured_value": 0,
+    "threshold": 10
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "measured_value": 0,
+     "threshold": 10
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-PAYMENT-FEEDS-01/union/M12/v2-candidate-0028/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on an empty page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-PAYMENT-FEEDS-01",
+  "candidate_id": "v2-candidate-0048",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions/public",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260906-142929-a8ce:request:145"
+    ],
+    "rationale": "Proposed output unit: the counted members of $.results are items, matching the integer page limit field.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 0,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 0,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-PAYMENT-FEEDS-01/union/M12/v2-candidate-0048/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on an empty page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-REQUEST-NOTIFY-01",
+  "candidate_id": "v2-candidate-0042",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b PATCH /transactions/YgLsJpr8W",
+  "consumer": "actor_b GET /transactions/YgLsJpr8W",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.transaction",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.amount",
+    "$.description",
+    "$.createdAt",
+    "$.senderId",
+    "$.receiverId",
+    "$.privacyLevel",
+    "$.status",
+    "$.uuid"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.transaction",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.amount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.description",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.createdAt",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.privacyLevel",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.status",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "check_id": "$.uuid",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "PATCH /transactions/i6noE-jlLV -> None",
+  "before_call": "GET /transactions/i6noE-jlLV -> 200",
+  "after_call": "GET /transactions/i6noE-jlLV -> 200",
+  "failing_values": [
+   {
+    "check": "$.status",
+    "before": "pending",
+    "after": "complete"
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-REQUEST-NOTIFY-01/union/M12/v2-candidate-0042/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L1",
+   "note": "reject marks the request complete",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-REQUEST-NOTIFY-01",
+  "candidate_id": "v2-candidate-0053",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_a GET /transactions",
+  "predicate": {
+   "body": {
+    "family": "P10",
+    "flags": 0,
+    "format": "date_yyyy_mm_dd",
+    "pattern": null,
+    "target": {
+     "path": "$.createdAt",
+     "role": "item",
+     "value_type": "string"
+    }
+   },
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "forall",
+   "item_guard": null,
+   "scope": "actual_response"
+  },
+  "predicate_result": {
+   "family": "forall",
+   "observed": {
+    "applicable_member_count": 10,
+    "checks": [
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 0,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 1,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 2,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 3,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 4,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 5,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 6,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 7,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 8,
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "body": {
+       "observed": {
+        "format_valid": false
+       },
+       "reason_code": null,
+       "satisfied": false
+      },
+      "guard": {
+       "observed": {},
+       "reason_code": null,
+       "satisfied": true
+      },
+      "member_index": 9,
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "member_count": 10,
+    "nonempty_support": true,
+    "parameter_checks": []
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "applicable_member_count": 10,
+     "checks": [
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 0,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 1,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 2,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 3,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 4,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 5,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 6,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 7,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 8,
+       "reason_code": null,
+       "satisfied": false
+      },
+      {
+       "body": {
+        "observed": {
+         "format_valid": false
+        },
+        "reason_code": null,
+        "satisfied": false
+       },
+       "guard": {
+        "observed": {},
+        "reason_code": null,
+        "satisfied": true
+       },
+       "member_index": 9,
+       "reason_code": null,
+       "satisfied": false
+      }
+     ],
+     "member_count": 10,
+     "nonempty_support": true,
+     "parameter_checks": []
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-REQUEST-NOTIFY-01/union/M12/v2-candidate-0053/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": null,
+   "note": "createdAt is actually an ISO-8601 date-time (e.g. 2026-09-12T18:58:00.171Z), while the candidate wrongly fixed the format as yyyy-mm-dd; M12 refuted it correctly. Before the fix the candidate was not executed because of a prerequisite failure; after the fix it entered execution and was refuted.",
+   "reviewed_at": "2026-09-12",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-REQUEST-NOTIFY-01",
+  "candidate_id": "v2-candidate-0086",
+  "contract_kind": "single_state_constraint",
+  "protocol": "V2",
+  "producer": "-",
+  "consumer": "actor_b GET /transactions/public",
+  "predicate": {
+   "collection": {
+    "path": "$.results",
+    "role": "observation",
+    "value_type": "array"
+   },
+   "family": "P19",
+   "numeric_mode": "exact",
+   "operator": "count",
+   "output": {
+    "path": "$.pageData.limit",
+    "role": "observation",
+    "value_type": "integer"
+   },
+   "scope": "actual_response",
+   "units": {
+    "evidence_refs": [
+     "r20260906-142558-047d:request:276"
+    ],
+    "rationale": "Proposed unit for the counted page members and the recorded page-size field: both count items; not prevalidated.",
+    "source": "hypothesis",
+    "value": {
+     "output": "items"
+    },
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P19",
+   "observed": {
+    "member_count": 5,
+    "numeric_mode": "exact",
+    "precision_sources": {
+     "output": "integer"
+    },
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "observations[0]"
+  ],
+  "producer_call": "-",
+  "before_call": "-",
+  "after_call": "-",
+  "failing_values": [
+   {
+    "observed": {
+     "member_count": 5,
+     "numeric_mode": "exact",
+     "precision_sources": {
+      "output": "integer"
+     },
+     "values_equal": false
+    }
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-REQUEST-NOTIFY-01/union/M12/v2-candidate-0086/execution_evidence.json",
+  "classification": {
+   "code": "WH",
+   "lead": "",
+   "note": "results count == limit on a short page",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-REQUEST-NOTIFY-01",
+  "candidate_id": "v2-candidate-0121",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b PATCH /transactions/YgLsJpr8W",
+  "consumer": "actor_b GET /transactions/YgLsJpr8W",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.transaction",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.amount",
+    "$.description",
+    "$.id",
+    "$.privacyLevel",
+    "$.receiverId",
+    "$.senderId",
+    "$.status",
+    "$.uuid",
+    "$.createdAt"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.transaction",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.amount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.description",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.id",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.privacyLevel",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.status",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     },
+     {
+      "check_id": "$.uuid",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.createdAt",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "PATCH /transactions/nM1CtbINn -> None",
+  "before_call": "GET /transactions/nM1CtbINn -> 200",
+  "after_call": "GET /transactions/nM1CtbINn -> 200",
+  "failing_values": [
+   {
+    "check": "$.status",
+    "before": "pending",
+    "after": "complete"
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-REQUEST-NOTIFY-01/union/M12/v2-candidate-0121/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L1",
+   "note": "reject marks the request complete",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ },
+ {
+  "subject": "rwa",
+  "run": "m11fix-01",
+  "case": "L4-REQUEST-REJECT-01",
+  "candidate_id": "v2-candidate-0048",
+  "contract_kind": "C04",
+  "protocol": "V4",
+  "producer": "actor_b PATCH /transactions/ZVWIVuuef",
+  "consumer": "actor_b GET /transactions/ZVWIVuuef",
+  "predicate": {
+   "family": "P20",
+   "left": {
+    "path": "$.transaction",
+    "role": "before",
+    "value_type": "object"
+   },
+   "operator": "equal",
+   "projection": [
+    "$.id",
+    "$.uuid",
+    "$.amount",
+    "$.createdAt",
+    "$.description",
+    "$.senderId",
+    "$.receiverId",
+    "$.receiverName",
+    "$.senderName",
+    "$.privacyLevel",
+    "$.status"
+   ],
+   "projection_ref": null,
+   "right": {
+    "path": "$.transaction",
+    "role": "after",
+    "value_type": "object"
+   }
+  },
+  "predicate_result": {
+   "family": "P20",
+   "observed": {
+    "checks": [
+     {
+      "check_id": "$.id",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.uuid",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.amount",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.createdAt",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.description",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverId",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.receiverName",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.senderName",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.privacyLevel",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": true
+     },
+     {
+      "check_id": "$.status",
+      "observed": {},
+      "reason_code": null,
+      "satisfied": false
+     }
+    ],
+    "values_equal": false
+   },
+   "reason_code": null,
+   "status": "violated"
+  },
+  "checkpoints": [
+   "after",
+   "before",
+   "producer"
+  ],
+  "producer_call": "PATCH /transactions/oylAA6GaH -> None",
+  "before_call": "GET /transactions/oylAA6GaH -> 200",
+  "after_call": "GET /transactions/oylAA6GaH -> 200",
+  "failing_values": [
+   {
+    "check": "$.status",
+    "before": "pending",
+    "after": "complete"
+   }
+  ],
+  "evidence": "rwa/m11fix-01/cases/L4-REQUEST-REJECT-01/union/M12/v2-candidate-0048/execution_evidence.json",
+  "classification": {
+   "code": "RD",
+   "lead": "L1",
+   "note": "reject marks the request complete",
+   "reviewer": "author review against the execution evidence (2026-09-12); notes drafted with AI assistance and confirmed by the authors"
+  }
+ }
+]

@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "artifact_type": "skills",
+    "schema_version": "1.0.0",
+    "run_id": "r20260610-0001",
+    "stage": "stage5",
+    "created_at": "2026-06-10T10:30:00+08:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": [
+      { "artifact_type": "dependency_graph", "run_id": "r20260610-0001" },
+      { "artifact_type": "augmented_oas", "run_id": "r20260610-0001" }
+    ]
+  },
+  "skills": [
+    {
+      "skill_id": "skill-0001",
+      "steps": ["post_articles", "get_articles_slug"],
+      "bindings": [
+        {
+          "from_step": 0,
+          "from_field": "/article/slug",
+          "from_location": "response_body",
+          "to_step": 1,
+          "to_location": "path",
+          "to_field": "slug"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "article_title",
+          "to_step": 0,
+          "to_location": "body",
+          "to_field": "/article/title",
+          "required": true
+        }
+      ],
+      "status": "candidate"
+    }
+  ]
+}

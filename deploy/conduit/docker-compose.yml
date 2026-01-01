@@ -1,0 +1,37 @@
+# Subject application: Conduit (local experiment environment).
+# All credentials below are local placeholder values, not real secrets.
+name: uisemtest-conduit
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: conduit
+      POSTGRES_PASSWORD: conduit
+      POSTGRES_DB: conduit
+    ports:
+      - "5433:5432"   # avoids a 5432 that may already be in use on the host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U conduit -d conduit"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  app:
+    build: .
+    environment:
+      PORT: "3001"
+      JWT_KEY: uisemtest-local-jwt-key
+      PROD_DB_USERNAME: conduit
+      PROD_DB_PASSWORD: conduit
+      PROD_DB_NAME: conduit
+      PROD_DB_HOSTNAME: db
+      PROD_DB_DIALECT: postgres
+      # Note: do not set PROD_DB_LOGGING. The upstream config.js passes it verbatim to sequelize's
+      # `logging` option (which expects a function); the string "false" is truthy and would be
+      # called as a function and crash. Unset = undefined = falsy = logging off.
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy

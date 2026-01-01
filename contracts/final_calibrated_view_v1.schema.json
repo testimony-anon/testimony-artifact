@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "final_calibrated_view_v1.schema.json",
+  "title": "UISemTest final calibrated view v1",
+  "type": "object",
+  "required": [
+    "schema_version", "status", "completion_reason", "source_suite", "source_calibration",
+    "retained_candidate_ids", "failed_candidate_ids", "inconclusive_candidate_ids",
+    "not_run_candidate_ids",
+    "candidate_denominator", "test_denominator", "assertion_definition_denominator",
+    "physical_evaluation_denominator", "m13_suite_mutated"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-final-calibrated-view-v1"},
+    "status": {"enum": ["pass", "complete_empty"]},
+    "completion_reason": {"enum": ["relations_calibrated", "no_confirmed_relations"]},
+    "source_suite": {"$ref": "current_calibration_report_v1.schema.json#/$defs/file_ref"},
+    "source_calibration": {"$ref": "current_calibration_report_v1.schema.json#/$defs/file_ref"},
+    "retained_candidate_ids": {"$ref": "current_calibration_report_v1.schema.json#/$defs/id_array"},
+    "failed_candidate_ids": {"$ref": "current_calibration_report_v1.schema.json#/$defs/id_array"},
+    "inconclusive_candidate_ids": {"$ref": "current_calibration_report_v1.schema.json#/$defs/id_array"},
+    "not_run_candidate_ids": {"$ref": "current_calibration_report_v1.schema.json#/$defs/id_array"},
+    "candidate_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/candidate_denominator"},
+    "test_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/test_denominator"},
+    "assertion_definition_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/assertion_definition_denominator"},
+    "physical_evaluation_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/physical_denominator"},
+    "m13_suite_mutated": {"const": false}
+  },
+  "additionalProperties": false
+}

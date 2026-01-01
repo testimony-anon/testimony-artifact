@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test_suite.schema.json",
+  "title": "test_suite — candidate test suite with actors, inputs and business assertions (Stage 5)",
+  "description": "The test suite is in candidate state when produced by Stage 5; normal-control calibration in the running environment is performed by Stage 6 and recorded only in test_execution_report.",
+  "type": "object",
+  "required": ["metadata", "cases"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "test_suite" },
+        "stage": { "const": "stage5" }
+      }
+    },
+    "transform_evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unit_scale_evidence" },
+      "x-volatility": "structural"
+    },
+    "cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/test_case" },
+      "x-volatility": "volatile"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "observation_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id", "value_path"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 },
+        "value_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "unit_scale_pair": {
+      "type": "object",
+      "required": ["ui_observation_ref", "api_observation_ref", "ui_text_sha256", "parsed_ui_value", "api_value", "ratio"],
+      "properties": {
+        "ui_observation_ref": { "$ref": "#/$defs/observation_ref" },
+        "api_observation_ref": { "$ref": "#/$defs/observation_ref" },
+        "ui_text_sha256": { "$ref": "#/$defs/sha256" },
+        "parsed_ui_value": { "type": "number" },
+        "api_value": { "type": "number" },
+        "ratio": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "unit_scale_evidence": {
+      "type": "object",
+      "required": ["evidence_id", "quantity_key", "derivation_status", "factor", "pairs", "parser", "absolute_tolerance", "relative_tolerance", "derived_at"],
+      "properties": {
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "quantity_key": { "type": "string", "minLength": 1 },
+        "derivation_status": { "enum": ["confirmed", "review_required", "rejected"] },
+        "factor": { "type": ["integer", "null"], "minimum": 1 },
+        "pairs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/unit_scale_pair" } },
+        "parser": { "const": "currency_decimal_v1" },
+        "absolute_tolerance": { "const": 1e-9 },
+        "relative_tolerance": { "const": 1e-9 },
+        "derived_at": { "type": "string", "format": "date-time", "x-volatility": "volatile" }
+      },
+      "additionalProperties": false
+    },
+    "actor_id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "operation_id": { "type": "string", "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$" },
+    "assertion_source": { "type": "string", "enum": ["value_flow", "ui_diff", "ui_constraint", "ui_assertion_transfer"] },
+    "step": {
+      "type": "object",
+      "required": ["step_id", "actor_id", "operation_id"],
+      "properties": {
+        "step_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "operation_id": { "$ref": "#/$defs/operation_id" },
+        "body_encoding": { "type": "string", "enum": ["json", "form_urlencoded", "multipart", "none"] }
+      },
+      "additionalProperties": false
+    },
+    "observation_step": {
+      "type": "object",
+      "required": ["observation_id", "actor_id", "operation_id"],
+      "properties": {
+        "observation_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "operation_id": { "$ref": "#/$defs/operation_id" }
+      },
+      "additionalProperties": false
+    },
+    "assignment": {
+      "type": "object",
+      "required": ["step_id", "location", "field", "value", "generation_source"],
+      "properties": {
+        "step_id": { "type": "string", "minLength": 1 },
+        "location": { "type": "string", "enum": ["path", "query", "header", "body"] },
+        "field": { "type": "string", "minLength": 1 },
+        "value": {},
+        "generation_source": { "type": "string", "enum": ["recorded", "deterministic_boundary", "llm_runtime_hint", "external_parameter"] }
+      },
+      "additionalProperties": false
+    },
+    "artifact_record_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "input_variant": {
+      "type": "object",
+      "required": ["variant_id", "assignments"],
+      "properties": {
+        "variant_id": { "type": "string", "minLength": 1 },
+        "assignments": { "type": "array", "items": { "$ref": "#/$defs/assignment" } },
+        "expected_ui_acceptance": { "type": ["boolean", "null"] },
+        "variant_provenance_version": { "const": "v2" },
+        "variant_role": { "enum": ["baseline", "candidate"] },
+        "variant_source": { "enum": ["recorded", "deterministic_boundary", "ui_constraint", "external_parameter"] },
+        "constraint_candidate_ref": {
+          "allOf": [
+            { "$ref": "#/$defs/artifact_record_ref" },
+            { "properties": { "artifact_type": { "const": "constraint_input_audit" } } }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["variant_provenance_version"] },
+          "then": { "required": ["variant_role", "variant_source"] }
+        },
+        {
+          "if": { "required": ["variant_source"], "properties": { "variant_source": { "const": "ui_constraint" } } },
+          "then": {
+            "required": ["variant_provenance_version", "variant_role", "constraint_candidate_ref"],
+            "properties": { "variant_role": { "const": "candidate" } }
+          },
+          "else": { "not": { "required": ["constraint_candidate_ref"] } }
+        },
+        {
+          "if": { "required": ["constraint_candidate_ref"] },
+          "then": {
+            "required": ["variant_provenance_version", "variant_role", "variant_source"],
+            "properties": {
+              "variant_role": { "const": "candidate" },
+              "variant_source": { "const": "ui_constraint" }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "value_transform": {
+      "oneOf": [
+        { "type": "object", "required": ["type"], "properties": { "type": { "const": "identity" } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "factor"], "properties": { "type": { "const": "number_multiply" }, "factor": { "enum": [-1, 1] } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "factor", "evidence_ref"], "properties": { "type": { "const": "unit_scale" }, "factor": { "type": "integer", "minimum": 1 }, "evidence_ref": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "mapping", "evidence_ref"], "properties": { "type": { "const": "enum_map" }, "mapping": { "type": "object", "minProperties": 1, "additionalProperties": { "type": ["string", "number", "boolean", "null"] } }, "evidence_ref": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "mode"], "properties": { "type": { "const": "null_transition" }, "mode": { "enum": ["null_to_value", "value_to_null", "null_as_empty_collection"] } }, "additionalProperties": false }
+      ]
+    },
+    "value_ref": {
+      "type": "object", "required": ["role", "path", "value_type"],
+      "properties": {
+        "role": {"anyOf": [{"enum": ["before", "after", "producer_request", "producer_response", "producer_status", "after_status", "source_query", "followup_query", "observation", "item"]}, {"type": "string", "pattern": "^((actor|joint)_(before|after):[A-Za-z][A-Za-z0-9_-]{0,63}|followup_query:[A-Za-z0-9]+)$"}]},
+        "path": {"type": "string", "minLength": 1},
+        "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}
+      }, "additionalProperties": false,
+      "allOf": [{"if": {"properties": {"role": {"enum": ["producer_status", "after_status"]}}}, "then": {"properties": {"path": {"const": "$"}, "value_type": {"const": "integer"}}}}]
+    },
+    "role_operand": {
+      "type": "object", "required": ["source", "ref"],
+      "properties": {"source": {"const": "role"}, "ref": {"$ref": "#/$defs/value_ref"}},
+      "additionalProperties": false
+    },
+    "transition_fact_constant": {
+      "type": "object",
+      "required": ["source", "fact_ref", "value_type", "value"],
+      "properties": {
+        "source": {"const": "transition_fact"},
+        "fact_ref": {"type": "string", "pattern": "^transition-fact-[0-9a-f]{24}$"},
+        "value_type": {"enum": ["boolean", "integer", "number"]},
+        "value": {"type": ["boolean", "integer", "number"]}
+      },
+      "additionalProperties": false
+    },
+    "located_member_field_ref": {
+      "type": "object",
+      "required": ["source", "role", "collection_path", "field_path", "value_type", "member", "identity"],
+      "properties": {
+        "source": {"const": "collection_member"},
+        "role": {"enum": ["before", "after"]},
+        "collection_path": {"type": "string", "minLength": 1},
+        "field_path": {"type": "string", "minLength": 1},
+        "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]},
+        "member": {"$ref": "#/$defs/role_operand"},
+        "identity": {"$ref": "#/$defs/member_identity"}
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object", "required": ["paths", "semantics"],
+      "properties": {
+        "paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "semantics": {"const": "strict-tuple"}
+      }, "additionalProperties": false
+    },
+    "member_identity": {
+      "type": "object", "required": ["field_pairs", "semantics"],
+      "properties": {
+        "field_pairs": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "type": "object", "required": ["member_path", "collection_item_path"],
+            "properties": {
+              "member_path": {"type": "string", "minLength": 1},
+              "collection_item_path": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        },
+        "semantics": {"const": "strict-tuple"}
+      }, "additionalProperties": false
+    },
+    "request_operand": {"type": "object", "required": ["source", "ref"], "properties": {"source": {"const": "request"}, "ref": {"type": "object", "required": ["role", "location", "path", "value_type"], "properties": {"role": {"enum": ["observation_request", "source_query_request", "followup_query_request", "producer_request"]}, "location": {"enum": ["query", "body", "path", "headers"]}, "path": {"type": "string", "minLength": 1}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}}, "additionalProperties": false}}, "additionalProperties": false},
+    "hypothesis_operand": {"type": "object", "required": ["source", "value_type", "value", "evidence_refs", "rationale"], "properties": {"source": {"const": "hypothesis"}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}, "value": {}, "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}, "rationale": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "numeric_hypothesis_operand": {"type": "object", "required": ["source", "value_type", "value", "evidence_refs", "rationale"], "properties": {"source": {"const": "hypothesis"}, "value_type": {"enum": ["integer", "number"]}, "value": {}, "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}, "rationale": {"type": "string", "minLength": 1}, "lexical": {"type": ["string", "null"], "pattern": "^-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?$"}}, "additionalProperties": false, "allOf": [{"if": {"properties": {"value_type": {"const": "number"}}}, "then": {"required": ["lexical"], "properties": {"lexical": {"type": "string"}}}}]},
+    "numeric_request_operand": {"type": "object", "required": ["source", "ref"], "properties": {"source": {"const": "request"}, "ref": {"type": "object", "required": ["role", "location", "path", "value_type"], "properties": {"role": {"const": "producer_request"}, "location": {"const": "body"}, "path": {"type": "string", "minLength": 1}, "value_type": {"enum": ["integer", "number"]}}, "additionalProperties": false}}, "additionalProperties": false},
+    "single_state_operand": {"oneOf": [{"$ref": "#/$defs/role_operand"}, {"$ref": "#/$defs/request_operand"}, {"$ref": "#/$defs/hypothesis_operand"}]},
+    "equality_predicate": {"type":"object","required":["family","operator","left","right"],"properties":{"family":{"const":"P02"},"operator":{"enum":["eq","neq","numeric_eq","numeric_neq","lt","le","gt","ge"]},"left":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"right":{"$ref":"#/$defs/single_state_operand"}},"additionalProperties":false},
+    "numeric_delta_predicate": {"additionalProperties":false,"properties":{"family":{"const":"P06","type":"string"},"before":{"anyOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"after":{"anyOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"delta":{"anyOf":[{"$ref":"#/$defs/role_operand"},{"$ref":"#/$defs/transition_fact_constant"},{"$ref":"#/$defs/numeric_hypothesis_operand"},{"$ref":"#/$defs/numeric_request_operand"}]},"multiplier":{"enum":[-1,1],"type":"integer"},"numeric_mode":{"enum":["exact","approximate"],"type":"string"},"unit":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]},"tolerance":{"anyOf":[{"$ref":"#/$defs/numeric_hypothesis_operand"},{"type":"null"}]},"tolerance_kind":{"anyOf":[{"enum":["absolute","relative"],"type":"string"},{"type":"null"}]},"rounding":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]},"conversions":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]}},"required":["family","before","after","delta"],"type":"object","allOf":[{"if":{"required":["numeric_mode"],"properties":{"numeric_mode":{"const":"approximate"}}},"then":{"required":["tolerance","tolerance_kind"],"properties":{"tolerance":{"$ref":"#/$defs/numeric_hypothesis_operand"},"tolerance_kind":{"enum":["absolute","relative"]}}},"else":{"properties":{"tolerance":{"type":"null"},"tolerance_kind":{"type":"null"}}}},{"if":{"properties":{"delta":{"properties":{"source":{"enum":["hypothesis","request"]}}}}},"then":{"required":["unit"],"properties":{"unit":{"allOf":[{"$ref":"#/$defs/hypothesis_operand"},{"properties":{"value_type":{"const":"string"},"value":{"type":"string","minLength":1}}}]}}}}]},
+    "preservation_predicate": {"type":"object","required":["family","operator","left","right"],"properties":{"family":{"const":"P20"},"operator":{"const":"equal"},"left":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"right":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"projection_ref":{"type":["string","null"],"pattern":"^state-projection-[0-9a-f]{24}$"},"projection":{"type":"array","uniqueItems":true,"items":{"type":"string","pattern":"^\\$(?!.*\\[\\*\\])"}}},"additionalProperties":false,"allOf":[{"if":{"required":["projection"],"properties":{"projection":{"minItems":1}}},"then":{"properties":{"left":{"properties":{"value_type":{"const":"object"}}},"right":{"properties":{"value_type":{"const":"object"}}}}}}]},
+    "rejection_predicate": {"allOf":[{"$ref":"#/$defs/equality_predicate"},{"properties":{"left":{"allOf":[{"$ref":"#/$defs/value_ref"},{"properties":{"role":{"enum":["producer_status","producer_response"]}}}]},"right":{"oneOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"object","required":["source","ref"],"properties":{"source":{"const":"role"},"ref":{"allOf":[{"$ref":"#/$defs/value_ref"},{"properties":{"role":{"enum":["producer_status","producer_response"]}}}]}},"additionalProperties":false}]}}}]},
+    "repeat_equal_predicate": {"type":"object","required":["family","projection"],"properties":{"family":{"const":"repeat_equal"},"projection":{"$ref":"#/$defs/preservation_predicate"}},"additionalProperties":false},
+    "repeat_rejected_predicate": {"type":"object","required":["family","projection"],"properties":{"family":{"const":"repeat_rejected"},"projection":{"$ref":"#/$defs/preservation_predicate"},"rejection":{"oneOf":[{"$ref":"#/$defs/rejection_predicate"},{"type":"null"}]}},"additionalProperties":false},
+    "repeat_delta_predicate": {"type":"object","required":["family","delta"],"properties":{"family":{"const":"repeat_delta"},"delta":{"$ref":"#/$defs/numeric_delta_predicate"}},"additionalProperties":false},
+    "predicate": {
+      "oneOf": [
+        {"$ref":"#/$defs/repeat_equal_predicate"},
+        {"$ref":"#/$defs/repeat_rejected_predicate"},
+        {"$ref":"#/$defs/repeat_delta_predicate"},
+        {"additionalProperties":false,"properties":{"family":{"const":"P08","type":"string"},"operator":{"enum":["add","subtract","multiply","divide","linear_delta"],"type":"string"},"left":{"anyOf":[{"$ref":"#/$defs/role_operand"},{"$ref":"#/$defs/numeric_hypothesis_operand"},{"$ref":"#/$defs/request_operand"}]},"right":{"anyOf":[{"$ref":"#/$defs/role_operand"},{"$ref":"#/$defs/numeric_hypothesis_operand"},{"$ref":"#/$defs/request_operand"}]},"output":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/numeric_hypothesis_operand"}]},"numeric_mode":{"enum":["exact","approximate"],"type":"string"},"units":{"$ref":"#/$defs/hypothesis_operand"},"tolerance":{"anyOf":[{"$ref":"#/$defs/numeric_hypothesis_operand"},{"type":"null"}]},"tolerance_kind":{"anyOf":[{"enum":["absolute","relative"],"type":"string"},{"type":"null"}]},"rounding":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]},"conversions":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]},"terms":{"type":"array","minItems":2,"maxItems":16,"items":{"type":"object","required":["before","after","coefficient"],"properties":{"before":{"$ref":"#/$defs/value_ref"},"after":{"$ref":"#/$defs/value_ref"},"coefficient":{"$ref":"#/$defs/numeric_hypothesis_operand"}},"additionalProperties":false}}},"required":["family","operator","output","units"],"type":"object","allOf":[{"if":{"required":["numeric_mode"],"properties":{"numeric_mode":{"const":"approximate"}}},"then":{"required":["tolerance","tolerance_kind"],"properties":{"tolerance":{"$ref":"#/$defs/numeric_hypothesis_operand"},"tolerance_kind":{"enum":["absolute","relative"]}}},"else":{"properties":{"tolerance":{"type":"null"},"tolerance_kind":{"type":"null"}}}},{"if":{"properties":{"operator":{"const":"linear_delta"}}},"then":{"required":["terms"],"properties":{"output":{"$ref":"#/$defs/numeric_hypothesis_operand"}},"not":{"anyOf":[{"required":["left"]},{"required":["right"]}]}},"else":{"required":["left","right"],"properties":{"output":{"$ref":"#/$defs/value_ref"}},"not":{"required":["terms"]}}}]},
+        {"additionalProperties":false,"properties":{"family":{"const":"P19","type":"string"},"operator":{"enum":["count","sum","min","max"],"type":"string"},"collection":{"$ref":"#/$defs/value_ref"},"scope":{"enum":["actual_response","finite_query_plan"]},"item":{"anyOf":[{"$ref":"#/$defs/value_ref"},{"type":"null"}]},"factor":{"anyOf":[{"$ref":"#/$defs/value_ref"},{"type":"null"}]},"output":{"allOf":[{"$ref":"#/$defs/value_ref"},{"properties":{"value_type":{"enum":["integer","number"]}}}]},"numeric_mode":{"enum":["exact","approximate"],"type":"string"},"units":{"$ref":"#/$defs/hypothesis_operand"},"tolerance":{"anyOf":[{"$ref":"#/$defs/numeric_hypothesis_operand"},{"type":"null"}]},"tolerance_kind":{"anyOf":[{"enum":["absolute","relative"],"type":"string"},{"type":"null"}]},"rounding":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]},"conversions":{"anyOf":[{"$ref":"#/$defs/hypothesis_operand"},{"type":"null"}]}},"required":["family","operator","collection","scope","output","units"],"type":"object","allOf":[{"if":{"required":["numeric_mode"],"properties":{"numeric_mode":{"const":"approximate"}}},"then":{"required":["tolerance","tolerance_kind"],"properties":{"tolerance":{"$ref":"#/$defs/numeric_hypothesis_operand"},"tolerance_kind":{"enum":["absolute","relative"]}}},"else":{"properties":{"tolerance":{"type":"null"},"tolerance_kind":{"type":"null"}}}}]},
+        {"additionalProperties": false, "properties": {"family": {"const": "P16", "type": "string"}, "before": {"$ref": "#/$defs/value_ref"}, "after": {"$ref": "#/$defs/value_ref"}, "key": {"pattern": "^\\$(?:\\.[^.*\\[\\]]+)*$", "type": "string"}, "direction": {"enum": ["asc", "desc"], "type": "string"}, "nulls": {"enum": ["first", "last"], "type": "string"}, "ties": {"const": "unordered", "type": "string"}, "comparison_basis": {"enum": ["full_json_value", "frozen_projection", "identity_tuple"], "type": "string"}, "projection": {"items": {"type": "string"}, "type": "array"}, "identity": {"anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]}, "parameters": {"$ref": "#/$defs/hypothesis_operand"}}, "required": ["family", "before", "after", "key", "parameters"], "type": "object", "allOf": [{"if": {"properties": {"comparison_basis": {"const": "identity_tuple"}}, "required": ["comparison_basis"]}, "then": {"required": ["identity"], "properties": {"identity": {"$ref": "#/$defs/identity"}, "projection": {"maxItems": 0}}}}, {"if": {"required": ["comparison_basis"], "properties": {"comparison_basis": {"const": "frozen_projection"}}}, "then": {"required": ["projection"], "properties": {"identity": {"type": "null"}, "projection": {"minItems": 1, "uniqueItems": true}}}}, {"if": {"required": ["comparison_basis"], "properties": {"comparison_basis": {"const": "full_json_value"}}}, "then": {"properties": {"identity": {"type": "null"}, "projection": {"maxItems": 0}}}}]},
+        {"type": "object", "required": ["family", "operator", "target", "right"], "properties": {"family": {"const": "P09"}, "operator": {"enum": ["contains", "prefix", "suffix"]}, "target": {"$ref": "#/$defs/value_ref"}, "right": {"$ref": "#/$defs/single_state_operand"}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "target", "format", "pattern", "flags"], "properties": {"family": {"const": "P10"}, "target": {"$ref": "#/$defs/value_ref"}, "format": {"enum": ["date_yyyy_mm_dd", "pattern"]}, "pattern": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/hypothesis_operand"}]}, "flags": {"const": 0}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "operator", "right", "target", "projection", "unit"], "properties": {"family": {"const": "P11"}, "operator": {"enum": ["eq", "neq", "lt", "le", "gt", "ge"]}, "right": {"$ref": "#/$defs/single_state_operand"}, "target": {"$ref": "#/$defs/value_ref"}, "projection": {"const": "count"}, "unit": {"const": "items"}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "operator", "right", "target", "projection", "unit", "newline", "empty"], "properties": {"family": {"const": "P11"}, "operator": {"enum": ["eq", "neq", "lt", "le", "gt", "ge"]}, "right": {"$ref": "#/$defs/single_state_operand"}, "target": {"$ref": "#/$defs/value_ref"}, "projection": {"const": "length"}, "unit": {"enum": ["unicode_code_point", "utf16_code_unit"]}, "newline": {"enum": ["preserve", "html_textarea_api"]}, "empty": {"enum": ["compare", "allow"]}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "operator", "target", "lower", "upper", "lower_inclusive", "upper_inclusive"], "properties": {"family": {"const": "P03"}, "operator": {"const": "range"}, "target": {"$ref": "#/$defs/value_ref"}, "lower": {"$ref": "#/$defs/single_state_operand"}, "upper": {"$ref": "#/$defs/single_state_operand"}, "lower_inclusive": {"type": "boolean"}, "upper_inclusive": {"type": "boolean"}, "domain": {"type": "null"}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "operator", "target", "domain"], "properties": {"family": {"const": "P03"}, "operator": {"const": "in"}, "target": {"$ref": "#/$defs/value_ref"}, "domain": {"$ref": "#/$defs/single_state_operand"}, "lower": {"type": "null"}, "upper": {"type": "null"}, "lower_inclusive": {"const": true}, "upper_inclusive": {"const": true}}, "additionalProperties": false},
+        {"type":"object","required":["family","collection","scope","item_guard","body"],"properties":{"family":{"const":"forall"},"collection":{"$ref":"#/$defs/value_ref"},"scope":{"enum":["actual_response","finite_query_plan"]},"item_guard":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/equality_predicate"}]},"body":{"oneOf":[{"type":"object","required":["family","operator","target","member","identity"],"properties":{"family":{"const":"P01"},"operator":{"enum":["exists","absent","present"]},"target":{"$ref":"#/$defs/value_ref"},"member":{"oneOf":[{"$ref":"#/$defs/role_operand"},{"type":"null"}]},"identity":{"oneOf":[{"$ref":"#/$defs/member_identity"},{"type":"null"}]},"absent_statuses":{"type":"array","maxItems":0}},"additionalProperties":false},{"type":"object","required":["family","target","expected_type"],"properties":{"family":{"const":"P21"},"target":{"$ref":"#/$defs/value_ref"},"expected_type":{"enum":["object","array","string","number","integer","boolean","null"]}},"additionalProperties":false},{"$ref":"#/$defs/equality_predicate"},{"type":"object","required":["family","operator","target","lower","upper","lower_inclusive","upper_inclusive"],"properties":{"family":{"const":"P03"},"operator":{"const":"range"},"target":{"$ref":"#/$defs/value_ref"},"lower":{"$ref":"#/$defs/single_state_operand"},"upper":{"$ref":"#/$defs/single_state_operand"},"lower_inclusive":{"type":"boolean"},"upper_inclusive":{"type":"boolean"},"domain":{"type":"null"}},"additionalProperties":false},{"type":"object","required":["family","operator","target","domain"],"properties":{"family":{"const":"P03"},"operator":{"const":"in"},"target":{"$ref":"#/$defs/value_ref"},"domain":{"$ref":"#/$defs/single_state_operand"},"lower":{"type":"null"},"upper":{"type":"null"},"lower_inclusive":{"const":true},"upper_inclusive":{"const":true}},"additionalProperties":false},{"type":"object","required":["family","operator","target","right"],"properties":{"family":{"const":"P09"},"operator":{"enum":["contains","prefix","suffix"]},"target":{"$ref":"#/$defs/value_ref"},"right":{"$ref":"#/$defs/single_state_operand"}},"additionalProperties":false},{"type":"object","required":["family","target","format","pattern","flags"],"properties":{"family":{"const":"P10"},"target":{"$ref":"#/$defs/value_ref"},"format":{"enum":["date_yyyy_mm_dd","pattern"]},"pattern":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/hypothesis_operand"}]},"flags":{"const":0}},"additionalProperties":false},{"type":"object","required":["family","operator","right","target","projection","unit"],"properties":{"family":{"const":"P11"},"operator":{"enum":["eq","neq","lt","le","gt","ge"]},"right":{"$ref":"#/$defs/single_state_operand"},"target":{"$ref":"#/$defs/value_ref"},"projection":{"const":"count"},"unit":{"const":"items"}},"additionalProperties":false},{"type":"object","required":["family","operator","right","target","projection","unit","newline","empty"],"properties":{"family":{"const":"P11"},"operator":{"enum":["eq","neq","lt","le","gt","ge"]},"right":{"$ref":"#/$defs/single_state_operand"},"target":{"$ref":"#/$defs/value_ref"},"projection":{"const":"length"},"unit":{"enum":["unicode_code_point","utf16_code_unit"]},"newline":{"enum":["preserve","html_textarea_api"]},"empty":{"enum":["compare","allow"]}},"additionalProperties":false},{"type":"object","required":["family","collection","identity","scope"],"properties":{"family":{"const":"P15"},"collection":{"$ref":"#/$defs/value_ref"},"identity":{"$ref":"#/$defs/identity"},"scope":{"const":"actual_response"}},"additionalProperties":false}]}},"additionalProperties":false},
+
+        {"type":"object","required":["family","operator","target","member","identity"],"properties":{"family":{"const":"P01"},"operator":{"enum":["exists","absent","present"]},"target":{"$ref":"#/$defs/value_ref"},"member":{"oneOf":[{"$ref":"#/$defs/role_operand"},{"type":"null"}]},"identity":{"oneOf":[{"$ref":"#/$defs/member_identity"},{"type":"null"}]},"absent_statuses":{"type":"array","items":{"const":404},"uniqueItems":true,"maxItems":1}},"additionalProperties":false,"allOf":[{"if":{"required":["absent_statuses"],"properties":{"absent_statuses":{"minItems":1}}},"then":{"properties":{"operator":{"const":"absent"},"target":{"properties":{"value_type":{"const":"object"}}},"member":{"type":"null"},"identity":{"type":"null"}}}}]},
+        {"type": "object", "required": ["family", "target", "expected_type"], "properties": {"family": {"const": "P21"}, "target": {"$ref": "#/$defs/value_ref"}, "expected_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "operator", "collection", "right"], "properties": {"family": {"const": "P11"}, "operator": {"const": "le"}, "collection": {"$ref": "#/$defs/value_ref"}, "right": {"type": "object", "required": ["source", "ref"], "properties": {"source": {"const": "request"}, "ref": {"type": "object", "required": ["role", "location", "path", "value_type"], "properties": {"role": {"const": "observation_request"}, "location": {"const": "query"}, "path": {"const": "$.limit"}, "value_type": {"const": "integer"}}, "additionalProperties": false}}, "additionalProperties": false}}, "additionalProperties": false},
+        {"$ref":"#/$defs/equality_predicate"},
+        {"type":"object","required":["family","operator","before","after","from_value","to_value"],"properties":{"family":{"const":"P04"},"operator":{"enum":["from_to","toggle"]},"before":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"after":{"oneOf":[{"$ref":"#/$defs/value_ref"},{"$ref":"#/$defs/located_member_field_ref"}]},"from_value":{"oneOf":[{"$ref":"#/$defs/transition_fact_constant"},{"$ref":"#/$defs/single_state_operand"}]},"to_value":{"oneOf":[{"$ref":"#/$defs/transition_fact_constant"},{"$ref":"#/$defs/single_state_operand"}]}},"additionalProperties":false},
+        {"type": "object", "required": ["family", "operator", "before", "after"], "properties": {"family": {"const": "P07"}, "operator": {"enum": ["gt", "lt", "ge", "le"]}, "before": {"oneOf": [{"$ref": "#/$defs/value_ref"}, {"$ref": "#/$defs/located_member_field_ref"}]}, "after": {"oneOf": [{"$ref": "#/$defs/value_ref"}, {"$ref": "#/$defs/located_member_field_ref"}]}}, "additionalProperties": false},
+        {"$ref":"#/$defs/numeric_delta_predicate"},
+        {"type": "object", "required": ["family", "before", "after", "delta"], "properties": {"family": {"const": "P12"}, "before": {"$ref": "#/$defs/value_ref"}, "after": {"$ref": "#/$defs/value_ref"}, "delta": {"type": "integer", "not": {"const": 0}}}, "additionalProperties": false},
+        {"additionalProperties": false, "properties": {"family": {"const": "P13", "type": "string"}, "operator": {"enum": ["contains", "not_contains"], "type": "string"}, "collection": {"$ref": "#/$defs/value_ref"}, "member": {"anyOf": [{"$ref": "#/$defs/role_operand"}, {"$ref": "#/$defs/request_operand"}, {"$ref": "#/$defs/hypothesis_operand"}, {"$ref": "#/$defs/numeric_hypothesis_operand"}]}, "identity": {"anyOf": [{"$ref": "#/$defs/member_identity"}, {"type": "null"}]}}, "required": ["family", "operator", "collection", "member"], "type": "object", "allOf": [{"if": {"properties": {"member": {"properties": {"source": {"const": "hypothesis"}, "value_type": {"const": "number"}}, "required": ["source", "value_type"]}}}, "then": {"properties": {"member": {"$ref": "#/$defs/numeric_hypothesis_operand"}}}}]},
+        {"type": "object", "required": ["family", "operator", "before", "after", "member", "identity"], "properties": {"family": {"const": "P14"}, "operator": {"enum": ["added", "removed"]}, "before": {"$ref": "#/$defs/value_ref"}, "after": {"$ref": "#/$defs/value_ref"}, "member": {"$ref": "#/$defs/role_operand"}, "identity": {"$ref": "#/$defs/member_identity"}}, "additionalProperties": false},
+        {"type": "object", "required": ["family", "collection", "identity"], "properties": {"family": {"const": "P15"}, "collection": {"$ref": "#/$defs/value_ref"}, "identity": {"$ref": "#/$defs/identity"}, "scope": {"enum": ["actual_response", "finite_query_plan"]}}, "additionalProperties": false},
+        {"additionalProperties": false, "properties": {"family": {"const": "P17", "type": "string"}, "operator": {"enum": ["subset", "superset", "equal"], "type": "string"}, "left": {"$ref": "#/$defs/value_ref"}, "right": {"$ref": "#/$defs/value_ref"}, "identity": {"anyOf": [{"$ref": "#/$defs/identity"}, {"type": "null"}]}, "expected_difference": {"type": "null"}, "representation": {"enum": ["set", "multiset", "sequence"], "type": "string"}, "comparison_basis": {"enum": ["full_json_value", "frozen_projection", "identity_tuple"], "type": "string"}, "projection": {"items": {"type": "string"}, "type": "array"}}, "required": ["family", "operator", "left", "right"], "type": "object", "allOf": [{"if": {"properties": {"comparison_basis": {"const": "identity_tuple"}}}, "then": {"required": ["identity"], "properties": {"identity": {"$ref": "#/$defs/identity"}, "projection": {"maxItems": 0}}}}, {"if": {"required": ["comparison_basis"], "properties": {"comparison_basis": {"const": "frozen_projection"}}}, "then": {"required": ["projection"], "properties": {"identity": {"type": "null"}, "projection": {"minItems": 1, "uniqueItems": true}}}}, {"if": {"required": ["comparison_basis"], "properties": {"comparison_basis": {"const": "full_json_value"}}}, "then": {"properties": {"identity": {"type": "null"}, "projection": {"maxItems": 0}}}}, {"if": {"required": ["representation"], "properties": {"representation": {"enum": ["multiset", "sequence"]}}}, "then": {"properties": {"operator": {"const": "equal"}}}}]},
+        {"type": "object", "required": ["family", "operator", "source", "partitions", "identity", "expected_remainder"], "properties": {"family": {"const": "P18"}, "operator": {"enum": ["pairwise_disjoint", "complete_union", "partition_difference"]}, "source": {"$ref": "#/$defs/value_ref"}, "partitions": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/value_ref"}}, "identity": {"$ref": "#/$defs/identity"}, "expected_remainder": {"oneOf": [{"$ref": "#/$defs/value_ref"}, {"type": "null"}]}}, "additionalProperties": false},
+        {"$ref":"#/$defs/preservation_predicate"},
+        {"type": "object", "required": ["type", "response_ref"], "properties": {"type": {"const": "status_success"}, "response_ref": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+        {"type":"object","required":["type","response_ref","expected_class"],"properties":{"type":{"const":"status_class"},"response_ref":{"type":"string","minLength":1},"expected_class":{"enum":["client_error","success_or_client_error"]}},"additionalProperties":false},
+        {"type": "object", "required": ["type", "response_ref", "target_path", "expected_type"], "properties": {"type": {"const": "schema_type"}, "response_ref": {"type": "string", "minLength": 1}, "target_path": {"type": "string"}, "expected_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}}, "additionalProperties": false}
+      ]
+    },
+    "assertion": {
+      "type": "object",
+      "required": ["assertion_id", "assertion_source", "assertion_class", "predicate", "evidence_refs"],
+      "properties": {
+        "assertion_id": { "type": "string", "minLength": 1 },
+        "assertion_source": { "$ref": "#/$defs/assertion_source" },
+        "assertion_class": { "type": "string", "enum": ["business", "generic"] },
+        "predicate": { "$ref": "#/$defs/predicate" },
+        "evidence_refs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "test_case": {
+      "type": "object",
+      "required": ["test_id", "actors", "setup_steps", "observe_before", "action_steps", "observe_after", "input_variants", "assertions", "calibration_policy"],
+      "properties": {
+        "test_id": { "type": "string", "minLength": 1 },
+        "sequence_ref": { "type": ["string", "null"] },
+        "actors": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/actor_id" } },
+        "setup_steps": { "type": "array", "items": { "$ref": "#/$defs/step" } },
+        "observe_before": { "type": "array", "items": { "$ref": "#/$defs/observation_step" } },
+        "action_steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/step" } },
+        "observe_after": { "type": "array", "items": { "$ref": "#/$defs/observation_step" } },
+        "input_variants": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/input_variant" } },
+        "assertions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/assertion" } },
+        "calibration_policy": {
+          "type": "object",
+          "required": ["normal_control_runs", "drop_on_normal_failure"],
+          "properties": {
+            "normal_control_runs": { "type": "integer", "minimum": 1 },
+            "drop_on_normal_failure": { "const": true }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

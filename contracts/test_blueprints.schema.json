@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test_blueprints.schema.json",
+  "title": "test_blueprints — explicit Stage 5 execution-plan inputs",
+  "description": "Execution plans selected independently from assertion proposals. The typed loader enforces every x-unique-by annotation, resolves constraint candidate references, and requires an explicit non-constraint baseline whenever ui_constraint variants are present before build_test_suite is called.",
+  "type": "object",
+  "required": ["metadata", "blueprints"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "test_blueprints" },
+        "stage": { "const": "stage5" }
+      }
+    },
+    "blueprints": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/test_blueprint" },
+      "x-unique-by": "test_id",
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "artifact_record_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "test_blueprint": {
+      "type": "object",
+      "required": ["test_id", "actors", "setup_steps", "observe_before", "action_steps", "observe_after", "input_variants", "assertion_candidate_ids", "calibration_policy", "provenance_refs"],
+      "properties": {
+        "test_id": { "type": "string", "minLength": 1 },
+        "sequence_ref": { "type": ["string", "null"] },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "test_suite.schema.json#/$defs/actor_id" }
+        },
+        "setup_steps": {
+          "type": "array",
+          "items": { "$ref": "test_suite.schema.json#/$defs/step" },
+          "x-unique-by": "step_id"
+        },
+        "observe_before": {
+          "type": "array",
+          "items": { "$ref": "test_suite.schema.json#/$defs/observation_step" },
+          "x-unique-by": "observation_id"
+        },
+        "action_steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "test_suite.schema.json#/$defs/step" },
+          "x-unique-by": "step_id"
+        },
+        "observe_after": {
+          "type": "array",
+          "items": { "$ref": "test_suite.schema.json#/$defs/observation_step" },
+          "x-unique-by": "observation_id"
+        },
+        "input_variants": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "test_suite.schema.json#/$defs/input_variant" },
+          "x-unique-by": "variant_id"
+        },
+        "assertion_candidate_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "calibration_policy": {
+          "$ref": "test_suite.schema.json#/$defs/test_case/properties/calibration_policy"
+        },
+        "provenance_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/artifact_record_ref" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

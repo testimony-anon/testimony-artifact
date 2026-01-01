@@ -1,0 +1,84 @@
+{
+  "metadata": {
+    "artifact_type": "run_config",
+    "schema_version": "1.0.0",
+    "run_id": "r20260920-082714-e92e",
+    "stage": "stage0",
+    "created_at": "2026-09-20T08:27:14.691+00:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": []
+  },
+  "app_profile": {
+    "base_url": "http://127.0.0.1:18090",
+    "auth": {
+      "method": "none",
+      "token_scheme": "Token"
+    },
+    "reset": {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "subject_adapters.docker_single_local",
+        "reset",
+        "--adapter",
+        "fixtures/adapters/umami_current_local.json",
+        "--output",
+        "unused.json"
+      ],
+      "verify_request": {
+        "method": "GET",
+        "path": "/api/heartbeat",
+        "expect_status": 200,
+        "expect_json_path": "$.ok",
+        "expect_json_equals": true
+      }
+    },
+    "rate_limit": {
+      "max_concurrency": 1,
+      "min_interval_ms": 50,
+      "retry_on_429": {
+        "max_retries": 1
+      }
+    },
+    "drive_mode": "replay",
+    "actors": [
+      {
+        "actor_id": "guest",
+        "auth": {
+          "method": "none",
+          "token_scheme": "Token"
+        }
+      },
+      {
+        "actor_id": "actor_a",
+        "auth": {
+          "method": "none",
+          "token_scheme": "Token"
+        }
+      },
+      {
+        "actor_id": "actor_b",
+        "auth": {
+          "method": "none",
+          "token_scheme": "Token"
+        }
+      }
+    ]
+  },
+  "auth_context": {
+    "verified": true,
+    "method": "none",
+    "auth_mode": "auto_login",
+    "actor_id": "guest",
+    "verified_at": "2026-09-20T08:27:14.690+00:00",
+    "session_ref": "guest"
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

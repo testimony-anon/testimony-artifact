@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "grounded_report.schema.json",
+  "title": "grounded_report — real replay and counterexample results (produced by Stage 6; decision record 000 §2.8, 007)",
+  "description": "For each candidate sequence/skill, the real replay result (pass/fail, per-step evidence, the resolution result of every binding) and, for each dependency edge used, the counterexample (counterfactual) experiment result (whether the consumer fails in the qualified way after the producer value is perturbed, and the hard/soft/inconclusive decision derived from it). Sequences whose replay passes get status written back as grounded, failures as validation_failed (kept, not deleted); the hard/soft strength of edges is written back to dependency_graph. removed_false_edges is narrowed by 007: it holds only true false edges whose value flow does not even hold; soft edges are not listed (their value flow is real; they are retained and marked soft).",
+  "type": "object",
+  "required": ["metadata", "results", "removed_false_edges"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "grounded_report" },
+        "stage": { "const": "stage6" }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/replay_result" }
+    },
+    "seeding_record": {
+      "type": "array",
+      "description": "(decision record 010 D62) Seed derivation record for each replay unit: number of seed resources and the derivation basis (the maximum list index N in bindings.from_field of the sequence to be grounded → seed N+1). Optional.",
+      "items": {
+        "type": "object",
+        "required": ["target_id", "seed_count", "basis"],
+        "properties": {
+          "target_id": { "type": "string", "minLength": 1, "x-volatility": "volatile" },
+          "seed_count": { "type": "integer", "minimum": 0, "description": "Number of resources seeded for this unit" },
+          "basis": { "type": "string", "description": "Derivation basis, e.g. 'maximum list index in bindings N=1 → seed N+1=2'" },
+          "resource": { "type": "string", "description": "Resource type seeded (V2: articles only)" }
+        },
+        "additionalProperties": false
+      },
+      "x-volatility": "volatile"
+    },
+    "counterexample_results": {
+      "type": "array",
+      "description": "D50 counterexample (counterfactual) experiment results, indexed by the dependency edges used (decision record 007 D50/D51). Each item records which edge's producer value was perturbed, the perturbation strategy, the consumer's measured status, whether it failed in the qualified way, and the dependency strength decided from it (and by majority vote). This is the structure that carries soft-edge decisions — soft edges stay in dependency_graph as usual (grounded:true, dependency_strength=soft) and do not enter removed_false_edges. Optional: may be an empty array or omitted when no edges were used.",
+      "items": { "$ref": "#/$defs/counterexample" }
+    },
+    "removed_false_edges": {
+      "type": "array",
+      "description": "(narrowed by 007) Only true false edges whose value flow does not even hold — edges the counterexample shows to be invalid as a whole and whose replay fails. Soft edges are not listed here (their value flow really exists and replay succeeds; they are merely not required, so they are retained and marked dependency_strength=soft).",
+      "items": {
+        "type": "object",
+        "required": ["producer", "consumer"],
+        "properties": {
+          "producer": { "$ref": "#/$defs/operation_id" },
+          "consumer": { "$ref": "#/$defs/operation_id" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "operation_id": {
+      "type": "string",
+      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+      "$comment": "operationId derived deterministically per D5",
+      "x-volatility": "structural"
+    },
+    "replay_result": {
+      "type": "object",
+      "required": ["target_type", "target_id", "passed", "steps"],
+      "properties": {
+        "target_type": {
+          "type": "string",
+          "enum": ["sequence", "skill"]
+        },
+        "target_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The sequence_id or skill_id that was replayed",
+          "x-volatility": "volatile"
+        },
+        "passed": {
+          "type": "boolean",
+          "description": "End-to-end pass/fail decision"
+        },
+        "steps": {
+          "type": "array",
+          "description": "Per-step evidence",
+          "items": {
+            "type": "object",
+            "required": ["step_index", "operation_id", "passed"],
+            "properties": {
+              "step_index": { "type": "integer", "minimum": 0 },
+              "operation_id": { "$ref": "#/$defs/operation_id" },
+              "passed": { "type": "boolean" },
+              "response_status": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 599,
+                "x-volatility": "volatile"
+              },
+              "error": { "type": "string", "x-volatility": "volatile" },
+              "bindings_resolved": {
+                "type": "array",
+                "description": "(007 D49) Result of every binding resolved into this step: whether the value was obtained and patched in successfully. Value-flow success is a requirement for grounding a sequence and is recorded per binding.",
+                "items": { "$ref": "#/$defs/binding_resolution" },
+                "x-volatility": "volatile"
+              }
+            },
+            "additionalProperties": false
+          },
+          "x-volatility": "volatile"
+        }
+      },
+      "additionalProperties": false
+    },
+    "binding_resolution": {
+      "type": "object",
+      "description": "(007 D49 + 012-A) Resolution result of a single binding during replay. The producer source location is expressed by the optional from_location; default/absent is equivalent to response_body.",
+      "required": ["from_step", "from_field", "to_location", "to_field", "resolved"],
+      "properties": {
+        "from_step": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index of the step that produces the value (same meaning as in a test_sequences binding)"
+        },
+        "from_field": {
+          "type": "string",
+          "description": "Producer value locator: when from_location=response_body, the existing response-body JSONPath/JSON Pointer; when from_location=response_header, a canonical lowercase header name or a controlled structured header selector (e.g. location.path[1])."
+        },
+        "from_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header"],
+          "description": "Source location of the producer value. Optional; default/absent is equivalent to response_body. The first batch of 012-A supports only response_body / response_header; cookie is not in the enum."
+        },
+        "to_location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "to_field": {
+          "type": "string",
+          "description": "Target location: the parameter name for path/query/header; a JSON Pointer for body"
+        },
+        "resolved": {
+          "type": "boolean",
+          "description": "Whether the binding was resolved successfully (value obtained and patched into the consumer); false means a value-flow break (producer_value_missing / consumer_patch_failed)"
+        },
+        "resolved_value": {
+          "type": "string",
+          "description": "Optional: the resolved literal value (volatile). Sensitive values (e.g. auth tokens) must be redacted per D18 and never stored in plaintext.",
+          "x-volatility": "volatile"
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "volatile"
+    },
+    "counterexample": {
+      "type": "object",
+      "description": "(007 D50) Counterfactual experiment result for one dependency edge that was used.",
+      "required": ["producer", "consumer", "perturbation", "consumer_failed", "dependency_strength"],
+      "properties": {
+        "producer": { "$ref": "#/$defs/operation_id" },
+        "consumer": { "$ref": "#/$defs/operation_id" },
+        "edge_kind": {
+          "type": "string",
+          "enum": ["data", "auth", "pagination"],
+          "description": "Kind of the edge under validation (corresponds to dependency_graph edge.kind); determines the qualified-failure status code and the perturbation strategy (D50 per-edge-kind)."
+        },
+        "perturbation": {
+          "type": "string",
+          "enum": ["replace_nonexistent", "drop_all_sources", "switch_alternative_source"],
+          "description": "Perturbation strategy (D50 per-edge-kind, M4): replace_nonexistent = replace with a non-existent/stale value (used to judge id/resource edges hard; stable 404); drop_all_sources = remove all sources of the same kind (used to judge the auth category hard; → 401); switch_alternative_source = switch to a legitimate alternative source (used to judge a single auth edge soft; still 200 = not required). Removing the path segment is forbidden (→ list-route false negative), and so is replacing with a bad token (→ 500 dirty signal)."
+        },
+        "consumer_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599,
+          "description": "Measured consumer response status code under the counterexample",
+          "x-volatility": "volatile"
+        },
+        "consumer_failed": {
+          "type": "boolean",
+          "description": "Whether the consumer failed in the qualified way (per-edge-kind check M3: 404 for id/resource edges, 401/403 for auth edges; incidental 5xx/429 or a broken template do not count as qualified failure)"
+        },
+        "dependency_strength": {
+          "type": "string",
+          "enum": ["hard", "soft", "inconclusive"],
+          "description": "Dependency strength decided from this counterexample (and by majority vote over multiple runs, S4), written back to dependency_graph edge.dependency_strength (D51)"
+        },
+        "sequence_id": {
+          "type": "string",
+          "description": "Optional: the replay sequence context the counterexample is based on",
+          "x-volatility": "volatile"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Optional: decision rationale / explanation of the qualified-failure classification",
+          "x-volatility": "volatile"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

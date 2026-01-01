@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "semantic_edge_audit.schema.json",
+  "title": "semantic_edge_audit — semantic edge proposal and two-arm adjudication audit (Stage 4)",
+  "type": "object",
+  "required": ["metadata", "proposal_runs", "candidates"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "semantic_edge_audit" },
+        "stage": { "const": "stage4" }
+      }
+    },
+    "proposal_runs": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/proposal_run" },
+      "x-volatility": "volatile"
+    },
+    "transform_evidence": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/unit_scale_evidence" },
+      "x-volatility": "structural"
+    },
+    "candidates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidate" },
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "observation_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id", "value_path"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 },
+        "value_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "unit_scale_pair": {
+      "type": "object",
+      "required": ["ui_observation_ref", "api_observation_ref", "ui_text_sha256", "parsed_ui_value", "api_value", "ratio"],
+      "properties": {
+        "ui_observation_ref": { "$ref": "#/$defs/observation_ref" },
+        "api_observation_ref": { "$ref": "#/$defs/observation_ref" },
+        "ui_text_sha256": { "$ref": "#/$defs/sha256" },
+        "parsed_ui_value": { "type": "number" },
+        "api_value": { "type": "number" },
+        "ratio": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "unit_scale_evidence": {
+      "type": "object",
+      "required": ["evidence_id", "quantity_key", "derivation_status", "factor", "pairs", "parser", "absolute_tolerance", "relative_tolerance", "derived_at"],
+      "properties": {
+        "evidence_id": { "type": "string", "minLength": 1 },
+        "quantity_key": { "type": "string", "minLength": 1 },
+        "derivation_status": { "enum": ["confirmed", "review_required", "rejected"] },
+        "factor": { "type": ["integer", "null"], "minimum": 1 },
+        "pairs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/unit_scale_pair" } },
+        "parser": { "const": "currency_decimal_v1" },
+        "absolute_tolerance": { "const": 1e-9 },
+        "relative_tolerance": { "const": 1e-9 },
+        "derived_at": { "type": "string", "format": "date-time", "x-volatility": "volatile" }
+      },
+      "additionalProperties": false
+    },
+    "actor_request_ref": {
+      "type": "object",
+      "required": ["actor_id", "request_ref"],
+      "properties": {
+        "actor_id": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+        "request_ref": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "proposal_run": {
+      "type": "object",
+      "required": ["proposal_run_id", "prompt_sha256", "evidence_sha256", "response_sha256", "model", "endpoint_shape", "temperature", "retry_count"],
+      "properties": {
+        "proposal_run_id": { "type": "string", "minLength": 1 },
+        "provenance_version": { "const": "v2" },
+        "prompt_sha256": { "$ref": "#/$defs/sha256" },
+        "template_sha256": { "$ref": "#/$defs/sha256" },
+        "evidence_sha256": { "$ref": "#/$defs/sha256" },
+        "response_sha256": { "$ref": "#/$defs/sha256" },
+        "model": { "type": "string", "minLength": 1 },
+        "endpoint_shape": { "type": "string", "enum": ["openai_compatible", "official_openai", "other_disclosed"] },
+        "endpoint_host": { "type": "string", "minLength": 1 },
+        "temperature": { "type": "number" },
+        "retry_count": { "type": "integer", "minimum": 0 },
+        "evidence_frozen_at": { "type": "string", "format": "date-time", "x-volatility": "volatile" },
+        "response_received_at": { "type": "string", "format": "date-time", "x-volatility": "volatile" }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": ["provenance_version"],
+            "properties": { "provenance_version": { "const": "v2" } }
+          },
+          "then": {
+            "required": ["template_sha256", "endpoint_host", "evidence_frozen_at", "response_received_at"]
+          }
+        }
+      ]
+    },
+    "setup_step": {
+      "type": "object",
+      "required": ["actor_id", "request_ref"],
+      "properties": {
+        "actor_id": { "type": "string", "minLength": 1 },
+        "request_ref": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "transform": {
+      "oneOf": [
+        { "type": "object", "required": ["type"], "properties": { "type": { "const": "identity" } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "factor"], "properties": { "type": { "const": "number_multiply" }, "factor": { "enum": [-1, 1] } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "factor", "evidence_ref"], "properties": { "type": { "const": "unit_scale" }, "factor": { "type": "integer", "minimum": 1 }, "evidence_ref": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "mapping", "evidence_ref"], "properties": { "type": { "const": "enum_map" }, "mapping": { "type": "object", "minProperties": 1, "additionalProperties": { "type": ["string", "number", "boolean", "null"] } }, "evidence_ref": { "type": "string", "minLength": 1 } }, "additionalProperties": false },
+        { "type": "object", "required": ["type", "mode"], "properties": { "type": { "const": "null_transition" }, "mode": { "enum": ["null_to_value", "value_to_null", "null_as_empty_collection"] } }, "additionalProperties": false }
+      ]
+    },
+    "effect_predicate": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["numeric_delta", "count_delta", "item_appears", "field_equals"] },
+        "consumer_ref": { "type": "string", "minLength": 1 },
+        "before_ref": { "type": "string", "minLength": 1 },
+        "after_ref": { "type": "string", "minLength": 1 },
+        "response_ref": { "type": "string", "minLength": 1 },
+        "target_path": { "type": "string" },
+        "collection_path": { "type": "string" },
+        "value_ref": { "type": "string", "pattern": "^(producer|consumer|setup)\\." },
+        "multiplier": { "enum": [-1, 1] },
+        "equals": { "type": "integer" },
+        "match_fields": { "type": "object", "minProperties": 1 },
+        "value_transform": { "$ref": "#/$defs/transform" }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "numeric_delta" } } }, "then": { "required": ["before_ref", "after_ref", "target_path", "value_ref", "multiplier"] } },
+        { "if": { "properties": { "type": { "const": "count_delta" } } }, "then": { "required": ["before_ref", "after_ref", "target_path", "equals"] } },
+        { "if": { "properties": { "type": { "const": "item_appears" } } }, "then": { "required": ["before_ref", "after_ref", "collection_path", "match_fields"] } },
+        { "if": { "properties": { "type": { "const": "field_equals" } } }, "then": { "required": ["response_ref", "target_path", "value_ref"] } }
+      ],
+      "additionalProperties": false
+    },
+    "artifact_record_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": ["control_ref", "treatment_ref", "reset_fingerprint_refs"],
+      "properties": {
+        "control_ref": { "$ref": "#/$defs/artifact_record_ref" },
+        "treatment_ref": { "$ref": "#/$defs/artifact_record_ref" },
+        "reset_fingerprint_refs": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/artifact_record_ref" } }
+      },
+      "additionalProperties": false,
+      "x-volatility": "volatile"
+    },
+    "legacy_candidate": {
+      "type": "object",
+      "required": ["candidate_id", "proposal_run_id", "producer", "consumer", "setup", "effect_predicate", "semantic_verdict"],
+      "properties": {
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "proposal_run_id": { "type": "string", "minLength": 1 },
+        "producer": { "$ref": "#/$defs/actor_request_ref" },
+        "consumer": { "$ref": "#/$defs/actor_request_ref" },
+        "setup": { "type": "array", "items": { "$ref": "#/$defs/setup_step" } },
+        "effect_predicate": { "$ref": "#/$defs/effect_predicate" },
+        "semantic_verdict": { "enum": ["confirmed", "rejected", "inconclusive"] },
+        "rejection_class": { "type": ["string", "null"], "enum": ["rejected_predicate", "rejected_out_of_scope", "rejected_malformed", null] },
+        "verification": { "$ref": "#/$defs/verification" },
+        "reason": { "type": "string" }
+      },
+      "allOf": [
+        { "if": { "properties": { "semantic_verdict": { "const": "confirmed" } } }, "then": { "required": ["verification"], "properties": { "rejection_class": { "type": "null" } } } },
+        { "if": { "properties": { "semantic_verdict": { "const": "rejected" } } }, "then": { "required": ["rejection_class", "reason"], "properties": { "rejection_class": { "type": "string" } } } },
+        { "if": { "properties": { "semantic_verdict": { "const": "inconclusive" } } }, "then": { "required": ["reason"], "properties": { "rejection_class": { "type": "null" } } } }
+      ],
+      "additionalProperties": false
+    },
+    "well_formed_candidate_v2": {
+      "type": "object",
+      "required": ["candidate_record_version", "candidate_shape", "candidate_id", "proposal_run_id", "producer", "consumer", "setup", "effect_predicate", "semantic_verdict"],
+      "properties": {
+        "candidate_record_version": { "const": "v2" },
+        "candidate_shape": { "const": "well_formed" },
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "proposal_run_id": { "type": "string", "minLength": 1 },
+        "producer": { "$ref": "#/$defs/actor_request_ref" },
+        "consumer": { "$ref": "#/$defs/actor_request_ref" },
+        "setup": { "type": "array", "items": { "$ref": "#/$defs/setup_step" } },
+        "effect_predicate": { "$ref": "#/$defs/effect_predicate" },
+        "semantic_verdict": { "enum": ["confirmed", "rejected", "inconclusive"] },
+        "rejection_class": { "type": ["string", "null"], "enum": ["rejected_predicate", "rejected_out_of_scope", null] },
+        "verification": { "$ref": "#/$defs/verification" },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "semantic_verdict": { "const": "confirmed" } }, "required": ["semantic_verdict"] },
+          "then": {
+            "required": ["verification"],
+            "properties": { "rejection_class": { "type": "null" } },
+            "not": { "required": ["reason"] }
+          }
+        },
+        {
+          "if": { "properties": { "semantic_verdict": { "const": "rejected" } }, "required": ["semantic_verdict"] },
+          "then": {
+            "required": ["rejection_class", "reason"],
+            "properties": { "rejection_class": { "enum": ["rejected_predicate", "rejected_out_of_scope"] } },
+            "not": { "required": ["verification"] }
+          }
+        },
+        {
+          "if": { "properties": { "semantic_verdict": { "const": "inconclusive" } }, "required": ["semantic_verdict"] },
+          "then": {
+            "required": ["reason"],
+            "properties": { "rejection_class": { "type": "null" } },
+            "not": { "required": ["verification"] }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "malformed_candidate_v2": {
+      "type": "object",
+      "required": ["candidate_record_version", "candidate_shape", "candidate_id", "proposal_run_id", "semantic_verdict", "rejection_class", "reason", "raw_proposal", "raw_proposal_sha256"],
+      "properties": {
+        "candidate_record_version": { "const": "v2" },
+        "candidate_shape": { "const": "malformed" },
+        "candidate_id": { "type": "string", "minLength": 1 },
+        "proposal_run_id": { "type": "string", "minLength": 1 },
+        "semantic_verdict": { "const": "rejected" },
+        "rejection_class": { "const": "rejected_malformed" },
+        "reason": { "type": "string", "minLength": 1 },
+        "raw_proposal": { "type": "object" },
+        "raw_proposal_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "candidate": {
+      "oneOf": [
+        { "$ref": "#/$defs/legacy_candidate" },
+        { "$ref": "#/$defs/well_formed_candidate_v2" },
+        { "$ref": "#/$defs/malformed_candidate_v2" }
+      ]
+    }
+  }
+}

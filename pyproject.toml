@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uisemtest"
+version = "0.1.0"
+description = "Testimony (implementation name uisemtest): deriving and validating business-level API test oracles from web UI execution evidence"
+requires-python = ">=3.12"
+dependencies = [
+    "playwright>=1.60",
+    "pydantic>=2.10",
+    "jsonschema>=4.22",
+    "referencing>=0.35",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+py-modules = ["cli", "oas_naming"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = [
+    "common*",
+    "stage0_launch*",
+    "stage1_record*",
+    "stage2_recover*",
+    "stage2_5_probe*",
+    "stage3_gate*",
+    "stage4_deps*",
+    "stage5_synth*",
+    "stage6_ground*",
+    "subject_adapters*",
+    "ui_semantics*",
+]
+
+[tool.setuptools.package-data]
+ui_semantics = ["templates/*.txt"]

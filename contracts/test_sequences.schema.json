@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test_sequences.schema.json",
+  "title": "test_sequences — business test sequences (produced by Stage 5; decision record 000 §2.7)",
+  "description": "A sequence = an ordered list of operationIds + a data-binding plan (which output field binds to which input location). All are in candidate state when produced; the grounded flag is written back after passing Stage 6. Sequences are volatile assets (must be re-validated by Stage 6 before use).",
+  "type": "object",
+  "required": ["metadata", "sequences"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "test_sequences" },
+        "stage": { "const": "stage5" }
+      }
+    },
+    "sequences": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/sequence" },
+      "x-volatility": "volatile"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "operation_id": {
+      "type": "string",
+      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+      "$comment": "operationId derived deterministically per D5",
+      "x-volatility": "structural"
+    },
+    "binding": {
+      "type": "object",
+      "description": "Data-binding plan item: which output value binds to which input location. 'Producer precedes consumer' (from_step < to_step) is a cross-field constraint checked by the Stage 5 acceptance assertions and not expressed in JSON Schema. The producer source location is expressed by the optional from_location; default/absent is equivalent to response_body.",
+      "required": ["from_step", "from_field", "to_step", "to_location", "to_field"],
+      "properties": {
+        "from_step": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index of the step that produces the value (0-based)"
+        },
+        "from_field": {
+          "type": "string",
+          "description": "Producer value locator: when from_location=response_body, the existing response-body JSONPath/JSON Pointer; when from_location=response_header, a canonical lowercase header name or a controlled structured header selector (e.g. location.path[1])."
+        },
+        "from_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header"],
+          "description": "Source location of the producer value. Optional; default/absent is equivalent to response_body. The first batch of 012-A supports only response_body / response_header; cookie is not in the enum."
+        },
+        "to_step": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index of the step that consumes the value"
+        },
+        "to_location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "to_field": {
+          "type": "string",
+          "description": "Target location: the parameter name for path/query/header; a JSON Pointer for body"
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "sequence": {
+      "type": "object",
+      "required": ["sequence_id", "steps", "bindings", "status"],
+      "properties": {
+        "sequence_id": {
+          "type": "string",
+          "minLength": 1,
+          "x-volatility": "volatile"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Ordered list of operationIds",
+          "items": { "$ref": "#/$defs/operation_id" },
+          "x-volatility": "structural"
+        },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/binding" },
+          "x-volatility": "structural"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "grounded", "validation_failed", "inconclusive"],
+          "description": "Four states (decision record 007 D49/D51 + 010 D63): candidate = validation not yet attempted (the state when produced by Stage 5); grounded = the whole sequence replayed successfully; validation_failed = validly executed and refuted; inconclusive = validation was attempted but not completed validly for tool/environment reasons (e.g. insufficient setup, capability gap). The 'candidate + reported reason' of 009 was a transitional expression; inconclusive is formally in effect since 010."
+        },
+        "x-carverflow-runtime-ranking": {
+          "$ref": "#/$defs/runtime_ranking_extension",
+          "description": "Read-only ranking / risk annotation for this sequence from the Runtime Material Phase 2 sidecar. The extension does not change steps / bindings / status and does not extend the Stage 5 candidate space."
+        }
+      },
+      "additionalProperties": false
+    },
+    "runtime_evidence_ref": {
+      "type": "object",
+      "required": ["source", "reason"],
+      "properties": {
+        "source": { "type": "string" },
+        "material_id": { "type": ["string", "null"] },
+        "edge_id": { "type": ["string", "null"] },
+        "hypothesis_id": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "runtime_conflict_ref": {
+      "type": "object",
+      "required": ["conflict_id", "conflict_type", "scope", "operations", "explanation"],
+      "properties": {
+        "conflict_id": { "type": "string" },
+        "conflict_type": { "type": "string" },
+        "scope": { "type": "string" },
+        "operations": { "type": "array", "items": { "type": "string" } },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "runtime_ranking_policy": {
+      "type": "object",
+      "required": [
+        "status_unchanged",
+        "steps_unchanged",
+        "bindings_unchanged",
+        "does_not_set_grounded",
+        "does_not_expand_candidates",
+        "does_not_reorder_stage5_output"
+      ],
+      "properties": {
+        "status_unchanged": { "const": true },
+        "steps_unchanged": { "const": true },
+        "bindings_unchanged": { "const": true },
+        "does_not_set_grounded": { "const": true },
+        "does_not_expand_candidates": { "const": true },
+        "does_not_reorder_stage5_output": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "runtime_ranking_extension": {
+      "type": "object",
+      "required": [
+        "phase",
+        "report_ref",
+        "annotation_id",
+        "matched_lifecycle_hypotheses",
+        "suggested_score",
+        "suggested_rank",
+        "dominant_evidence",
+        "dominant_risk",
+        "matched_materials",
+        "positive_evidence",
+        "negative_evidence",
+        "conflicts",
+        "policy"
+      ],
+      "properties": {
+        "phase": { "const": "phase2_sidecar" },
+        "report_ref": { "type": "string", "minLength": 1 },
+        "annotation_id": { "type": "string", "minLength": 1 },
+        "matched_lifecycle_hypotheses": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "suggested_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "suggested_rank": { "type": "integer", "minimum": 1 },
+        "dominant_evidence": { "type": "string" },
+        "dominant_risk": { "type": "string", "enum": ["low", "medium", "high", "blocked"] },
+        "matched_materials": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "positive_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_evidence_ref" }
+        },
+        "negative_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_evidence_ref" }
+        },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_conflict_ref" }
+        },
+        "policy": { "$ref": "#/$defs/runtime_ranking_policy" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,469 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 6,
+    "canonical_relation_core_identities": [
+      "ccb9baa6509b4c0201fea64ebfe740e7db802e9d0039276cf5257afbae65fadd",
+      "e8aa0f5447544fa78c5fa1f270eea971c51a621b7ca7a7e0a43d549b3f3066a2",
+      "fe3cf41d2cd3b607560c13d42ce174ba9c43e9fcf153608be2627c89f0c8c18f"
+    ],
+    "duplicate_core_occurrence_count": 3,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007"
+    ],
+    "physical_retained_test_occurrence_count": 6,
+    "unique_canonical_relation_core_count": 3
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$",
+            "role": "producer_status",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "evidence_refs": [
+              "negative-request-fact-7f74e2e6cd61e5f139701c6c"
+            ],
+            "rationale": "Proposed rejection status for the duplicate-title write; grounded in the recorded 422 response and client_error/http_status_class detector, not prevalidated.",
+            "source": "hypothesis",
+            "value": 422,
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection; no before/after observation or settling; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['negative-request-fact-7f74e2e6cd61e5f139701c6c'], 'rationale': 'Proposed rejection status for the duplicate-title write; grounded in the recorded 422 response and client_error/http_status_class detector, not prevalidated.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P02 requires producer_status $ (integer) to strictly equal frozen hypothesis 422 (integer).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "fe3cf41d2cd3b607560c13d42ce174ba9c43e9fcf153608be2627c89f0c8c18f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The center write POST /api/articles (request:8, group 0010) returned 422 on a duplicate title; the negative-request fact records context_mode auth_preserved and status-class rejection. Status 422 is a frozen hypothesis, not an already-proven expected value.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fa2aae0420643917e2c1"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": "state-projection-db07afda6a45556ecf720dd9",
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection_preservation; fresh preservation observers actor_a GET /api/articles/shared-title-draft; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['negative-request-fact-7f74e2e6cd61e5f139701c6c'], 'rationale': 'Proposed rejection status for the duplicate-title write; grounded in the recorded 422 response, not prevalidated.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P20 requires strict equality between before $.article (object) and after $.article (object).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "ccb9baa6509b4c0201fea64ebfe740e7db802e9d0039276cf5257afbae65fadd",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The negative-request fact copies its observer get_api_articles_shared_title_draft (request:5) on $.article plus the recorded projection reference for both before and after. P20 proposes that the rejected duplicate write preserved the article object; the recorded values need not already be equal.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c30e38b290d9ea0fc2ec"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$",
+            "role": "producer_status",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "evidence_refs": [
+              "negative-request-fact-7f74e2e6cd61e5f139701c6c",
+              "r20260901-190117-5954:request:8"
+            ],
+            "rationale": "Proposed rule: the recorded duplicate-title POST (request:8) answers with client-error status 422; the fact only records the rejected status class and status, not a proven business rule.",
+            "source": "hypothesis",
+            "value": 422,
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection; no before/after observation or settling; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['negative-request-fact-7f74e2e6cd61e5f139701c6c', 'r20260901-190117-5954:request:8'], 'rationale': 'Proposed rule: the recorded duplicate-title POST (request:8) answers with client-error status 422; the fact only records the rejected status class and status, not a proven business rule.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P02 requires producer_status $ (integer) to strictly equal frozen hypothesis 422 (integer).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "fe3cf41d2cd3b607560c13d42ce174ba9c43e9fcf153608be2627c89f0c8c18f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The negative-request fact for request:8 records an auth-preserved client-error rejection of the duplicate-title article write, with request:5 as the recorded anchor read of the same article resource. Rejection-only C06; after is a recorded identity anchor, not an executed observer.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1b0086ec3051dbdb4962"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection_preservation; fresh preservation observers actor_a GET /api/articles/shared-title-draft; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['negative-request-fact-7f74e2e6cd61e5f139701c6c', 'r20260901-190117-5954:request:8'], 'rationale': 'Proposed rule: the recorded duplicate-title POST is rejected with client-error status 422; recorded status only.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P20 requires strict equality between before $.article (object) and after $.article (object).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "ccb9baa6509b4c0201fea64ebfe740e7db802e9d0039276cf5257afbae65fadd",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The negative-request fact declares an auth-preserved rejected write over the article projection path $.article with request:5 as both recorded before/after observer of that object. Proposed is preservation of the frozen $.article object across the rejected duplicate write, evaluated against fresh reads.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-83f1a6e065afe0038799"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$",
+            "role": "producer_status",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "evidence_refs": [
+              "r20260901-190117-5954:request:8",
+              "negative-request-fact-7f74e2e6cd61e5f139701c6c"
+            ],
+            "rationale": "The center POST /api/articles was recorded with response status 422 (client-error class in the rejection detector); the frozen hypothesis is that the duplicate-title request is rejected rather than accepted.",
+            "source": "hypothesis",
+            "value": 422,
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection; no before/after observation or settling; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['r20260901-190117-5954:request:8', 'negative-request-fact-7f74e2e6cd61e5f139701c6c'], 'rationale': 'The center POST /api/articles was recorded with response status 422 (client-error class in the rejection detector); the frozen hypothesis is that the duplicate-title request is rejected rather than accepted.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P02 requires producer_status $ (integer) to strictly equal frozen hypothesis 422 (integer).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "fe3cf41d2cd3b607560c13d42ce174ba9c43e9fcf153608be2627c89f0c8c18f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Rejection-only candidate grounded in the recorded negative request fact: the center write request:8 (POST /api/articles, duplicate title) was answered with 422 in the same actor/session, with request:5 (GET /api/articles/shared-title-draft) as the recorded identity/binding anchor for the target resource. The eligible setup action workflow-action-0005 is the recorded prior create that establishes the duplicate-title precondition.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3ea370e8f2648debe161"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190117-5954:request:8"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.title",
+            "$.description",
+            "$.body"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Negative request actor_a POST /api/articles; rejection_preservation; fresh preservation observers actor_a GET /api/articles/shared-title-draft; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['r20260901-190117-5954:request:8', 'negative-request-fact-7f74e2e6cd61e5f139701c6c'], 'rationale': 'The recorded center write returned 422; this freezes the rejection condition under which the preserved article fields are compared.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P20 requires strict equality between before $.article (object) and after $.article (object) for every frozen field ['$.title', '$.description', '$.body']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "e8aa0f5447544fa78c5fa1f270eea971c51a621b7ca7a7e0a43d549b3f3066a2",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/shared-title-draft",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190117-5954:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190117-5954:request:8"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Rejection plus preservation candidate: the negative request fact provides the observer operation get_api_articles_shared_title_draft with projection path $.article and before_request_ref = after_request_ref = request:5, so the rejected duplicate-title POST must leave the existing article's title/description/body fields frozen. Setup replays the recorded prior create (workflow-action-0005) that establishes the duplicated title.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fdfb34b4e12dbfd77a10"
+    }
+  ]
+}

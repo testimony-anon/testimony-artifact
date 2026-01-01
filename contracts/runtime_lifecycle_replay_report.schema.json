@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_lifecycle_replay_report.schema.json",
+  "title": "runtime_lifecycle_replay_report — Phase3 explicit lifecycle replay companion",
+  "description": "Explicit companion lifecycle replay report for Phase3-D/E/G/H. It is only produced by an opt-in runner; dry-run mode performs no HTTP egress. Results do not modify Stage6 or main artifact core fields and do not promote dependency evidence.",
+  "type": "object",
+  "required": ["metadata", "execution_policy", "reset_evidence", "plan_results", "counterexample_diagnostics", "summary", "warnings"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "runtime_lifecycle_replay_report" },
+        "stage": { "const": "runtime_materials_phase3" }
+      }
+    },
+    "execution_policy": {
+      "type": "object",
+      "required": ["execute_requested", "http_egress_allowed", "default_no_egress", "core_artifacts_unchanged", "stage6_invoked", "replay_success_promotes_dependency_evidence"],
+      "properties": {
+        "execute_requested": { "type": "boolean" },
+        "http_egress_allowed": { "type": "boolean" },
+        "default_no_egress": { "const": true },
+        "core_artifacts_unchanged": { "const": true },
+        "stage6_invoked": { "const": false },
+        "replay_success_promotes_dependency_evidence": { "const": false },
+        "base_url": { "type": ["string", "null"] },
+        "profile_path": { "type": ["string", "null"] },
+        "reset_config_present": { "type": "boolean" },
+        "runner_reset_requested": { "type": "boolean" },
+        "runner_reset_executed": { "type": "boolean" },
+        "target_reset_executed_by_start_services": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "reset_evidence": { "$ref": "#/$defs/reset_evidence" },
+    "plan_results": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/plan_result" }
+    },
+    "counterexample_diagnostics": { "$ref": "#/$defs/counterexample_diagnostics" },
+    "summary": {
+      "type": "object",
+      "required": ["plan_count", "attempted_count", "executed_http_request_count", "succeeded_count", "blocked_count", "inconclusive_count", "cleanup_failed_count", "environment_pollution_state", "by_status", "by_block_reason", "counterexample_requested", "counterexample_executed_count", "counterexample_http_request_count"],
+      "properties": {
+        "plan_count": { "type": "integer", "minimum": 0 },
+        "attempted_count": { "type": "integer", "minimum": 0 },
+        "executed_http_request_count": { "type": "integer", "minimum": 0 },
+        "succeeded_count": { "type": "integer", "minimum": 0 },
+        "blocked_count": { "type": "integer", "minimum": 0 },
+        "inconclusive_count": { "type": "integer", "minimum": 0 },
+        "cleanup_failed_count": { "type": "integer", "minimum": 0 },
+        "environment_pollution_state": { "$ref": "#/$defs/pollution_state" },
+        "by_status": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "by_block_reason": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "counterexample_requested": { "type": "boolean" },
+        "counterexample_executed_count": { "type": "integer", "minimum": 0 },
+        "counterexample_http_request_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "pollution_state": { "type": "string", "enum": ["clean", "possibly_dirty", "dirty", "reset_required", "unknown"] },
+    "plan_status": { "type": "string", "enum": ["dry_run", "blocked", "inconclusive", "succeeded", "failed", "cleanup_failed"] },
+    "step_role": { "type": "string", "enum": ["setup", "producer", "target", "verification", "cleanup"] },
+    "step_result": {
+      "type": "object",
+      "required": ["step_index", "step_role", "operation_id", "method", "path", "status", "request_sent", "response_status"],
+      "properties": {
+        "step_index": { "type": "integer", "minimum": 0 },
+        "step_role": { "$ref": "#/$defs/step_role" },
+        "operation_id": { "type": "string" },
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "url_preview": { "type": ["string", "null"] },
+        "status": { "type": "string", "enum": ["skipped", "sent", "succeeded", "failed", "reused"] },
+        "request_sent": { "type": "boolean" },
+        "response_status": { "type": ["integer", "null"] },
+        "error": { "type": ["string", "null"] },
+        "bindings_applied": { "type": "array", "items": { "$ref": "#/$defs/binding_resolution" } }
+      },
+      "additionalProperties": false
+    },
+    "binding_resolution": {
+      "type": "object",
+      "required": ["source", "target_location", "target_field", "resolved"],
+      "properties": {
+        "source": { "type": "string" },
+        "target_location": { "type": "string" },
+        "target_field": { "type": "string" },
+        "resolved": { "type": "boolean" },
+        "value_preview": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "plan_result": {
+      "type": "object",
+      "required": ["plan_id", "source_plan_status", "replay_status", "block_reasons", "environment_pollution_state", "http_request_count", "fresh_bindings", "step_results", "cleanup_reused_target", "dependency_evidence_promoted"],
+      "properties": {
+        "plan_id": { "type": "string" },
+        "source_plan_status": { "type": "string" },
+        "replay_status": { "$ref": "#/$defs/plan_status" },
+        "block_reasons": { "type": "array", "items": { "type": "string" } },
+        "environment_pollution_state": { "$ref": "#/$defs/pollution_state" },
+        "http_request_count": { "type": "integer", "minimum": 0 },
+        "fresh_bindings": { "type": "array", "items": { "$ref": "#/$defs/binding_resolution" } },
+        "materials_used": { "type": "array", "items": { "$ref": "#/$defs/material_usage" } },
+        "step_results": { "type": "array", "items": { "$ref": "#/$defs/step_result" } },
+        "cleanup_reused_target": { "type": "boolean" },
+        "dependency_evidence_promoted": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "material_usage": {
+      "type": "object",
+      "required": ["material_id", "material_type", "source", "operation_id", "accepted", "redacted", "literal_assumption", "preview"],
+      "properties": {
+        "material_id": { "type": "string" },
+        "material_type": { "type": "string", "enum": ["request_body", "auth_session", "header", "cookie", "known_resource"] },
+        "source": { "type": "string" },
+        "operation_id": { "type": "string" },
+        "accepted": { "type": "boolean" },
+        "redacted": { "type": "boolean" },
+        "literal_assumption": { "type": "boolean" },
+        "preview": { "type": ["string", "null"] },
+        "blocked_reason": { "type": ["string", "null"] },
+        "headers_preview": { "type": "object", "additionalProperties": { "type": "string" } },
+        "cookies_preview": { "type": "object", "additionalProperties": { "type": "string" } },
+        "body_preview": { "type": ["string", "null"] },
+        "value_preview": { "type": ["string", "null"] },
+        "allowed_methods": { "type": "array", "items": { "type": "string" } },
+        "destructive_use_blocked": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "known_resource": {
+      "type": "object",
+      "required": ["source", "source_artifact", "source_path", "value_preview", "redacted", "allowed_methods", "destructive_use_blocked", "target_paths", "reason"],
+      "properties": {
+        "source": { "type": "string" },
+        "source_artifact": { "type": "string" },
+        "source_path": { "type": "string" },
+        "value_preview": { "type": ["string", "null"] },
+        "redacted": { "type": "boolean" },
+        "allowed_methods": { "type": "array", "items": { "type": "string" } },
+        "destructive_use_blocked": { "type": "boolean" },
+        "target_paths": { "type": "array", "items": { "type": "string" } },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "reset_evidence": {
+      "type": "object",
+      "required": ["reset_config_present", "reset_requested", "runner_reset_executed", "target_reset_executed_by_start_services", "reset_succeeded", "reset_source", "reset_command", "known_resources"],
+      "properties": {
+        "reset_config_present": { "type": "boolean" },
+        "reset_requested": { "type": "boolean" },
+        "runner_reset_executed": { "type": "boolean" },
+        "target_reset_executed_by_start_services": { "type": "boolean" },
+        "reset_succeeded": { "type": "boolean" },
+        "reset_source": { "type": "string" },
+        "reset_command": { "type": "array", "items": { "type": "string" } },
+        "reset_returncode": { "type": ["integer", "null"] },
+        "reset_error": { "type": ["string", "null"] },
+        "stdout_preview": { "type": ["string", "null"] },
+        "stderr_preview": { "type": ["string", "null"] },
+        "verify_request": {
+          "type": "object",
+          "properties": {
+            "checked": { "type": "boolean" },
+            "succeeded": { "type": "boolean" },
+            "reason": { "type": ["string", "null"] },
+            "method": { "type": ["string", "null"] },
+            "path": { "type": ["string", "null"] },
+            "response_status": { "type": ["integer", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "known_resources": { "type": "array", "items": { "$ref": "#/$defs/known_resource" } }
+      },
+      "additionalProperties": false
+    },
+    "counterexample_diagnostics": {
+      "type": "object",
+      "required": ["requested", "executed_count", "http_request_count", "by_status", "diagnostics"],
+      "properties": {
+        "requested": { "type": "boolean" },
+        "executed_count": { "type": "integer", "minimum": 0 },
+        "http_request_count": { "type": "integer", "minimum": 0 },
+        "by_status": { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+        "diagnostics": { "type": "array", "items": { "$ref": "#/$defs/counterexample_diagnostic" } }
+      },
+      "additionalProperties": false
+    },
+    "counterexample_diagnostic": {
+      "type": "object",
+      "required": ["plan_id", "counterexample_requested", "counterexample_executed", "counterexample_status", "necessity_state", "reason", "http_request_count", "safety_decision", "target_operation_id", "target_method", "target_path", "binding_source", "response_status"],
+      "properties": {
+        "plan_id": { "type": "string" },
+        "counterexample_requested": { "type": "boolean" },
+        "counterexample_executed": { "type": "boolean" },
+        "counterexample_status": { "type": "string", "enum": ["not_executed", "unsafe", "executed"] },
+        "necessity_state": { "type": "string", "enum": ["unknown", "necessary", "not_necessary", "inconclusive", "blocked"] },
+        "reason": { "type": "string" },
+        "http_request_count": { "type": "integer", "minimum": 0 },
+        "safety_decision": { "type": "string" },
+        "target_operation_id": { "type": "string" },
+        "target_method": { "type": "string" },
+        "target_path": { "type": "string" },
+        "binding_source": { "type": "string" },
+        "response_status": { "type": ["integer", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "message"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

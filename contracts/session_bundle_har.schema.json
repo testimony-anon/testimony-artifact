@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session_bundle_har.schema.json",
+  "title": "session_bundle member: har.json (D2: standard HAR 1.2 + _initiator)",
+  "description": "Complete network traffic including response bodies. Standard HAR 1.2 (full validity is checked by the vendored official schema, approved supplementary choice point 2); each entry carries a custom _initiator field (the HAR specification allows _-prefixed extensions) holding the CDP initiator information, so that Stage 2 can perform the deterministic 'initiator + time + action boundary' join (D3).",
+  "allOf": [
+    { "$ref": "vendor/har-1.2/har.json" },
+    {
+      "type": "object",
+      "properties": {
+        "log": {
+          "type": "object",
+          "properties": {
+            "entries": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["_initiator"],
+                "properties": {
+                  "_initiator": {
+                    "type": "object",
+                    "description": "Raw CDP initiator information (facts only, no inference)",
+                    "required": ["type"],
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "description": "CDP initiator type (e.g. script, parser, other)"
+                      }
+                    },
+                    "additionalProperties": true,
+                    "x-volatility": "volatile"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

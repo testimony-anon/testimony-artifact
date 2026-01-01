@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mattermost_blind_binding_response_v1.schema.json",
+  "title": "Mattermost blind UI-action-to-request labels",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rows"],
+  "properties": {
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_id",
+          "global_order",
+          "actor_id",
+          "label",
+          "request_ref",
+          "rationale"
+        ],
+        "properties": {
+          "event_id": {"type": "string", "minLength": 1},
+          "global_order": {"type": "integer", "minimum": 0},
+          "actor_id": {"enum": ["actor_a", "actor_b"]},
+          "label": {"enum": ["linked", "no_link", "ambiguous"]},
+          "request_ref": {"type": ["string", "null"]},
+          "rationale": {"type": "string", "minLength": 1}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {"label": {"const": "linked"}},
+              "required": ["label"]
+            },
+            "then": {
+              "properties": {
+                "request_ref": {"type": "string", "minLength": 1}
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "label": {"enum": ["no_link", "ambiguous"]}
+              },
+              "required": ["label"]
+            },
+            "then": {
+              "properties": {"request_ref": {"type": "null"}}
+            }
+          }
+        ]
+      }
+    }
+  }
+}

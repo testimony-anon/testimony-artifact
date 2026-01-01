@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lifecycle_recipes.schema.json",
+  "title": "lifecycle_recipes — probe-discovered lifecycle recipes (V2 pipeline sidecar)",
+  "description": "Lifecycle recipes extracted from probe_results that are replayable only within the recipe scope. They neither promote probe-discovered discovery_only operations to globally ready nor inject probe-derived edges into Stage 4 exact value flow.",
+  "type": "object",
+  "required": ["metadata", "recipes"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "lifecycle_recipes" },
+        "stage": { "const": "v2_pipeline" }
+      }
+    },
+    "recipes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/recipe" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "operation_id": {
+      "type": "string",
+      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$"
+    },
+    "recipe": {
+      "type": "object",
+      "required": [
+        "recipe_id",
+        "steps",
+        "bindings",
+        "step_materials",
+        "provenance",
+        "readiness_scope",
+        "status"
+      ],
+      "properties": {
+        "recipe_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/operation_id" },
+          "description": "Sequence of operationIds inside the recipe. May include discovery_only operations; executability is limited to the recipe_only scope."
+        },
+        "bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/binding" },
+          "description": "Fresh-value bindings inside the recipe, e.g. POST response slug/id -> DELETE path parameter."
+        },
+        "step_materials": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/step_material" },
+          "description": "Per-step request-material audit, including body templates, runtime secrets, literal assumptions and deterministic mutations."
+        },
+        "provenance": {
+          "$ref": "#/$defs/provenance"
+        },
+        "readiness_scope": {
+          "type": "string",
+          "const": "recipe_only",
+          "description": "This recipe only proves replayability inside the recipe; it does not raise the operation's global execution_readiness."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["candidate", "grounded", "validation_failed", "inconclusive"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "binding": {
+      "type": "object",
+      "required": ["from_step", "from_location", "from_field", "to_step", "to_location", "to_field"],
+      "properties": {
+        "from_step": { "type": "integer", "minimum": 0 },
+        "from_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header"]
+        },
+        "from_field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "to_step": { "type": "integer", "minimum": 0 },
+        "to_location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "to_field": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "step_material": {
+      "type": "object",
+      "required": ["step", "source_probe_id"],
+      "properties": {
+        "step": { "type": "integer", "minimum": 0 },
+        "source_probe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "probe_id in probe_results that supplied the material/execution facts for this step."
+        },
+        "body_template": {
+          "description": "Request body template used for this step; may be a JSON object/list/string."
+        },
+        "body_template_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime_secret_bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_secret_binding" }
+        },
+        "literal_assumptions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/literal_assumption" }
+        },
+        "deterministic_mutation": {
+          "$ref": "#/$defs/deterministic_mutation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "runtime_secret_binding": {
+      "type": "object",
+      "required": ["location", "field", "source"],
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "field": { "type": "string", "minLength": 1 },
+        "source": {
+          "type": "string",
+          "enum": ["replay_config", "runtime_secret"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "literal_assumption": {
+      "type": "object",
+      "required": ["location", "field", "reason"],
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "field": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "deterministic_mutation": {
+      "type": "object",
+      "required": ["kind", "description"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["uniquify_suffix", "none"]
+        },
+        "seed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fields": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["probe_ids", "source"],
+      "properties": {
+        "probe_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source": {
+          "type": "string",
+          "enum": ["same_turn_probe_pair"]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

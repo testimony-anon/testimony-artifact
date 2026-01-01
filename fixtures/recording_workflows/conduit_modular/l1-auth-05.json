@@ -1,0 +1,105 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "conduit-modular-l1-auth-05",
+  "profile_ref": "fixtures/profiles/conduit_current_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.home",
+          "action": {
+            "kind": "navigate",
+            "url": "/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/editor\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-user-menu",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": ".nav-item.dropdown .dropdown-toggle",
+          "scope": {
+            "kind": "css",
+            "value": "nav.navbar"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".dropdown-menu",
+            "scope": {
+              "kind": "css",
+              "value": "nav.navbar"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.logout",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "text",
+          "value": "Logout",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": ".dropdown-menu"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/login\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

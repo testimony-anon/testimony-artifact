@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session_bundle_manifest.schema.json",
+  "title": "session_bundle member: manifest.json (produced by Stage 1; decision record 000 §2.2, D1)",
+  "description": "The session bundle is a directory bundle (D1): manifest.json holds the manifest and metadata and indexes the other member files. The session bundle records raw facts only and makes no inference; the action↔API join is the deterministic responsibility of Stage 2 (D3).",
+  "type": "object",
+  "required": ["metadata", "session", "members"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "session_bundle" },
+        "stage": { "const": "stage1" }
+      }
+    },
+    "session": {
+      "type": "object",
+      "description": "Metadata describing this session itself (the metadata field of the session-bundle contract in design document 2: the system under test, the profile, session start/end, the auth context)",
+      "required": ["system_under_test", "profile_ref", "started_at", "ended_at", "auth_context", "workflow_id", "workflow_ref", "actor_id", "reset_epoch", "business_barrier_at"],
+      "properties": {
+        "system_under_test": {
+          "type": "string",
+          "x-volatility": "structural"
+        },
+        "profile_ref": {
+          "type": "string",
+          "description": "Identifier or path of the app_profile used",
+          "x-volatility": "structural"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-volatility": "volatile"
+        },
+        "ended_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-volatility": "volatile"
+        },
+        "auth_context": {
+          "type": "object",
+          "description": "Authentication context the session runs in",
+          "x-volatility": "volatile"
+        },
+        "workflow_id": {"type": "string", "minLength": 1},
+        "workflow_ref": {"type": "string", "minLength": 1},
+        "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "business_barrier_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    },
+    "members": {
+      "type": "object",
+      "description": "Index of the directory-bundle members. Member file names are frozen per D1.",
+      "required": ["har", "ui_action_log", "action_decision_log", "page_state"],
+      "properties": {
+        "har": {
+          "const": "har.json",
+          "description": "Network traffic: standard HAR 1.2 + the custom _initiator field (D2); the per-file schema is session_bundle_har.schema.json"
+        },
+        "ui_action_log": {
+          "const": "ui_action_log.jsonl",
+          "description": "One line per action; the schema of a single record is session_bundle_ui_action.schema.json"
+        },
+        "action_decision_log": {
+          "const": "action_decision_log.jsonl",
+          "description": "Strategy-layer decision records, one per line; the schema of a single record is session_bundle_action_decision.schema.json"
+        },
+        "request_material_shapes": {
+          "const": "request_material_shapes.jsonl",
+          "description": "Optional for backward compatibility. B2 structured-redaction writers must emit this member and index it here. Each line validates against session_bundle_request_material_shape.schema.json."
+        },
+        "page_state": {
+          "type": "array",
+          "description": "Index of page_state/ snapshots. The contract freezes only the reference shape; the internal format of snapshot files is defined separately by the Stage 1 decision record (approved supplementary choice point 4).",
+          "items": {
+            "type": "object",
+            "required": ["file", "timestamp", "action_id", "format"],
+            "properties": {
+              "file": {
+                "type": "string",
+                "pattern": "^page_state/",
+                "x-volatility": "volatile"
+              },
+              "timestamp": {
+                "type": "string",
+                "format": "date-time",
+                "x-volatility": "volatile"
+              },
+              "action_id": {
+                "type": "string",
+                "description": "ID of the associated ui_action_log action (the key moment the snapshot corresponds to)",
+                "x-volatility": "volatile"
+              },
+              "format": {
+                "type": "string",
+                "description": "Snapshot format tag (the concrete value table is frozen by the Stage 1 decision record)",
+                "x-volatility": "structural"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

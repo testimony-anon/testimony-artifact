@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_certificate_envelope_v5.schema.json",
+  "title": "Route-S dual-view certificate envelope v5",
+  "type": "object",
+  "required": ["schema_version", "status", "execution_evidence_sha256", "pre_live_binding_pins", "execution_binding", "route_s_certificate", "producer_dual_view_attestation", "request_binding_attestation", "redaction_attestation", "qualifying_seal_required", "live_result_eligible"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-certificate-envelope-v5"},
+    "status": {"const": "rendered_awaiting_post_render_scan_and_final_seal"},
+    "execution_evidence_sha256": {"$ref": "#/$defs/sha"},
+    "pre_live_binding_pins": {"$ref": "route_s_pre_live_binding_pins_v2.schema.json"},
+    "execution_binding": {"$ref": "route_s_execution_binding_v2.schema.json"},
+    "route_s_certificate": {"$ref": "route_s_certificate_v4.schema.json"},
+    "producer_dual_view_attestation": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "business_request_sha256", "transport_request_sha256", "transport_body_sha256", "cross_view_equality", "left_operand", "right_operand", "canonicalization", "derivation_rule"],
+          "properties": {
+            "state": {"const": "validated"},
+            "business_request_sha256": {"$ref": "#/$defs/sha"},
+            "transport_request_sha256": {"$ref": "#/$defs/sha"},
+            "transport_body_sha256": {"$ref": "#/$defs/sha"},
+            "cross_view_equality": {"const": true},
+            "left_operand": {"const": "/protocol/P/request"},
+            "right_operand": {"const": "/protocol/P/transport_request/body"},
+            "canonicalization": {"type": "string", "minLength": 1},
+            "derivation_rule": {"const": "business_request_from_same_final_outgoing_transport_body_after_binding"}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["state", "reason_code"],
+          "properties": {"state": {"const": "not_evaluated"}, "reason_code": {"const": "producer_not_executed_pass"}}
+        }
+      ]
+    },
+    "request_binding_attestation": {
+      "type": "object",
+      "propertyNames": {"enum": ["Oc1", "Oc2", "Ot0", "P", "Ot1"]},
+      "minProperties": 0,
+      "additionalProperties": {"$ref": "#/$defs/request_binding"}
+    },
+    "redaction_attestation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rule", "capture_before_write", "original_values_persisted", "original_value_lengths_persisted", "original_value_hashes_or_hmacs_persisted", "observer_secret_state_derivation", "slot_counts"],
+      "properties": {
+        "rule": {"const": "route-s-capture-redaction-v1"},
+        "capture_before_write": {"const": true},
+        "original_values_persisted": {"const": false},
+        "original_value_lengths_persisted": {"const": false},
+        "original_value_hashes_or_hmacs_persisted": {"const": false},
+        "observer_secret_state_derivation": {"const": "in_memory_equality_ordinal_then_public_label_hash_no_secret_input"},
+        "slot_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["Oc1", "Oc2", "Ot0", "P", "Ot1"],
+          "properties": {
+            "Oc1": {"$ref": "#/$defs/redaction_counts"},
+            "Oc2": {"$ref": "#/$defs/redaction_counts"},
+            "Ot0": {"$ref": "#/$defs/redaction_counts"},
+            "P": {"$ref": "#/$defs/redaction_counts"},
+            "Ot1": {"$ref": "#/$defs/redaction_counts"}
+          }
+        }
+      }
+    },
+    "qualifying_seal_required": {"const": true},
+    "live_result_eligible": {"const": false}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "actor_id", "arm", "reset_epoch", "request_ref", "expected_method", "actual_method", "expected_path", "actual_path", "request_shape_sha256", "path_rebound", "binding_event_count", "source_ids", "binding_scope_ids", "binding_rule"],
+      "properties": {
+        "slot": {"enum": ["Oc1", "Oc2", "Ot0", "P", "Ot1"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "arm": {"enum": ["control", "treatment"]},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "request_ref": {"type": ["string", "null"]},
+        "expected_method": {"type": "string"},
+        "actual_method": {"type": "string"},
+        "expected_path": {"type": "string"},
+        "actual_path": {"type": "string"},
+        "request_shape_sha256": {"$ref": "#/$defs/sha"},
+        "path_rebound": {"type": "boolean"},
+        "binding_event_count": {"type": "integer", "minimum": 0},
+        "source_ids": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+        "binding_scope_ids": {"type": "array", "items": {"$ref": "#/$defs/sha"}, "uniqueItems": true},
+        "binding_rule": {"const": "exact_or_existing_arm_local_typed_resource_event"}
+      }
+    },
+    "redaction_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request", "request_query", "request_headers", "response", "response_headers"],
+      "properties": {
+        "request": {"type": "integer", "minimum": 0},
+        "request_query": {"type": "integer", "minimum": 0},
+        "request_headers": {"type": "integer", "minimum": 0},
+        "response": {"type": "integer", "minimum": 0},
+        "response_headers": {"type": "integer", "minimum": 0}
+      }
+    }
+  }
+}

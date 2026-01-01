@@ -1,0 +1,1 @@
+inventory-ablation.json = inventory.json minus L1-DOCLIST-01/02/04 (their Full-run M10 never completed: oversized evidence, ~¥400 spent); same suite_id and schema; RQ3 ablation input for the added subjects, 2026-09-21.

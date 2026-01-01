@@ -1,0 +1,215 @@
+{
+  "metadata": {
+    "artifact_type": "probe_results",
+    "schema_version": "1.0.0",
+    "run_id": "r20260610-0001",
+    "stage": "stage2_5",
+    "created_at": "2026-06-10T10:15:00+08:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": [
+      { "artifact_type": "initial_oas", "run_id": "r20260610-0001" },
+      { "artifact_type": "session_bundle", "run_id": "r20260610-0001" }
+    ]
+  },
+  "probes": [
+    {
+      "probe_id": "p-0001",
+      "target": {
+        "method": "DELETE",
+        "canonical_path": "/api/articles/{slug}",
+        "operation_id": "delete_api_articles_slug"
+      },
+      "construction_basis": {
+        "strategy": "method_completion",
+        "anchor_sequence": ["post_api_articles"]
+      },
+      "request": {
+        "method": "DELETE",
+        "url": "http://localhost:3000/api/articles/probe-article-1"
+      },
+      "response": {
+        "status": 204
+      },
+      "success": true,
+      "cleanup": {
+        "required": false,
+        "performed": false,
+        "basis": "per_probe_cleanup",
+        "detail": "Delete-type probe follows create-before-delete: the anchor sequence already created probe-article-1; the deletion is the final state, no extra cleanup needed"
+      }
+    },
+    {
+      "probe_id": "p-0002",
+      "probe_kind": "operation",
+      "execution_mode": "scheduled",
+      "target": {
+        "method": "DELETE",
+        "canonical_path": "/api/articles/{slug}",
+        "operation_id": "delete_api_articles_slug"
+      },
+      "construction_basis": {
+        "strategy": "scheduled_discovery",
+        "anchor_sequence": ["post_api_articles", "get_api_articles_slug"],
+        "generation_basis": {
+          "generation_rule": "method_gap",
+          "source_entry_id": "r20260610-0001#22",
+          "source_location": "oas_operation",
+          "source_part": "method_gap",
+          "derived_candidate": "DELETE /api/articles/{slug}",
+          "reason": "DELETE was not observed for an existing article endpoint"
+        }
+      },
+      "schedule": {
+        "schedule_kind": "same_resource_anchor",
+        "anchor_entry_id": "r20260610-0001#22",
+        "insertion_policy": "after_anchor",
+        "prefix_steps": ["post_api_articles", "get_api_articles_slug"],
+        "probe_step": 2,
+        "suffix_policy": "skip"
+      },
+      "material": {
+        "fresh_value_bindings": [
+          {
+            "from_step": 0,
+            "from_location": "response_body",
+            "from_field": "$.article.slug",
+            "to_location": "path",
+            "to_field": "slug"
+          }
+        ],
+        "value_basis": "fresh_replay",
+        "material_sufficiency": "sufficient"
+      },
+      "admission": {
+        "existence_evidence": "strong_success",
+        "admission_decision": "admit_augmented_oas"
+      },
+      "request": {
+        "method": "DELETE",
+        "url": "http://localhost:3000/api/articles/fresh-article-1"
+      },
+      "response": {
+        "status": 204
+      },
+      "success": true,
+      "cleanup": {
+        "required": false,
+        "performed": false,
+        "basis": "per_probe_cleanup",
+        "detail": "After the scheduled DELETE succeeded, suffix_policy=skip; the deletion is the final state"
+      }
+    },
+    {
+      "probe_id": "p-0003",
+      "probe_kind": "response",
+      "execution_mode": "not_executed",
+      "not_executed_reason": "response_derived_url_without_anchor",
+      "target": {
+        "method": "GET",
+        "candidate_url": "http://localhost:3000/api/profiles/carver"
+      },
+      "construction_basis": {
+        "strategy": "scheduled_discovery",
+        "generation_basis": {
+          "generation_rule": "response_value_path_extension",
+          "source_entry_id": "r20260610-0001#18",
+          "source_location": "response_body",
+          "source_jsonpath": "$.profile.username",
+          "source_part": "value",
+          "derived_candidate": "http://localhost:3000/api/profiles/carver",
+          "reason": "response value deterministically extends profile collection path"
+        }
+      },
+      "schedule": {
+        "schedule_kind": "not_scheduled",
+        "checkpoint_type": "none",
+        "insertion_policy": "not_scheduled",
+        "suffix_policy": "not_applicable"
+      },
+      "material": {
+        "value_basis": "recorded_literal",
+        "literal_assumptions": [
+          {
+            "location": "path",
+            "field": "username",
+            "reason": "No anchor that can be made fresh has been found yet for the response-derived URL candidate"
+          }
+        ],
+        "material_sufficiency": "insufficient"
+      },
+      "admission": {
+        "existence_evidence": "non_evidence",
+        "admission_decision": "not_executed"
+      }
+    },
+    {
+      "probe_id": "p-0004",
+      "probe_kind": "operation",
+      "execution_mode": "scheduled",
+      "target": {
+        "method": "POST",
+        "canonical_path": "/api/users",
+        "operation_id": "post_api_users"
+      },
+      "construction_basis": {
+        "strategy": "scheduled_discovery",
+        "anchor_sequence": [],
+        "generation_basis": {
+          "generation_rule": "method_gap",
+          "source_entry_id": "r20260610-0001#login-body",
+          "source_location": "oas_operation",
+          "source_part": "method_gap",
+          "derived_candidate": "POST /api/users",
+          "reason": "POST user creation candidate uses recorded login-shaped body template"
+        }
+      },
+      "schedule": {
+        "schedule_kind": "checkpoint",
+        "checkpoint_entry_id": "r20260610-0001#4",
+        "checkpoint_type": "operation_based",
+        "checkpoint_method": "POST",
+        "insertion_policy": "after_checkpoint",
+        "prefix_steps": [],
+        "probe_step": 0,
+        "suffix_policy": "skip"
+      },
+      "material": {
+        "body_template_source": "r20260610-0001#login-body",
+        "fresh_value_bindings": [],
+        "runtime_secret_bindings": [
+          {
+            "location": "body",
+            "field": "$.user.email",
+            "source": "replay_config"
+          },
+          {
+            "location": "body",
+            "field": "$.user.password",
+            "source": "replay_config"
+          }
+        ],
+        "value_basis": "runtime_secret",
+        "material_sufficiency": "sufficient"
+      },
+      "admission": {
+        "existence_evidence": "strong_success",
+        "admission_decision": "admit_augmented_oas"
+      },
+      "request": {
+        "method": "POST",
+        "url": "http://localhost:3000/api/users",
+        "body": "{\"user\": {\"email\": \"[REDACTED:runtime_secret]\", \"password\": \"[REDACTED:runtime_secret]\"}}"
+      },
+      "response": {
+        "status": 201
+      },
+      "success": true,
+      "cleanup": {
+        "required": true,
+        "performed": false,
+        "basis": "per_probe_cleanup",
+        "detail": "body_bearing_write_cleanup_not_verified"
+      }
+    }
+  ]
+}

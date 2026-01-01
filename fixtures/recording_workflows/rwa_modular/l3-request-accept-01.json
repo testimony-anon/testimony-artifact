@@ -1,0 +1,853 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "rwa-modular-l3-request-accept-01",
+  "profile_ref": "fixtures/profiles/rwa_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://localhost:14000/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "actor_id": "actor_b",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_b.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://localhost:14000/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.a-start-balance",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "hover",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-user-balance]"
+        }
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.b-start-balance",
+      "global_step_index": 1,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "hover",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-user-balance]"
+        }
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.open-new-transaction",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=nav-top-new-transaction]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/transaction/new$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=user-list-search-input]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.search-receiver",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=user-list-search-input]"
+        },
+        "value": "Arvilla_Hegmann"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=user-list-item-]",
+            "has_text": "Arvilla_Hegmann"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.select-receiver",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=user-list-item-]",
+          "has_text": "Arvilla_Hegmann"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test*=amount-input] input"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.fill-amount",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test*=amount-input] input"
+        },
+        "value": "16"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.fill-description",
+      "global_step_index": 6,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test*=description-input] input"
+        },
+        "value": "accept request"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.submit-request",
+      "global_step_index": 7,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test*=submit-request]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=new-transaction-return-to-transactions]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "text",
+            "value": "accept request",
+            "exact": false
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s003.search-receiver",
+        "story.s005.fill-amount",
+        "story.s006.fill-description"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s008",
+      "workflow_step_id": "story.s008.return-to-transactions",
+      "global_step_index": 8,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=new-transaction-return-to-transactions]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-personal-tab]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s009",
+      "workflow_step_id": "story.s009.open-mine-feed",
+      "global_step_index": 9,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=nav-personal-tab]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-item-]",
+            "has_text": "accept request"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s010",
+      "workflow_step_id": "story.s010.open-transaction-detail",
+      "global_step_index": 10,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=transaction-item-]",
+          "has_text": "accept request"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/transaction/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=transaction-detail-header]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s011",
+      "workflow_step_id": "story.s011.a-no-request-buttons",
+      "global_step_index": 11,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "hover",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=transaction-detail-header]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-accept-request-]"
+          },
+          "state": "hidden",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-reject-request-]"
+          },
+          "state": "hidden",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s012",
+      "workflow_step_id": "story.s012.navigate-home",
+      "global_step_index": 12,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/"
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-personal-tab]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s013",
+      "workflow_step_id": "story.s013.open-mine-feed",
+      "global_step_index": 13,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=nav-personal-tab]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-item-]",
+            "has_text": "accept request"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s014",
+      "workflow_step_id": "story.s014.open-transaction-detail",
+      "global_step_index": 14,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=transaction-item-]",
+          "has_text": "accept request"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/transaction/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=transaction-detail-header]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s015",
+      "workflow_step_id": "story.s015.b-accept-request",
+      "global_step_index": 15,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=transaction-accept-request-]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-accept-request-]"
+          },
+          "state": "hidden",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=transaction-detail-header]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s016",
+      "workflow_step_id": "story.s016.logout",
+      "global_step_index": 16,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-signout]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/signin$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-submit]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s017",
+      "workflow_step_id": "story.s017.fill-username",
+      "global_step_index": 17,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value_env": "UISEMTEST_RWA_ACTOR_B_USERNAME"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s018",
+      "workflow_step_id": "story.s018.fill-password",
+      "global_step_index": 18,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value_env": "UISEMTEST_RWA_ACTOR_B_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s019",
+      "workflow_step_id": "story.s019.submit-signin",
+      "global_step_index": 19,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s020",
+      "workflow_step_id": "story.s020.navigate-home",
+      "global_step_index": 20,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/"
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-personal-tab]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s021",
+      "workflow_step_id": "story.s021.open-mine-feed",
+      "global_step_index": 21,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=nav-personal-tab]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-item-]",
+            "has_text": "accept request"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s022",
+      "workflow_step_id": "story.s022.open-transaction-detail",
+      "global_step_index": 22,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=transaction-item-]",
+          "has_text": "accept request"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/transaction/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=transaction-detail-header]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s023",
+      "workflow_step_id": "story.s023.b-final-balance",
+      "global_step_index": 23,
+      "actor_id": "actor_b",
+      "action": {
+        "kind": "hover",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-user-balance]"
+        }
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s024",
+      "workflow_step_id": "story.s024.logout",
+      "global_step_index": 24,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-signout]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/signin$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-submit]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s025",
+      "workflow_step_id": "story.s025.fill-username",
+      "global_step_index": 25,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value_env": "UISEMTEST_RWA_ACTOR_A_USERNAME"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s026",
+      "workflow_step_id": "story.s026.fill-password",
+      "global_step_index": 26,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value_env": "UISEMTEST_RWA_ACTOR_A_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s027",
+      "workflow_step_id": "story.s027.submit-signin",
+      "global_step_index": 27,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s028",
+      "workflow_step_id": "story.s028.navigate-home",
+      "global_step_index": 28,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/"
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-personal-tab]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s029",
+      "workflow_step_id": "story.s029.open-mine-feed",
+      "global_step_index": 29,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=nav-personal-tab]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test^=transaction-item-]",
+            "has_text": "accept request"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s030",
+      "workflow_step_id": "story.s030.open-transaction-detail",
+      "global_step_index": 30,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test^=transaction-item-]",
+          "has_text": "accept request"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/transaction/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=transaction-detail-header]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s031",
+      "workflow_step_id": "story.s031.a-final-balance",
+      "global_step_index": 31,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "hover",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=sidenav-user-balance]"
+        }
+      },
+      "waits": []
+    }
+  ]
+}

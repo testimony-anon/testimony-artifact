@@ -1,0 +1,242 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "ghost-modular-l2-member-02",
+  "profile_ref": "fixtures/profiles/ghost_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18093/ghost/#/members"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 300,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-nav-menu=\"main\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[data-test-new-member-button]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.click-a-new-member",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[data-test-new-member-button]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-input=\"member-name\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-member-name",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-input=\"member-name\"]"
+        },
+        "value": "Test Member"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.fill-member-email",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-input=\"member-email\"]"
+        },
+        "value": "tester@testmember.com"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.click-save",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-button=\"save\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-button=\"save\"]",
+            "has_text": "Saved"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "network_quiet",
+          "quiet_ms": 400,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.fill-member-name",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-input=\"member-name\"]"
+        },
+        "value": "Test Member Edited"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.fill-member-email",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-input=\"member-email\"]"
+        },
+        "value": "tester.edited@example.com"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.fill-member-note",
+      "global_step_index": 6,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-input=\"member-note\"]"
+        },
+        "value": "This is an edited test member"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.click-save",
+      "global_step_index": 7,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-button=\"save\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-button=\"save\"]",
+            "has_text": "Saved"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "network_quiet",
+          "quiet_ms": 400,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

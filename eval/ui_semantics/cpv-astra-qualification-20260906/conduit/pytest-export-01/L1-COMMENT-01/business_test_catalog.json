@@ -1,0 +1,926 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 9,
+    "canonical_relation_core_identities": [
+      "312fdc80805643e9ae4400831df2ef47ac9280ff4e9aa93e7e7b7ec2c7faecaa",
+      "3fb48d84e87928dbf27a1346fecf7643b5920b416706222247c24bc32284bc59",
+      "6eaf8894694374a8be840b1d3916d1f91d03b5cc3df9153a4af7423a0d41579b",
+      "77612dff54bea02236cff13fe2841e8118dd6a090e0fd86924c896ae7b84cf37",
+      "7771fcacc67e7ec701f2d57fa057e28695091593c1d090f0b54ebea276b3c4a7",
+      "9faeaf27d11dda9dcb4ac5f3f9facd3d19acd804fa2ed0473e477f01803d0104",
+      "a233174b6754dfb20f369cd0b013795aa3717fde70e7500a75d9dce460ae84d5",
+      "bb99a5b0f4dd5f668dfb697e5bb42c27473afb1c7f203bdb060496ad3ec25caf",
+      "c4a9eb88ec529357aae25e880cd8e20ad1a82fa2fa49419893bc3c486a2dcd8c",
+      "c7c7984985ca2db54dff3426786c65fd963e23f60fd5d4c9df4384d27f1bb5db",
+      "e124b064f4594071cf33e777c676644b983c3ac925716bf52f47519b41346a0d"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0011",
+      "v2-candidate-0012"
+    ],
+    "physical_retained_test_occurrence_count": 11,
+    "unique_canonical_relation_core_count": 11
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/community-gardening-tips; business predicate P02 requires after $.article.title (string) to strictly equal producer_request $.article.title (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "e124b064f4594071cf33e777c676644b983c3ac925716bf52f47519b41346a0d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The POST sends $.article.title, and the slug-linked GET exposes the same string field. Propose that a fresh read returns the actually submitted title; equality is not established by the response shapes.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-db6585539e80f43e1848"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.description",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.description",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/community-gardening-tips; business predicate P02 requires after $.article.description (string) to strictly equal producer_request $.article.description (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "7771fcacc67e7ec701f2d57fa057e28695091593c1d090f0b54ebea276b3c4a7",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The POST sends $.article.description, and the slug-linked GET exposes the same string field. This grounds a proposed readback of the actually submitted description, not an observed equality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e947e3a48c25c6d19788"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.body",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.body",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/community-gardening-tips; business predicate P02 requires after $.article.body (string) to strictly equal producer_request $.article.body (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "77612dff54bea02236cff13fe2841e8118dd6a090e0fd86924c896ae7b84cf37",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The POST sends $.article.body, and the slug-linked GET exposes the same string field. Propose exact readback of the actually submitted body; the recording does not establish that rule.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5d037fe25ba5a06ea847"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.tagList",
+            "role": "after",
+            "value_type": "array"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.tagList",
+              "role": "producer_request",
+              "value_type": "array"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/community-gardening-tips; business predicate P02 requires after $.article.tagList (array) to strictly equal producer_request $.article.tagList (array).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "3fb48d84e87928dbf27a1346fecf7643b5920b416706222247c24bc32284bc59",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The POST sends $.article.tagList as an array, and the linked article GET exposes that array path. Propose strict readback equality, including order and multiplicity; neither equality nor normalization behavior is established.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-d2298e509b775702cee6"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "delta": 1,
+          "family": "P12"
+        },
+        "predicate_type": "P12"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/community-gardening-tips/comments; observer actor_a GET /api/articles/community-gardening-tips/comments; business predicate P12 requires collection count after $.comments (array) minus before $.comments (array) to equal 1.",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "6eaf8894694374a8be840b1d3916d1f91d03b5cc3df9153a4af7423a0d41579b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190305-64cb:request:4"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/community-gardening-tips/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The comparable comments reads record a count change from 0 to 1, with request:7 classified as the unique target-relevant write. This grounds a proposed increase of one, not causality. Article creation is the minimal eligible setup supported by the recorded target locator linkage.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e73fed5f169d1f17ca73"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.comment",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/community-gardening-tips/comments; observer actor_a GET /api/articles/community-gardening-tips/comments; business predicate P14 requires producer_response $.comment (object) to be added between before $.comments (array) and after $.comments (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "9faeaf27d11dda9dcb4ac5f3f9facd3d19acd804fa2ed0473e477f01803d0104",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190305-64cb:request:4"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/community-gardening-tips/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The recorded collection is initially empty and subsequently has one member; the intervening POST returns a comment with the same visible id field structure as collection members. This supports proposing that the returned comment is newly added, without establishing its observed identity match or causality. The linked article creation supplies the minimal eligible setup hypothesis.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-32e8d5738b867c1e4dd0"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.comments",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/community-gardening-tips/comments; basic constraint P15 requires observation $.comments (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "bb99a5b0f4dd5f668dfb697e5bb42c27473afb1c7f203bdb060496ad3ec25caf",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "observation",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 10,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[9].rationale",
+          "raw_rationale": "The recorded comments read exposes integer member ids. Propose uniqueness of the frozen $.id tuple within its complete actual response array; the visible shape does not prove uniqueness or database-wide identity.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The response exposes comment ids, and an observed id supplies the locator for deleting a comment. This supports proposed id uniqueness within the complete actual response array. The recording contains only one member and does not establish uniqueness across other responses or stored comments.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-dbb7dd9d21412ddd1e12"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.article.tagList",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/community-gardening-tips; basic constraint P15 requires observation $.article.tagList (array) (actual_response) to have unique members by strict-tuple identity [$]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "c4a9eb88ec529357aae25e880cd8e20ad1a82fa2fa49419893bc3c486a2dcd8c",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "observation",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "The submitted article contains a tag array, and the recorded point read exposes string tag members. Propose uniqueness of complete tag values within that returned array, retaining duplicates for evaluation; uniqueness is a hypothesis, not an observed API guarantee.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b53f022f0288ae883813"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "DELETE",
+          "path": "/api/articles/community-gardening-tips/comments/1",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:9"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "delta": -1,
+          "family": "P12"
+        },
+        "predicate_type": "P12"
+      },
+      "business_summary": "Producer actor_a DELETE /api/articles/community-gardening-tips/comments/1; observer actor_a GET /api/articles/community-gardening-tips/comments; business predicate P12 requires collection count after $.comments (array) minus before $.comments (array) to equal -1.",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "c7c7984985ca2db54dff3426786c65fd963e23f60fd5d4c9df4384d27f1bb5db",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:10"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "DELETE",
+        "path": "/api/articles/community-gardening-tips/comments/1",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:9"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The comparable reads record the comments count changing from 1 to 0. The transition fact identifies request 9 as the unique target-relevant intervening write, supporting the proposed delta of -1 without proving causality. Action 0007 is the minimal setup hypothesis supported by the comment identity linkage.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f83e30093e616bdfd7aa"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "checkpoint_id": "B_action1",
+          "kind": "http",
+          "method": "DELETE",
+          "occurrence_index": 1,
+          "path": "/api/articles/community-gardening-tips/comments/1",
+          "phase": "B_action1",
+          "request_policy": "reuse_prepared_request",
+          "request_ref": "r20260901-190305-64cb:request:9",
+          "reset_epoch": "repeat_twice",
+          "role": "producer"
+        },
+        {
+          "actor": "actor_a",
+          "checkpoint_id": "B_action2",
+          "kind": "http",
+          "method": "DELETE",
+          "occurrence_index": 2,
+          "path": "/api/articles/community-gardening-tips/comments/1",
+          "phase": "B_action2",
+          "request_policy": "reuse_prepared_request",
+          "request_ref": "r20260901-190305-64cb:request:9",
+          "reset_epoch": "repeat_twice",
+          "role": "producer"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "repeat_rejected",
+          "projection": {
+            "family": "P20",
+            "left": {
+              "path": "$",
+              "role": "before",
+              "value_type": "object"
+            },
+            "operator": "equal",
+            "projection": [
+              "$.comments"
+            ],
+            "projection_ref": null,
+            "right": {
+              "path": "$",
+              "role": "after",
+              "value_type": "object"
+            }
+          },
+          "rejection": null
+        },
+        "predicate_type": "repeat_rejected"
+      },
+      "business_summary": "Repeated action actor_a DELETE /api/articles/community-gardening-tips/comments/1; reset arms ['repeat_twice']; actual checkpoints/actions ['B0', 'B_action1', 'B1', 'B_action2', 'B2']; fixed checks ['second_rejection', 'preservation']; repeat_rejected requires first success, second rejection (healthy HTTP 4xx), and B1 = B2; P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.comments']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "a233174b6754dfb20f369cd0b013795aa3717fde70e7500a75d9dce460ae84d5",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "checkpoint_id": "B0",
+          "kind": "http",
+          "method": "GET",
+          "occurrence_index": 0,
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "B0",
+          "request_ref": "r20260901-190305-64cb:request:8",
+          "reset_epoch": "repeat_twice",
+          "role": "before"
+        },
+        {
+          "actor": "actor_a",
+          "checkpoint_id": "B1",
+          "kind": "http",
+          "method": "GET",
+          "occurrence_index": 1,
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "B1",
+          "request_ref": "r20260901-190305-64cb:request:10",
+          "reset_epoch": "repeat_twice",
+          "role": "after"
+        },
+        {
+          "actor": "actor_a",
+          "checkpoint_id": "B2",
+          "kind": "http",
+          "method": "GET",
+          "occurrence_index": 2,
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "B2",
+          "request_ref": "r20260901-190305-64cb:request:10",
+          "reset_epoch": "repeat_twice",
+          "role": "after"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "checkpoint_id": "B_action1",
+        "kind": "http",
+        "method": "DELETE",
+        "occurrence_index": 1,
+        "path": "/api/articles/community-gardening-tips/comments/1",
+        "phase": "B_action1",
+        "request_policy": "reuse_prepared_request",
+        "request_ref": "r20260901-190305-64cb:request:9",
+        "reset_epoch": "repeat_twice",
+        "role": "producer"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The recorded deletion returns 200 and the subsequent collection is empty. The resulting absence supports the separate hypothesis that a second identical deletion receives a healthy 4xx while preserving the comments collection. Neither repetition nor rejection was observed. Action 0007 is the target-linked setup hypothesis.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-155adaa72c99989b0590"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.comment",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/community-gardening-tips/comments; observer actor_a GET /api/articles/community-gardening-tips/comments; business predicate P14 requires producer_response $.comment (object) to be added between before $.comments (array) and after $.comments (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "312fdc80805643e9ae4400831df2ef47ac9280ff4e9aa93e7e7b7ec2c7faecaa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/community-gardening-tips/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The POST of a comment body returns 201 with an identified comment, followed by a read of the same collection. This supports the stronger hypothesis that the returned identity is newly added across the action; its prior absence is not established by a visible recorded read. Article locator lineage supports action 0005 as setup.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-da5b36fd3097d158e673"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "uisemtest-current-subject-adapter-v1",
+  "adapter_id": "rwa-current-local-http-v1",
+  "subject_id": "rwa",
+  "runtime": {
+    "kind": "local_http",
+    "source_root": "${UISEMTEST_RWA_CHECKOUT}",
+    "environment": {
+      "PATH": "${UISEMTEST_NODE22_BIN}:${UISEMTEST_RWA_CHECKOUT}/node_modules/.bin:/usr/bin:/bin:/usr/sbin:/sbin",
+      "NODE_ENV": "development",
+      "PORT": "14000",
+      "VITE_BACKEND_PORT": "14001",
+      "NO_PROXY": "localhost,127.0.0.1,::1",
+      "no_proxy": "localhost,127.0.0.1,::1"
+    },
+    "materialize_commands": [
+      [
+        "${UISEMTEST_NODE22_BIN}/node",
+        "${UISEMTEST_RWA_CHECKOUT}/node_modules/ncp/bin/ncp",
+        "${UISEMTEST_RWA_CHECKOUT}/scripts/mock-aws-exports.js",
+        "${UISEMTEST_RWA_CHECKOUT}/src/aws-exports.js"
+      ],
+      [
+        "${UISEMTEST_NODE22_BIN}/node",
+        "${UISEMTEST_RWA_CHECKOUT}/node_modules/ncp/bin/ncp",
+        "${UISEMTEST_RWA_CHECKOUT}/scripts/mock-aws-exports-es5.js",
+        "${UISEMTEST_RWA_CHECKOUT}/aws-exports-es5.js"
+      ]
+    ],
+    "server_commands": [
+      [
+        "${UISEMTEST_NODE22_BIN}/node",
+        "${UISEMTEST_RWA_CHECKOUT}/node_modules/nyc/bin/nyc.js",
+        "--silent",
+        "${UISEMTEST_NODE22_BIN}/node",
+        "${UISEMTEST_RWA_CHECKOUT}/node_modules/ts-node/dist/bin.js",
+        "-P",
+        "${UISEMTEST_RWA_CHECKOUT}/tsconfig.tsnode.json",
+        "--files",
+        "${UISEMTEST_RWA_CHECKOUT}/backend/app.ts"
+      ],
+      [
+        "${UISEMTEST_NODE22_BIN}/node",
+        "${UISEMTEST_RWA_CHECKOUT}/node_modules/vite/bin/vite.js",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "14000",
+        "--strictPort"
+      ]
+    ],
+    "health_probes": [
+      {"url": "http://localhost:14001/", "expect_status": 200},
+      {"url": "http://127.0.0.1:14000/", "expect_status": 200}
+    ],
+    "teardown_generated_paths": [
+      "src/aws-exports.js",
+      "aws-exports-es5.js"
+    ],
+    "loopback_only": true,
+    "reset_from_profile": true,
+    "independent_arm_sessions": true
+  },
+  "request_mapping": {
+    "mode": "current_recording_exact",
+    "header_policy": "accept_content_type_only"
+  },
+  "request_bindings": {},
+  "fresh_materialization_policy": {
+    "source": "current_observed_value_flow_set",
+    "selection": "exact_setup_to_candidate_consumers_v1",
+    "allowed_target_locations": ["path", "query", "header", "body"],
+    "allowed_scalar_types": ["string", "integer", "number", "boolean"]
+  },
+  "observer_policy": {
+    "schema_version": "uisemtest-current-observer-policy-v1",
+    "purity_domains_exact_set": ["cache", "cookie", "last_seen", "token"],
+    "request_method_policy": "read_only"
+  },
+  "settle_policy": {
+    "schema_version": "uisemtest-current-settle-policy-v2",
+    "rule": "bounded_semantic_stability_v1",
+    "minimum_duration_ms": 500,
+    "poll_interval_ms": 100,
+    "consecutive_identical_observations": 3,
+    "maximum_duration_ms": 2000
+  },
+  "sensitive_classification": {
+    "forbidden_source_refs": [],
+    "forbidden_projection_paths": ["$.password", "$.token", "$.accessToken"]
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "rwa-modular-l1-auth-03",
+  "profile_ref": "fixtures/profiles/rwa_modular_guest_local.json",
+  "actors": [
+    {
+      "actor_id": "guest",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.guest.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://localhost:14000/signin"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-username] input"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.username-value",
+      "global_step_index": 0,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value": "User"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.username-clear",
+      "global_step_index": 1,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value": ""
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.username-blur",
+      "global_step_index": 2,
+      "actor_id": "guest",
+      "action": {
+        "kind": "press",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "key": "Tab"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "#username-helper-text",
+            "has_text": "Username is required"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.password-short",
+      "global_step_index": 3,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value": "abc"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.password-short-blur",
+      "global_step_index": 4,
+      "actor_id": "guest",
+      "action": {
+        "kind": "press",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "key": "Tab"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "#password-helper-text",
+            "has_text": "at least 4"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.password-clear",
+      "global_step_index": 5,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value": ""
+      },
+      "waits": []
+    }
+  ]
+}

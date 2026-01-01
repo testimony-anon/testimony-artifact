@@ -1,0 +1,13 @@
+--- a/core/server/services/posts/PostsService.js
++++ b/core/server/services/posts/PostsService.js
+@@ -76,7 +76,9 @@
+             }
+         }
+ 
+-        const model = await this.models.Post.edit(frame.data.posts[0], frame.options);
++        // RQ2 B-G01: the submitted visibility is dropped before the update is persisted.
++        const {visibility: _ignoredVisibility, ...postData} = frame.data.posts[0];
++        const model = await this.models.Post.edit(postData, frame.options);
+ 
+         /**Handle newsletter email */
+         if (model.get('newsletter_id')) {

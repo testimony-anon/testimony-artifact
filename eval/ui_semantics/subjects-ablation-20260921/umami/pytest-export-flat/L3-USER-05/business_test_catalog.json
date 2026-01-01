@@ -1,0 +1,407 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 4,
+    "canonical_relation_core_identities": [
+      "74150e0027eb5e5cfb1d5ed30e8d007971ae8fb338a48a58f6f2c530ee2e43b0",
+      "81a1b61a43a9bae859757ce7d2cb55b978a4c31e35d79f7e0888977712322aff",
+      "87d9f4cd3190e5647aa1658364e765f5e59c1c8620354d4bd747c0db78a8eabc",
+      "fd219dc812904bb382128f39a619545ec6a13b4658666f54b36075bf4ea7d73e"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0022",
+      "v2-candidate-0025",
+      "v2-candidate-0026",
+      "v2-candidate-0073"
+    ],
+    "physical_retained_test_occurrence_count": 4,
+    "unique_canonical_relation_core_count": 4
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "producer",
+          "request_ref": "r20260920-082945-da28:request:34"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0022-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.role",
+            "role": "after",
+            "value_type": "string"
+          },
+          "before": {
+            "path": "$.role",
+            "role": "before",
+            "value_type": "string"
+          },
+          "family": "P04",
+          "from_value": {
+            "ref": {
+              "path": "$.role",
+              "role": "before",
+              "value_type": "string"
+            },
+            "source": "role"
+          },
+          "operator": "from_to",
+          "to_value": {
+            "ref": {
+              "location": "body",
+              "path": "$.role",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "request"
+          }
+        },
+        "predicate_type": "P04"
+      },
+      "business_summary": "Producer actor_a POST /api/users/b0000000-0000-4000-8000-000000000002; observer actor_a GET /api/users/b0000000-0000-4000-8000-000000000002; business predicate P04 checks before action that before $.role (string) equals before $.role (string); if established, requires the fresh after $.role (string) to equal actual request body $.role (string).",
+      "candidate_id": "v2-candidate-0022",
+      "canonical_relation_core_identity": "81a1b61a43a9bae859757ce7d2cb55b978a4c31e35d79f7e0888977712322aff",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082945-da28:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082945-da28:request:35"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+        "phase": "producer",
+        "request_ref": "r20260920-082945-da28:request:34"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center POST /api/users/{id} (actor_a request:34) sends body $.role; the same actor/session pre-read request:23 and post-read request:35 expose $.role as a string. Proposed state pair: $.role moves from its pre-read value to the posted value. Recorded values need not already satisfy this.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-826f2bb5bc1779d81a76"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "producer",
+          "request_ref": "r20260920-082945-da28:request:34"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0025-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.role",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.role",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/users/b0000000-0000-4000-8000-000000000002; observer actor_a GET /api/users/b0000000-0000-4000-8000-000000000002; business predicate P02 requires after $.role (string) to strictly equal producer_request $.role (string).",
+      "candidate_id": "v2-candidate-0025",
+      "canonical_relation_core_identity": "fd219dc812904bb382128f39a619545ec6a13b4658666f54b36075bf4ea7d73e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082945-da28:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082945-da28:request:35"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+        "phase": "producer",
+        "request_ref": "r20260920-082945-da28:request:34"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Readback: the fresh after read request:35 exposes $.role (string) and the actual prepared producer request request:34 body exposes $.role (string). The updated user resource is hypothesized to return the posted role.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0006",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Distinct field of the same observed lifecycle: the prepared POST r20260920-082945-da28:request:34 carries body $.role (recorded literal, string), and the fresh same-operation read r20260920-082945-da28:request:35 exposes $.role. Proposed readback rule compares the two, not a recording that already agrees.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center write request:34 (POST /api/users/b0000000-...-000000000002) carries visible body field $.role (string) for actor_a; the same-actor fresh API read request:35 (GET /api/users/{id}) returns response field $.role (shape e0ca566415657c0b19cdda5d). P02 proposes the fresh after field equals the actual prepared producer-request body field; prior read request:23 is the same observer operation for the same user. Causality is not proven by recording order.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5255c231adc80e13572f"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "producer",
+          "request_ref": "r20260920-082945-da28:request:34"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0026-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.id",
+            "$.createdAt"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/users/b0000000-0000-4000-8000-000000000002; observer actor_a GET /api/users/b0000000-0000-4000-8000-000000000002; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.id', '$.createdAt']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0026",
+      "canonical_relation_core_identity": "87d9f4cd3190e5647aa1658364e765f5e59c1c8620354d4bd747c0db78a8eabc",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082945-da28:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082945-da28:request:35"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+        "phase": "producer",
+        "request_ref": "r20260920-082945-da28:request:34"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The same actor/session reads the same user object before (request:23) and after (request:35) the center update request:34, using the same observer operation and selector. Identity field $.id and creation field $.createdAt (both present in the before/after shapes and echoed in the write body) are hypothesized to survive the username/role update of that one object.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0006",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Same-actor/session root-object comparison: before r20260920-082945-da28:request:23 and after r20260920-082945-da28:request:35 share one observed catalog operation and selector on the same user record, and the write r20260920-082945-da28:request:34 echoes $.id and $.createdAt in its body. Proposed preservation rule projects those two fields; each is checked independently and the hypothesis is not prevalidated.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Request:23 and request:35 are the same actor_a/session observer operation get_api_users with the same selector for the same user object (identical response shape e0ca566415657c0b19cdda5d), with the center write request:34 in between. P20 proposes that the object fields $.id and $.createdAt remain unchanged from before to after; the recorded values need not already be equal and the write's effect on $.role/$.username is not attributed here.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a70145cfd2262d19a264"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "producer",
+          "request_ref": "r20260920-082945-da28:request:34"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0073-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.twoFactorRequired",
+            "role": "after",
+            "value_type": "boolean"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.twoFactorRequired",
+              "role": "producer_request",
+              "value_type": "boolean"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/users/b0000000-0000-4000-8000-000000000002; observer actor_a GET /api/users/b0000000-0000-4000-8000-000000000002; business predicate P02 requires after $.twoFactorRequired (boolean) to strictly equal producer_request $.twoFactorRequired (boolean).",
+      "candidate_id": "v2-candidate-0073",
+      "canonical_relation_core_identity": "74150e0027eb5e5cfb1d5ed30e8d007971ae8fb338a48a58f6f2c530ee2e43b0",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "before_observer",
+          "request_ref": "r20260920-082945-da28:request:23"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+          "phase": "after_observer",
+          "request_ref": "r20260920-082945-da28:request:35"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users/b0000000-0000-4000-8000-000000000002",
+        "phase": "producer",
+        "request_ref": "r20260920-082945-da28:request:34"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0006",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Boolean readback in the same observed lifecycle: POST r20260920-082945-da28:request:34 body records $.twoFactorRequired (boolean), and the fresh read r20260920-082945-da28:request:35 exposes $.twoFactorRequired (boolean). Proposed strict boolean equality between fresh after field and actual prepared request field; hypothesis only.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Center write request:34 carries visible boolean body field $.twoFactorRequired; the same-actor fresh read request:35 returns boolean response field $.twoFactorRequired (shape e0ca566415657c0b19cdda5d). P02 readback proposes strict JSON equality of the fresh after value with the actual prepared request body value; the recorded booleans are not treated as prevalidated.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-19c723d4481034b2bd4d"
+    }
+  ]
+}

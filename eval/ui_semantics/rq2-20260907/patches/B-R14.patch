@@ -1,0 +1,18 @@
+--- a/backend/database.ts
++++ b/backend/database.ts
+@@ -436,14 +436,7 @@
+ export const getContactIdsForUser = (userId: string): Contact["id"][] =>
+   flow(getContactsByUserId, map("contactUserId"))(userId);
+ 
+-export const getTransactionsForUserContacts = (userId: string, query?: object) =>
+-  uniqBy(
+-    "id",
+-    flatMap(
+-      (contactId) => getTransactionsForUserForApi(contactId, query),
+-      getContactIdsForUser(userId)
+-    )
+-  );
++export const getTransactionsForUserContacts = (userId: string, query?: object): TransactionResponseItem[] => [];
+ 
+ export const getTransactionIds = (transactions: Transaction[]) => map("id", transactions);
+ 

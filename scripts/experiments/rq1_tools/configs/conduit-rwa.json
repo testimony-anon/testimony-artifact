@@ -1,0 +1,53 @@
+{
+  "_doc": [
+    "Frozen two-subject configuration: reproduces docs/design/cpv-expansion/rq1-audit-deepseek/ exactly.",
+    "Run priority is m11fix-02,m11fix-01 -- NOT the rerecord-01,m11fix-01 default written in the frozen",
+    "scripts' docstrings; m11fix-02,m11fix-01 is the order that reproduces the frozen cases.jsonl/tests.jsonl",
+    "byte for byte (verified 2026-09-20).",
+    "audit_dir points at the frozen artefacts on purpose (it documents where they live), but every tool",
+    "refuses to write there unless --allow-frozen-audit-dir is given; pass --audit-dir <temp dir> instead."
+  ],
+  "runs_root": "eval/ui_semantics/deepseek-full-20260912",
+  "audit_dir": "docs/design/cpv-expansion/rq1-audit-deepseek",
+  "export_name": "pytest-export-final",
+  "export_glob": "*/business_test_catalog.json",
+  "runs": [
+    "m11fix-02",
+    "rerecord-01",
+    "m11fix-01"
+  ],
+  "subjects": [
+    {
+      "id": "conduit",
+      "inventory": "fixtures/recording_workflows/conduit_modular/inventory.json"
+    },
+    {
+      "id": "rwa",
+      "inventory": "fixtures/recording_workflows/rwa_modular/inventory.json"
+    }
+  ],
+  "scopes": "docs/design/cpv-expansion/rq1-audit/scopes.jsonl",
+  "queue_sample_seed": 20260912,
+  "summary_generator_label": "scripts/experiments/rq1_tools/rq1_summarize_deepseek.py",
+  "helpers_module": "eval/ui_semantics/deepseek-full-20260912/review_refuted.py",
+  "previous_round": {
+    "enabled": true,
+    "audit_dir": "docs/design/cpv-expansion/rq1-audit",
+    "exports_root": "eval/ui_semantics/cpv-astra-qualification-20260906",
+    "export_glob": "pytest-export-*/*/business_test_catalog.json",
+    "subjects": [
+      "conduit",
+      "rwa"
+    ]
+  },
+  "review": {
+    "model": "deepseek-flash",
+    "prompt_version": "v2.1",
+    "reviewer_date": "2026-09-12"
+  },
+  "targets": {
+    "model": "deepseek-flash",
+    "prompt_version": "v2",
+    "reviewer_date": "2026-09-12"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_pre_live_binding_pins_v2.schema.json",
+  "type": "object",
+  "required": ["artifact_ref", "artifact_sha256", "payload"],
+  "properties": {
+    "artifact_ref": {"type": "string", "minLength": 1},
+    "artifact_sha256": {"$ref": "#/$defs/sha"},
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version", "candidate_id", "candidate_identity",
+        "normalized_candidate_sha256", "canonical_candidate_payload_sha256",
+        "execution_binding_ref", "execution_binding_sha256",
+        "sensitive_classification_ref", "sensitive_classification_sha256",
+        "projection_plan_ref", "projection_plan_sha256"
+      ],
+      "properties": {
+        "schema_version": {"const": "ui-semantics-route-s-pre-live-binding-pins-payload-v2"},
+        "candidate_id": {"type": "string", "minLength": 1},
+        "candidate_identity": {"type": "string", "minLength": 1},
+        "normalized_candidate_sha256": {"$ref": "#/$defs/sha"},
+        "canonical_candidate_payload_sha256": {"$ref": "#/$defs/sha"},
+        "execution_binding_ref": {"type": "string", "minLength": 1},
+        "execution_binding_sha256": {"$ref": "#/$defs/sha"},
+        "sensitive_classification_ref": {"type": "string", "minLength": 1},
+        "sensitive_classification_sha256": {"$ref": "#/$defs/sha"},
+        "projection_plan_ref": {"type": "string", "minLength": 1},
+        "projection_plan_sha256": {"$ref": "#/$defs/sha"}
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "registered_at": "2026-09-21T16:55:40.733433+00:00",
+  "subject": "ghost",
+  "appended": true,
+  "fault_definitions": [
+    {
+      "fault_id": "PR-G04",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "A column projection (fields=) must not change which posts a read returns: the posts listed by a projected read are the posts listed by the same read without the projection.",
+      "description": "Every 2xx GET /ghost/api/admin/posts/ response whose query string contains the key fields loses the member of $.posts with the smallest id; reads without fields are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "omit_first_member",
+      "target": {
+        "list_path": "$.posts",
+        "id_field": "id",
+        "when_query_key": "fields"
+      },
+      "substates": [
+        "read"
+      ],
+      "observable_effect": "The dashboard read GET posts/?filter=status:published&fields=id,url,title,visibility,published_at&order=published_at desc&limit=5 (recorded 44x) comes back as {\"posts\":[],\"meta\":{...}} while GET posts/?filter=status:published&limit=1 (no fields, recorded 15x) still returns 'Coming soon'.",
+      "paired_tests": 438,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 1004.2455004579679,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md"
+    },
+    {
+      "fault_id": "PR-G05",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "newsletters",
+      "business_rule": "Asking for relation counts (include=count.active_members) must not change which newsletters a read returns: the newsletters listed with include are the newsletters listed without it.",
+      "description": "Every 2xx GET /ghost/api/admin/newsletters/ response whose query string contains the key include loses the last member of $.newsletters; reads without include (filter=status:active) are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/newsletters/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "drop_last_member",
+      "target": {
+        "list_path": "$.newsletters",
+        "when_query_key": "include"
+      },
+      "substates": [
+        "read"
+      ],
+      "observable_effect": "GET newsletters/?status=active&limit=100&include=count.active_members&page=1 (recorded 44x) and newsletters/?filter=status:active&include=none&limit=1 (5x) come back with an empty newsletters list, while GET newsletters/?filter=status:active (6x) still returns the default newsletter 'UISemTest-Ghost'.",
+      "paired_tests": 248,
+      "read_route_pairs_before_trigger_filter": 248,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 560.1975646271603,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md"
+    },
+    {
+      "fault_id": "PR-G06",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "An explicit sort order (order=) must not alter the members it sorts: a post reads back with the same title whether or not the read specifies order.",
+      "description": "Every 2xx GET /ghost/api/admin/posts/ response whose query string contains the key order has the fixed suffix ' [RQ2]' appended to the title of every post object; reads without order are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "rewrite_string",
+      "target": {
+        "field": "title",
+        "scope": "all",
+        "when_query_key": "order"
+      },
+      "substates": [
+        "read"
+      ],
+      "observable_effect": "The dashboard read (order=published_at desc, recorded 44x) and the post-list reads (order=published_at desc / updated_at desc) show 'Coming soon [RQ2]' while GET posts/?filter=status:published&limit=1 (no order) shows 'Coming soon'.",
+      "paired_tests": 438,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 1004.2455004579679,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md"
+    }
+  ],
+  "source_pairs": {
+    "B-G01": 0,
+    "B-G02": 0,
+    "B-G03": 3,
+    "B-G04": 438,
+    "B-G05": 32
+  },
+  "test_selection": "qualified normal_pass on the isolated normal version; API-only read coverage, trigger uncertainty retained; RQ1 labels joined at reporting time",
+  "excluded_tests": [
+    {
+      "test_key": "ghost/L1-MEMBER-01/relation-test-6da57c857dfcf38e50e2",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L1-MEMBER-01/relation-test-82b95e59fe36b763de17",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L1-TAG-03/relation-test-591b132c7a197a624df6",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-02/relation-test-21d760ed789227145c71",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-02/relation-test-74ee6c95d59db97960d0",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-02/relation-test-090b3996fc3118cd553b",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-03/relation-test-2e8222b77cba1b6de6bc",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-03/relation-test-8daafc4d079f0c4b38c4",
+      "reason": "original_qualification_not_passed"
+    },
+    {
+      "test_key": "ghost/L2-MEMBER-05/relation-test-b36930c6cdf0e1aa3e12",
+      "reason": "original_qualification_not_passed"
+    }
+  ],
+  "qualified_tests": 739,
+  "no_response_location_or_test_id_in_fault_identity": true
+}

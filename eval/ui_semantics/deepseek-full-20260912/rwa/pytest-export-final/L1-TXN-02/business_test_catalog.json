@@ -1,0 +1,649 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 5,
+    "business_relation_occurrence_count": 4,
+    "canonical_relation_core_identities": [
+      "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "1f45f33b3d7bdd9810048a76c9b3e2d9baeab07364efad12722d40de9962f68e",
+      "27fb3687c204174a5d1cbf6e25c78bae0d6e52909a7303af161d91449038e357",
+      "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "cbc5c57ede25a4bc4da383354d1355e694b9df964749ac8dd85a2469451c653a",
+      "d3cf2a8f0064e6c2a2a0881502eb993970144d236ffe5b457d842606da430ea6",
+      "f71ed22b57b272a54183e5f60c1a721c203b1f43a1221a877d8fca524ea451bf"
+    ],
+    "duplicate_core_occurrence_count": 2,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0008",
+      "v2-candidate-0010"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0010",
+      "v2-candidate-0011"
+    ],
+    "physical_retained_test_occurrence_count": 9,
+    "unique_canonical_relation_core_count": 7
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-022310-f8a2:request:0', 'r20260902-022310-f8a2:request:4', 'vf-9f806e980792903e673a728b'], 'rationale': \"Proposed rule: the second recorded read keeps the same /users collection read but adds the q selector, so its members are the source members restricted by that filter (conjunction with the source's (empty) filter set). Not prevalidated.\", 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-022310-f8a2:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same actor/session recorded GET /users (request:0, $.results objects with $.id/$.username) then GET /users/search?q=Dina20 (request:4) with the identical member shape; the observed value flow puts the source response member's username into the follow-up query selector q, an observed narrowing selector change. The subset proposal over strict-tuple $.id identity and the frozen filter_refinement transform are hypotheses, not proven containment.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c64abf8c106e3ca7e4ed"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "forall_body_compares_member_with_actual_request_parameter",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P09",
+            "operator": "contains",
+            "right": {
+              "ref": {
+                "location": "query",
+                "path": "$.q",
+                "role": "observation_request",
+                "value_type": "string"
+              },
+              "source": "request"
+            },
+            "target": {
+              "path": "$.username",
+              "role": "item",
+              "value_type": "string"
+            }
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /users/search; business relation For every member of observation $.results (array) in actual_response: P09 requires item $.username (string) to contain actual request query $.q (string); case-sensitive, no normalization; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Proposed request-semantic relation for the recorded authenticated read GET /users/search with query q (request:4): every member of the actual $.results array has a $.username string that contains the actual outgoing q value. Structural grounding is the visible q query location, the $.results[*].username response field and the recorded value flow placing a username value into q; the matching rule itself is a frozen hypothesis, not proven. Actual-response scope only, no claim about the database or other pages.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Proposed single-layer request-semantic relation: the recorded search request carries the visible string selector $.q (literal 'Dina20') and every member of the actual response array exposes a string $.username. The body binds each complete member's username to the actual outgoing query value; the matched field is a proposal, not a proven filter, and the recorded members need not already satisfy it.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "One mechanically read-only recorded request (GET /users/search?q=Dina20) returns $.results[*] objects each carrying a string username, and the same request's own query q is a visible string selector whose value was observed to flow from a username of the preceding user list; the forall body proposes, over the complete actual response array including duplicates, that every returned member's username contains this request's own q, with the selector condition placed in the body and scope fixed to the actual response only.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The recorded search read carries the single query parameter q and returns an object array at $.results whose members expose a string field username; the observed flow vf-9f806e980792903e673a728b shows the recorded q value was taken from a username in the user list, so the proposed request semantic relation is that every returned member's username contains the actually prepared q value. This is a frozen hypothesis over the complete actual response array (duplicates retained), not a completeness or database-level claim, and the case-sensitive containment semantics are the only admitted string operator here.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [
+        {
+          "location": "query",
+          "operand": "right",
+          "path": "$.q",
+          "role": "observation_request",
+          "value_type": "string"
+        }
+      ],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4de1b733b4f42c265a08"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-022310-f8a2:request:0', 'r20260902-022310-f8a2:request:4', 'vf-9f806e980792903e673a728b'], 'rationale': 'Proposed rule: the recorded follow-up read adds the q search selector on top of the source read; the observed value flow shows the search selector value was taken from the source user list, not prevalidated.', 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-022310-f8a2:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Both reads are same-actor/session GET reads whose responses share the collection path $.results with a visible string member id ($.results[*].id), so member identity can be compared on the stable id tuple. The follow-up /users/search?q=Dina20 is proposed as a filtered refinement of the source /users collection, i.e. its results are a subset of the recorded user list. The endpoint path differs from the source read, so the refinement reading is a hypothesis grounded in the recorded selector and the observed selector-value flow (vf-9f806e980792903e673a728b), not proven causality; only the two actual responses are compared.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c22e91bc90bb7bbe30b1"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.user.balance",
+            "role": "observation",
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /checkAuth; basic constraint P01 requires field observation $.user.balance (integer) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "cbc5c57ede25a4bc4da383354d1355e694b9df964749ac8dd85a2469451c653a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0005-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:7"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Mechanically read-only recorded request:7 (GET /checkAuth, actor_a, session r20260902-022310-f8a2) returns an object whose visible shape contains $.user.balance as an integer (shape-ed37bc4329e58023745907cc and observer_operation_catalog get_checkauth). This freezes only the single-response presence claim for that field; it does not assert a numeric value, a delta, or any effect of the center action.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-44212b91d3fa070feee8"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /users/search; basic constraint P01 requires field observation $.results (array) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "d3cf2a8f0064e6c2a2a0881502eb993970144d236ffe5b457d842606da430ea6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0006-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Mechanically read-only recorded GET /users/search by actor_a; its recorded response shape exposes the array $.results. One fresh bounded read closes this presence proposition; no producer, before/after pair, write action or setup is bound.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5fb1aa48fc759b518462"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /users/search; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "f71ed22b57b272a54183e5f60c1a721c203b1f43a1221a877d8fca524ea451bf",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The recorded response shape of GET /users/search shows $.results[*].id as a string member key, so uniqueness of the returned member ids over the actual response array is checkable. Scope actual_response claims only the returned page, not any database or later pages.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c301627cd063052e421b"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.user",
+            "role": "observation",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /checkAuth; basic constraint P01 requires field observation $.user (object) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "1f45f33b3d7bdd9810048a76c9b3e2d9baeab07364efad12722d40de9962f68e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0008-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:7"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Mechanically read-only recorded GET /checkAuth by actor_a; its recorded response shape exposes the object $.user. One fresh bounded read closes this presence proposition; no write, producer or before/after binding is used.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0994ac783e9fd8cc2b55"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "expected_type": "integer",
+          "family": "P21",
+          "target": {
+            "path": "$.user.balance",
+            "role": "observation",
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P21"
+      },
+      "business_summary": "Observation actor_a GET /checkAuth; basic constraint P21 requires observation $.user.balance (integer) to have JSON type integer; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "27fb3687c204174a5d1cbf6e25c78bae0d6e52909a7303af161d91449038e357",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0010-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "observation",
+          "request_ref": "r20260902-022310-f8a2:request:7"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "GET /checkAuth (request:7) is a mechanically read-only recorded request; its observed response shape reports $.user.balance with visible type integer, so the frozen single-response proposition is that this field is a JSON integer. This is one isolated type constraint on one field of the actual response, not a complete schema validation and not an effect claim about the preceding payment.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-c513d1141335b4b253a7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-022310-f8a2:request:0', 'r20260902-022310-f8a2:request:4'], 'rationale': 'The source read recorded no query parameters while the follow-up read recorded exactly the query parameter q=Dina20 on the same actor/session; the follow-up filter is proposed as the conjunction of the source selector set and the added q criterion.', 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-022310-f8a2:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-022310-f8a2:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Both recorded reads return the same response array shape $.results[*] with an id field, and the observed value flow vf-9f806e980792903e673a728b shows the follow-up query value q is the username taken from the source read's array, so the follow-up result set is proposed as a filtered subset of the source result set under strict-tuple identity on $.id. The subset claim is a frozen business hypothesis, not a proven coverage or completeness claim; the endpoints differ by path and the caller must decide whether the observed selector change admits one executable plan.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-7d79ed4932447ce2d2cc"
+    }
+  ]
+}

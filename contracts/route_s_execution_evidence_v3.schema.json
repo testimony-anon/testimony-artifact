@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_execution_evidence_v3.schema.json",
+  "title": "Route-S generic final execution evidence v3",
+  "type": "object",
+  "required": ["schema_version", "candidate", "projection_plan", "protocol", "sessions", "cross_arm_reuse_refs", "pins", "run_attestation"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-execution-evidence-v3"},
+    "candidate": {"$ref": "#/$defs/candidate"},
+    "projection_plan": {"$ref": "#/$defs/projection_plan"},
+    "protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["Rc", "Sc", "Oc1", "settle_c", "Oc2", "Rt", "St", "Ot0", "P", "settle_t", "Ot1"],
+      "properties": {
+        "Rc": {"$ref": "#/$defs/Rc"}, "Sc": {"$ref": "#/$defs/Sc"}, "Oc1": {"$ref": "#/$defs/Oc1"},
+        "settle_c": {"$ref": "#/$defs/settle_c"}, "Oc2": {"$ref": "#/$defs/Oc2"}, "Rt": {"$ref": "#/$defs/Rt"},
+        "St": {"$ref": "#/$defs/St"}, "Ot0": {"$ref": "#/$defs/Ot0"}, "P": {"$ref": "#/$defs/P"},
+        "settle_t": {"$ref": "#/$defs/settle_t"}, "Ot1": {"$ref": "#/$defs/Ot1"}
+      }
+    },
+    "sessions": {"type": "array", "minItems": 2, "items": {"$ref": "#/$defs/session"}},
+    "cross_arm_reuse_refs": {"type": "array", "maxItems": 0},
+    "pins": {"$ref": "#/$defs/pins"},
+    "run_attestation": {"$ref": "#/$defs/attestation"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ts": {"type": "string", "format": "date-time"},
+    "endpoint": {"type": "object", "required": ["actor_id", "request_ref"], "properties": {"actor_id": {"type": "string", "minLength": 1}, "request_ref": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "candidate_identity", "normalized_candidate_sha256", "source_hashes", "producer", "consumer", "setup", "effect_predicate", "transform_evidence"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1}, "candidate_identity": {"type": "string", "minLength": 1},
+        "normalized_candidate_sha256": {"$ref": "#/$defs/sha"}, "source_hashes": {"type": "object", "minProperties": 1, "additionalProperties": {"$ref": "#/$defs/sha"}},
+        "producer": {"$ref": "#/$defs/endpoint"}, "consumer": {"$ref": "#/$defs/endpoint"}, "setup": {"type": "array", "items": {"$ref": "#/$defs/endpoint"}},
+        "effect_predicate": {"type": "object", "required": ["type"], "additionalProperties": true}, "transform_evidence": {"type": "object"}
+      }
+    },
+    "projection_plan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["artifact_ref", "artifact_sha256", "predicate_type", "body_path", "derived_from_field", "canonicalization", "materialized_before_observation", "result_adaptive_selection"],
+      "properties": {
+        "artifact_ref": {"type": "string", "minLength": 1}, "artifact_sha256": {"$ref": "#/$defs/sha"},
+        "predicate_type": {"enum": ["numeric_delta", "count_delta", "item_appears", "field_equals"]}, "body_path": {"type": "string"},
+        "derived_from_field": {"enum": ["target_path", "collection_path"]}, "canonicalization": {"const": "typed_canonical_json_object_keys_array_order_preserved_no_coercion"},
+        "materialized_before_observation": {"const": true}, "result_adaptive_selection": {"const": false}
+      }
+    },
+    "common_executed": {
+      "type": "object", "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm"],
+      "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string", "minLength": 1}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}},
+      "additionalProperties": true
+    },
+    "not_executed": {"type": "object", "required": ["slot", "state", "reason_code"], "properties": {"slot": {"type": "string"}, "state": {"const": "not_executed"}, "reason_code": {"type": "string", "minLength": 1}}, "additionalProperties": false},
+    "reset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "reset_epoch"],
+      "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "reset_epoch": {"type": "string", "minLength": 1}}
+    },
+    "setup": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "provenance_refs"],
+      "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "provenance_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}}
+    },
+    "observer_domain": {
+      "type": "object", "additionalProperties": false,
+      "required": ["domain", "disposition", "before_sha256", "after_sha256", "mutation_events", "uncertain_fields", "capability_ref", "capability_sha256", "reason_code"],
+      "properties": {"domain": {"enum": ["cookie", "token", "cache", "last_seen"]}, "disposition": {"enum": ["proven_unchanged", "mutating", "uncertain", "not_applicable"]}, "before_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}, "after_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}, "mutation_events": {"type": "array", "items": {"type": "string"}}, "uncertain_fields": {"type": "array", "items": {"type": "string"}}, "capability_ref": {"type": "string", "minLength": 1}, "capability_sha256": {"$ref": "#/$defs/sha"}, "reason_code": {"type": "string", "minLength": 1}}
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "actor_id", "request", "response", "observer_domains"],
+      "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "actor_id": {"type": "string", "minLength": 1}, "request": {}, "response": {"type": "object", "required": ["status", "body"], "properties": {"status": {"type": "integer", "minimum": 100, "maximum": 599}, "body": {}}, "additionalProperties": false}, "observer_domains": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/observer_domain"}}}
+    },
+    "producer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "actor_id", "action_ref", "request_ref", "request", "response"],
+      "properties": {"slot": {"const": "P"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"const": "treatment"}, "actor_id": {"type": "string"}, "action_ref": {"type": "string"}, "request_ref": {"type": "string"}, "request": {}, "response": {}}
+    },
+    "settle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot", "state", "raw_ref", "raw_sha256", "started_at", "finished_at", "status", "arm", "policy_ref", "policy_sha256"],
+      "properties": {"slot": {"type": "string"}, "state": {"const": "executed"}, "raw_ref": {"type": "string"}, "raw_sha256": {"$ref": "#/$defs/sha"}, "started_at": {"$ref": "#/$defs/ts"}, "finished_at": {"$ref": "#/$defs/ts"}, "status": {"enum": ["pass", "failed"]}, "arm": {"enum": ["control", "treatment"]}, "policy_ref": {"type": "string"}, "policy_sha256": {"$ref": "#/$defs/sha"}}
+    },
+    "Rc": {"oneOf": [{"allOf": [{"$ref": "#/$defs/reset"}, {"properties": {"slot": {"const": "Rc"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Rc"}}}]}]},
+    "Rt": {"oneOf": [{"allOf": [{"$ref": "#/$defs/reset"}, {"properties": {"slot": {"const": "Rt"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Rt"}}}]}]},
+    "Sc": {"oneOf": [{"allOf": [{"$ref": "#/$defs/setup"}, {"properties": {"slot": {"const": "Sc"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Sc"}}}]}]},
+    "St": {"oneOf": [{"allOf": [{"$ref": "#/$defs/setup"}, {"properties": {"slot": {"const": "St"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "St"}}}]}]},
+    "Oc1": {"oneOf": [{"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Oc1"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Oc1"}}}]}]},
+    "Oc2": {"oneOf": [{"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Oc2"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Oc2"}}}]}]},
+    "Ot0": {"oneOf": [{"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Ot0"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Ot0"}}}]}]},
+    "Ot1": {"oneOf": [{"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Ot1"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "Ot1"}}}]}]},
+    "P": {"oneOf": [{"$ref": "#/$defs/producer"}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "P"}}}]}]},
+    "settle_c": {"oneOf": [{"allOf": [{"$ref": "#/$defs/settle"}, {"properties": {"slot": {"const": "settle_c"}, "arm": {"const": "control"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "settle_c"}}}]}]},
+    "settle_t": {"oneOf": [{"allOf": [{"$ref": "#/$defs/settle"}, {"properties": {"slot": {"const": "settle_t"}, "arm": {"const": "treatment"}}}]}, {"allOf": [{"$ref": "#/$defs/not_executed"}, {"properties": {"slot": {"const": "settle_t"}}}]}]},
+    "session": {"type": "object", "additionalProperties": false, "required": ["arm", "actor_id", "reset_epoch", "materialization_id", "ownership_domain_sha256", "jar_ownership_sha256", "mutation_domain_sha256", "secret_values_present"], "properties": {"arm": {"enum": ["control", "treatment"]}, "actor_id": {"type": "string"}, "reset_epoch": {"type": "string"}, "materialization_id": {"type": "string"}, "ownership_domain_sha256": {"$ref": "#/$defs/sha"}, "jar_ownership_sha256": {"$ref": "#/$defs/sha"}, "mutation_domain_sha256": {"$ref": "#/$defs/sha"}, "secret_values_present": {"const": false}}},
+    "pins": {"type": "object", "additionalProperties": false, "required": ["verifier_sha256", "certificate_schema_sha256", "execution_evidence_schema_sha256", "projector_sha256", "equivalence_sha256", "predicate_evaluator_sha256", "predicate_linter_sha256", "observer_request_policy_sha256", "reset_driver_sha256", "session_materializer_sha256", "settle_policy_sha256", "profile_sha256", "renderer_sha256", "subject_pin_sha256"], "properties": {"verifier_sha256": {"$ref": "#/$defs/sha"}, "certificate_schema_sha256": {"$ref": "#/$defs/sha"}, "execution_evidence_schema_sha256": {"$ref": "#/$defs/sha"}, "projector_sha256": {"$ref": "#/$defs/sha"}, "equivalence_sha256": {"$ref": "#/$defs/sha"}, "predicate_evaluator_sha256": {"$ref": "#/$defs/sha"}, "predicate_linter_sha256": {"$ref": "#/$defs/sha"}, "observer_request_policy_sha256": {"$ref": "#/$defs/sha"}, "reset_driver_sha256": {"$ref": "#/$defs/sha"}, "session_materializer_sha256": {"$ref": "#/$defs/sha"}, "settle_policy_sha256": {"$ref": "#/$defs/sha"}, "profile_sha256": {"$ref": "#/$defs/sha"}, "renderer_sha256": {"$ref": "#/$defs/sha"}, "subject_pin_sha256": {"$ref": "#/$defs/sha"}}},
+    "attestation": {"type": "object", "additionalProperties": false, "required": ["secret_scan_ref", "secret_scan_sha256", "secret_scan_status", "secret_findings", "scan_scope", "provider_calls", "no_feedback", "no_feedback_ref", "no_feedback_sha256"], "properties": {"secret_scan_ref": {"type": "string"}, "secret_scan_sha256": {"$ref": "#/$defs/sha"}, "secret_scan_status": {"const": "pass"}, "secret_findings": {"const": 0}, "scan_scope": {"const": "all_route_s_run_artifacts"}, "provider_calls": {"const": 0}, "no_feedback": {"const": true}, "no_feedback_ref": {"type": "string"}, "no_feedback_sha256": {"$ref": "#/$defs/sha"}}}
+  }
+}

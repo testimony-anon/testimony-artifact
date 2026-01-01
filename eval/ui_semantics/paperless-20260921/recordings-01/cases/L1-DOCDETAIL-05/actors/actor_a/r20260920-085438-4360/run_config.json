@@ -1,0 +1,133 @@
+{
+  "metadata": {
+    "artifact_type": "run_config",
+    "schema_version": "1.0.0",
+    "run_id": "r20260920-085438-4360",
+    "stage": "stage0",
+    "created_at": "2026-09-20T08:54:38.272+00:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": []
+  },
+  "app_profile": {
+    "base_url": "http://127.0.0.1:18091",
+    "auth": {
+      "method": "none",
+      "token_scheme": "Token"
+    },
+    "reset": {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "subject_adapters.docker_single_local",
+        "reset",
+        "--adapter",
+        "fixtures/adapters/paperless_current_local.json",
+        "--output",
+        "unused.json"
+      ],
+      "verify_request": {
+        "method": "GET",
+        "path": "/accounts/login/",
+        "expect_status": 200
+      }
+    },
+    "rate_limit": {
+      "max_concurrency": 1,
+      "min_interval_ms": 50,
+      "retry_on_429": {
+        "max_retries": 1
+      }
+    },
+    "drive_mode": "replay",
+    "actors": [
+      {
+        "actor_id": "actor_a",
+        "auth": {
+          "method": "cookie_session",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_PAPERLESS_ACTOR_A_USERNAME",
+            "password_env": "UISEMTEST_PAPERLESS_ACTOR_A_PASSWORD"
+          },
+          "token_scheme": "Token",
+          "probe_endpoint": {
+            "method": "GET",
+            "path": "/api/profile/",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.email"
+          },
+          "cookie_session": {
+            "method": "POST",
+            "path": "/api/auth/headless/browser/v1/auth/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "cookie_name": "sessionid",
+            "cookie_path": "/",
+            "csrf": {
+              "cookie_name": "csrftoken",
+              "header_name": "X-CSRFToken"
+            }
+          }
+        }
+      },
+      {
+        "actor_id": "actor_b",
+        "auth": {
+          "method": "cookie_session",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_PAPERLESS_ACTOR_B_USERNAME",
+            "password_env": "UISEMTEST_PAPERLESS_ACTOR_B_PASSWORD"
+          },
+          "token_scheme": "Token",
+          "probe_endpoint": {
+            "method": "GET",
+            "path": "/api/profile/",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.email"
+          },
+          "cookie_session": {
+            "method": "POST",
+            "path": "/api/auth/headless/browser/v1/auth/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "cookie_name": "sessionid",
+            "cookie_path": "/",
+            "csrf": {
+              "cookie_name": "csrftoken",
+              "header_name": "X-CSRFToken"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "auth_context": {
+    "verified": true,
+    "method": "cookie_session",
+    "auth_mode": "auto_login",
+    "actor_id": "actor_a",
+    "probe_status": 200,
+    "verified_at": "2026-09-20T08:54:38.024+00:00",
+    "probe_identity_observed": true,
+    "session_ref": "actor_a"
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

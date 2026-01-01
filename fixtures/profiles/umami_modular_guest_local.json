@@ -1,0 +1,83 @@
+{
+  "base_url": "http://127.0.0.1:18090",
+  "auth": {
+    "method": "none"
+  },
+  "actors": [
+    {
+      "actor_id": "guest",
+      "auth": {
+        "method": "none",
+        "probe_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/verify",
+          "expect_status": 200,
+          "unauthenticated_status": 401
+        },
+        "logout_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/logout"
+        }
+      }
+    },
+    {
+      "actor_id": "actor_a",
+      "auth": {
+        "method": "none",
+        "probe_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/verify",
+          "expect_status": 200,
+          "unauthenticated_status": 401
+        },
+        "logout_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/logout"
+        }
+      }
+    },
+    {
+      "actor_id": "actor_b",
+      "auth": {
+        "method": "none",
+        "probe_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/verify",
+          "expect_status": 200,
+          "unauthenticated_status": 401
+        },
+        "logout_endpoint": {
+          "method": "POST",
+          "path": "/api/auth/logout"
+        }
+      }
+    }
+  ],
+  "reset": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "subject_adapters.docker_single_local",
+      "reset",
+      "--adapter",
+      "fixtures/adapters/umami_current_local.json",
+      "--output",
+      "unused.json"
+    ],
+    "verify_request": {
+      "method": "GET",
+      "path": "/api/heartbeat",
+      "expect_status": 200,
+      "expect_json_path": "$.ok",
+      "expect_json_equals": true
+    }
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

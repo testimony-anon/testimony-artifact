@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_probe_admission_downstream_report.schema.json",
+  "title": "runtime_probe_admission_downstream_report — Phase5-B shadow downstream rebuild",
+  "description": "014I / Phase5-B companion report. It compares original Stage4/5 artifacts with shadow artifacts rebuilt from augmented_oas.runtime_admitted.json. It does not replace main artifacts.",
+  "type": "object",
+  "required": [
+    "metadata",
+    "status",
+    "reason",
+    "artifact_paths",
+    "input_hashes",
+    "operation_diff",
+    "original_counts",
+    "shadow_counts",
+    "deltas",
+    "downstream_changed",
+    "main_artifacts_untouched",
+    "shadow_policy",
+    "diagnostics",
+    "summary",
+    "warnings"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "runtime_probe_admission_downstream_report" },
+        "stage": { "const": "runtime_materials_phase5" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["rebuilt", "skipped"]
+    },
+    "reason": { "type": ["string", "null"] },
+    "artifact_paths": {
+      "type": "object",
+      "required": [
+        "source_augmented_oas",
+        "admitted_augmented_oas",
+        "original_dependency_graph",
+        "original_test_sequences",
+        "original_skills",
+        "shadow_dependency_graph",
+        "shadow_test_sequences",
+        "shadow_skills",
+        "report"
+      ],
+      "properties": {
+        "source_augmented_oas": { "type": ["string", "null"] },
+        "admitted_augmented_oas": { "type": ["string", "null"] },
+        "original_dependency_graph": { "type": ["string", "null"] },
+        "original_test_sequences": { "type": ["string", "null"] },
+        "original_skills": { "type": ["string", "null"] },
+        "shadow_dependency_graph": { "type": ["string", "null"] },
+        "shadow_test_sequences": { "type": ["string", "null"] },
+        "shadow_skills": { "type": ["string", "null"] },
+        "report": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "input_hashes": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/hash_pair" }
+    },
+    "operation_diff": {
+      "type": "object",
+      "required": ["added", "removed", "changed"],
+      "properties": {
+        "added": { "type": "array", "items": { "$ref": "#/$defs/operation_ref" } },
+        "removed": { "type": "array", "items": { "$ref": "#/$defs/operation_ref" } },
+        "changed": { "type": "array", "items": { "$ref": "#/$defs/operation_ref" } }
+      },
+      "additionalProperties": false
+    },
+    "original_counts": { "$ref": "#/$defs/counts" },
+    "shadow_counts": { "$ref": "#/$defs/counts" },
+    "deltas": { "$ref": "#/$defs/counts" },
+    "downstream_changed": { "type": "boolean" },
+    "main_artifacts_untouched": { "type": "boolean" },
+    "shadow_policy": { "$ref": "#/$defs/shadow_policy" },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "shadow_rebuild_requested",
+        "shadow_rebuild_ran",
+        "skipped_reason",
+        "admitted_operation_added_count",
+        "admitted_operation_changed_count",
+        "graph_node_delta",
+        "graph_edge_delta",
+        "sequence_delta",
+        "skill_delta",
+        "downstream_changed",
+        "main_artifacts_untouched",
+        "readiness_overlay_applied",
+        "ready_overlay_operation_count"
+      ],
+      "properties": {
+        "shadow_rebuild_requested": { "type": "boolean" },
+        "shadow_rebuild_ran": { "type": "boolean" },
+        "skipped_reason": { "type": ["string", "null"] },
+        "admitted_operation_added_count": { "type": "integer" },
+        "admitted_operation_changed_count": { "type": "integer" },
+        "graph_node_delta": { "type": "integer" },
+        "graph_edge_delta": { "type": "integer" },
+        "sequence_delta": { "type": "integer" },
+        "skill_delta": { "type": "integer" },
+        "downstream_changed": { "type": "boolean" },
+        "main_artifacts_untouched": { "type": "boolean" },
+        "readiness_overlay_applied": { "type": "boolean" },
+        "ready_overlay_operation_count": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash_pair": {
+      "type": "object",
+      "required": ["before", "after", "unchanged"],
+      "properties": {
+        "before": { "type": ["string", "null"] },
+        "after": { "type": ["string", "null"] },
+        "unchanged": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "operation_ref": {
+      "type": "object",
+      "required": ["method", "path", "operationId"],
+      "properties": {
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "operationId": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": ["operation_count", "graph_node_count", "graph_edge_count", "sequence_count", "skill_count"],
+      "properties": {
+        "operation_count": { "type": "integer" },
+        "graph_node_count": { "type": "integer" },
+        "graph_edge_count": { "type": "integer" },
+        "sequence_count": { "type": "integer" },
+        "skill_count": { "type": "integer" }
+      },
+      "additionalProperties": false
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "shadow_policy": {
+      "type": "object",
+      "required": [
+        "phase",
+        "runtime_admitted_read_safe_as_ready",
+        "ready_overlay_operation_refs",
+        "input_admitted_oas_mutated",
+        "main_artifacts_replaced",
+        "formal_mainline_replacement",
+        "status",
+        "notes"
+      ],
+      "properties": {
+        "phase": { "const": "phase5c_shadow_downstream" },
+        "runtime_admitted_read_safe_as_ready": { "type": "boolean" },
+        "ready_overlay_operation_refs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ready_overlay_operation_ref" }
+        },
+        "input_admitted_oas_mutated": { "type": "boolean" },
+        "main_artifacts_replaced": { "type": "boolean" },
+        "formal_mainline_replacement": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["rebuilt", "skipped"] },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "ready_overlay_operation_ref": {
+      "type": "object",
+      "required": [
+        "method",
+        "path",
+        "operationId",
+        "previous_execution_readiness",
+        "overlay_reason"
+      ],
+      "properties": {
+        "method": { "type": "string" },
+        "path": { "type": "string" },
+        "operationId": { "type": ["string", "null"] },
+        "previous_execution_readiness": { "type": ["string", "null"] },
+        "overlay_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "severity", "message", "source"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error"] },
+        "message": { "type": "string" },
+        "source": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

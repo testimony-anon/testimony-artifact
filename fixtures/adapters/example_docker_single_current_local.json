@@ -1,0 +1,110 @@
+{
+  "schema_version": "uisemtest-current-subject-adapter-v1",
+  "adapter_id": "example-docker-single-current-local-http-v1",
+  "subject_id": "exampleapp",
+  "runtime": {
+    "kind": "local_http",
+    "source_root": "${UISEMTEST_REPO_ROOT}",
+    "environment": {
+      "PATH": "${UISEMTEST_OPERATOR_PATH}",
+      "PYTHONPATH": "${UISEMTEST_REPO_ROOT}/src",
+      "NO_PROXY": "localhost,127.0.0.1,::1",
+      "no_proxy": "localhost,127.0.0.1,::1",
+      "UISEMTEST_PYTHON": "${UISEMTEST_PYTHON}",
+      "UISEMTEST_DOCKER_SINGLE_ADAPTER": "${UISEMTEST_REPO_ROOT}/fixtures/adapters/example_docker_single_current_local.json",
+      "UISEMTEST_EXAMPLEAPP_OUTPUT_ROOT": "${UISEMTEST_EXAMPLEAPP_OUTPUT_ROOT}",
+      "UISEMTEST_EXAMPLEAPP_SEED_SCRIPT": "${UISEMTEST_EXAMPLEAPP_SEED_SCRIPT}",
+      "UISEMTEST_EXAMPLEAPP_ACTOR_A_USERNAME": "${UISEMTEST_EXAMPLEAPP_ACTOR_A_USERNAME}",
+      "UISEMTEST_EXAMPLEAPP_ACTOR_A_PASSWORD": "${UISEMTEST_EXAMPLEAPP_ACTOR_A_PASSWORD}",
+      "UISEMTEST_EXAMPLEAPP_ACTOR_B_USERNAME": "${UISEMTEST_EXAMPLEAPP_ACTOR_B_USERNAME}",
+      "UISEMTEST_EXAMPLEAPP_ACTOR_B_PASSWORD": "${UISEMTEST_EXAMPLEAPP_ACTOR_B_PASSWORD}"
+    },
+    "materialize_commands": [],
+    "server_commands": [[
+      "${UISEMTEST_PYTHON}",
+      "-m",
+      "subject_adapters.docker_single_local",
+      "supervise"
+    ]],
+    "health_probes": [
+      {"url": "http://127.0.0.1:14200/", "expect_status": 200},
+      {"url": "http://127.0.0.1:14200/api/health", "expect_status": 200}
+    ],
+    "teardown_generated_paths": [],
+    "loopback_only": true,
+    "reset_from_profile": true,
+    "independent_arm_sessions": true
+  },
+  "docker_single": {
+    "schema_version": "uisemtest-docker-single-runtime-v1",
+    "container_name_prefix": "uisemtest-exampleapp",
+    "instance_key_env": "UISEMTEST_EXAMPLEAPP_OUTPUT_ROOT",
+    "image": {
+      "repository": "ghcr.io/example-org/exampleapp",
+      "tag": "v1.4.2",
+      "digest": "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      "pull_policy": "if_absent"
+    },
+    "ports": [
+      {"host": 14200, "container": 8080}
+    ],
+    "environment": {
+      "EXAMPLEAPP_ENV": "test",
+      "EXAMPLEAPP_DISABLE_EMAIL": "1",
+      "EXAMPLEAPP_DATA_DIR": "/var/lib/exampleapp"
+    },
+    "volumes": [
+      {
+        "kind": "named",
+        "name": "data",
+        "container_path": "/var/lib/exampleapp",
+        "reset_scope": "fresh_on_reset"
+      }
+    ],
+    "readiness": {
+      "probes": [
+        {"url": "http://127.0.0.1:14200/api/health", "expect_status": 200},
+        {"url": "http://127.0.0.1:14200/", "expect_status": 200}
+      ],
+      "timeout_seconds": 180,
+      "poll_interval_ms": 250
+    },
+    "reset": {
+      "strategy": "recreate_with_fresh_volume",
+      "timeout_seconds": 240
+    },
+    "seed": {
+      "location": "host",
+      "command": ["/bin/sh", "${UISEMTEST_EXAMPLEAPP_SEED_SCRIPT}"],
+      "timeout_seconds": 120
+    }
+  },
+  "request_mapping": {
+    "mode": "current_recording_exact",
+    "header_policy": "accept_content_type_only"
+  },
+  "request_bindings": {},
+  "fresh_materialization_policy": {
+    "source": "current_observed_value_flow_set",
+    "selection": "exact_setup_to_candidate_consumers_v1",
+    "allowed_target_locations": ["path", "query", "header", "body"],
+    "allowed_scalar_types": ["string", "integer", "number", "boolean"]
+  },
+  "observer_policy": {
+    "schema_version": "uisemtest-current-observer-policy-v1",
+    "purity_domains_exact_set": ["cache", "cookie", "last_seen", "token"],
+    "request_method_policy": "read_only"
+  },
+  "settle_policy": {
+    "schema_version": "uisemtest-current-settle-policy-v2",
+    "rule": "bounded_semantic_stability_v1",
+    "minimum_duration_ms": 500,
+    "poll_interval_ms": 100,
+    "consecutive_identical_observations": 3,
+    "maximum_duration_ms": 2000
+  },
+  "sensitive_classification": {
+    "forbidden_source_refs": [],
+    "forbidden_projection_paths": ["$.password", "$.token", "$.access_token"]
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui_semantics_evidence.schema.json",
+  "title": "ui_semantics_evidence — typed proposal evidence sidecar",
+  "description": "Credential-free, answer-free evidence passed across the UI-semantics process boundary. Full response bodies and provider responses are not stored here.",
+  "type": "object",
+  "required": ["metadata", "channel", "records"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "ui_semantics_evidence" },
+        "stage": { "const": "stage2" }
+      }
+    },
+    "channel": {
+      "enum": ["semantic_edges", "ui_diff_assertions", "ui_constraints", "ui_assertion_transfer"],
+      "x-volatility": "structural"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 1,
+      "x-volatility": "structural"
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "channel": { "const": "semantic_edges" },
+        "records": { "items": { "$ref": "#/$defs/semantic_edge_record" } }
+      }
+    },
+    {
+      "properties": {
+        "channel": { "const": "ui_diff_assertions" },
+        "records": { "items": { "$ref": "#/$defs/ui_diff_record" } }
+      }
+    },
+    {
+      "properties": {
+        "channel": { "const": "ui_constraints" },
+        "records": { "items": { "$ref": "#/$defs/ui_constraint_record" } }
+      }
+    },
+    {
+      "properties": {
+        "channel": { "const": "ui_assertion_transfer" },
+        "records": { "items": { "$ref": "#/$defs/assertion_transfer_record" } }
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "record_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$" },
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "path"],
+      "properties": {
+        "artifact_type": {
+          "enum": ["session_bundle", "ui_trace", "augmented_oas", "ui_semantics_evidence"]
+        },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "ui_trace_ref": {
+      "allOf": [
+        { "$ref": "#/$defs/artifact_ref" },
+        { "properties": { "artifact_type": { "const": "ui_trace" } } }
+      ]
+    },
+    "observation_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "enum": ["session_bundle", "ui_trace"] },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "$ref": "#/$defs/record_id" },
+        "value_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "artifact_record_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "$ref": "#/$defs/record_id" }
+      },
+      "additionalProperties": false
+    },
+    "constraint_target_slot": {
+      "type": "object",
+      "required": ["target_request_ref", "target_operation_id", "target_blueprint_ref", "target_step_id", "assignment_location", "assignment_field"],
+      "properties": {
+        "target_request_ref": {
+          "allOf": [
+            { "$ref": "#/$defs/observation_ref" },
+            { "properties": { "artifact_type": { "const": "ui_trace" } } }
+          ]
+        },
+        "target_operation_id": { "type": "string", "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$" },
+        "target_blueprint_ref": {
+          "allOf": [
+            { "$ref": "#/$defs/artifact_record_ref" },
+            { "properties": { "artifact_type": { "const": "test_blueprints" } } }
+          ]
+        },
+        "target_step_id": { "type": "string", "minLength": 1 },
+        "assignment_location": { "enum": ["path", "query", "header", "body"] },
+        "assignment_field": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "constraint_target": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["resolution", "selected"],
+          "properties": {
+            "resolution": { "const": "resolved" },
+            "selected": { "$ref": "#/$defs/constraint_target_slot" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["resolution", "reason", "candidates"],
+          "properties": {
+            "resolution": { "const": "unresolved_zero" },
+            "reason": { "type": "string", "minLength": 1 },
+            "candidates": { "type": "array", "maxItems": 0, "items": { "$ref": "#/$defs/constraint_target_slot" } }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["resolution", "reason", "candidates"],
+          "properties": {
+            "resolution": { "const": "unresolved_multiple" },
+            "reason": { "type": "string", "minLength": 1 },
+            "candidates": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/constraint_target_slot" } }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "semantic_edge_record": {
+      "type": "object",
+      "required": ["record_id", "ui_trace_ref", "event_refs", "request_refs"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/record_id" },
+        "ui_trace_ref": { "$ref": "#/$defs/ui_trace_ref" },
+        "event_refs": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        },
+        "request_refs": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ui_diff_record": {
+      "type": "object",
+      "required": ["record_id", "event_ref", "before_page_state_ref", "after_page_state_ref", "producer_request_refs", "consumer_request_refs"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/record_id" },
+        "event_ref": { "$ref": "#/$defs/observation_ref" },
+        "before_page_state_ref": { "$ref": "#/$defs/observation_ref" },
+        "after_page_state_ref": { "$ref": "#/$defs/observation_ref" },
+        "producer_request_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        },
+        "consumer_request_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "field_constraint": {
+      "type": "object",
+      "required": ["field_id", "input_type", "required", "constraint_observation_refs", "target"],
+      "properties": {
+        "field_id": { "$ref": "#/$defs/record_id" },
+        "input_type": { "enum": ["text", "email", "password", "number", "tel", "url", "date", "select", "checkbox", "radio", "other"] },
+        "required": { "type": "boolean" },
+        "min_length": { "type": "integer", "minimum": 0 },
+        "max_length": { "type": "integer", "minimum": 0 },
+        "minimum": { "type": "number" },
+        "maximum": { "type": "number" },
+        "pattern": { "type": "string" },
+        "allowed_values": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": ["string", "number", "boolean", "null"] }
+        },
+        "constraint_observation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        },
+        "validation_message_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        },
+        "target": { "$ref": "#/$defs/constraint_target" }
+      },
+      "additionalProperties": false
+    },
+    "valid_baseline": {
+      "type": "object",
+      "required": ["variant_id", "expected_ui_acceptance", "observation_refs"],
+      "properties": {
+        "variant_id": { "$ref": "#/$defs/record_id" },
+        "expected_ui_acceptance": { "const": true },
+        "observation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ui_constraint_record": {
+      "type": "object",
+      "required": ["record_id", "event_ref", "form_ref", "fields", "valid_baseline"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/record_id" },
+        "event_ref": { "$ref": "#/$defs/observation_ref" },
+        "form_ref": { "$ref": "#/$defs/observation_ref" },
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/field_constraint" },
+          "x-unique-by": "field_id"
+        },
+        "valid_baseline": { "$ref": "#/$defs/valid_baseline" }
+      },
+      "additionalProperties": false
+    },
+    "source_assertion": {
+      "type": "object",
+      "required": ["source_sha256", "source_location", "verbatim"],
+      "properties": {
+        "source_sha256": { "$ref": "#/$defs/sha256" },
+        "source_location": { "type": "string", "minLength": 1 },
+        "verbatim": { "type": "string", "minLength": 1, "maxLength": 4000 }
+      },
+      "additionalProperties": false
+    },
+    "assertion_transfer_record": {
+      "type": "object",
+      "required": ["record_id", "selection_manifest_sha256", "source_assertion", "api_observation_refs"],
+      "properties": {
+        "record_id": { "$ref": "#/$defs/record_id" },
+        "selection_manifest_sha256": { "$ref": "#/$defs/sha256" },
+        "source_assertion": { "$ref": "#/$defs/source_assertion" },
+        "api_observation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/observation_ref" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

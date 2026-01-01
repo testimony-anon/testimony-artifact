@@ -1,0 +1,1209 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 4,
+    "business_relation_occurrence_count": 12,
+    "canonical_relation_core_identities": [
+      "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "2dbf8a9df4504682c040d0d24c2ea59c672990f7a7add55fb8e03a318adc06c8",
+      "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "3a3553b7f3556a0c87bd709a2d602f30171419b881335f7d333b540004e36059",
+      "46da1280d4c653ec6a8fc949c79d0da2a87dab0a4f3463bc9dc2a00a808c00b0",
+      "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "6f7170d64324ce1e5defde5eea8a613722b34825f8134181fc987e8637860110",
+      "8c22f6669e383600a1af7d5b2e17462de1dd453c9f8832e0709c45c2d97a25b9",
+      "bf13c6e5ac3330d6b0a4c3a73253123fca225af822c320fa510049b7c8cc968d",
+      "ec9cd85b729a9edbb884ba5986830600ccafc3f96c5abec27813ba068c92e3cb"
+    ],
+    "duplicate_core_occurrence_count": 6,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0014"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0012",
+      "v2-candidate-0013",
+      "v2-candidate-0014",
+      "v2-candidate-0015",
+      "v2-candidate-0016",
+      "v2-candidate-0017"
+    ],
+    "physical_retained_test_occurrence_count": 16,
+    "unique_canonical_relation_core_count": 10
+  },
+  "tests": [
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-023853-7b21:request:0', 'r20260902-023853-7b21:request:4'], 'rationale': 'The follow-up read adds the recorded query selector q; the source read carries no query selector, so the frozen visible change is a conjunctive (and) refinement of the directory listing.', 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-023853-7b21:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-023853-7b21:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Recorded value flow vf-94d9e326 links a username field of the /users read (request:0) to the q selector of the /users/search read (request:4), and both responses expose the same user member array $.results[*] with a visible $.id. Proposed hypothesis: the search result set is an identity-tuple subset of the directory listing. This is a proposed relation between recorded reads, not proof that the search endpoint is implemented as a filter.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-174d4e2d13bcd14ae5f9"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P11",
+          "operator": "le",
+          "projection": "count",
+          "right": {
+            "ref": {
+              "path": "$.pageData.limit",
+              "role": "observation",
+              "value_type": "integer"
+            },
+            "source": "role"
+          },
+          "target": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "unit": "items"
+        },
+        "predicate_type": "P11"
+      },
+      "business_summary": "Observation actor_a GET /transactions; basic constraint P11 requires count(observation $.results (array); unit=items) le observation $.pageData.limit (integer); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "6f7170d64324ce1e5defde5eea8a613722b34825f8134181fc987e8637860110",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:10"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The recorded GET /transactions response exposes both $.results (array) and $.pageData.limit (integer). Proposed single-response page-size invariant for this recorded read: the returned member count is less than or equal to the page limit declared in the same response. Only the actual response arrays are claimed; no database completeness is asserted.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3d2ee458c4b8ed319f10"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.description",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.description",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.description (string) to strictly equal producer_request $.description (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "46da1280d4c653ec6a8fc949c79d0da2a87dab0a4f3463bc9dc2a00a808c00b0",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "POST body description is recorded as string; fresh GET readback response shape exposes $.transaction.description string.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4f382b5cb11f0f90c826"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.receiverId",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.receiverId",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.receiverId (string) to strictly equal producer_request $.receiverId (string).",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "3a3553b7f3556a0c87bd709a2d602f30171419b881335f7d333b540004e36059",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "POST body receiverId is recorded as string; fresh GET readback response shape exposes $.transaction.receiverId string.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0455d39a1c369fa2188d"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.receiverId",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.receiverId",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.receiverId (string) to strictly equal producer_request $.receiverId (string).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "3a3553b7f3556a0c87bd709a2d602f30171419b881335f7d333b540004e36059",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Readback relation for the write request:6 whose prepared body carries $.receiverId (string, literal available); the point read GET /transactions/{id} (request:12, same actor/session) returns $.transaction.receiverId (string). Proposed rule: the fresh read conforms to the actual prepared producer request body field. The point read's path target is mechanically bound from the public feed item (observed value flow vf-32be163e0eda75fabe1a4064 / binding bo-754f6561c9875ffce17c131c / dependency de-5be02f7966895ffac7a9e53d), so the resource linkage to the created transaction remains a hypothesis, not proven causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0004",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The prepared producer request body (POST /transactions, request:6) carries $.receiverId as a string literal, and the freshly read transaction object (GET /transactions/{id}, request:12, locator lineage from the post-create listing) exposes $.transaction.receiverId as a string. The relation compares the fresh read-back field with the actually prepared request field; the recorded values need not already agree, so this is a proposed readback rule rather than a proven echo.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-0af857276adc5bb726da"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.description",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.description",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.description (string) to strictly equal producer_request $.description (string).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "46da1280d4c653ec6a8fc949c79d0da2a87dab0a4f3463bc9dc2a00a808c00b0",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0005",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "request:6 sends body $.description as a string ('pending request'); the point read request:12 (bound via the request:10 -> request:12 value flow) returns a string $.transaction.description. Proposed readback rule: the fresh after field equals the actual prepared request body field. Execution binds the real outgoing body value instead of copying the recording; the recorded values are not prevalidated as equal.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-5f36554de6429d9dc7ab"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.description",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.description",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.description (string) to strictly equal producer_request $.description (string).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "46da1280d4c653ec6a8fc949c79d0da2a87dab0a4f3463bc9dc2a00a808c00b0",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The create request body description is recorded as 'pending request'; the fresh after read returns transaction.description.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0006",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Both compared positions are visible with the same strict JSON type: the prepared producer_request body field $.description (recorded literal 'pending request') of POST /transactions (request:6) and the fresh detail-read field $.transaction.description (string) of request:12, whose path locator is grounded by the recorded flow vf-65d5fa7554a678a6ef8bb560. The recorded values need not already agree; the equality is the proposed readback rule.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The prepared producer request body carries $.description as string (parameter_evidence of request:6, literal “pending request”), and the bound same-actor read of the created resource (request:12, shape 861c8eb547b387c9e8c68c5f) exposes $.transaction.description as string; the UI diff ui-diff-0001 adds the text “Requested $14.00 for pending request”. Proposes that the created transaction echoes the submitted description; recorded values need not already agree, and no before read exists so the fresh post-create read is bound as the reusable observer.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "The write body declares $.description (string, recorded literal 'pending request') and the fresh bound read GET /transactions/{id} exposes $.transaction.description (string). Proposed readback rule: the freshly read description equals the description actually sent. The equality is a frozen hypothesis; it is not established by the recording, and the request operand binds to the prepared outgoing request.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-93c67be0cdc9b31d7b3c"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.receiverId",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.receiverId",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.receiverId (string) to strictly equal producer_request $.receiverId (string).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "3a3553b7f3556a0c87bd709a2d602f30171419b881335f7d333b540004e36059",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0006",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The create request body receiverId is recorded; the fresh after read returns transaction.receiverId.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0006/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Request:6 prepared body carries $.receiverId as string (parameter_evidence) and the bound post-create read of the created resource (request:12, shape 861c8eb547b387c9e8c68c5f) exposes $.transaction.receiverId as string; the created id is carried into that read by vf-65d5fa7554a678a6ef8bb560 and bo-667ed36c057116fbfe7332d7. Proposes that the created transaction stores the submitted receiver; this is a distinct field claim from the description readback.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The write body declares $.receiverId (string, recorded literal '_XblMqbuoP') and the fresh bound read exposes $.transaction.receiverId (string). Proposed readback rule: the receiver recorded on the created transaction equals the receiverId actually sent by the prepared request. Field-level correspondence in request and response shapes is the only grounding; equality is a hypothesis.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-15f1af288c211e388773"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-023853-7b21:request:0', 'r20260902-023853-7b21:request:4', 'vf-94d9e2a3260c164b38cab133'], 'rationale': 'The follow-up /users/search request adds exactly the query selector q; the observed value flow shows that scalar originated from the source users list response, so the follow-up response is proposed as the source users restricted by that additional conjunctive filter.', 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-023853-7b21:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-023853-7b21:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Two recorded same-actor user reads with identical $.results[*] shape: GET /users (request:0) and GET /users/search?q=Dina20 (request:4), linked by an observed value flow from a source username to the follow-up selector. Proposed subset relation of the follow-up user members within the source user members, identity on the visible member id path; the query transform freezes only the observed selector addition.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-80fca54e36bc882862e2"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "forall_body_compares_member_with_actual_request_parameter",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P02",
+            "left": {
+              "path": "$.username",
+              "role": "item",
+              "value_type": "string"
+            },
+            "operator": "eq",
+            "right": {
+              "ref": {
+                "location": "query",
+                "path": "$.q",
+                "role": "observation_request",
+                "value_type": "string"
+              },
+              "source": "request"
+            }
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /users/search; business relation For every member of observation $.results (array) in actual_response: P02 requires item $.username (string) to strictly equal actual request query $.q (string); one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "8c22f6669e383600a1af7d5b2e17462de1dd453c9f8832e0709c45c2d97a25b9",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "GET /users/search sends exactly one query selector q (literal 'Dina20') and returns $.results[*].username strings. Proposed single-layer forall request-semantics relation: every returned member's username equals the actual outgoing query value for this request. This is one bounded actual-response proposition, not a database or pagination claim; it is stated as a hypothesis that need not already hold.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [
+        {
+          "location": "query",
+          "operand": "right",
+          "path": "$.q",
+          "role": "observation_request",
+          "value_type": "string"
+        }
+      ],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-26f7e9d9c3f1f494c674"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "forall_body_compares_member_with_actual_request_parameter",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "body": {
+            "family": "P09",
+            "operator": "contains",
+            "right": {
+              "ref": {
+                "location": "query",
+                "path": "$.q",
+                "role": "observation_request",
+                "value_type": "string"
+              },
+              "source": "request"
+            },
+            "target": {
+              "path": "$.username",
+              "role": "item",
+              "value_type": "string"
+            }
+          },
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "forall",
+          "item_guard": null,
+          "scope": "actual_response"
+        },
+        "predicate_type": "forall"
+      },
+      "business_summary": "Observation actor_a GET /users/search; business relation For every member of observation $.results (array) in actual_response: P09 requires item $.username (string) to contain actual request query $.q (string); case-sensitive, no normalization; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "35d2072371d64157311c2fe24f226db5523016558f37202e3fff8d5c006e35f3",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0005",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Proposed request-semantic relation over one recorded read-only response. request:4 (GET /users/search) carries the literal query $.q and returns $.results[*].username strings; the recorded user-list search input declares name q (workflow-action-0001 DOM declarations, not an API constraint). The hypothesis that every returned username contains the frozen recorded query text is fixed before execution and is not required to hold in the recording.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [
+        {
+          "location": "query",
+          "operand": "right",
+          "path": "$.q",
+          "role": "observation_request",
+          "value_type": "string"
+        }
+      ],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-d925d4fb6e3d28438523"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0013-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "identity_tuple",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "left": {
+            "path": "$.results",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "subset",
+          "projection": [],
+          "representation": "set",
+          "right": {
+            "path": "$.results",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a GET /users; followup_query:q1 actor_a GET /users/search; business predicate P17 requires followup_query:q1 $.results (array) subset source_query $.results (array); representation=set, basis=identity_tuple, projection=[], identity={'paths': ['$.id'], 'semantics': 'strict-tuple'}; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['q'], 'kind': 'filter_refinement', 'location': 'query', 'semantics': {'evidence_refs': ['r20260902-023853-7b21:request:0', 'r20260902-023853-7b21:request:4'], 'rationale': 'The source read /users carries no query selector while the follow-up read /users/search adds the single visible selector q=Dina20; the proposed rule is that this is a conjunction-style refinement of the same user collection.', 'source': 'hypothesis', 'value': 'and', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0013",
+      "canonical_relation_core_identity": "12e6cf1637d3476d3ded2f68d0692ac1e3700ca5739fefb3de8b2aca3aecbefa",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/users/search",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-023853-7b21:request:4"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "GET",
+        "path": "/users",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-023853-7b21:request:0"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Both recorded reads by actor_a return the same $.results user-object array shape, the observed value flow vf-94d9e2 carries a member username from request:0 into the request:4 q selector, and the dependency edge de-5220af6a1e245ead635d7f12 links the two reads as data-related; the proposal freezes the follow-up members as a subset of the source members compared by strict-tuple id.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-edc23300300969e58023"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0014-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.transaction",
+            "role": "observation",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /transactions/42vVPA9-Z; basic constraint P01 requires field observation $.transaction (object) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0014",
+      "canonical_relation_core_identity": "bf13c6e5ac3330d6b0a4c3a73253123fca225af822c320fa510049b7c8cc968d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0014-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Isolated single-response field-presence constraint mechanically read from the recorded point read: the visible response shape of request:12 contains the object field $.transaction. No cross-request or causal claim is made.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Mechanically read-only point read GET /transactions/<id> (request:12), reached by the recorded value flow vf-fc86c2b241ef88dc41f9c2dc that bound $.results[0].id of request:10 into its path locator. Its response shape declares an object $.transaction, so the single-response presence proposition over that exact path is expressible. This is an isolated presence constraint on one recorded response; it does not assert any field value, effect, or relation to the center write.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-44282ab8468c0088bfd5"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0015-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /transactions; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0015",
+      "canonical_relation_core_identity": "50484dbb22ce7c0f7bd4490c7d411055e95b1f9921f3bdf8fc796c7ac40c9906",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:10"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Mechanically read-only recorded read GET /transactions (request:10). Its shape shows $.results as an array of objects each with a visible string $.id, so a single-response uniqueness proposition over the actual returned array is expressible. The claim concerns only the returned page (scope actual_response); it says nothing about the database or later pages. Key visibility is frozen before execution, no stable cross-time identity is asserted, and duplicates would refute it.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-298094ab10cd12a087ea"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0016-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.results",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /transactions/public; basic constraint P15 requires observation $.results (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0016",
+      "canonical_relation_core_identity": "ec9cd85b729a9edbb884ba5986830600ccafc3f96c5abec27813ba068c92e3cb",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/public",
+          "phase": "observation",
+          "request_ref": "r20260902-023853-7b21:request:8"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0005",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Mechanically read-only recorded read GET /transactions/public (request:8). Its shape shows $.results as an array of objects each with a visible string $.id, so single-response uniqueness over the actual returned array is expressible for this distinct resource. Scope is limited to the actual response and makes no claim about completeness or about the private list returned by request:10.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0005/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b4edab8d312c4ea31bda"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/transactions",
+          "phase": "producer",
+          "request_ref": "r20260902-023853-7b21:request:6"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0017-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.transaction.senderId",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.senderId",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /transactions; observer actor_a GET /transactions/42vVPA9-Z; business predicate P02 requires after $.transaction.senderId (string) to strictly equal producer_request $.senderId (string).",
+      "candidate_id": "v2-candidate-0017",
+      "canonical_relation_core_identity": "2dbf8a9df4504682c040d0d24c2ea59c672990f7a7add55fb8e03a318adc06c8",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/transactions/42vVPA9-Z",
+          "phase": "after_observer",
+          "request_ref": "r20260902-023853-7b21:request:12"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/transactions",
+        "phase": "producer",
+        "request_ref": "r20260902-023853-7b21:request:6"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0006",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The write body shape declares $.senderId (string) and the fresh bound read shape exposes $.transaction.senderId (string). Proposed readback rule: the sender stored on the created transaction equals the senderId actually sent by the prepared request; the recorded literal is unavailable/sanitized, so the operand must bind to the actual outgoing request at execution, and the equality remains a hypothesis.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0006/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-626ced7ff71701240d23"
+    }
+  ]
+}

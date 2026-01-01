@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "test_suite_build_audit.schema.json",
+  "title": "test_suite_build_audit — Stage5 promotion and leave-one-channel audit",
+  "description": "Immutable per-condition record of promotion, filtering, and exclusion decisions while building a test suite. Source audits and blueprints remain byte-identical.",
+  "type": "object",
+  "required": ["metadata", "config_sha256", "input_refs", "decisions", "output_test_suite_ref"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "test_suite_build_audit" },
+        "stage": { "const": "stage5" }
+      }
+    },
+    "config_sha256": { "$ref": "#/$defs/sha256" },
+    "input_refs": {
+      "type": "object",
+      "required": ["test_blueprints", "assertion_audit", "constraint_input_audit"],
+      "properties": {
+        "test_blueprints": { "$ref": "#/$defs/artifact_ref" },
+        "assertion_audit": { "anyOf": [{ "$ref": "#/$defs/artifact_ref" }, { "type": "null" }] },
+        "constraint_input_audit": { "anyOf": [{ "$ref": "#/$defs/artifact_ref" }, { "type": "null" }] }
+      },
+      "additionalProperties": false
+    },
+    "decisions": { "type": "array", "items": { "$ref": "#/$defs/decision" }, "x-unique-by": "decision_id", "x-volatility": "structural" },
+    "output_test_suite_ref": { "anyOf": [{ "$ref": "#/$defs/artifact_ref" }, { "type": "null" }] }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "artifact_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "path"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "artifact_record_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "type": "string", "minLength": 1 },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": ["decision_id", "test_id", "variant_id", "constraint_candidate_ref", "status", "reason"],
+      "properties": {
+        "decision_id": { "type": "string", "minLength": 1 },
+        "test_id": { "type": "string", "minLength": 1 },
+        "variant_id": { "type": ["string", "null"], "minLength": 1 },
+        "constraint_candidate_ref": {
+          "anyOf": [
+            {
+              "allOf": [
+                { "$ref": "#/$defs/artifact_record_ref" },
+                { "properties": { "artifact_type": { "const": "constraint_input_audit" } } }
+              ]
+            },
+            { "type": "null" }
+          ]
+        },
+        "status": {
+          "enum": [
+            "promoted",
+            "not_promoted_channel_disabled",
+            "excluded_blueprint_no_baseline",
+            "not_promoted_execution_unable",
+            "not_promoted_target_unresolved",
+            "not_promoted_no_assertion_blueprint"
+          ]
+        },
+        "reason": { "type": ["string", "null"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "promoted" } }, "required": ["status"] },
+          "then": { "properties": { "variant_id": { "type": "string", "minLength": 1 }, "constraint_candidate_ref": { "type": "object" }, "reason": { "type": "null" } } },
+          "else": { "properties": { "reason": { "type": "string", "minLength": 1 } } }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

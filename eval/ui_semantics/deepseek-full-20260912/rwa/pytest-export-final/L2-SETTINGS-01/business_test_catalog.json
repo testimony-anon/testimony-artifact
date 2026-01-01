@@ -1,0 +1,912 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 10,
+    "canonical_relation_core_identities": [
+      "01aa0327f49412230bec3d2de5044433299e89f2e5a5acd6e254e1f94e545e30",
+      "1f45f33b3d7bdd9810048a76c9b3e2d9baeab07364efad12722d40de9962f68e",
+      "248862a2ae50650891520876d3b0cc0b6e0b93367e285c206b5ddb9378fe4f4d",
+      "27fb3687c204174a5d1cbf6e25c78bae0d6e52909a7303af161d91449038e357",
+      "649981044c501dd4f1157f8e9b216e7e7dd6e557ceff557e0215e5ac1d482bb7",
+      "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "d73253724562eb5c0f947687195bafa539c32ab9faf35feabab5374fe8b00ce5"
+    ],
+    "duplicate_core_occurrence_count": 5,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0009",
+      "v2-candidate-0010"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0010",
+      "v2-candidate-0011",
+      "v2-candidate-0012",
+      "v2-candidate-0013"
+    ],
+    "physical_retained_test_occurrence_count": 12,
+    "unique_canonical_relation_core_count": 7
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-024120-9640:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.firstName",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.firstName",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.firstName (string) to strictly equal producer_request $.firstName (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "01aa0327f49412230bec3d2de5044433299e89f2e5a5acd6e254e1f94e545e30",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-024120-9640:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center write PATCH /users/{id} (body $.firstName string) is followed by the same-actor get_checkauth read whose response shape exposes $.user.firstName string; no explicit unique pre-state read exists, so the catalog observer template resolves the after read. Readback of the submitted firstName is proposed, not proven.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center write is the same-actor PATCH /users/uBmeaz5pX (request:2) whose recorded body carries $.firstName (BeaconFirst), $.lastName, $.phoneNumber and $.defaultPrivacyLevel; no comparable pre-state observation exists for any post read (comparable_pre_state_status none everywhere), so the observer is selected from observer_operation_catalog as the ready single-template operation get_checkauth, whose recorded response shape exposes $.user.firstName. The proposal is a write-then-readback equality between the freshly read field and the actual prepared request field; the recorded values need not already agree. ui-diff-0001 (name text added/removed on /user/settings) is retained only as neutral corroboration and is not used as an expected constant.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center PATCH body carries firstName=BeaconFirst (visible body literal) and the recorded GET /checkAuth read after it (same actor/session, request-group-0005) exposes $.user.firstName; UI diff shows the displayed name changing at the action. Proposed readback of the posted field from the fresh read.",
+          "source_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-f47da45128d948c5a6a3"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-024120-9640:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.lastName",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.lastName",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.lastName (string) to strictly equal producer_request $.lastName (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "d73253724562eb5c0f947687195bafa539c32ab9faf35feabab5374fe8b00ce5",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-024120-9640:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Same center write also carries body $.lastName string; the same-actor get_checkauth template exposes $.user.lastName string. Candidate readback of the submitted lastName.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Center PATCH body carries lastName=BeaconLast (visible body literal) and the post-action GET /checkAuth response shape exposes $.user.lastName; UI diff records the name change. Proposed readback of the posted last name from the fresh read.",
+          "source_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-30e2228e2c6aa9f13cc1"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-024120-9640:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.phoneNumber",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.phoneNumber",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.phoneNumber (string) to strictly equal producer_request $.phoneNumber (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "248862a2ae50650891520876d3b0cc0b6e0b93367e285c206b5ddb9378fe4f4d",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-024120-9640:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Center write body $.phoneNumber string versus same-actor get_checkauth response $.user.phoneNumber string; the recorded HTML declaration of name=phoneNumber is only setup-style context, not an API constraint.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Center PATCH body carries the visible literal phoneNumber=6155551212 and the post-action GET /checkAuth response shape exposes $.user.phoneNumber as string. Proposed readback of the posted phone number from the fresh read.",
+          "source_ref": "../attempts/attempt-0004/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2e536cf249811cf74495"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/users/uBmeaz5pX",
+          "phase": "producer",
+          "request_ref": "r20260902-024120-9640:request:2"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.user.email",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.email",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /users/uBmeaz5pX; observer actor_a GET /checkAuth; business predicate P02 requires after $.user.email (string) to strictly equal producer_request $.email (string).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "649981044c501dd4f1157f8e9b216e7e7dd6e557ceff557e0215e5ac1d482bb7",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "before_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "after_observer",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/users/uBmeaz5pX",
+        "phase": "producer",
+        "request_ref": "r20260902-024120-9640:request:2"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Center write declares body $.email string (recording is sanitized, so no literal is frozen) and the same-actor get_checkauth template exposes $.user.email string; execution binds the operand to the actual prepared request instead of the recorded value.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4d671986e64b0e99ae67"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': 'both recorded POST /graphql bodies carry the identical operationName ListBankAccount and identical query text, so the frozen selector change is equivalence, not a new value', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Two same-actor/session recorded POST /graphql reads with identical body selectors share response shape exposing $.data.listBankAccount as an array; a multiset equal-input relation between the two identical ListBankAccount queries is proposed over the returned arrays, without any database-completeness claim.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e34bbdd3be40bf071208"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': 'both recorded POST /graphql requests have byte-identical bodies (same operationName and query text shape hash), so the frozen selector change is the identity on those two scalar body keys', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Second recorded query pair: request:143 (request-group-0006) and request:288 (request-group-0007) are the same POST /graphql ListBankAccount operation with identical recorded bodies and identical visible response shapes. Equivalent-input selector change on the two body scalar keys, so the two returned $.data.listBankAccount arrays are hypothesized equal as multisets of complete JSON members; execution binds the actual prepared bodies rather than copying recorded values.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1bb760e098ee61f7e2ad"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': 'Both recorded POST /graphql reads carry the same recorded operationName and query body paths (identical request body hash) and identical response body hash, so the observed selector sets are equivalent; the proposal is that the two $.data.listBankAccount arrays are equal as multisets of complete JSON members.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "Two concrete related recorded reads (post_graphql, operation ListBankAccount) by actor_a in the same session: request:143 (earlier global order) and request:288 (later global order), with identical recorded body selectors $.operationName and $.query. An equivalent-input multiset equality over the complete $.data.listBankAccount array is proposed on full JSON values only.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-20edfa45444a6e38ade7"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.user",
+            "role": "observation",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /checkAuth; basic constraint P01 requires field observation $.user (object) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "1f45f33b3d7bdd9810048a76c9b3e2d9baeab07364efad12722d40de9962f68e",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0009-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "observation",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "Isolated single-state presence constraint over one mechanically read-only recorded request (GET /checkAuth, request:3): the recorded response shape contains the object field $.user. This is a bounded presence claim about one fresh response, not a schema validation and not a business effect.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-632dffc5607e1bab6bd2"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0010-business-01",
+        "class": "business",
+        "predicate": {
+          "expected_type": "integer",
+          "family": "P21",
+          "target": {
+            "path": "$.user.balance",
+            "role": "observation",
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P21"
+      },
+      "business_summary": "Observation actor_a GET /checkAuth; basic constraint P21 requires observation $.user.balance (integer) to have JSON type integer; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0010",
+      "canonical_relation_core_identity": "27fb3687c204174a5d1cbf6e25c78bae0d6e52909a7303af161d91449038e357",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0010-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/checkAuth",
+          "phase": "observation",
+          "request_ref": "r20260902-024120-9640:request:3"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 8,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[7].rationale",
+          "raw_rationale": "Isolated single-state type constraint over the same recorded read-only request:3: the recorded response shape declares $.user.balance as integer. This is one field-level JSON type claim about a fresh response, not complete response schema validation and not a business relation.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a0fc08f496551a2bbee3"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': \"Both recorded POST /graphql requests carry the identical operationName 'ListBankAccount' and an identical recorded query string, and both responses use the same shape exposing $.data.listBankAccount[*]; the frozen meaning is equivalent input selectors, with no other selector differing.\", 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Two concrete same-actor recorded reads of the same catalog operation (POST /graphql, ListBankAccount) exist in this region; the frozen equivalent_input transform asserts only that their observed body selectors ($.operationName, $.query) are equivalent, and the P17 equality compares the returned $.data.listBankAccount arrays under full_json_value multiset preservation. No expected value is copied from the recording.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-ebb7c82ca78bff9d695e"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0012-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': 'Both recorded POST /graphql reads carry the identical body_sha256 with parameter_evidence body paths $.operationName=ListBankAccount and $.query, i.e. the same GraphQL input document, and returned the identical account-list body.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0012",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Two concrete related recorded queries (POST /graphql ListBankAccount in request-group-0006 and in request-group-0007, same actor/session) expose $.data.listBankAccount arrays; the observed arrays are equal as multisets of full JSON members. Only the frozen operationName/query body keys are declared as the equivalent selector input.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3cd10e0fc3fcf3e9a409"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0013-business-01",
+        "class": "business",
+        "predicate": {
+          "comparison_basis": "full_json_value",
+          "expected_difference": null,
+          "family": "P17",
+          "identity": null,
+          "left": {
+            "path": "$.data.listBankAccount",
+            "role": "followup_query:q1",
+            "value_type": "array"
+          },
+          "operator": "equal",
+          "projection": [],
+          "representation": "multiset",
+          "right": {
+            "path": "$.data.listBankAccount",
+            "role": "source_query",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P17"
+      },
+      "business_summary": "Queries source_query actor_a POST /graphql; followup_query:q1 actor_a POST /graphql; business predicate P17 requires followup_query:q1 $.data.listBankAccount (array) equal source_query $.data.listBankAccount (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['$.operationName', '$.query'], 'kind': 'equivalent_input', 'location': 'body', 'semantics': {'evidence_refs': ['r20260902-024120-9640:request:143', 'r20260902-024120-9640:request:288'], 'rationale': 'Both recorded POST /graphql reads send the same ListBankAccount operationName and query text as their only scalar body selectors.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.",
+      "candidate_id": "v2-candidate-0013",
+      "canonical_relation_core_identity": "ae424b77d8d93feb66f7589acefa02b95d18e02b7d7a9c3fdfc0187e3d8d5066",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/graphql",
+          "phase": "followup_query[1]",
+          "request_ref": "r20260902-024120-9640:request:288"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/graphql",
+        "phase": "source_query/producer",
+        "request_ref": "r20260902-024120-9640:request:143"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Two recorded same-actor POST /graphql reads (request:143 in group 0006, request:288 in group 0007) declare identical scalar body selectors $.operationName and $.query and the same response array path $.data.listBankAccount; the proposition freezes multiset equality of that complete array by full JSON member value.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-fa7a6f90c52bd10915c3"
+    }
+  ]
+}

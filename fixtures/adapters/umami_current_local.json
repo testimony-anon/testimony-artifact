@@ -1,0 +1,117 @@
+{
+  "schema_version": "uisemtest-current-subject-adapter-v1",
+  "adapter_id": "umami-current-local-http-v1",
+  "subject_id": "umami",
+  "runtime": {
+    "kind": "local_http",
+    "source_root": "${UISEMTEST_REPO_ROOT}",
+    "environment": {
+      "PATH": "${UISEMTEST_OPERATOR_PATH}",
+      "PYTHONPATH": "${UISEMTEST_REPO_ROOT}/src",
+      "NO_PROXY": "localhost,127.0.0.1,::1",
+      "no_proxy": "localhost,127.0.0.1,::1",
+      "UISEMTEST_PYTHON": "${UISEMTEST_PYTHON}",
+      "UISEMTEST_DOCKER_SINGLE_ADAPTER": "${UISEMTEST_REPO_ROOT}/fixtures/adapters/umami_current_local.json",
+      "UISEMTEST_UMAMI_OUTPUT_ROOT": "${UISEMTEST_UMAMI_OUTPUT_ROOT}",
+      "UISEMTEST_UMAMI_DEPLOY_ROOT": "${UISEMTEST_UMAMI_DEPLOY_ROOT}",
+      "UISEMTEST_UMAMI_APP_SECRET": "${UISEMTEST_UMAMI_APP_SECRET}",
+      "UISEMTEST_UMAMI_ACTOR_A_USERNAME": "${UISEMTEST_UMAMI_ACTOR_A_USERNAME}",
+      "UISEMTEST_UMAMI_ACTOR_A_PASSWORD": "${UISEMTEST_UMAMI_ACTOR_A_PASSWORD}",
+      "UISEMTEST_UMAMI_ACTOR_B_USERNAME": "${UISEMTEST_UMAMI_ACTOR_B_USERNAME}",
+      "UISEMTEST_UMAMI_ACTOR_B_PASSWORD": "${UISEMTEST_UMAMI_ACTOR_B_PASSWORD}"
+    },
+    "materialize_commands": [],
+    "server_commands": [[
+      "${UISEMTEST_PYTHON}",
+      "-m",
+      "subject_adapters.docker_single_local",
+      "supervise"
+    ]],
+    "health_probes": [
+      {"url": "http://127.0.0.1:18090/api/heartbeat", "expect_status": 200},
+      {"url": "http://127.0.0.1:18090/api/config", "expect_status": 200}
+    ],
+    "teardown_generated_paths": [],
+    "loopback_only": true,
+    "reset_from_profile": true,
+    "independent_arm_sessions": true
+  },
+  "docker_single": {
+    "schema_version": "uisemtest-docker-single-runtime-v1",
+    "container_name_prefix": "uisemtest-umami",
+    "instance_key_env": "UISEMTEST_UMAMI_OUTPUT_ROOT",
+    "image": {
+      "repository": "ghcr.io/umami-software/umami",
+      "tag": "postgresql-latest",
+      "digest": "sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+      "pull_policy": "if_absent"
+    },
+    "ports": [
+      {"host": 18090, "container": 3000}
+    ],
+    "environment": {
+      "DATABASE_TYPE": "postgresql",
+      "DATABASE_URL": "postgresql://umami:umami@localhost/umami?host=/var/run/postgresql",
+      "APP_SECRET": "${UISEMTEST_UMAMI_APP_SECRET}",
+      "DISABLE_TELEMETRY": "1",
+      "DISABLE_UPDATES": "1"
+    },
+    "volumes": [
+      {
+        "kind": "named",
+        "name": "pgsock",
+        "container_path": "/var/run/postgresql",
+        "reset_scope": "persistent"
+      }
+    ],
+    "readiness": {
+      "probes": [
+        {"url": "http://127.0.0.1:18090/api/heartbeat", "expect_status": 200}
+      ],
+      "timeout_seconds": 180,
+      "poll_interval_ms": 250
+    },
+    "reset": {
+      "strategy": "run_script",
+      "timeout_seconds": 60,
+      "script": {
+        "location": "host",
+        "command": ["/bin/bash", "${UISEMTEST_UMAMI_DEPLOY_ROOT}/reset.sh"],
+        "timeout_seconds": 30
+      }
+    },
+    "seed": {
+      "location": "host",
+      "command": ["/bin/bash", "${UISEMTEST_UMAMI_DEPLOY_ROOT}/seed.sh"],
+      "timeout_seconds": 120
+    }
+  },
+  "request_mapping": {
+    "mode": "current_recording_exact",
+    "header_policy": "accept_content_type_only"
+  },
+  "request_bindings": {},
+  "fresh_materialization_policy": {
+    "source": "current_observed_value_flow_set",
+    "selection": "exact_setup_to_candidate_consumers_v1",
+    "allowed_target_locations": ["path", "query", "header", "body"],
+    "allowed_scalar_types": ["string", "integer", "number", "boolean"]
+  },
+  "observer_policy": {
+    "schema_version": "uisemtest-current-observer-policy-v1",
+    "purity_domains_exact_set": ["cache", "cookie", "last_seen", "token"],
+    "request_method_policy": "read_only"
+  },
+  "settle_policy": {
+    "schema_version": "uisemtest-current-settle-policy-v2",
+    "rule": "bounded_semantic_stability_v1",
+    "minimum_duration_ms": 500,
+    "poll_interval_ms": 100,
+    "consecutive_identical_observations": 3,
+    "maximum_duration_ms": 2000
+  },
+  "sensitive_classification": {
+    "forbidden_source_refs": [],
+    "forbidden_projection_paths": ["$.password", "$.token", "$.user.token", "$.shareToken"]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "ghost-modular-l1-post-06",
+  "profile_ref": "fixtures/profiles/ghost_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18093/ghost/#/posts"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 300,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-nav-menu=\"main\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-new-post-button]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.click-post-list-title",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": ".gh-post-list-title",
+          "has_text": "Coming soon"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": "#/editor/",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-editor-title-input]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "network_quiet",
+          "quiet_ms": 400,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.click-psm-trigger",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-psm-trigger]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[name=\"post-setting-slug\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

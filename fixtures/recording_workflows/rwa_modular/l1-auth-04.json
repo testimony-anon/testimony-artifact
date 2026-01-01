@@ -1,0 +1,159 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "rwa-modular-l1-auth-04",
+  "profile_ref": "fixtures/profiles/rwa_modular_guest_local.json",
+  "actors": [
+    {
+      "actor_id": "guest",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.guest.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://localhost:14000/signin"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-username] input"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.invalid-username",
+      "global_step_index": 0,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value": "missing-user"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.invalid-password",
+      "global_step_index": 1,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value": "wrong-password"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.submit-invalid-user",
+      "global_step_index": 2,
+      "actor_id": "guest",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-error]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s000.invalid-username",
+        "story.s001.invalid-password"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.existing-username",
+      "global_step_index": 3,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value_env": "UISEMTEST_RWA_ACTOR_A_USERNAME"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.wrong-existing-password",
+      "global_step_index": 4,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value": "wrong-password"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.submit-wrong-password",
+      "global_step_index": 5,
+      "actor_id": "guest",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-error]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s004.wrong-existing-password"
+      ]
+    }
+  ]
+}

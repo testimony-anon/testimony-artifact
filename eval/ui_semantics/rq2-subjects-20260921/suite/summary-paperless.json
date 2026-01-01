@@ -1,0 +1,3873 @@
+{
+  "subject": "paperless",
+  "response": [
+    {
+      "fault_id": "PR-P01",
+      "subject": "paperless",
+      "kind": "response",
+      "status": "included",
+      "module": "documents",
+      "business_rule": "After a document update, reading the document returns the updated title.",
+      "description": "For a document targeted by a PATCH /api/documents/{id}/ of this epoch, every later 2xx GET /api/documents/{id}/ (and the same object inside GET /api/documents/) reports the `title` last observed before the update instead of the current one.",
+      "reads": [
+        [
+          "GET",
+          "/api/documents/\\d+"
+        ],
+        [
+          "GET",
+          "/api/documents"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "PATCH",
+          "path": "/api/documents/\\d+",
+          "role": "update"
+        }
+      ],
+      "operator": "old_value_after_update",
+      "target": {
+        "field": "title",
+        "id_field": "id"
+      },
+      "substates": {
+        "update": {
+          "activated_responses": 39,
+          "status": "activated"
+        }
+      },
+      "observable_effect": "In L2-DOCEDIT-01 GET /api/documents/1/ after the PATCH shows \"test document 1\" instead of \"authored edited title\"; in L2-DOCEDIT-03 the PATCH leaves the title unchanged, so nothing is rewritten.",
+      "paired_tests": 27,
+      "read_route_pairs_before_trigger_filter": 347,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-5a5ad59b53022f8d6507",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-62811e3f748736daad33",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-013e19e8b1e6d060ce0c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-9e6f640e0fe2bfcf9cae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-bbd0bce95978a9ba6fe1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-781c92e1c968ca5f5545",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-1d98857177484cd7fc86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-a11716a32b4b9f5d523f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-d25e8c65d688991e0632",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-82585764282818ef500f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-dd5fb872e47ad94ee04e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-4127747a3d4f6686874f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-9cc9ba463efa7fe7f8fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-194366da22f1e55f5c3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-2b5ffbbb9c04dc351200",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-96d03fc1f681d4b1af7a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-f1efcb209b9712e0a208",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-64563add4222ac34b77e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-5874fc1238a6bf3f3f10",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-eff022b66a4feec900c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-88eb54a94133d41e8b46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-340eebbb78373156d97c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-253351acfa114df39a4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-4b5b94f2a53a3149fab3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-84150be60f3fe288b964",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-13f4252556d41f3fad9e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-6255ec58e8b1a0009df3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-c808d952dc822af5c39c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-14e3d8321f8cff45754c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-0fc2039f3c4b0b636521",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-43630764f4d78ac894fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-83a7d0562fe9d9521254",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-f45d8b7e3ccbd3412f34",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-694cc1765a8a698b0d05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-b6682f878d7ac589fb1a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-ceb6a8e1dc433076acff",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-0b3bb5aa42aa337734f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-d5065ab3c9dda861b08e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4e4b5427fceda8897348",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-e5efb2e4cc74fc2e78fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-799ff373b121b6ce0d7d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-2ddc584daece55d8f76a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-79ef402be0e90b486d1c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-6a4a9127713194ef3108",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-a36b33114a92ffea1ba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-21c3aec5130291f6ac5e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-83a90fa47cb99ca70a9c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-1590ed3b6673518d626c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-9be58dbe6ce63d6f3892",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-3e350333a4f493e4a709",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4c5739e49660c9d9baea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-6515f5ba61d81dea6c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-47a55fd151ad153790d4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-55d1c577ce3367b1de90",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-9a1d450d5fa9d43963ab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-e9fe961bcc8eb3dd751a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-f2bc98dfd15dc505d0c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-1e1d26a5628f6bc8b0eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-cf8826892c0037b9ec1c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-427a78af1388e551f012",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-f99a885edcaa9f3da737",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-8bde43801fb439dc0483",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-bd53a74de022eb411a0d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-1ba1be8fa94ded0524b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-5a42a2e76ed1b7e3d69e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6846b729fa46d7e2c48f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-4f8aab70a1202834a3a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6010a590642ed9945966",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-1fffc98fe8b04c1c1dba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-7b5e92ed778512b21e8c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-770222b190759bd6c23f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-629e89c78c2321e3993c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c7bceb629e08b38bf860",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-8a471da88dbba65d648a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-d11c3aa43a78b2753212",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c713a52ea3f7e727c053",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a0e62e3bb4d47be55389",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-e3f57b3f4326cb3b30a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-0c01bae6234ae32741c1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-ccf1db85edd0d467a7e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-0c47a3c0cb788e5f159e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c948e93cbb39d17daf66",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-f567f3bb7f1033dafa94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-894c2b29295335e72125",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6508e6d2a759824ee3b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-878b59767e96094d5ccd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a6b571d28507e644a36a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-b8481c9eca9c90c00487",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-687207118a3f5e1498dc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-dd208f7e8c2727a0ceaa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-5d0b7edeabf6ef9c443e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-74b1919ec06dcf4a1eb5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-12e372956be62e0bb174",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b57dea9dbf1e683fa1cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-934ca17d5708c18324a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-0dccb8a1587bdde5dcb4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-6d43594106f80f6f1a0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-fc27725e0fcf51bdacfd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-62cdb56d0edf91b7ab54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-d42179630fe2d52e2d86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-34358e8ce475a3348e84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-8b072ea4399f39755db1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-053ff17ac59d3159e338",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-87df256b6791ab1ab479",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-c2d9c9df776e9ed1c7a7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-8712b758ec0b8e61532a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-ee9bf84609ee5e868902",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-c25261192e6e5b667708",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-d789ec3401559ab2d47d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-5a26337e9f3aed91f699",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-9f64c82a8a1ab4cc2ab7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-b38ed585f4d1920d764d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-7c65319e3b5e4caa5d94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-9d2803f921458f640cb5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-b9fc19f93d3dd37aa6a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-722c12a9322982c88a27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-bf0044e5c55aab70e54e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-4c6073d0447079a4eb6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-d948f611c1c2b1134718",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-535c8e2159db45909513",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-adc3b849e4e9e2cae298",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-88add89bf4f320d39190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-1daae73caf3f61bc9b4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-018e32b5dc820ccd9f6b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a652c09c149017dcb766",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e3f4b4e55e6ab2bea2d9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a13cd25e693ac47a6db0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-68d79bc094cb8fb06419",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-6759bfed22274389498a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-36b3a9230805a25ee9ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-5d9e02f2de0df3f658fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-7d5cc1ec8f7903e79a83",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a88f394f591aaa7cc7fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-56875c7d7735305b1ae1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-3d858a7f5c77c0cd25fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-c43e9dfaa4d1cb9f379a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e74cd01099ba51aa8d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-076b1a193a3277d2601c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-d21e9a52947714a82be3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-262f01e4d091eacaa9c6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-556b1a20b56fbfc528d2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1016163d05ce88ad0ca4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-c8e32aca17399a39234e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-da1d04e59c409f6fa5e2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-38bee6e65fe0fd9998a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f9fc59ffc155cd93a0a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f602e476b61675cce97e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-a6a1fad3c07237d2e1dd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6a8d5acd01d8d255a9f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-af85f6d6618c6a1d1124",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-9a6d6ddbda4f4a08af21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-5f0c7728960c86876f4d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-445d793d0d62b87d1335",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1cb7ad9a07e8455c3bc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6bdc65f1dc359e1a7de7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-958855de3f73f2de20b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-792f1a7ad9769e7497fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-d0830b3844aba6293af8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-dc4358207506f7fe17b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-8066aaf4dccebc6102eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-b2748a13d1e3d9a76d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-16f3c72088c28556cd38",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6d988257a14b5547fc4d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-ddaaa837f8cb09b2f037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-43d38b6937c8279ca037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d6a569992596973164f8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-12f964b2b6dd682d9514",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f07e38f8b08f912b3c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7123d50d203e536331eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d5db95574a69da40da87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-5b35e8f6a40b7ab0505e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-b6ae95c08b3159d203da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-eff0c8351d0f4357a352",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9dd1244a78df51a4764f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-8fe0253f6414d119ee19",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9d0350099d77ceca16f9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-708cd296651821ad543c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f954224454c611517c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-4c34cae0950060f4f03d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7d6a04338ab0325cfd3e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-75b4d3b1b985f3e1514d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-1400e8d3cb2b0acbac43",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-6107e187a4e4bfbe4ffa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-1eec5135a8976dc726a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-ae3c1bc98ac292ddbaf3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eaf8725b3262e6ed70ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-942d4755c4ec9621c381",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-90e8a4bd0af88ddbf989",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eb4e4a03b9ee030ce421",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-6b4dea0b8d031cf5f641",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-62569eb3ef7855b0a04b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-016e73a1552245a90022",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-25d39138fefbc2cf4d75",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-5db3342e61a8b219f3d0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-59a6afc4aea532d3b694",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b471c57adc8d2e3ead59",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b9b39511127b556c8094",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-61b03b84ae8cee6f5235",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-1963bd94de301a5a21a3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-b1d92a22dc8e42fc9399",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9e36d4a61bb21d397609",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9c8a7acc5684f6d52285",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-ddee1227dcde86d1e596",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-e1f95d1a98b69b7108f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-7e804f57b29a4ed9937d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-cf22573404c058593422",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-a7441d5f7221257bb917",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-60181b0c036bfdf69cd9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-7d4e55830873cfbd7576",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-65a3a6d838cd1eb3f4f5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-038d66add6a6b9095f35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-fdf3a6be25d0eee303c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-11b652ab909e0fa1929c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8faaaf616c45f7a8f601",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-2d05a2715614e6178dae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8a7bd81c10002668da55",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d558e996580cf0aab507",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-58b5333915a98b5f4c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-dcdf95ce0a7b078e04ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d19a7e5f8f30594c078e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-fb087d60dc8aa01ffb15",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-ee18bf0986069f2a3ece",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-6ec45f3b5346cb858b6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-22c55b674ebcaf3269c5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-76590e5b731a6134d0d5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-8fd33c3251801dcfe024",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-1ee2ff2a604611a1c1bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-eb0b27d29583f6b9a7ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d42d520dce57a6a83f7a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-55cf3a3a791ad32b89cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-866ed8d655595107c4c6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d8b7378c93d6b5821c06",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-e4cb39dc824f62570046",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-3b133d834eee41a71171",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-5b82170d18e93fbe07b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-64f16842093ccba3eb6c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-030fe1286c7de60bd756",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-21de0c7c20d73abaed2d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-016fdfa46ff291baf773",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-c32e0c2b5620bbaea307",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc551f7eb7398a02dcb2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-cbef760ac858857a9695",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-bcf9951e468f958b72b0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-45b92b001aa8d15f1966",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-916dbaae1779a78ee430",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-4fe114898a6cbd185885",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-497b36a610ae48c734a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-5389bfc8fa0bc7bff8f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-07072e7f52d443dacba5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc6cb9f483c7cb9801ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-675cbbbb1e160430453f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-843b42cdaa912537fda5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-d6b6645cc59c4156b3b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-03/relation-test-444642b4499b2fd16a36",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-5b81c9d25f1d5c2cc841",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-b46d5dff21af8083cb81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-ea5683030d3b956e3c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-11f7eb87e8b375e9294b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-78f62dbf91905fecb4be",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-88f1498030a3a69711fd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-a0b7606a1b354614ccf2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-c4945c9eaaa61400e271",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-129e7b294c8adaa48edf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-692b4d6af39a52ae759c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-3dc9c0f9ba342832b942",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-9877cb443df4f8a502fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-de5e817aaa23a2d0fdc2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-b8b48ea67d753861a087",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-48177fd7a0a28ef404e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-63976df74dd170384466",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-b38c10036595bd5dd65d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-3fd7cca7d61a527d1bca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-aafe5c838608d877cc5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-5d2c5942def01345c12c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-1ef788e66830e0307c74",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-a90c6610b6a9920f3f81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-d09ff29a427c0a86acfc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-bd519a278989bcfad2b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-3122f8fb6f70c2ed8469",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-f7064ffaf2098756fc64",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-1026072cc759b1197822",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-cf109db724d8f0168e33",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-459f0dab37c5618f64b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-153dcf55a9e7d5900203",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-6c4045e0df60154d5c35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-536fe4429c90d4438657",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-b34687bf7181245b9155",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-95f0b39b43bbb72ce037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-1f66a838f7e01cfcf123",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-58a30e515889937210a6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-4169b5682d63b3dd51c5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-6de8a013dbba8f001c2e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-feb75221116a6c7968df",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-ac3c99b1b82f759e2d21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-df776d619e2c1f14363a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-58e5ee11bfe1510da9a0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-b8a1b5e178be3e679044",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-be4f32f1754dc9d86b0f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-2f33b1d920df8fbdf398",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-663778361d1089a5698e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-c54f46489dc807a6d35e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-1d4c983cc4e547b24b7d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-44a5f68009bd5ba4594f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-11e8e1868e390304c0ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-1be0a1c8355539a64687",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-4510e327991e93eee9b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-056add506203af8a2bf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-2e6c10604cebaeffb467",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-8dec6dbba519b108db27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-06cf0922ce4253a7558c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-dee2e71e9404bf54fb97",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-dc9a7e4051eefc00f11b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-bed93e5c9f0993fde843",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-16e465ec7365a0fb5b85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-c9ec6fe99caf17d66acf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-0cc2690dc6ac0f277f0e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-c72563a4fb82e8d1b68f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-a122ccc9b87c88ff5573",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-e77e4288479fd055fe08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-8c2236abcbbc2a6a69ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 42.26870449903072,
+      "substate_status": {
+        "update": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 27,
+      "completed_tests": 27,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 39,
+      "activated_tests": 13,
+      "elapsed_seconds": 42.69870645500487,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 13
+      }
+    },
+    {
+      "fault_id": "PR-P02",
+      "subject": "paperless",
+      "kind": "response",
+      "status": "included",
+      "module": "tags",
+      "business_rule": "A newly created tag appears in the tag list: after POST /api/tags/ answers 201 with the new tag, GET /api/tags/ lists it for its owner and for every user allowed to view it.",
+      "description": "Every 2xx GET /api/tags/ response of the epoch has the members whose `id` was created by a POST /api/tags/ of this epoch removed from `$.results` (count and display_count are left as they are).",
+      "reads": [
+        [
+          "GET",
+          "/api/tags"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/tags",
+          "role": "create",
+          "id_path": "$.id"
+        }
+      ],
+      "operator": "omit_created_member",
+      "target": {
+        "list_path": "$.results",
+        "id_field": "id"
+      },
+      "substates": {
+        "create": {
+          "activated_responses": 30,
+          "status": "activated"
+        }
+      },
+      "observable_effect": "In L3-SHARING-01 the tag list read right after creating tag 4 has count 4 but three results, and actor_b's later tag list (which should contain exactly the shared tag 4) is empty; in L3-SHARING-02 actor_b's own new tag is missing from both actors' lists.",
+      "paired_tests": 17,
+      "read_route_pairs_before_trigger_filter": 285,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-9e6f640e0fe2bfcf9cae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-bbd0bce95978a9ba6fe1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-781c92e1c968ca5f5545",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-1d98857177484cd7fc86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-a11716a32b4b9f5d523f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-d25e8c65d688991e0632",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-dd5fb872e47ad94ee04e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-4127747a3d4f6686874f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-9cc9ba463efa7fe7f8fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-194366da22f1e55f5c3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-2b5ffbbb9c04dc351200",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-96d03fc1f681d4b1af7a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-f1efcb209b9712e0a208",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-64563add4222ac34b77e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-5874fc1238a6bf3f3f10",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-eff022b66a4feec900c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-88eb54a94133d41e8b46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-340eebbb78373156d97c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-253351acfa114df39a4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-6255ec58e8b1a0009df3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-c808d952dc822af5c39c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-14e3d8321f8cff45754c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-0fc2039f3c4b0b636521",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-43630764f4d78ac894fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-83a7d0562fe9d9521254",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-f45d8b7e3ccbd3412f34",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-02/relation-test-694cc1765a8a698b0d05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-ceb6a8e1dc433076acff",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-0b3bb5aa42aa337734f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-d5065ab3c9dda861b08e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4e4b5427fceda8897348",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-e5efb2e4cc74fc2e78fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-79ef402be0e90b486d1c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-6a4a9127713194ef3108",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-a36b33114a92ffea1ba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-21c3aec5130291f6ac5e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-83a90fa47cb99ca70a9c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-1590ed3b6673518d626c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-9be58dbe6ce63d6f3892",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-3e350333a4f493e4a709",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4c5739e49660c9d9baea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-6515f5ba61d81dea6c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-47a55fd151ad153790d4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-e9fe961bcc8eb3dd751a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-f2bc98dfd15dc505d0c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-1e1d26a5628f6bc8b0eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-cf8826892c0037b9ec1c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-427a78af1388e551f012",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-f99a885edcaa9f3da737",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-8bde43801fb439dc0483",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-bd53a74de022eb411a0d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-1ba1be8fa94ded0524b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-5a42a2e76ed1b7e3d69e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6846b729fa46d7e2c48f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-7b5e92ed778512b21e8c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-770222b190759bd6c23f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-629e89c78c2321e3993c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c7bceb629e08b38bf860",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-8a471da88dbba65d648a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-d11c3aa43a78b2753212",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c713a52ea3f7e727c053",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a0e62e3bb4d47be55389",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-e3f57b3f4326cb3b30a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-0c01bae6234ae32741c1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-ccf1db85edd0d467a7e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-0c47a3c0cb788e5f159e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-f567f3bb7f1033dafa94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-894c2b29295335e72125",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6508e6d2a759824ee3b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-878b59767e96094d5ccd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a6b571d28507e644a36a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-b8481c9eca9c90c00487",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-dd208f7e8c2727a0ceaa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-5d0b7edeabf6ef9c443e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-74b1919ec06dcf4a1eb5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-05/relation-test-12e372956be62e0bb174",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-43842d4b2e98feded8bd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b6734395e45bfa456cc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-03daa8b4e975f5e86007",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-949eb485daebd9d0f474",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-c15a8c6069d683827ab4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-4a9d1053f935724d2163",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b592e69836a1f44eeac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-d8683a2dcf859d75288f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-84dd2640c0d49becfd20",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-eb757dc04124231e5f37",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-e0c9da3a3459fb563fa8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-9f967ddc05ea9d8041d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-329f3d67d69afc711083",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-0cdbb3fda97230f6d23c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b6a4c1a0e492bb9da9b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b57dea9dbf1e683fa1cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-934ca17d5708c18324a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-0dccb8a1587bdde5dcb4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-6d43594106f80f6f1a0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-fc27725e0fcf51bdacfd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-c93056c5edae2128da08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b4788715b867726d343f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-bb0a735fd8aa005ab913",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-3eb701895548ed00057d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-80aa2c4a7e63d8057794",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-8c56a8c785bea2069277",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-e0e3cc32db3ce5b46576",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-44d25dacc5f107de454c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-21a9da263344b8f78411",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-5b131c921cfdf30e35ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-6e5033872646fd9c77d6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-62cdb56d0edf91b7ab54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-d42179630fe2d52e2d86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-34358e8ce475a3348e84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-8b072ea4399f39755db1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-053ff17ac59d3159e338",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-87df256b6791ab1ab479",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-131b28a8a115491b9a05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-02b9cddf38562dd0a1fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b039ae816cbbf640649c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b549e4aceca88fe49a5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-c2d9c9df776e9ed1c7a7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-ee9bf84609ee5e868902",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-5a26337e9f3aed91f699",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-9f64c82a8a1ab4cc2ab7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-b9fc19f93d3dd37aa6a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-722c12a9322982c88a27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-535c8e2159db45909513",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-88add89bf4f320d39190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-1daae73caf3f61bc9b4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-018e32b5dc820ccd9f6b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a652c09c149017dcb766",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e3f4b4e55e6ab2bea2d9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a13cd25e693ac47a6db0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-68d79bc094cb8fb06419",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-6759bfed22274389498a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-36b3a9230805a25ee9ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-5d9e02f2de0df3f658fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-7d5cc1ec8f7903e79a83",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a88f394f591aaa7cc7fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-56875c7d7735305b1ae1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-3d858a7f5c77c0cd25fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-c43e9dfaa4d1cb9f379a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e74cd01099ba51aa8d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-076b1a193a3277d2601c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-d21e9a52947714a82be3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-262f01e4d091eacaa9c6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1016163d05ce88ad0ca4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-c8e32aca17399a39234e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-da1d04e59c409f6fa5e2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-38bee6e65fe0fd9998a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f9fc59ffc155cd93a0a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f602e476b61675cce97e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-a6a1fad3c07237d2e1dd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6a8d5acd01d8d255a9f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-9a6d6ddbda4f4a08af21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-5f0c7728960c86876f4d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1cb7ad9a07e8455c3bc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6bdc65f1dc359e1a7de7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-958855de3f73f2de20b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-792f1a7ad9769e7497fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-d0830b3844aba6293af8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-dc4358207506f7fe17b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-8066aaf4dccebc6102eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-b2748a13d1e3d9a76d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-16f3c72088c28556cd38",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-ddaaa837f8cb09b2f037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d6a569992596973164f8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-12f964b2b6dd682d9514",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f07e38f8b08f912b3c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7123d50d203e536331eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d5db95574a69da40da87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-5b35e8f6a40b7ab0505e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-b6ae95c08b3159d203da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-eff0c8351d0f4357a352",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9dd1244a78df51a4764f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-8fe0253f6414d119ee19",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9d0350099d77ceca16f9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-708cd296651821ad543c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f954224454c611517c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-4c34cae0950060f4f03d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7d6a04338ab0325cfd3e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-1400e8d3cb2b0acbac43",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-1eec5135a8976dc726a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-ae3c1bc98ac292ddbaf3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eaf8725b3262e6ed70ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-942d4755c4ec9621c381",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-90e8a4bd0af88ddbf989",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eb4e4a03b9ee030ce421",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-6b4dea0b8d031cf5f641",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-62569eb3ef7855b0a04b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-016e73a1552245a90022",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b471c57adc8d2e3ead59",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b9b39511127b556c8094",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-1963bd94de301a5a21a3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-b1d92a22dc8e42fc9399",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9e36d4a61bb21d397609",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9c8a7acc5684f6d52285",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-ddee1227dcde86d1e596",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-e1f95d1a98b69b7108f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-cf22573404c058593422",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-a7441d5f7221257bb917",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-60181b0c036bfdf69cd9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-7d4e55830873cfbd7576",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-65a3a6d838cd1eb3f4f5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-038d66add6a6b9095f35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-fdf3a6be25d0eee303c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-11b652ab909e0fa1929c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8faaaf616c45f7a8f601",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8a7bd81c10002668da55",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d558e996580cf0aab507",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-dcdf95ce0a7b078e04ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d19a7e5f8f30594c078e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-fb087d60dc8aa01ffb15",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-ee18bf0986069f2a3ece",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-6ec45f3b5346cb858b6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-22c55b674ebcaf3269c5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-76590e5b731a6134d0d5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-8fd33c3251801dcfe024",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-1ee2ff2a604611a1c1bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-eb0b27d29583f6b9a7ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d42d520dce57a6a83f7a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-55cf3a3a791ad32b89cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d8b7378c93d6b5821c06",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-3b133d834eee41a71171",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-5b82170d18e93fbe07b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-64f16842093ccba3eb6c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-030fe1286c7de60bd756",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-21de0c7c20d73abaed2d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-016fdfa46ff291baf773",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc551f7eb7398a02dcb2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-cbef760ac858857a9695",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-916dbaae1779a78ee430",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-4fe114898a6cbd185885",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-497b36a610ae48c734a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-5389bfc8fa0bc7bff8f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc6cb9f483c7cb9801ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-843b42cdaa912537fda5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-5b81c9d25f1d5c2cc841",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-ea5683030d3b956e3c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-11f7eb87e8b375e9294b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-c4945c9eaaa61400e271",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-3dc9c0f9ba342832b942",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-b8b48ea67d753861a087",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-48177fd7a0a28ef404e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-63976df74dd170384466",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-3fd7cca7d61a527d1bca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-aafe5c838608d877cc5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-5d2c5942def01345c12c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-d09ff29a427c0a86acfc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-bd519a278989bcfad2b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-f7064ffaf2098756fc64",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-1026072cc759b1197822",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-459f0dab37c5618f64b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-13a19bb020bc35d8e138",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-153dcf55a9e7d5900203",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-ff944f0f8fc60a714e4a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-ab7a01897b92e75790ee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-9b6f0854c39aa5f361ac",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-6de8a013dbba8f001c2e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-feb75221116a6c7968df",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-ac3c99b1b82f759e2d21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-df776d619e2c1f14363a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-58e5ee11bfe1510da9a0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-b8a1b5e178be3e679044",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-7aa5c906f71b696a439a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-070af6c0ea9ac751cfc2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-2ab4aa52e998cfbbdcf8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-056add506203af8a2bf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-2133bb0a56256de9b8ed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-8dec6dbba519b108db27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-06cf0922ce4253a7558c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 26.34291329194093,
+      "substate_status": {
+        "create": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 17,
+      "completed_tests": 17,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 30,
+      "activated_tests": 12,
+      "elapsed_seconds": 26.511589877976803,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 12
+      }
+    },
+    {
+      "fault_id": "PR-P03",
+      "subject": "paperless",
+      "kind": "response",
+      "status": "included",
+      "module": "users",
+      "business_rule": "Saving a user's permissions persists them: after PUT /api/users/{id}/ with `user_permissions`, GET /api/users/ (and GET /api/users/{id}/) returns the new permission list for that user.",
+      "description": "For a user targeted by a PUT /api/users/{id}/ of this epoch, every later 2xx GET /api/users/{id}/ and the matching object inside GET /api/users/ report the `user_permissions` list last observed before the update instead of the current one.",
+      "reads": [
+        [
+          "GET",
+          "/api/users/\\d+"
+        ],
+        [
+          "GET",
+          "/api/users"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "PUT",
+          "path": "/api/users/\\d+",
+          "role": "update"
+        }
+      ],
+      "operator": "old_value_after_update",
+      "target": {
+        "field": "user_permissions",
+        "id_field": "id"
+      },
+      "substates": {
+        "update": {
+          "activated_responses": 0,
+          "status": "no_eligible_tests"
+        }
+      },
+      "observable_effect": "In L3-SHARING-01 GET /api/users/ after PUT /api/users/3/ shows user 3 with user_permissions [] instead of [\"view_tag\"]; in L3-SHARING-02 [] instead of [\"add_tag\", \"view_tag\", \"view_uisettings\"].",
+      "paired_tests": 0,
+      "read_route_pairs_before_trigger_filter": 310,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-781c92e1c968ca5f5545",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-1d98857177484cd7fc86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-a11716a32b4b9f5d523f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-d25e8c65d688991e0632",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-4127747a3d4f6686874f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-9cc9ba463efa7fe7f8fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-194366da22f1e55f5c3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-2b5ffbbb9c04dc351200",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-64563add4222ac34b77e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-5874fc1238a6bf3f3f10",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-eff022b66a4feec900c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-88eb54a94133d41e8b46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-340eebbb78373156d97c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-01/relation-test-253351acfa114df39a4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-d5065ab3c9dda861b08e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4e4b5427fceda8897348",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-e5efb2e4cc74fc2e78fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-a36b33114a92ffea1ba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-21c3aec5130291f6ac5e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-83a90fa47cb99ca70a9c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-4c5739e49660c9d9baea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-6515f5ba61d81dea6c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-47a55fd151ad153790d4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-1e1d26a5628f6bc8b0eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-cf8826892c0037b9ec1c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-427a78af1388e551f012",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-f99a885edcaa9f3da737",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-03/relation-test-8bde43801fb439dc0483",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-5a42a2e76ed1b7e3d69e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6846b729fa46d7e2c48f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-629e89c78c2321e3993c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c7bceb629e08b38bf860",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-c713a52ea3f7e727c053",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a0e62e3bb4d47be55389",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-e3f57b3f4326cb3b30a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-0c01bae6234ae32741c1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-ccf1db85edd0d467a7e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-6508e6d2a759824ee3b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-878b59767e96094d5ccd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-a6b571d28507e644a36a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DASHBOARD-04/relation-test-b8481c9eca9c90c00487",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-43842d4b2e98feded8bd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b6734395e45bfa456cc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-03daa8b4e975f5e86007",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-949eb485daebd9d0f474",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-c15a8c6069d683827ab4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-4a9d1053f935724d2163",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b592e69836a1f44eeac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-d8683a2dcf859d75288f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-84dd2640c0d49becfd20",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-eb757dc04124231e5f37",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-e0c9da3a3459fb563fa8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-9f967ddc05ea9d8041d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-329f3d67d69afc711083",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-0cdbb3fda97230f6d23c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b6a4c1a0e492bb9da9b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-b57dea9dbf1e683fa1cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-934ca17d5708c18324a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-0dccb8a1587bdde5dcb4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-6d43594106f80f6f1a0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-01/relation-test-fc27725e0fcf51bdacfd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-c93056c5edae2128da08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b4788715b867726d343f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-bb0a735fd8aa005ab913",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-3eb701895548ed00057d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-80aa2c4a7e63d8057794",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-8c56a8c785bea2069277",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-e0e3cc32db3ce5b46576",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-44d25dacc5f107de454c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-21a9da263344b8f78411",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-5b131c921cfdf30e35ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-6e5033872646fd9c77d6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-62cdb56d0edf91b7ab54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-d42179630fe2d52e2d86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-34358e8ce475a3348e84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-8b072ea4399f39755db1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-053ff17ac59d3159e338",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-87df256b6791ab1ab479",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-131b28a8a115491b9a05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-02b9cddf38562dd0a1fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b039ae816cbbf640649c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-b549e4aceca88fe49a5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-02/relation-test-c2d9c9df776e9ed1c7a7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-8712b758ec0b8e61532a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-ee9bf84609ee5e868902",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-c25261192e6e5b667708",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-d789ec3401559ab2d47d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-5a26337e9f3aed91f699",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-84d88d8fa63485c950c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-ce2a195380dddf57c46b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-e12642099af39af2d7db",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-dad03b1f8cfb497d81f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-8828587c222418f44585",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-f3c72ab5f16f31d4a5f6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-9f64c82a8a1ab4cc2ab7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-b38ed585f4d1920d764d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-7c65319e3b5e4caa5d94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-04/relation-test-9d2803f921458f640cb5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-b9fc19f93d3dd37aa6a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-ebec0cb14a6ef8b99d7f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-1ee764ed2084568ff6d6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-7598bc7824c0deedfccb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-722c12a9322982c88a27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-61112034147105cd980c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-9f88fbeb5d42651f8e8c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-7158dd1651cbfc173413",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-535c8e2159db45909513",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-adc3b849e4e9e2cae298",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-88add89bf4f320d39190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-1daae73caf3f61bc9b4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-018e32b5dc820ccd9f6b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a652c09c149017dcb766",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e3f4b4e55e6ab2bea2d9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a13cd25e693ac47a6db0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-68d79bc094cb8fb06419",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-6759bfed22274389498a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-36b3a9230805a25ee9ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-5d9e02f2de0df3f658fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-7d5cc1ec8f7903e79a83",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-a88f394f591aaa7cc7fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-56875c7d7735305b1ae1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-3d858a7f5c77c0cd25fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-c43e9dfaa4d1cb9f379a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-e74cd01099ba51aa8d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-0338cf653024cad9399b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-f35a831b68f5c66c17e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-f2cdde58041beef3b4b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-076b1a193a3277d2601c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-d21e9a52947714a82be3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCDETAIL-05/relation-test-262f01e4d091eacaa9c6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-919416649e295dc0eef7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-556b1a20b56fbfc528d2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1016163d05ce88ad0ca4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-c8e32aca17399a39234e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-da1d04e59c409f6fa5e2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-38bee6e65fe0fd9998a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f9fc59ffc155cd93a0a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-f602e476b61675cce97e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-a6a1fad3c07237d2e1dd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6a8d5acd01d8d255a9f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-af85f6d6618c6a1d1124",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-9a6d6ddbda4f4a08af21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-5f0c7728960c86876f4d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-445d793d0d62b87d1335",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-1cb7ad9a07e8455c3bc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-6bdc65f1dc359e1a7de7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-958855de3f73f2de20b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-792f1a7ad9769e7497fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-d0830b3844aba6293af8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-dc4358207506f7fe17b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-8066aaf4dccebc6102eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-b2748a13d1e3d9a76d72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-aa2ac2947d725cb40ae2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-03/relation-test-16f3c72088c28556cd38",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d31f8c1e42d5ae3abc5d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-ddaaa837f8cb09b2f037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-43d38b6937c8279ca037",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d6a569992596973164f8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-74b0927fb7d778dc335a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-12f964b2b6dd682d9514",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f07e38f8b08f912b3c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7123d50d203e536331eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-d5db95574a69da40da87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-a55bfbfbd606cd00a478",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-5b35e8f6a40b7ab0505e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-b6ae95c08b3159d203da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-eff0c8351d0f4357a352",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9dd1244a78df51a4764f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-8fe0253f6414d119ee19",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-9d0350099d77ceca16f9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-708cd296651821ad543c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-f954224454c611517c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-4c34cae0950060f4f03d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-7d6a04338ab0325cfd3e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-75b4d3b1b985f3e1514d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-1400e8d3cb2b0acbac43",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-05/relation-test-a41d6efe9cb3c35eb1b6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-e2836befc508da042530",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-6107e187a4e4bfbe4ffa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-1eec5135a8976dc726a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-ae3c1bc98ac292ddbaf3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eaf8725b3262e6ed70ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-942d4755c4ec9621c381",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-90e8a4bd0af88ddbf989",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-8d96a3e8ec68218c6717",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-eb4e4a03b9ee030ce421",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-6b4dea0b8d031cf5f641",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-62569eb3ef7855b0a04b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-016e73a1552245a90022",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-59a6afc4aea532d3b694",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b471c57adc8d2e3ead59",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-b9b39511127b556c8094",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-06/relation-test-3f9dd901659e354fd08d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-1fb4682f9f08c39ce2a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-1963bd94de301a5a21a3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-b1d92a22dc8e42fc9399",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9e36d4a61bb21d397609",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-9c8a7acc5684f6d52285",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-ddee1227dcde86d1e596",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-e1f95d1a98b69b7108f2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-13b1aa3d25565a118c63",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-7e804f57b29a4ed9937d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-cf22573404c058593422",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-a7441d5f7221257bb917",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-60181b0c036bfdf69cd9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-7d4e55830873cfbd7576",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-65a3a6d838cd1eb3f4f5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-58250b18b9f828a8ebdd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-038d66add6a6b9095f35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-fdf3a6be25d0eee303c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-11b652ab909e0fa1929c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8faaaf616c45f7a8f601",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-2d05a2715614e6178dae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-07/relation-test-8a7bd81c10002668da55",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d558e996580cf0aab507",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-58b5333915a98b5f4c85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-dcdf95ce0a7b078e04ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d19a7e5f8f30594c078e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-fb087d60dc8aa01ffb15",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-ee18bf0986069f2a3ece",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-9b6286e8d38f022d25d1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-6ec45f3b5346cb858b6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-22c55b674ebcaf3269c5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-76590e5b731a6134d0d5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-8fd33c3251801dcfe024",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-1ee2ff2a604611a1c1bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-eb0b27d29583f6b9a7ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d42d520dce57a6a83f7a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-55cf3a3a791ad32b89cd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-866ed8d655595107c4c6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-d8b7378c93d6b5821c06",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-e4cb39dc824f62570046",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-3b133d834eee41a71171",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-5b82170d18e93fbe07b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-64f16842093ccba3eb6c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-030fe1286c7de60bd756",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-21de0c7c20d73abaed2d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-DOCLIST-08/relation-test-016fdfa46ff291baf773",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-12bd1d0ee52bb151dde5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-c32e0c2b5620bbaea307",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-1fa9e87b68a9eb3eb26e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-7f608701cd68f5c32fbb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-bbba3a741dcc80d7c715",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-01/relation-test-7e4e0257e61d6ae2a428",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-1750d1a12f4cc481958c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc551f7eb7398a02dcb2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-cbef760ac858857a9695",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-57d3ba835557edea74fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-bcf9951e468f958b72b0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-45b92b001aa8d15f1966",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-916dbaae1779a78ee430",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-4fe114898a6cbd185885",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-497b36a610ae48c734a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-5389bfc8fa0bc7bff8f0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-07072e7f52d443dacba5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-fc6cb9f483c7cb9801ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-a30c46a0986e842b47d7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-675cbbbb1e160430453f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-843b42cdaa912537fda5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-02/relation-test-d6b6645cc59c4156b3b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-03/relation-test-e38f9a00a1a9cce4becd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-03/relation-test-444642b4499b2fd16a36",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-03/relation-test-08e59619ba3fcce15ba8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L1-SETTINGS-03/relation-test-5f3a08127c7874dfaa71",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-5b81c9d25f1d5c2cc841",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-b46d5dff21af8083cb81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-a8522384369e31231e54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-ea5683030d3b956e3c87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-ea5d499d3545ded71ba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-11f7eb87e8b375e9294b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-01/relation-test-78f62dbf91905fecb4be",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-88f1498030a3a69711fd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-a0b7606a1b354614ccf2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-aadec0e7462088a88e68",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-ffe2a48e813a05b10fe1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-02/relation-test-48177fd7a0a28ef404e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-bc03b781037529d834b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-90165634ed3177e40549",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-94ec45ff9c4c377db8f3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-bd519a278989bcfad2b3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-3122f8fb6f70c2ed8469",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-f7064ffaf2098756fc64",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-d530a12620de08c46452",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-9bd4679163c6dd513156",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-92162bb1dc5cd3081f23",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L2-DOCEDIT-03/relation-test-1026072cc759b1197822",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-459f0dab37c5618f64b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-153dcf55a9e7d5900203",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-536fe4429c90d4438657",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-b34687bf7181245b9155",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-58e5ee11bfe1510da9a0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-b8a1b5e178be3e679044",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-be4f32f1754dc9d86b0f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-056add506203af8a2bf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-01/relation-test-06cf0922ce4253a7558c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-18063a11e3def6f4e07e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-0197269e9687ed3a65c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-b4ca90af1f06f978e4fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-dee2e71e9404bf54fb97",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-380563f45a164bafa0ee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-18911daf50b03e9a971a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-dc9a7e4051eefc00f11b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-bed93e5c9f0993fde843",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-16e465ec7365a0fb5b85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-c9ec6fe99caf17d66acf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-0cc2690dc6ac0f277f0e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-c72563a4fb82e8d1b68f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-a122ccc9b87c88ff5573",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-e77e4288479fd055fe08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "paperless/L3-SHARING-02/relation-test-8c2236abcbbc2a6a69ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 0,
+      "substate_status": {
+        "update": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    }
+  ],
+  "source": [
+    {
+      "fault_id": "B-P01",
+      "subject": "paperless",
+      "kind": "source",
+      "module": "documents",
+      "business_rule": "Saving a document with a new title persists that title: PATCH/PUT /api/documents/{id}/ with `title` changes the stored title, and every later read of the document (GET /api/documents/{id}/, the same object in GET /api/documents/) returns the new title.",
+      "planned_tests": 27,
+      "completed_tests": 27,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 42.23359462694498,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 27
+      }
+    },
+    {
+      "fault_id": "B-P02",
+      "subject": "paperless",
+      "kind": "source",
+      "module": "notes",
+      "business_rule": "Deleting a note removes it: DELETE /api/documents/{id}/notes/?id=N answers with the remaining notes, and the note no longer appears in any later read (GET /api/documents/{id}/notes/, the `notes` array of GET /api/documents/{id}/ and of the document list).",
+      "planned_tests": 8,
+      "completed_tests": 8,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 13.661798499990255,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 8
+      }
+    },
+    {
+      "fault_id": "B-P03",
+      "subject": "paperless",
+      "kind": "source",
+      "module": "bulk_edit",
+      "business_rule": "A bulk tag edit applies to every selected document: POST /api/documents/bulk_edit/ {method: modify_tags, documents: [...], parameters: {add_tags, remove_tags}} adds the tags to all listed documents, so each of them lists the tag afterwards (GET /api/documents/, GET /api/documents/{id}/) and the tag's document_count grows by the number of selected documents.",
+      "planned_tests": 3,
+      "completed_tests": 3,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 4.76612529202248,
+      "business_only": false,
+      "B": "completed_not_detected",
+      "B_vs_O1": "neither",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 3
+      }
+    }
+  ],
+  "updated_at": "2026-09-21T11:39:10.159187+00:00"
+}

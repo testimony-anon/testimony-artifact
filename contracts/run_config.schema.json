@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run_config.schema.json",
+  "title": "run_config — session run configuration (produced by Stage 0; decision record 000 §2.1)",
+  "description": "How this session runs: the resolved app_profile, the verified authentication context, rate-limit settings and the drive mode (V1: manual/replay only).",
+  "type": "object",
+  "required": ["metadata", "app_profile", "auth_context", "rate_limit", "drive_mode"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "run_config" },
+        "stage": { "const": "stage0" }
+      }
+    },
+    "app_profile": {
+      "$ref": "app_profile.schema.json",
+      "description": "The resolved application profile, same shape as the app_profile contract (KD-1 repaid: the loose inline shape tightened to a $ref, approved in decision record 002 §7.3)"
+    },
+    "auth_context": {
+      "type": "object",
+      "description": "Verified authentication context (Stage 0 acceptance: the authentication probe request returned 200)",
+      "required": ["verified"],
+      "properties": {
+        "verified": { "type": "boolean" }
+      },
+      "additionalProperties": true,
+      "x-volatility": "volatile"
+    },
+    "rate_limit": {
+      "type": "object",
+      "description": "Rate-limit settings in effect for this session",
+      "x-volatility": "structural"
+    },
+    "drive_mode": {
+      "type": "string",
+      "enum": ["manual", "replay", "heuristic", "llm_agent", "random"],
+      "description": "Drive mode: manual = live manual; replay = sequence replay; heuristic = heuristic frontier+reward (reserved); llm_agent = language model/agent (reserved); random = random (degenerate strategy for evaluation, reserved). V1 produces only manual/replay.",
+      "x-volatility": "structural"
+    },
+    "trust_basis": {
+      "type": "object",
+      "description": "Write-probe trust basis (decision record 010 D60). Optional; default is equivalent to per_probe_cleanup (keeps V1 run_config fully compatible). environment_reset = environment-level reversibility (resettable instance) as the fallback: write_2xx_no_handle write probes are admitted as trusted, and Stage 2.5 must perform a mandatory reset plus baseline verification at the end of the batch; per_probe_cleanup = per-probe cleanup criterion (the fallback for environments that cannot be reset; behaves as in V1).",
+      "required": ["mode", "rationale"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["per_probe_cleanup", "environment_reset"]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Basis for the declared trust basis (e.g. 'the Conduit deployment can be reset as a whole via DROP+CREATE') — persisted as a record; an empty declaration is not allowed."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,1554 @@
+{
+  "schema_version": "uisemtest-recording-origin-v1",
+  "subject": "paperless",
+  "upstream": {
+    "repository": "https://github.com/paperless-ngx/paperless-ngx",
+    "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+    "version": "3.2.0",
+    "image_digest": "sha256:22dc423ff48ac1629977dbf0c9625ba9f60d3bd1291a2ff173c65351984a14c2",
+    "suite_root": "src-ui/e2e",
+    "framework": "playwright",
+    "official_test_count": 31,
+    "official_assertion_count": 104
+  },
+  "conversion": {
+    "tool": "scripts/experiments/subject_survey/spec_to_workflow.py",
+    "preprocessing": [
+      "the specs are formatted with prettier `semi: false`; spec_to_workflow splits statements on ';' only, so an equivalent semicolon-terminated copy was converted.",
+      "cypress_assertion_stats.py masks string literals by quote character, and the apostrophe in the regular expression /You don't have permissions to do that/i swallowed four of the eight permission tests; the assertion statistics were recomputed on a copy with that message reworded."
+    ],
+    "assertions_policy": "every assertion is dropped by design; the counts above are the record",
+    "excluded_official_tests": [
+      {
+        "test_name": "should finish reloading the preview after a remote document update",
+        "reason": "document-detail/document-detail.spec.ts:91 has no UI operation after the initial goto: it drives the Angular component through page.evaluate(ng.getComponent(...)) and counts network requests; neither has a schema equivalent."
+      },
+      {
+        "test_name": "should show a mobile preview",
+        "reason": "document-detail/document-detail.spec.ts:62 drives page.setViewportSize(400) and the Preview tab only exists below the mobile breakpoint; the workflow schema has no viewport action (stage1_record/workflow.py:77 PrimitiveAction)."
+      }
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "L1-SETTINGS-01",
+      "origin": "official",
+      "module_id": "admin-settings",
+      "workflow": "l1-settings-01.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/admin/settings.spec.ts",
+        "line": 20,
+        "test_name": "should activate / deactivate save button when settings change",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 23,
+            "source": "await expect(page.getByRole('button', { name: 'Save' })).toBeDisabled()"
+          },
+          {
+            "line": 26,
+            "source": "await expect(page.getByRole('button', { name: 'Save' })).toBeEnabled()"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-SETTINGS-02",
+      "origin": "official",
+      "module_id": "admin-settings",
+      "workflow": "l1-settings-02.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/admin/settings.spec.ts",
+        "line": 30,
+        "test_name": "should warn on unsaved changes",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 33,
+            "source": "await expect(page.getByRole('dialog')).toHaveText(/unsaved changes/)"
+          },
+          {
+            "line": 37,
+            "source": "await expect(page.getByRole('dialog')).toHaveCount(0)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 6,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "getByRole('link', {name: 'Dashboard'}) -> css 'pngx-app-frame nav a[routerlink=dashboard]': the sidebar entry is an <a routerLink> without href, so it exposes no link role.",
+        "getByRole('button', {name: 'Cancel'}) -> css '.modal-content button' filtered by text, to scope it to the unsaved-changes dialog."
+      ]
+    },
+    {
+      "case_id": "L1-SETTINGS-03",
+      "origin": "official",
+      "module_id": "admin-settings",
+      "workflow": "l1-settings-03.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/admin/settings.spec.ts",
+        "line": 41,
+        "test_name": "should apply appearance changes when set",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 42,
+            "source": "await expect(page.locator('html')).toHaveAttribute('data-bs-theme', /auto/)"
+          },
+          {
+            "line": 45,
+            "source": "await expect(page.locator('html')).toHaveAttribute('data-bs-theme', /dark/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 3,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DASHBOARD-01",
+      "origin": "official",
+      "module_id": "dashboard",
+      "workflow": "l1-dashboard-01.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/dashboard/dashboard.spec.ts",
+        "line": 3,
+        "test_name": "dashboard inbox link",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 2,
+        "mid_sequence": 0,
+        "targets": {
+          "url": 2
+        },
+        "statements": [
+          {
+            "line": 5,
+            "source": "await expect(page).toHaveURL(/tags__id__in=1/)"
+          },
+          {
+            "line": 6,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/8 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DASHBOARD-02",
+      "origin": "official",
+      "module_id": "dashboard",
+      "workflow": "l1-dashboard-02.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/dashboard/dashboard.spec.ts",
+        "line": 10,
+        "test_name": "dashboard total documents link",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 2,
+        "mid_sequence": 0,
+        "targets": {
+          "url": 2
+        },
+        "statements": [
+          {
+            "line": 12,
+            "source": "await expect(page).toHaveURL(/documents/)"
+          },
+          {
+            "line": 13,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/61 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 1,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DASHBOARD-03",
+      "origin": "official",
+      "module_id": "dashboard",
+      "workflow": "l1-dashboard-03.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/dashboard/dashboard.spec.ts",
+        "line": 18,
+        "test_name": "dashboard saved view show all",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 2,
+        "mid_sequence": 0,
+        "targets": {
+          "url": 2
+        },
+        "statements": [
+          {
+            "line": 25,
+            "source": "await expect(page).toHaveURL(/view\\/1/)"
+          },
+          {
+            "line": 26,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/8 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DASHBOARD-04",
+      "origin": "official",
+      "module_id": "dashboard",
+      "workflow": "l1-dashboard-04.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/dashboard/dashboard.spec.ts",
+        "line": 30,
+        "test_name": "dashboard saved view document links",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 1,
+        "after_last_action": 1,
+        "mid_sequence": 0,
+        "targets": {
+          "url": 1
+        },
+        "statements": [
+          {
+            "line": 38,
+            "source": "await expect(page).toHaveURL(/documents\\/1\\/details/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "getByRole('link', {name: /test/}).first() -> css 'pngx-saved-view-widget table tbody tr:nth-child(1) td:nth-child(2) a': the schema has no regular-expression accessible name and no .first()."
+      ]
+    },
+    {
+      "case_id": "L1-DASHBOARD-05",
+      "origin": "official",
+      "module_id": "dashboard",
+      "workflow": "l1-dashboard-05.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/dashboard/dashboard.spec.ts",
+        "line": 42,
+        "test_name": "test slim sidebar",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 44,
+            "source": "await expect( page.getByRole('link', { name: 'Dashboard' }).getByText('Dashboard') ).toBeHidden()"
+          },
+          {
+            "line": 48,
+            "source": "await expect( page.getByRole('link', { name: 'Dashboard' }).getByText('Dashboard') ).toBeVisible()"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 3,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DOCDETAIL-01",
+      "origin": "official",
+      "module_id": "document-detail",
+      "workflow": "l1-docdetail-01.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-detail/document-detail.spec.ts",
+        "line": 3,
+        "test_name": "should activate / deactivate save button when changes are saved",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 3,
+        "after_last_action": 1,
+        "mid_sequence": 2,
+        "targets": {
+          "ui": 3
+        },
+        "statements": [
+          {
+            "line": 7,
+            "source": "await expect(page.getByTitle('Storage path', { exact: true })).toHaveText( /\\w+/ )"
+          },
+          {
+            "line": 10,
+            "source": "await expect(page.getByRole('button', { name: 'Save' }).nth(1)).toBeDisabled()"
+          },
+          {
+            "line": 12,
+            "source": "await expect(page.getByRole('button', { name: 'Save' }).nth(1)).toBeEnabled()"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "getByTitle('Storage path').getByTitle('Clear all') -> css '[title=\"Clear all\"]' scoped to css 'pngx-input-select[title=\"Storage path\"]': the schema has no title locator; four 'Clear all' controls exist on the page, so the scope is what makes it unique."
+      ]
+    },
+    {
+      "case_id": "L1-DOCDETAIL-02",
+      "origin": "official",
+      "module_id": "document-detail",
+      "workflow": "l1-docdetail-02.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-detail/document-detail.spec.ts",
+        "line": 16,
+        "test_name": "should warn on unsaved changes",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 5,
+        "after_last_action": 1,
+        "mid_sequence": 4,
+        "targets": {
+          "ui": 5
+        },
+        "statements": [
+          {
+            "line": 17,
+            "source": "await expect(page.getByTitle('Correspondent', { exact: true })).toHaveText( /\\w+/ )"
+          },
+          {
+            "line": 20,
+            "source": "await expect(page.getByRole('button', { name: 'Save' }).nth(1)).toBeDisabled()"
+          },
+          {
+            "line": 25,
+            "source": "await expect(page.getByRole('button', { name: 'Save' }).nth(1)).toBeEnabled()"
+          },
+          {
+            "line": 27,
+            "source": "await expect(page.getByRole('dialog')).toHaveText(/unsaved changes/)"
+          },
+          {
+            "line": 30,
+            "source": "await expect(page.getByRole('dialog')).toHaveText(/unsaved changes/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 5,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "same getByTitle -> scoped css rewrite as L1-DOCDETAIL-01.",
+        "getByRole('button', {name:'Close', exact:true}) -> css 'button[title=\"Close\"]'.",
+        "getByRole('button', {name:'Close all'}) -> css 'button[ngbpopover=\"Close all\"]'."
+      ]
+    },
+    {
+      "case_id": "L1-DOCDETAIL-03",
+      "origin": "official",
+      "module_id": "document-detail",
+      "workflow": "l1-docdetail-03.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-detail/document-detail.spec.ts",
+        "line": 34,
+        "test_name": "should support tab direct navigation",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 5,
+        "after_last_action": 1,
+        "mid_sequence": 4,
+        "targets": {
+          "ui": 5
+        },
+        "statements": [
+          {
+            "line": 35,
+            "source": "await expect(page.getByRole('tab', { name: 'Details' })).toHaveAttribute( 'aria-selected', 'true' )"
+          },
+          {
+            "line": 40,
+            "source": "await expect(page.getByRole('tab', { name: 'Content' })).toHaveAttribute( 'aria-selected', 'true' )"
+          },
+          {
+            "line": 45,
+            "source": "await expect(page.getByRole('tab', { name: 'Metadata' })).toHaveAttribute( 'aria-selected', 'true' )"
+          },
+          {
+            "line": 50,
+            "source": "await expect(page.getByRole('tab', { name: 'Notes' })).toHaveAttribute( 'aria-selected', 'true' )"
+          },
+          {
+            "line": 55,
+            "source": "await expect(page.getByRole('tab', { name: 'Permissions' })).toHaveAttribute( 'aria-selected', 'true' )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 5,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DOCDETAIL-04",
+      "origin": "official",
+      "module_id": "document-detail",
+      "workflow": "l1-docdetail-04.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-detail/document-detail.spec.ts",
+        "line": 70,
+        "test_name": "should show a list of notes",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 2,
+        "mid_sequence": 0,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 71,
+            "source": "await expect(page.locator('pngx-document-notes')).toBeVisible()"
+          },
+          {
+            "line": 72,
+            "source": "await expect( await page.getByRole('button', { name: /delete note/i, includeHidden: true, }) ).toHaveCount(4)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 1,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DOCDETAIL-05",
+      "origin": "official",
+      "module_id": "document-detail",
+      "workflow": "l1-docdetail-05.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-detail/document-detail.spec.ts",
+        "line": 81,
+        "test_name": "should support quick filters",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 1,
+        "after_last_action": 1,
+        "mid_sequence": 0,
+        "targets": {
+          "url": 1
+        },
+        "statements": [
+          {
+            "line": 85,
+            "source": "await expect(page).toHaveURL( /tags__id__all=2,1&sort=created&reverse=1&page=1/ )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-DOCLIST-01",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-01.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 3,
+        "test_name": "basic filtering",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 12,
+        "after_last_action": 1,
+        "mid_sequence": 11,
+        "targets": {
+          "url": 12
+        },
+        "statements": [
+          {
+            "line": 6,
+            "source": "await expect(page).toHaveURL(/tags__id__all=1/)"
+          },
+          {
+            "line": 7,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/8 documents/)"
+          },
+          {
+            "line": 10,
+            "source": "await expect(page).toHaveURL(/document_type__id__in=1/)"
+          },
+          {
+            "line": 11,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/3 documents/)"
+          },
+          {
+            "line": 16,
+            "source": "await expect(page).toHaveURL(/correspondent__id__in=(?:1,2|2,1)/)"
+          },
+          {
+            "line": 17,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/7 documents/)"
+          },
+          {
+            "line": 23,
+            "source": "await expect(page).toHaveURL(/correspondent__id__none=(?:1,2|2,1)/)"
+          },
+          {
+            "line": 24,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/54 documents/)"
+          },
+          {
+            "line": 27,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/61 documents/)"
+          },
+          {
+            "line": 30,
+            "source": "await expect(page).toHaveURL(/storage_path__id__in=1/)"
+          },
+          {
+            "line": 31,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/8 documents/)"
+          },
+          {
+            "line": 33,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/61 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 14,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "filter dropdown toggles -> css 'pngx-filter-editor button#dropdown_<field>': the same ids also exist inside pngx-bulk-editor, so the component scope is required.",
+        "dropdown entries -> css 'button[role=menuitem]' scoped to the open menu and filtered by text, because their accessible name carries the document count ('Inbox8').",
+        "the Document type dropdown entry ('Invoice Test') was missing from the mechanical output (the source used a /^Invoice Test/ regular-expression name) and was re-inserted.",
+        "getByTitle('Correspondent').getByText('Exclude') -> css 'label[for=\"intersectionExclude_correspondent\"]'.",
+        "getByRole('button', {name:'2 selected', exact:true}) -> the correspondent dropdown toggle, which is the same control; its label is state-dependent."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-02",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-02.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 37,
+        "test_name": "text filtering",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 16,
+        "after_last_action": 2,
+        "mid_sequence": 14,
+        "targets": {
+          "url": 16
+        },
+        "statements": [
+          {
+            "line": 40,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/32 documents/)"
+          },
+          {
+            "line": 41,
+            "source": "await expect(page).toHaveURL(/text=test/)"
+          },
+          {
+            "line": 44,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/9 documents/)"
+          },
+          {
+            "line": 45,
+            "source": "await expect(page).toHaveURL(/title_search=test/)"
+          },
+          {
+            "line": 48,
+            "source": "await expect(page).toHaveURL(/query=test/)"
+          },
+          {
+            "line": 49,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/32 documents/)"
+          },
+          {
+            "line": 53,
+            "source": "await expect(page).toHaveURL(/archive_serial_number=1123/)"
+          },
+          {
+            "line": 54,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/one document/i)"
+          },
+          {
+            "line": 58,
+            "source": "await expect(page).toHaveURL(/archive_serial_number__gt=1123/)"
+          },
+          {
+            "line": 59,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/5 documents/)"
+          },
+          {
+            "line": 61,
+            "source": "await expect(page).toHaveURL(/archive_serial_number__lt=1123/)"
+          },
+          {
+            "line": 62,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/0 documents/)"
+          },
+          {
+            "line": 64,
+            "source": "await expect(page).toHaveURL(/archive_serial_number__isnull=1/)"
+          },
+          {
+            "line": 65,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/55 documents/)"
+          },
+          {
+            "line": 67,
+            "source": "await expect(page).toHaveURL(/archive_serial_number__isnull=0/)"
+          },
+          {
+            "line": 68,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/6 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 14,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "getByRole('main').getByRole('combobox') -> css 'pngx-filter-editor .input-group-sm input.form-control-sm'; the source locator has no literal accessible name.",
+        "the text-filter mode toggle is addressed by structure rather than by its label, because the label changes with the selected mode.",
+        "page.locator('select').selectOption(...) -> css 'pngx-filter-editor .input-group-sm select.form-select' (four select_option steps kept)."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-03",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-03.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 72,
+        "test_name": "date filtering",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 76,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/one document/i)"
+          },
+          {
+            "line": 89,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText(/3 documents/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 6,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "the relative-date ng-select is addressed as css 'ng-select[name=createdRelativeDate]' scoped to the open dates menu.",
+        "DROPPED 4 operations: getByRole('menuitem',{name:'Relative dates'}).locator('span').first() and the two getByLabel('Dates selected').locator('button').first() clears have no schema-expressible unique locator; the created-from date typed afterwards reaches the same filter state.",
+        "the created-from date input is addressed with Playwright's :has() CSS extension, because four identical mm/dd/yyyy inputs exist in the dropdown."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-04",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-04.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 93,
+        "test_name": "sorting",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 9,
+        "after_last_action": 1,
+        "mid_sequence": 8,
+        "targets": {
+          "url": 9
+        },
+        "statements": [
+          {
+            "line": 96,
+            "source": "await expect(page).toHaveURL(/sort=archive_serial_number/)"
+          },
+          {
+            "line": 102,
+            "source": "await expect(page).toHaveURL(/sort=correspondent__name/)"
+          },
+          {
+            "line": 105,
+            "source": "await expect(page).toHaveURL(/sort=title/)"
+          },
+          {
+            "line": 111,
+            "source": "await expect(page).toHaveURL(/sort=document_type__name/)"
+          },
+          {
+            "line": 114,
+            "source": "await expect(page).toHaveURL(/sort=created/)"
+          },
+          {
+            "line": 117,
+            "source": "await expect(page).toHaveURL(/sort=added/)"
+          },
+          {
+            "line": 120,
+            "source": "await expect(page).toHaveURL(/sort=modified/)"
+          },
+          {
+            "line": 123,
+            "source": "await expect(page).toHaveURL(/sort=num_notes/)"
+          },
+          {
+            "line": 126,
+            "source": "await expect(page).not.toHaveURL(/reverse=1/)"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 19,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "the sort menu lives in pngx-page-header, not in pngx-filter-editor; every entry is a role button with an exact accessible name scoped to the open page-header menu (several filter toggles carry the same words).",
+        "the trailing '.w-100 > label > i-bs' click -> css 'label[for=\"listSortReverseFalse\"]'."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-05",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-05.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 130,
+        "test_name": "change views",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 3,
+        "after_last_action": 1,
+        "mid_sequence": 2,
+        "targets": {
+          "ui": 3
+        },
+        "statements": [
+          {
+            "line": 132,
+            "source": "await expect(page.locator('pngx-document-list table')).toBeVisible()"
+          },
+          {
+            "line": 134,
+            "source": "await expect(page.locator('pngx-document-card-small').first()).toBeAttached()"
+          },
+          {
+            "line": 136,
+            "source": "await expect(page.locator('pngx-document-card-large').first()).toBeAttached()"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 4,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "'.btn-group > label'.first() / 'label:nth-child(4)' / 'label:nth-child(6)' -> the three stable ids label[for=displayModeDetails|displayModeSmall|displayModeLarge]."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-06",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-06.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 140,
+        "test_name": "bulk edit",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 4,
+        "after_last_action": 0,
+        "mid_sequence": 4,
+        "targets": {
+          "network": 4
+        },
+        "statements": [
+          {
+            "line": 162,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText( /Selected 50 of 61 documents/i )"
+          },
+          {
+            "line": 166,
+            "source": "await expect(page.locator('pngx-document-list')).toHaveText( /Selected 61 of 61 documents/i )"
+          },
+          {
+            "line": 205,
+            "source": "await expect(page.getByRole('button', { name: 'Confirm' })).toBeVisible()"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 14,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "an explicit switch to the small-card display mode was prepended: the source relies on the display mode persisted by the previous test in the same file, which our per-case reset removes.",
+        "the shift-click range selection (.nth(0) then .nth(3) with modifiers:['Shift']) -> two plain clicks on cards 1 and 2 and, after the Page/All/None round trip, two plain clicks on cards 3 and 4: the schema has no click modifiers and no .nth(); the resulting selection size is the same but the operation count differs.",
+        "Page / All / None -> css 'pngx-page-header .btn-group-sm button' filtered by text."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-07",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-07.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 211,
+        "test_name": "permissions dropdown stays open when selecting a user",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 3,
+        "after_last_action": 2,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 3
+        },
+        "statements": [
+          {
+            "line": 218,
+            "source": "await expect(dropdown).toBeVisible()"
+          },
+          {
+            "line": 221,
+            "source": "await expect(dropdown).toBeVisible()"
+          },
+          {
+            "line": 222,
+            "source": "await expect(dropdown.locator('.ng-value-label')).toHaveText('playwright')"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 4,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "the captured `dropdown` locator and its .first() were replaced by the component selector css 'pngx-permissions-filter-dropdown button.dropdown-toggle' plus the ng-select inside the open menu."
+      ]
+    },
+    {
+      "case_id": "L1-DOCLIST-08",
+      "origin": "official",
+      "module_id": "document-list",
+      "workflow": "l1-doclist-08.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/document-list/document-list.spec.ts",
+        "line": 226,
+        "test_name": "custom fields query dropdown stays open when building a query",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 4,
+        "after_last_action": 2,
+        "mid_sequence": 2,
+        "targets": {
+          "ui": 4
+        },
+        "statements": [
+          {
+            "line": 233,
+            "source": "await expect(dropdown).toBeVisible()"
+          },
+          {
+            "line": 238,
+            "source": "await expect(dropdown).toBeVisible()"
+          },
+          {
+            "line": 244,
+            "source": "await expect(dropdown).toBeVisible()"
+          },
+          {
+            "line": 245,
+            "source": "await expect(dropdown.locator('.ng-value-label').last()).toHaveText('Alpha')"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 4,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "same captured-locator rewrite as L1-DOCLIST-07.",
+        "DROPPED 2 operations: selectOption({label:'In'}) and the .last() ng-select of the query builder have no literal value / unique locator in the schema."
+      ]
+    },
+    {
+      "case_id": "L1-PERMISSIONS-01",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-01.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 9,
+        "test_name": "should not allow user to edit settings",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 10,
+            "source": "await expect(page.getByRole('link', { name: 'Settings' })).not.toBeAttached()"
+          },
+          {
+            "line": 12,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-02",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-02.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 18,
+        "test_name": "should not allow user to view documents",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 3,
+        "after_last_action": 1,
+        "mid_sequence": 2,
+        "targets": {
+          "ui": 3
+        },
+        "statements": [
+          {
+            "line": 19,
+            "source": "await expect( page.locator('nav').getByRole('link', { name: 'Documents' }) ).not.toBeAttached()"
+          },
+          {
+            "line": 23,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          },
+          {
+            "line": 27,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 3,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-03",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-03.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 33,
+        "test_name": "should not allow user to view correspondents",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 34,
+            "source": "await expect( page.getByRole('link', { name: 'Attributes' }) ).not.toBeAttached()"
+          },
+          {
+            "line": 38,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-04",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-04.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 44,
+        "test_name": "should not allow user to view tags",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 45,
+            "source": "await expect( page.getByRole('link', { name: 'Attributes' }) ).not.toBeAttached()"
+          },
+          {
+            "line": 49,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-05",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-05.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 55,
+        "test_name": "should not allow user to view document types",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 56,
+            "source": "await expect( page.getByRole('link', { name: 'Attributes' }) ).not.toBeAttached()"
+          },
+          {
+            "line": 60,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-06",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-06.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 66,
+        "test_name": "should not allow user to view storage paths",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 67,
+            "source": "await expect( page.getByRole('link', { name: 'Attributes' }) ).not.toBeAttached()"
+          },
+          {
+            "line": 71,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-07",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-07.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 77,
+        "test_name": "should not allow user to view logs",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 78,
+            "source": "await expect(page.getByRole('link', { name: 'Logs' })).not.toBeAttached()"
+          },
+          {
+            "line": 80,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L1-PERMISSIONS-08",
+      "origin": "official",
+      "module_id": "global-permissions",
+      "workflow": "l1-permissions-08.json",
+      "source": {
+        "repository": "https://github.com/paperless-ngx/paperless-ngx",
+        "commit": "54e332d259436b0b5cb5e8f38753a83797924135",
+        "spec": "src-ui/e2e/permissions/global-permissions.spec.ts",
+        "line": 86,
+        "test_name": "should not allow user to view tasks",
+        "framework": "playwright"
+      },
+      "original_assertions": {
+        "count": 2,
+        "after_last_action": 1,
+        "mid_sequence": 1,
+        "targets": {
+          "ui": 2
+        },
+        "statements": [
+          {
+            "line": 87,
+            "source": "await expect(page.getByRole('link', { name: 'Tasks' })).not.toBeAttached()"
+          },
+          {
+            "line": 89,
+            "source": "await expect(page.locator('body')).toHaveText( /You do not have permissions to do that/i )"
+          }
+        ]
+      },
+      "converted": {
+        "steps": 2,
+        "actors": [
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": []
+    },
+    {
+      "case_id": "L3-SHARING-01",
+      "origin": "author",
+      "module_id": "authored-sharing",
+      "workflow": "l3-sharing-01.json",
+      "source": null,
+      "expected_business_effect": "actor_a's new tag becomes readable by actor_b only after BOTH the object-level view grant on the tag and the global view_tag permission on the user are in place.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 13,
+        "actors": [
+          "actor_a",
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    },
+    {
+      "case_id": "L3-SHARING-02",
+      "origin": "author",
+      "module_id": "authored-sharing",
+      "workflow": "l3-sharing-02.json",
+      "source": null,
+      "expected_business_effect": "a tag actor_b creates after being granted add_tag/view_tag is owned by actor_b and is visible to the superuser actor_a but carries actor_b as its owner.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 11,
+        "actors": [
+          "actor_a",
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    },
+    {
+      "case_id": "L3-SHARING-03",
+      "origin": "author",
+      "module_id": "authored-sharing",
+      "workflow": "l3-sharing-03.json",
+      "source": null,
+      "expected_business_effect": "document 1 stays invisible to actor_b until actor_a grants global view_document and adds actor_b to the document's object-level view users.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 11,
+        "actors": [
+          "actor_a",
+          "actor_b"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    },
+    {
+      "case_id": "L2-DOCEDIT-01",
+      "origin": "author",
+      "module_id": "authored-document",
+      "workflow": "l2-docedit-01.json",
+      "source": null,
+      "expected_business_effect": "editing the title of document 1 and saving persists the new title and leaves the other indexed fields of the document untouched.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 4,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    },
+    {
+      "case_id": "L2-DOCEDIT-02",
+      "origin": "author",
+      "module_id": "authored-document",
+      "workflow": "l2-docedit-02.json",
+      "source": null,
+      "expected_business_effect": "adding a note to document 1 creates a fifth note owned by actor_a and deleting one note brings the document back to four.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 4,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    },
+    {
+      "case_id": "L2-DOCEDIT-03",
+      "origin": "author",
+      "module_id": "authored-document",
+      "workflow": "l2-docedit-03.json",
+      "source": null,
+      "expected_business_effect": "attaching the seeded select custom field to document 1 and saving stores a custom field instance for that document with the chosen option.",
+      "original_assertions": {
+        "count": 0,
+        "after_last_action": 0,
+        "mid_sequence": 0,
+        "targets": {},
+        "statements": []
+      },
+      "converted": {
+        "steps": 6,
+        "actors": [
+          "actor_a"
+        ],
+        "assertions_kept": 0
+      },
+      "modifications": [
+        "authored for this study; not derived from any official case. Every actor_b step needs the global permission that the step before it grants, because the seeded second account deliberately starts with no permissions at all (see the progress note)."
+      ]
+    }
+  ]
+}

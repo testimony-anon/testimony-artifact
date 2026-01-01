@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+UISEMTEST_SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+UISEMTEST_REPO_ROOT=$(CDPATH= cd -- "$UISEMTEST_SCRIPT_DIR/.." && pwd)
+UISEMTEST_PYTHON="$UISEMTEST_REPO_ROOT/.venv/bin/python"
+
+if [ ! -x "$UISEMTEST_PYTHON" ]; then
+  echo "UISemTest requires the repository .venv interpreter: $UISEMTEST_PYTHON" >&2
+  exit 2
+fi
+
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONNOUSERSITE=1
+export PYTHONPATH="$UISEMTEST_REPO_ROOT/src:$UISEMTEST_REPO_ROOT${PYTHONPATH:+:$PYTHONPATH}"
+exec "$UISEMTEST_PYTHON" -m ui_semantics.cli "$@"

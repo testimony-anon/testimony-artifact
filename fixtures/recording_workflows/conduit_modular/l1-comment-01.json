@@ -1,0 +1,290 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "conduit-modular-l1-comment-01",
+  "profile_ref": "fixtures/profiles/conduit_current_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.home",
+          "action": {
+            "kind": "navigate",
+            "url": "/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/editor\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-editor",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/editor\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/editor$",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-title",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Article Title\"]"
+        },
+        "value": "Community Gardening Tips"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.fill-description",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"What's this article about?\"]"
+        },
+        "value": "Description for Community Gardening Tips"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.fill-body",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write your article (in markdown)\"]"
+        },
+        "value": "Body for Community Gardening Tips through the UI."
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.fill-tags",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Enter tags\"]"
+        },
+        "value": "storytag"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.publish-article",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Publish Article",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/article/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s001.fill-title",
+        "story.s002.fill-description",
+        "story.s003.fill-body",
+        "story.s004.fill-tags"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.fill-comment",
+      "global_step_index": 6,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write a comment...\"]"
+        },
+        "value": "First public discussion comment"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.post-comment",
+      "global_step_index": 7,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Post Comment",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form.comment-form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 200,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".card",
+            "has_text": "First public discussion comment"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "textarea[placeholder=\"Write a comment...\"]:placeholder-shown",
+            "scope": {
+              "kind": "css",
+              "value": "form.comment-form"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s006.fill-comment"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s008",
+      "workflow_step_id": "story.s008.dismiss-comment-delete",
+      "global_step_index": 8,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "i.ion-trash-a",
+          "scope": {
+            "kind": "css",
+            "value": ".card",
+            "has_text": "First public discussion comment"
+          }
+        },
+        "dismiss_confirm": true
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".card",
+            "has_text": "First public discussion comment"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s009",
+      "workflow_step_id": "story.s009.accept-comment-delete",
+      "global_step_index": 9,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "i.ion-trash-a",
+          "scope": {
+            "kind": "css",
+            "value": ".card",
+            "has_text": "First public discussion comment"
+          }
+        },
+        "accept_confirm": true
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".card",
+            "has_text": "First public discussion comment"
+          },
+          "state": "detached",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

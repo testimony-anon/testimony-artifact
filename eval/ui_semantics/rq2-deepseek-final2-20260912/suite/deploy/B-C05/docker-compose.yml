@@ -1,0 +1,37 @@
+# Subject application: Conduit (local experiment environment)
+# Local experiment environment only; all credentials are local placeholder values and no real secrets are involved.
+name: uisemtest-rq2-dsfinal2-b-c05
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: conduit
+      POSTGRES_PASSWORD: conduit
+      POSTGRES_DB: conduit
+    ports:
+      - "5433:5432"   # avoid a 5432 that may already be in use on the host
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U conduit -d conduit"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  app:
+    image: uisemtest-rq2-b-c05:20260907
+    environment:
+      PORT: "3001"
+      JWT_KEY: carverflow-local-jwt-key
+      PROD_DB_USERNAME: conduit
+      PROD_DB_PASSWORD: conduit
+      PROD_DB_NAME: conduit
+      PROD_DB_HOSTNAME: db
+      PROD_DB_DIALECT: postgres
+      # Note: do not set PROD_DB_LOGGING -- upstream config.js passes it as-is to sequelize's
+      # logging option (which expects a function); the string "false" is truthy and would be called as a function and crash.
+      # Unset = undefined = falsy = logging off.
+    ports:
+      - "3001:3001"
+    depends_on:
+      db:
+        condition: service_healthy

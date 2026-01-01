@@ -1,0 +1,66 @@
+{
+  "metadata": {
+    "artifact_type": "dependency_graph",
+    "schema_version": "1.0.0",
+    "run_id": "r20260610-0001",
+    "stage": "stage4",
+    "created_at": "2026-06-10T10:25:00+08:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": [
+      { "artifact_type": "augmented_oas", "run_id": "r20260610-0001" }
+    ]
+  },
+  "nodes": ["post_api_articles", "get_api_articles_var1", "post_api_users_login"],
+  "edges": [
+    {
+      "producer": "post_api_articles",
+      "consumer": "get_api_articles_var1",
+      "evidence": [
+        {
+          "type": "exact_value_flow",
+          "detail": {
+            "from_field": "$.article.slug",
+            "from_location": "response_body",
+            "to_location": "path",
+            "to_field": "var1",
+            "observation_refs": [
+              {
+                "producer_ref": { "run_id": "r20260610-0001", "entry_index": 17 },
+                "consumer_ref": { "run_id": "r20260610-0001", "entry_index": 21 }
+              }
+            ]
+          }
+        }
+      ],
+      "confidence": 1.0,
+      "kind": "data",
+      "grounded": true,
+      "dependency_strength": "hard"
+    },
+    {
+      "producer": "post_api_users_login",
+      "consumer": "get_api_articles_var1",
+      "evidence": [
+        {
+          "type": "exact_value_flow",
+          "detail": {
+            "from_field": "$.user.token",
+            "from_location": "response_body",
+            "to_location": "header",
+            "to_field": "Authorization",
+            "observation_refs": [
+              {
+                "producer_ref": { "run_id": "r20260610-0001", "entry_index": 10 },
+                "consumer_ref": { "run_id": "r20260610-0001", "entry_index": 21 }
+              }
+            ]
+          }
+        }
+      ],
+      "confidence": 0.9,
+      "kind": "auth",
+      "grounded": true,
+      "dependency_strength": "soft"
+    }
+  ]
+}

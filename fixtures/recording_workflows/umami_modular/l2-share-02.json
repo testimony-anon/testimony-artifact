@@ -1,0 +1,162 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "umami-l2-share-02",
+  "profile_ref": "fixtures/profiles/umami_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18090/websites"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 250,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"/websites\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.navigate",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "http://127.0.0.1:18090/websites/a0000000-0000-4000-8000-000000000001/settings"
+      },
+      "waits": [
+        {
+          "kind": "load_state",
+          "state": "domcontentloaded",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.click",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Add"
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.fill",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[role=dialog] input[name=\"name\"]"
+        },
+        "value": "Temporary report"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.click",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[role=dialog] button[data-slot=\"loading-button\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.click",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "button[aria-label=\"Delete\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.click",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[role=dialog] [data-test=\"button-confirm\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

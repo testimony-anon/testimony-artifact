@@ -1,0 +1,169 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 0,
+    "business_relation_occurrence_count": 2,
+    "canonical_relation_core_identities": [
+      "c597f0baa722ce1ac6e2e97035f7e1c77f3780c3da3d3a7b7e70e3b0a3ce9c06",
+      "c61aaa500a979513719d40339b2aca3709068aa76c085dec21c8786a3fe8943f"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0014",
+      "v2-candidate-0015"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "guest",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users",
+          "phase": "producer",
+          "request_ref": "r20260906-141913-f2c7:request:9"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0014-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$",
+            "role": "producer_status",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "evidence_refs": [
+              "r20260906-141913-f2c7:request:9",
+              "negative-request-fact-66fd2e7d2f16fcbc6bdf78af"
+            ],
+            "rationale": "The recorded duplicate-email submission returned 422, supporting this proposed rejection status without establishing a general server rule.",
+            "source": "hypothesis",
+            "value": 422,
+            "value_type": "integer"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Negative request guest POST /api/users; rejection; no before/after observation or settling; frozen rejection detector {'kind': 'predicate', 'predicate': {'family': 'P02', 'left': {'path': '$', 'role': 'producer_status', 'value_type': 'integer'}, 'operator': 'eq', 'right': {'evidence_refs': ['r20260906-141913-f2c7:request:9', 'negative-request-fact-66fd2e7d2f16fcbc6bdf78af'], 'rationale': 'The recorded duplicate-email submission returned 422, supporting this proposed rejection status without establishing a general server rule.', 'source': 'hypothesis', 'value': 422, 'value_type': 'integer'}}}; P02 requires producer_status $ (integer) to strictly equal frozen hypothesis 422 (integer).",
+      "candidate_id": "v2-candidate-0014",
+      "canonical_relation_core_identity": "c597f0baa722ce1ac6e2e97035f7e1c77f3780c3da3d3a7b7e70e3b0a3ce9c06",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [],
+      "producer": {
+        "actor": "guest",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users",
+        "phase": "producer",
+        "request_ref": "r20260906-141913-f2c7:request:9"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The duplicate-input fact and observed 422 support a rejection hypothesis. The successful earlier registration supplies the eligible prerequisite; the after request is only an identity anchor.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-3bdc23af50c083001b6c"
+    },
+    {
+      "actions": [
+        {
+          "actor": "guest",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/users",
+          "phase": "producer",
+          "request_ref": "r20260906-141913-f2c7:request:9"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0015-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.profile",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": "state-projection-6cac35f38f87e813df16dc1a",
+          "right": {
+            "path": "$.profile",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Negative request guest POST /api/users; rejection_preservation; fresh preservation observers guest GET /api/profiles/register_reader; frozen rejection detector {'expected_class': 'client_error', 'kind': 'http_status_class'}; P20 requires strict equality between before $.profile (object) and after $.profile (object).",
+      "candidate_id": "v2-candidate-0015",
+      "canonical_relation_core_identity": "c61aaa500a979513719d40339b2aca3709068aa76c085dec21c8786a3fe8943f",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "guest",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/register_reader",
+          "phase": "before_observer",
+          "request_ref": "r20260906-141913-f2c7:request:6"
+        },
+        {
+          "actor": "guest",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/profiles/register_reader",
+          "phase": "after_observer",
+          "request_ref": "r20260906-141913-f2c7:request:10"
+        }
+      ],
+      "producer": {
+        "actor": "guest",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/users",
+        "phase": "producer",
+        "request_ref": "r20260906-141913-f2c7:request:9"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The negative-request fact supplies the duplicate-input context, exact profile observation pair and frozen projection. It supports proposed client-error rejection with preservation of the existing profile, using the recorded successful registration as setup.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-28ba49b721da7f9a2766"
+    }
+  ]
+}

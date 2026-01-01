@@ -1,0 +1,155 @@
+{
+  "metadata": {
+    "artifact_type": "run_config",
+    "schema_version": "1.0.0",
+    "run_id": "r20260912-192325-3e38",
+    "stage": "stage0",
+    "created_at": "2026-09-12T19:23:25.830+00:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": []
+  },
+  "app_profile": {
+    "base_url": "http://localhost:14001",
+    "auth": {
+      "method": "none",
+      "token_scheme": "Token"
+    },
+    "reset": {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "subject_adapters.rwa_local",
+        "reset",
+        "--output",
+        "unused.json"
+      ],
+      "verify_request": {
+        "method": "GET",
+        "path": "/",
+        "expect_status": 200
+      }
+    },
+    "rate_limit": {
+      "max_concurrency": 1,
+      "min_interval_ms": 50,
+      "retry_on_429": {
+        "max_retries": 1
+      }
+    },
+    "drive_mode": "replay",
+    "actors": [
+      {
+        "actor_id": "actor_a",
+        "auth": {
+          "method": "cookie_session",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_RWA_ACTOR_A_USERNAME",
+            "password_env": "UISEMTEST_RWA_ACTOR_A_PASSWORD"
+          },
+          "token_scheme": "Token",
+          "probe_endpoint": {
+            "method": "GET",
+            "path": "/checkAuth",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.user.username",
+            "expect_json_equals": "Heath93"
+          },
+          "cookie_session": {
+            "method": "POST",
+            "path": "/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "cookie_name": "connect.sid",
+            "cookie_path": "/",
+            "browser_activation": {
+              "entry_url": "http://localhost:14000/signin",
+              "username_selector": "[data-test=signin-username] input",
+              "password_selector": "[data-test=signin-password] input",
+              "submit_selector": "[data-test=signin-submit]",
+              "ready_selector": "[data-test=nav-top-new-transaction]",
+              "timeout_ms": 30000
+            }
+          }
+        }
+      },
+      {
+        "actor_id": "actor_b",
+        "auth": {
+          "method": "cookie_session",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_RWA_ACTOR_B_USERNAME",
+            "password_env": "UISEMTEST_RWA_ACTOR_B_PASSWORD"
+          },
+          "token_scheme": "Token",
+          "probe_endpoint": {
+            "method": "GET",
+            "path": "/checkAuth",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.user.username",
+            "expect_json_equals": "Arvilla_Hegmann"
+          },
+          "cookie_session": {
+            "method": "POST",
+            "path": "/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "cookie_name": "connect.sid",
+            "cookie_path": "/",
+            "browser_activation": {
+              "entry_url": "http://localhost:14000/signin",
+              "username_selector": "[data-test=signin-username] input",
+              "password_selector": "[data-test=signin-password] input",
+              "submit_selector": "[data-test=signin-submit]",
+              "ready_selector": "[data-test=nav-top-new-transaction]",
+              "timeout_ms": 30000
+            }
+          }
+        }
+      }
+    ]
+  },
+  "auth_context": {
+    "verified": true,
+    "method": "cookie_session",
+    "auth_mode": "auto_login",
+    "actor_id": "actor_a",
+    "probe_status": 200,
+    "verified_at": "2026-09-12T19:23:25.274+00:00",
+    "probe_identity_observed": true,
+    "session_ref": "actor_a",
+    "actor_identity_distinct": true,
+    "identity_relations_verified": true,
+    "identity_relations": [
+      {
+        "left_actor_id": "actor_a",
+        "right_actor_id": "actor_b",
+        "left_session_ref": "actor_a",
+        "right_session_ref": "actor_b",
+        "principal_relation": "different",
+        "session_relation": "different",
+        "verification_source": "authenticated_probe",
+        "verified": true
+      }
+    ]
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

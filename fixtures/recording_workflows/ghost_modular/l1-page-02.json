@@ -1,0 +1,134 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "ghost-modular-l1-page-02",
+  "profile_ref": "fixtures/profiles/ghost_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18093/ghost/#/pages"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 300,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-nav-menu=\"main\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-new-page-button]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.click-new-page",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-new-page-button]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": "#/editor/page",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-editor-title-input]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-editor-title",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-editor-title-input]"
+        },
+        "value": "Draft Page"
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.press-enter",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "press",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test-editor-title-input]"
+        },
+        "key": "Enter"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test-editor-post-status]",
+            "has_text": "Draft - Saved"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "network_quiet",
+          "quiet_ms": 400,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

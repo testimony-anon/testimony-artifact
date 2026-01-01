@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_partial_certificate_v1.schema.json",
+  "title": "Route-S write-through partial certificate journal record",
+  "type": "object",
+  "required": ["schema_version", "certificate_status", "candidate_id", "last_closed_slot", "protocol_slot_states", "outcome", "attestation_state", "provider_calls", "live_result_eligible"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-partial-certificate-v1"},
+    "certificate_status": {"const": "partial"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "last_closed_slot": {"enum": ["none", "Rc", "Sc", "Oc1", "settle_c", "Oc2", "Rt", "St", "Ot0", "P", "settle_t", "Ot1"]},
+    "protocol_slot_states": {
+      "type": "object",
+      "required": ["Rc", "Sc", "Oc1", "settle_c", "Oc2", "Rt", "St", "Ot0", "P", "settle_t", "Ot1"],
+      "additionalProperties": false,
+      "properties": {
+        "Rc": {"enum": ["pending", "executed", "not_executed"]}, "Sc": {"enum": ["pending", "executed", "not_executed"]},
+        "Oc1": {"enum": ["pending", "executed", "not_executed"]}, "settle_c": {"enum": ["pending", "executed", "not_executed"]},
+        "Oc2": {"enum": ["pending", "executed", "not_executed"]}, "Rt": {"enum": ["pending", "executed", "not_executed"]},
+        "St": {"enum": ["pending", "executed", "not_executed"]}, "Ot0": {"enum": ["pending", "executed", "not_executed"]},
+        "P": {"enum": ["pending", "executed", "not_executed"]}, "settle_t": {"enum": ["pending", "executed", "not_executed"]},
+        "Ot1": {"enum": ["pending", "executed", "not_executed"]}
+      }
+    },
+    "outcome": {"const": "pending"},
+    "attestation_state": {"enum": ["not_executed", "pending"]},
+    "provider_calls": {"const": 0},
+    "live_result_eligible": {"const": false}
+  },
+  "additionalProperties": false
+}

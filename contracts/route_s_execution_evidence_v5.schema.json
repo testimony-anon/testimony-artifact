@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_execution_evidence_v5.schema.json",
+  "title": "Route-S dual-view capture-sanitized execution evidence v5",
+  "type": "object",
+  "required": ["schema_version", "candidate", "projection_plan", "protocol", "sessions", "cross_arm_reuse_refs", "pins", "run_attestation"],
+  "properties": {
+    "schema_version": {"const": "ui-semantics-route-s-execution-evidence-v5"},
+    "candidate": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/candidate"},
+    "projection_plan": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/projection_plan"},
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Rc", "Sc", "Oc1", "settle_c", "Oc2", "Rt", "St", "Ot0", "P", "settle_t", "Ot1"],
+      "properties": {
+        "Rc": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/Rc"},
+        "Sc": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/Sc"},
+        "Oc1": {"$ref": "#/$defs/Oc1"},
+        "settle_c": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/settle_c"},
+        "Oc2": {"$ref": "#/$defs/Oc2"},
+        "Rt": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/Rt"},
+        "St": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/St"},
+        "Ot0": {"$ref": "#/$defs/Ot0"},
+        "P": {"$ref": "#/$defs/P"},
+        "settle_t": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/settle_t"},
+        "Ot1": {"$ref": "#/$defs/Ot1"}
+      }
+    },
+    "sessions": {"type": "array", "items": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/session"}},
+    "cross_arm_reuse_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "pins": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/pins"},
+    "run_attestation": {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/attestation"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "transport_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "path", "body"],
+      "properties": {
+        "method": {"type": "string", "pattern": "^[A-Z]+$"},
+        "path": {"type": "string", "minLength": 1},
+        "body": {}
+      }
+    },
+    "redaction_row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["json_pointer", "category", "original_json_type", "rule", "replacement_kind"],
+      "properties": {
+        "json_pointer": {"type": "string"},
+        "category": {"enum": ["authorization", "cookie", "credential", "password", "secret", "session", "token", "unstructured_response"]},
+        "original_json_type": {"enum": ["null", "boolean", "string", "integer", "number", "array", "object"]},
+        "rule": {"const": "route-s-capture-redaction-v1"},
+        "replacement_kind": {"const": "typed_sentinel"}
+      }
+    },
+    "redaction_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["request", "request_query", "request_headers", "response", "response_headers"],
+      "properties": {
+        "request": {"type": "array", "items": {"$ref": "#/$defs/redaction_row"}},
+        "request_query": {"type": "array", "items": {"$ref": "#/$defs/redaction_row"}},
+        "request_headers": {"type": "array", "items": {"$ref": "#/$defs/redaction_row"}},
+        "response": {"type": "array", "items": {"$ref": "#/$defs/redaction_row"}},
+        "response_headers": {"type": "array", "items": {"$ref": "#/$defs/redaction_row"}}
+      }
+    },
+    "transport_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query", "request_headers", "response_headers", "sensitive_values_persisted"],
+      "properties": {
+        "query": {"type": "object"},
+        "request_headers": {"type": "object"},
+        "response_headers": {"type": "object"},
+        "sensitive_values_persisted": {"const": false}
+      }
+    },
+    "binding_event": {
+      "oneOf": [
+        {"$ref": "#/$defs/creator_binding_event"},
+        {"$ref": "#/$defs/consumer_binding_event"}
+      ]
+    },
+    "binding_event_common": {
+      "type": "object",
+      "required": ["event", "actor_id", "candidate_id", "arm", "reset_epoch", "binding_scope_id", "source_id", "creator_actor_id", "creator_request_ref", "source_typed_path", "scalar_type", "value_sha256"],
+      "properties": {
+        "event": {"enum": ["creator_value_captured", "consumer_value_rebound"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "candidate_id": {"type": "string", "minLength": 1},
+        "arm": {"enum": ["control", "treatment"]},
+        "reset_epoch": {"type": "string", "minLength": 1},
+        "binding_scope_id": {"$ref": "#/$defs/sha"},
+        "source_id": {"type": "string", "minLength": 1},
+        "creator_actor_id": {"type": "string", "minLength": 1},
+        "creator_request_ref": {"type": "string", "minLength": 1},
+        "source_typed_path": {"type": "string", "minLength": 1},
+        "scalar_type": {"enum": ["null", "boolean", "integer", "number", "string"]},
+        "value_sha256": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "creator_binding_event": {
+      "allOf": [
+        {"$ref": "#/$defs/binding_event_common"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event", "actor_id", "candidate_id", "arm", "reset_epoch", "binding_scope_id", "source_id", "creator_actor_id", "creator_request_ref", "source_typed_path", "scalar_type", "value_sha256"],
+          "properties": {
+            "event": {"const": "creator_value_captured"},
+            "actor_id": {}, "candidate_id": {}, "arm": {}, "reset_epoch": {}, "binding_scope_id": {}, "source_id": {}, "creator_actor_id": {}, "creator_request_ref": {}, "source_typed_path": {}, "scalar_type": {}, "value_sha256": {}
+          }
+        }
+      ]
+    },
+    "consumer_binding_event": {
+      "allOf": [
+        {"$ref": "#/$defs/binding_event_common"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event", "actor_id", "candidate_id", "arm", "reset_epoch", "binding_scope_id", "source_id", "creator_actor_id", "creator_request_ref", "source_typed_path", "scalar_type", "value_sha256", "consumer_request_ref", "target_location", "target_typed_path"],
+          "properties": {
+            "event": {"const": "consumer_value_rebound"},
+            "actor_id": {}, "candidate_id": {}, "arm": {}, "reset_epoch": {}, "binding_scope_id": {}, "source_id": {}, "creator_actor_id": {}, "creator_request_ref": {}, "source_typed_path": {}, "scalar_type": {}, "value_sha256": {},
+            "consumer_request_ref": {"type": "string", "minLength": 1},
+            "target_location": {"enum": ["path", "query", "header", "body"]},
+            "target_typed_path": {"type": "string", "minLength": 1},
+            "target_group_size": {"type": "integer", "minimum": 2}
+          }
+        }
+      ]
+    },
+    "observation_pass": {
+      "allOf": [
+        {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/observation"},
+        {
+          "type": "object",
+          "required": ["request_ref", "transport_request_shape_sha256", "binding_events", "transport_metadata", "redaction_manifest"],
+          "properties": {
+            "request_ref": {"type": "string", "minLength": 1},
+            "request": {"$ref": "#/$defs/transport_request"},
+            "transport_request_shape_sha256": {"$ref": "#/$defs/sha"},
+            "binding_events": {"type": "array", "items": {"$ref": "#/$defs/binding_event"}},
+            "transport_metadata": {"$ref": "#/$defs/transport_metadata"},
+            "redaction_manifest": {"$ref": "#/$defs/redaction_manifest"}
+          }
+        }
+      ]
+    },
+    "observation": {
+      "oneOf": [
+        {"$ref": "#/$defs/observation_pass"},
+        {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/attempted_failed"},
+        {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/not_executed"}
+      ]
+    },
+    "Oc1": {"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Oc1"}}}]},
+    "Oc2": {"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Oc2"}}}]},
+    "Ot0": {"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Ot0"}}}]},
+    "Ot1": {"allOf": [{"$ref": "#/$defs/observation"}, {"properties": {"slot": {"const": "Ot1"}}}]},
+    "producer_pass": {
+      "allOf": [
+        {"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/base_executed"},
+        {
+          "type": "object",
+          "required": ["actor_id", "action_ref", "request_ref", "request", "transport_request", "transport_request_shape_sha256", "response", "transport_status", "transport_metadata", "binding_events", "redaction_manifest"],
+          "properties": {
+            "actor_id": {"type": "string", "minLength": 1},
+            "action_ref": {"type": "string", "minLength": 1},
+            "request_ref": {"type": "string", "minLength": 1},
+            "request": {},
+            "transport_request": {"$ref": "#/$defs/transport_request"},
+            "transport_request_shape_sha256": {"$ref": "#/$defs/sha"},
+            "response": {},
+            "transport_status": {"type": "integer", "minimum": 100, "maximum": 599},
+            "transport_metadata": {"$ref": "#/$defs/transport_metadata"},
+            "binding_events": {"type": "array", "items": {"$ref": "#/$defs/binding_event"}},
+            "redaction_manifest": {"$ref": "#/$defs/redaction_manifest"}
+          }
+        }
+      ]
+    },
+    "P": {
+      "oneOf": [
+        {"allOf": [{"$ref": "#/$defs/producer_pass"}, {"properties": {"slot": {"const": "P"}, "arm": {"const": "treatment"}}}]},
+        {"allOf": [{"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/attempted_failed"}, {"properties": {"slot": {"const": "P"}, "arm": {"const": "treatment"}}}]},
+        {"allOf": [{"$ref": "route_s_execution_evidence_v4.schema.json#/$defs/not_executed"}, {"properties": {"slot": {"const": "P"}}}]}
+      ]
+    }
+  }
+}

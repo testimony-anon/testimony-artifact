@@ -1,0 +1,32 @@
+{
+  "base_url": "http://127.0.0.1:3001",
+  "auth": {"method": "none"},
+  "actors": [
+    {"actor_id": "guest", "auth": {"method": "none"}},
+    {"actor_id": "actor_a", "auth": {"method": "none"}},
+    {"actor_id": "actor_b", "auth": {"method": "none"}}
+  ],
+  "reset": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "subject_adapters.conduit_local",
+      "reset",
+      "--output",
+      "unused.json"
+    ],
+    "verify_request": {
+      "method": "GET",
+      "path": "/api/articles?limit=1&offset=0",
+      "expect_status": 200,
+      "expect_json_path": "$.articlesCount",
+      "expect_json_equals": 0
+    }
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {"max_retries": 1}
+  },
+  "drive_mode": "replay"
+}

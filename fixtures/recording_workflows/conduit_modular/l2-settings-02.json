@@ -1,0 +1,489 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "conduit-modular-l2-settings-02",
+  "profile_ref": "fixtures/profiles/conduit_current_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.home",
+          "action": {
+            "kind": "navigate",
+            "url": "/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/editor\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-settings",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "/#/settings"
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/settings$",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-new-username",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Your Name\"]"
+        },
+        "value": "updated_identity_user"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.fill-new-email",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Email\"]"
+        },
+        "value": "updated-identity@example.invalid"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.fill-new-password",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Password\"]"
+        },
+        "value": "updated-account-password"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.update-identity",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Update Settings",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".nav-item.dropdown",
+            "has_text": "updated_identity_user"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s001.fill-new-username",
+        "story.s002.fill-new-email"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.open-user-menu",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": ".nav-item.dropdown .dropdown-toggle",
+          "scope": {
+            "kind": "css",
+            "value": "nav.navbar"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".dropdown-menu",
+            "scope": {
+              "kind": "css",
+              "value": "nav.navbar"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.logout",
+      "global_step_index": 6,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "text",
+          "value": "Logout",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": ".dropdown-menu"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/login\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.open-login",
+      "global_step_index": 7,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/login\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/login$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[placeholder=\"Email\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s008",
+      "workflow_step_id": "story.s008.fill-old-email",
+      "global_step_index": 8,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Email\"]"
+        },
+        "value_env": "UISEMTEST_CONDUIT_ACTOR_A_EMAIL"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s009",
+      "workflow_step_id": "story.s009.fill-old-password",
+      "global_step_index": 9,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Password\"]"
+        },
+        "value_env": "UISEMTEST_CONDUIT_ACTOR_A_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s010",
+      "workflow_step_id": "story.s010.submit-old-credentials",
+      "global_step_index": 10,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Login",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".error-messages"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s011",
+      "workflow_step_id": "story.s011.fill-new-email-old-password",
+      "global_step_index": 11,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Email\"]"
+        },
+        "value": "updated-identity@example.invalid"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s012",
+      "workflow_step_id": "story.s012.keep-old-password",
+      "global_step_index": 12,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Password\"]"
+        },
+        "value_env": "UISEMTEST_CONDUIT_ACTOR_A_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s013",
+      "workflow_step_id": "story.s013.submit-new-email-old-password",
+      "global_step_index": 13,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Login",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".error-messages"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s014",
+      "workflow_step_id": "story.s014.fill-new-email",
+      "global_step_index": 14,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Email\"]"
+        },
+        "value": "updated-identity@example.invalid"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s015",
+      "workflow_step_id": "story.s015.fill-new-password",
+      "global_step_index": 15,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Password\"]"
+        },
+        "value": "updated-account-password"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s016",
+      "workflow_step_id": "story.s016.submit-new-credentials",
+      "global_step_index": 16,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Login",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/?$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".nav-item.dropdown",
+            "has_text": "updated_identity_user"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s017",
+      "workflow_step_id": "story.s017.open-user-menu",
+      "global_step_index": 17,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": ".nav-item.dropdown .dropdown-toggle",
+          "scope": {
+            "kind": "css",
+            "value": "nav.navbar"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".dropdown-menu",
+            "scope": {
+              "kind": "css",
+              "value": "nav.navbar"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s018",
+      "workflow_step_id": "story.s018.open-own-profile",
+      "global_step_index": 18,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href^=\"#/profile/\"]",
+          "scope": {
+            "kind": "css",
+            "value": ".dropdown-menu"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/profile/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "role",
+            "value": "heading",
+            "name": "updated_identity_user",
+            "exact": true
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "runtime_probe_admission_report.schema.json",
+  "title": "runtime_probe_admission_report — Phase5 Runtime Material probe admission gate",
+  "description": "014I / Phase5 companion report. It evaluates explicitly executed read-safe Runtime Material probes for safe copy-on-write Augmented OAS admission. It never sends HTTP and never mutates input artifacts.",
+  "type": "object",
+  "required": ["metadata", "input_coverage", "candidate_decisions", "summary", "warnings"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "runtime_probe_admission_report" },
+        "stage": { "const": "runtime_materials_phase5" }
+      }
+    },
+    "input_coverage": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/input_coverage_item" }
+    },
+    "candidate_decisions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/candidate_decision" }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "candidate_count",
+        "admitted_count",
+        "annotated_existing_count",
+        "added_operation_count",
+        "eligible_no_mutation_count",
+        "blocked_count",
+        "failed_probe_blocked_count",
+        "concrete_path_blocked_count",
+        "write_or_destructive_blocked_count",
+        "http_egress_performed",
+        "probe_execution_performed",
+        "input_augmented_oas_mutated",
+        "admitted_augmented_oas_copy_written",
+        "phase5_admission_performed",
+        "by_action",
+        "by_blocked_reason"
+      ],
+      "properties": {
+        "candidate_count": { "type": "integer", "minimum": 0 },
+        "admitted_count": { "type": "integer", "minimum": 0 },
+        "annotated_existing_count": { "type": "integer", "minimum": 0 },
+        "added_operation_count": { "type": "integer", "minimum": 0 },
+        "eligible_no_mutation_count": { "type": "integer", "minimum": 0 },
+        "blocked_count": { "type": "integer", "minimum": 0 },
+        "failed_probe_blocked_count": { "type": "integer", "minimum": 0 },
+        "concrete_path_blocked_count": { "type": "integer", "minimum": 0 },
+        "write_or_destructive_blocked_count": { "type": "integer", "minimum": 0 },
+        "http_egress_performed": { "const": false },
+        "probe_execution_performed": { "const": false },
+        "input_augmented_oas_mutated": { "const": false },
+        "admitted_augmented_oas_copy_written": { "type": "boolean" },
+        "phase5_admission_performed": { "type": "boolean" },
+        "by_action": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "by_blocked_reason": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/warning" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "input_status": {
+      "type": "string",
+      "enum": ["missing", "present", "compatibility_read", "parse_failed", "present_but_no_evidence"]
+    },
+    "input_coverage_item": {
+      "type": "object",
+      "required": ["status", "path", "evidence_count", "diagnostic_reason"],
+      "properties": {
+        "status": { "$ref": "#/$defs/input_status" },
+        "path": { "type": ["string", "null"] },
+        "evidence_count": { "type": "integer", "minimum": 0 },
+        "diagnostic_reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "candidate_decision": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "probe_id",
+        "method",
+        "response_status",
+        "success",
+        "read_safe",
+        "execution_mode",
+        "source_generation_rule",
+        "source_material_id",
+        "resolved_execution_path",
+        "original_candidate_path",
+        "expected_template_hint",
+        "canonical_path",
+        "canonicalization_reason",
+        "existing_operation",
+        "admission_action",
+        "blocked_reason",
+        "oas_mutation_requested",
+        "oas_mutation_performed",
+        "evidence_level",
+        "policy",
+        "source_refs",
+        "notes"
+      ],
+      "properties": {
+        "decision_id": { "type": "string", "minLength": 1 },
+        "probe_id": { "type": "string", "minLength": 1 },
+        "method": {
+          "type": "string",
+          "enum": ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE", "TRACE"]
+        },
+        "response_status": { "type": ["integer", "null"], "minimum": 100, "maximum": 599 },
+        "success": { "type": "boolean" },
+        "read_safe": { "type": "boolean" },
+        "execution_mode": { "type": "string" },
+        "source_generation_rule": { "type": ["string", "null"] },
+        "source_material_id": { "type": ["string", "null"] },
+        "resolved_execution_path": { "type": ["string", "null"], "pattern": "^/" },
+        "original_candidate_path": { "type": ["string", "null"], "pattern": "^/" },
+        "expected_template_hint": { "type": ["string", "null"], "pattern": "^/" },
+        "canonical_path": { "type": ["string", "null"], "pattern": "^/" },
+        "canonicalization_reason": { "type": "string" },
+        "existing_operation": { "type": "boolean" },
+        "admission_action": {
+          "type": "string",
+          "enum": ["added_operation", "annotated_existing_operation", "eligible_no_mutation", "blocked"]
+        },
+        "blocked_reason": {
+          "type": ["string", "null"],
+          "enum": [
+            null,
+            "ambiguous_canonical_template",
+            "auth_or_capability_material",
+            "auth_or_forbidden_response",
+            "canonical_path_unresolved",
+            "concrete_instance_without_template",
+            "external_or_query_fragment",
+            "failed_or_non_success_probe",
+            "not_runtime_diagnostic_probe",
+            "pagination_material",
+            "probe_not_executed",
+            "protocol_method_not_business_operation",
+            "static_asset",
+            "write_or_destructive_probe"
+          ]
+        },
+        "oas_mutation_requested": { "type": "boolean" },
+        "oas_mutation_performed": { "type": "boolean" },
+        "evidence_level": {
+          "type": "string",
+          "enum": ["runtime_probe_success", "diagnostic_only"]
+        },
+        "policy": {
+          "type": "object",
+          "required": [
+            "phase",
+            "does_not_execute_http",
+            "does_not_mutate_input_oas",
+            "does_not_touch_dependency_graph",
+            "does_not_touch_sequences_or_skills",
+            "requires_explicit_phase5_flag"
+          ],
+          "properties": {
+            "phase": { "const": "phase5_runtime_probe_admission" },
+            "does_not_execute_http": { "const": true },
+            "does_not_mutate_input_oas": { "const": true },
+            "does_not_touch_dependency_graph": { "const": true },
+            "does_not_touch_sequences_or_skills": { "const": true },
+            "requires_explicit_phase5_flag": { "const": true }
+          },
+          "additionalProperties": false
+        },
+        "source_refs": {
+          "type": "object",
+          "required": ["probe_id", "material_id", "template_hint", "resolved_execution_path"],
+          "properties": {
+            "probe_id": { "type": "string" },
+            "material_id": { "type": ["string", "null"] },
+            "template_hint": { "type": ["string", "null"] },
+            "resolved_execution_path": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "warning": {
+      "type": "object",
+      "required": ["warning_id", "severity", "message", "source"],
+      "properties": {
+        "warning_id": { "type": "string" },
+        "severity": { "type": "string", "enum": ["info", "warning", "error"] },
+        "message": { "type": "string" },
+        "source": { "type": "object" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

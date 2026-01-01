@@ -1,0 +1,680 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "app_profile.schema.json",
+  "title": "app_profile — application profile (pipeline input; approved addition in decision record 001 D10)",
+  "description": "Input file describing the access parameters of the system under test (design document 1 §6). Written by a human; consumed and validated by Stage 0 / Stage 2.5. Carries no metadata envelope (it is not a stage artifact but the starting input of the pipeline). Credentials themselves are never stored: credential fields are always references to environment variable names (D10/D12).",
+  "type": "object",
+  "required": ["base_url", "auth", "rate_limit", "drive_mode"],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Entry URL of the system under test",
+      "x-volatility": "structural"
+    },
+    "offline_url_rewrite": {
+      "type": "object",
+      "required": ["pattern", "replacement"],
+      "properties": {
+        "pattern": { "type": "string" },
+        "replacement": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "description": "Recording-only deterministic URL rewrite applied before offline reconstruction."
+    },
+    "auth": {
+      "type": "object",
+      "description": "Authentication configuration. form_login keeps the real Stage 0 browser login flow; api_token describes a Stage 2.5 direct tool login that obtains an Authorization token; cookie_session describes a direct tool login that captures the session cookie from Set-Cookie; none means the target needs no Authorization/Cookie.",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["form_login", "api_token", "cookie_session", "none"],
+          "description": "Authentication method. form_login = browser form login; api_token = tool-issued API login that obtains an Authorization token; cookie_session = tool-issued login that captures the session cookie from Set-Cookie; none = no Authorization/Cookie.",
+          "x-volatility": "structural"
+        },
+        "login_entry": {
+          "type": "string",
+          "description": "Login page entry (path relative to base_url, e.g. /#/login). Required for form_login.",
+          "x-volatility": "structural"
+        },
+        "credentials_ref": {
+          "$ref": "#/$defs/credentials_ref",
+          "description": "Credential references by environment variable name. Required for form_login/api_token; not needed for none."
+        },
+        "token_scheme": {
+          "type": "string",
+          "default": "Token",
+          "description": "Optional: scheme of the Authorization header (e.g. Token, Bearer); defaults to Token. Used by probes and replay when building the authentication header — system-specific parameters are injected through the profile rather than hard-coded (approved addition in decision record 002 §7.2/D19).",
+          "x-volatility": "structural"
+        },
+        "probe_endpoint": {
+          "$ref": "#/$defs/request_probe",
+          "description": "Authentication probe endpoint (e.g. a 'current user'-type endpoint), expected to return 2xx. Required for form_login; optional for api_token; optional for none."
+        },
+        "logout_endpoint": {
+          "$ref": "#/$defs/logout_endpoint",
+          "description": "Optional: the exact session-teardown endpoint of this actor. Declared, never inferred from path wording; a write to it is a session transaction, not a business producer."
+        },
+        "api_token": {
+          "$ref": "#/$defs/api_token_login",
+          "description": "Tool-issued API-token login configuration used by Stage 2.5 / explicit experiment entry points. Required when auth.method=api_token; optional for form_login, where it replaces the legacy hard-coded Conduit login."
+        },
+        "cookie_session": {
+          "$ref": "#/$defs/cookie_session_login",
+          "description": "Tool-issued cookie-session login configuration used by Stage 2.5 / explicit experiment entry points. Required when auth.method=cookie_session; records only the cookie name/source, the cookie value is used only in memory at run time."
+        },
+        "session_maintenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/session_maintenance_endpoint" },
+          "description": "Optional: session maintenance endpoints declared explicitly per actor. Only exact method/path matches are allowed; inferring from the wording of a path is forbidden."
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "method": { "const": "form_login" } }, "required": ["method"] },
+          "then": { "required": ["login_entry", "credentials_ref", "probe_endpoint"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "api_token" } }, "required": ["method"] },
+          "then": { "required": ["credentials_ref", "api_token"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "cookie_session" } }, "required": ["method"] },
+          "then": { "required": ["credentials_ref", "cookie_session"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "none" } }, "required": ["method"] },
+          "then": {
+            "not": {
+              "anyOf": [
+                { "required": ["credentials_ref"] },
+                { "required": ["api_token"] },
+                { "required": ["cookie_session"] },
+                { "required": ["session_maintenance"] }
+              ]
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "actors": {
+      "type": "array",
+      "description": "Optional additional actor authentication configurations. The top-level auth always represents the reserved actor_id=default; this array must not repeat default. actor_id uniqueness is enforced by the cross-item validator of the app_profile Pydantic model.",
+      "items": { "$ref": "#/$defs/actor_auth" },
+      "x-volatility": "structural"
+    },
+    "reset": {
+      "$ref": "#/$defs/reset_config",
+      "description": "Optional: environment-level reset facility. Consumed by Stage 2.5 when trust_basis=environment_reset; absent means the profile declares no environment-level reset."
+    },
+    "rate_limit": {
+      "type": "object",
+      "description": "Client-side throttle gate parameters (D9; minimal V1 version: concurrency limit + minimum request interval; the remaining fields are reserved in their full form and not consumed by V1)",
+      "required": ["max_concurrency", "min_interval_ms"],
+      "properties": {
+        "max_concurrency": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "min_interval_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retry_on_429": {
+          "type": "object",
+          "description": "Consumed by V1: the 429/Retry-After retry path exists (cannot be triggered on the local Conduit; covered by unit tests). Different in kind from burst_bucket/per_host (purely reserved).",
+          "properties": {
+            "max_retries": { "type": "integer", "minimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "burst_bucket": {
+          "type": "object",
+          "description": "Reserved: full form of the burst bucket (not implemented in V1)"
+        },
+        "per_host": {
+          "type": "object",
+          "description": "Reserved: full form of per-host partitioning (not implemented in V1)"
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "drive_mode": {
+      "type": "string",
+      "enum": ["manual", "replay", "heuristic", "llm_agent", "random"],
+      "description": "Drive mode, lifted unchanged into a top-level run_config field (001 D10). V1 produces only manual/replay; the others are reserved values.",
+      "x-volatility": "structural"
+    },
+    "write_probe_safety": {
+      "type": "object",
+      "description": "Reserved optional contract field (not required in V1; deliberately trimmed, not omitted by oversight; an item of the 'must at least include' list in design document 1 §6): write-probe safety policy",
+      "x-volatility": "structural"
+    },
+    "exploration_hints": {
+      "type": "object",
+      "description": "Reserved optional contract field (not required in V1; deliberately trimmed, not omitted by oversight): exploration hints (initial entry, key actions)",
+      "x-volatility": "structural"
+    },
+    "read_semantic_endpoints": {
+      "type": "array",
+      "description": "Exact method/path pairs whose write-method requests carry read semantics (for example a POST statistics or search endpoint whose body is the selector). Declared requests are not mutations for UI-action anchoring, not producers, and read-like for the proposer, the binder and the runtime observer check; nothing is inferred from path wording.",
+      "items": { "$ref": "#/$defs/read_semantic_endpoint" },
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "actor_auth": {
+      "type": "object",
+      "required": ["actor_id", "auth"],
+      "properties": {
+        "actor_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+          "not": { "const": "default" },
+          "description": "Stable actor identifier within the test scenario; default is reserved for the top-level auth."
+        },
+        "auth": { "$ref": "#/$defs/auth_config" }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "auth_config": {
+      "type": "object",
+      "required": ["method"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["form_login", "api_token", "cookie_session", "none"]
+        },
+        "login_entry": { "type": "string" },
+        "credentials_ref": { "$ref": "#/$defs/credentials_ref" },
+        "token_scheme": { "type": "string", "default": "Token" },
+        "probe_endpoint": { "$ref": "#/$defs/request_probe" },
+        "logout_endpoint": { "$ref": "#/$defs/logout_endpoint" },
+        "api_token": { "$ref": "#/$defs/api_token_login" },
+        "cookie_session": { "$ref": "#/$defs/cookie_session_login" },
+        "session_maintenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/session_maintenance_endpoint" }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "method": { "const": "form_login" } }, "required": ["method"] },
+          "then": { "required": ["login_entry", "credentials_ref", "probe_endpoint"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "api_token" } }, "required": ["method"] },
+          "then": { "required": ["credentials_ref", "api_token"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "cookie_session" } }, "required": ["method"] },
+          "then": { "required": ["credentials_ref", "cookie_session"] }
+        },
+        {
+          "if": { "properties": { "method": { "const": "none" } }, "required": ["method"] },
+          "then": {
+            "not": {
+              "anyOf": [
+                { "required": ["credentials_ref"] },
+                { "required": ["api_token"] },
+                { "required": ["cookie_session"] },
+                { "required": ["session_maintenance"] }
+              ]
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "read_semantic_endpoint": {
+      "type": "object",
+      "required": ["method", "path"],
+      "properties": {
+        "method": { "$ref": "#/$defs/http_method" },
+        "path": {
+          "type": "string",
+          "pattern": "^/[^?#]*$",
+          "description": "Exact canonical path relative to base_url; must not contain a query or fragment."
+        }
+      },
+      "additionalProperties": false
+    },
+    "session_maintenance_endpoint": {
+      "type": "object",
+      "required": ["method", "path", "role", "handling", "material_kind"],
+      "properties": {
+        "method": { "$ref": "#/$defs/http_method" },
+        "path": {
+          "type": "string",
+          "pattern": "^/[^?#]*$",
+          "description": "Exact canonical path relative to base_url; must not contain a query or fragment."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["credential_refresh"]
+        },
+        "handling": {
+          "type": "string",
+          "enum": ["fresh_session_satisfies", "execute_and_update_session"]
+        },
+        "material_kind": {
+          "type": "string",
+          "enum": ["api_token", "cookie_session"]
+        },
+        "fresh_session_basis": { "$ref": "#/$defs/fresh_session_basis" },
+        "response_material": { "$ref": "#/$defs/session_response_material" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "handling": { "const": "fresh_session_satisfies" } },
+            "required": ["handling"]
+          },
+          "then": {
+            "required": ["fresh_session_basis"],
+            "not": { "required": ["response_material"] }
+          }
+        },
+        {
+          "if": {
+            "properties": { "handling": { "const": "execute_and_update_session" } },
+            "required": ["handling"]
+          },
+          "then": {
+            "required": ["response_material"],
+            "not": { "required": ["fresh_session_basis"] }
+          }
+        }
+      ],
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "fresh_session_basis": {
+      "type": "object",
+      "required": ["kind", "locator", "sha256", "claim"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["official_documentation", "official_ui_test", "preregistered_equivalence_audit"]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "allOf": [
+            { "not": { "pattern": "^/" } },
+            { "not": { "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:" } },
+            { "not": { "pattern": "(^|/)\\.\\.(/|$)" } },
+            { "not": { "pattern": "\\\\" } }
+          ],
+          "description": "POSIX path relative to the repository root; the checkpoint preflight checks existence and hash."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "claim": { "const": "session_material_only" }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "session_response_material": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "token_json_path"],
+          "properties": {
+            "kind": { "const": "api_token" },
+            "token_json_path": { "type": "string", "pattern": "^\\$" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "cookie_name"],
+          "properties": {
+            "kind": { "const": "cookie_session" },
+            "cookie_name": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "x-volatility": "structural"
+    },
+    "credentials_ref": {
+      "type": "object",
+      "description": "Credential references by environment variable name (only variable names, never the credentials themselves)",
+      "required": ["email_env", "password_env"],
+      "properties": {
+        "email_env": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Environment variable holding the login email/username"
+        },
+        "password_env": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Environment variable holding the login password"
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "request_probe": {
+      "type": "object",
+      "required": ["method", "path"],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/http_method"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "API path relative to base_url (e.g. /api/user); may contain a query."
+        },
+        "expect_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599,
+          "default": 200
+        },
+        "unauthenticated_status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599,
+          "description": "Optional expected status for the same protected probe under a fresh empty session."
+        },
+        "expect_json_path": {
+          "type": "string",
+          "pattern": "^\\$",
+          "description": "Optional JSON path that must be present in the authenticated probe response."
+        },
+        "expect_json_equals": {
+          "description": "Optional exact typed value required at expect_json_path."
+        }
+      },
+      "dependentRequired": {
+        "expect_json_equals": ["expect_json_path"]
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "logout_endpoint": {
+      "type": "object",
+      "required": ["method", "path"],
+      "properties": {
+        "method": { "$ref": "#/$defs/http_method" },
+        "path": {
+          "type": "string",
+          "pattern": "^/[^?#]*$",
+          "description": "Exact canonical path relative to base_url; must not contain a query or fragment."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "api_token_login": {
+      "type": "object",
+      "required": ["method", "path", "body_template", "token_json_path"],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/http_method"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Login API path relative to base_url."
+        },
+        "headers": {
+          "type": "object",
+          "description": "Extra headers for the login request; values must be strings and must not contain real secrets.",
+          "additionalProperties": { "type": "string" }
+        },
+        "body_template": {
+          "description": "JSON body template of the login request. Use the ${email} / ${password} placeholders to reference credentials_ref; real credentials must not be written."
+        },
+        "token_json_path": {
+          "type": "string",
+          "pattern": "^\\$",
+          "description": "JSONPath that extracts the token from the login response JSON, e.g. $.user.token."
+        },
+        "recording_activation": {
+          "type": "string",
+          "enum": ["browser_form", "api_then_inject"],
+          "description": "Optional: how Stage 0 recording establishes this token session in the browser. browser_form drives the real login page with the selectors below and reads the token out of the login response observed by the recorder; api_then_inject issues the login request from the page context and then installs the token through browser_activation. Absent means the legacy hard-coded Conduit form_login path is used unchanged."
+        },
+        "selectors": {
+          "$ref": "#/$defs/login_form_selectors",
+          "description": "Optional: login-page selectors for recording_activation=browser_form; every omitted selector keeps its legacy Conduit default."
+        },
+        "browser_activation": {
+          "$ref": "#/$defs/browser_token_activation",
+          "description": "Required when recording_activation=api_then_inject: where the obtained token is installed in the browser context before navigating to the entry page."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "recording_activation": { "const": "api_then_inject" } },
+            "required": ["recording_activation"]
+          },
+          "then": { "required": ["browser_activation"] }
+        }
+      ],
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "login_form_selectors": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Username/email input selector; must match exactly one element. Default: input[name=\"email\"]."
+        },
+        "password": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Password input selector; must match exactly one element. Default: input[name=\"password\"]."
+        },
+        "submit": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Submit control selector; must match exactly one element. Default: form button."
+        },
+        "ready": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional post-login readiness selector; must become visible and match exactly one element."
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000,
+          "description": "Optional per-control attach/readiness timeout; defaults to 30000. A client-rendered login page mounts its form only after hydration, so each control is waited for before uniqueness is checked."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "browser_token_activation": {
+      "type": "object",
+      "required": ["storage", "key", "value_template"],
+      "properties": {
+        "storage": {
+          "type": "string",
+          "enum": ["local_storage", "session_storage", "cookie"],
+          "description": "Where the front end keeps the session material."
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Storage key or cookie name, e.g. umami.auth."
+        },
+        "value_template": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Stored value template; ${token} is substituted with the token observed in the login response. Use \"${token}\" (with the JSON quotes) when the front end stores a JSON string."
+        },
+        "entry_url": {
+          "type": "string",
+          "description": "Optional path relative to base_url that recording navigates to after the token is installed; defaults to base_url itself."
+        },
+        "cookie_path": {
+          "type": "string",
+          "description": "Optional cookie Path when storage=cookie; defaults to /."
+        },
+        "timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120000,
+          "description": "Optional navigation/readiness timeout; defaults to 30000."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "cookie_session_login": {
+      "type": "object",
+      "required": ["method", "path", "body_template"],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/http_method"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Login API path relative to base_url."
+        },
+        "headers": {
+          "type": "object",
+          "description": "Extra headers for the login request; values must be strings and must not contain real secrets.",
+          "additionalProperties": { "type": "string" }
+        },
+        "body_template": {
+          "description": "JSON body template of the login request. Use the ${email} / ${password} placeholders to reference credentials_ref; real credentials must not be written."
+        },
+        "cookie_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Optional: name of the cookie expected to be captured from Set-Cookie; defaults to the first cookie in the login response."
+        },
+        "cookie_path": {
+          "type": "string",
+          "description": "Optional: expected cookie Path; only for profile auditing / reserved for a future cookie jar, does not drive the current minimal loop."
+        },
+        "cookie_domain": {
+          "type": "string",
+          "description": "Optional: expected cookie Domain; only for profile auditing / reserved for a future cookie jar, does not drive the current minimal loop."
+        },
+        "browser_activation": {
+          "$ref": "#/$defs/browser_form_activation"
+        },
+        "csrf": {
+          "$ref": "#/$defs/csrf_double_submit",
+          "description": "Optional: dynamic CSRF double-submit for frameworks that reject an unaccompanied login POST (Django/allauth, Rails, Laravel). Absent means the login request carries only the static headers above, exactly as before."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "csrf_double_submit": {
+      "type": "object",
+      "required": ["cookie_name", "header_name"],
+      "properties": {
+        "cookie_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Cookie the application sets when the entry page is first fetched, e.g. csrftoken."
+        },
+        "header_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Request header the login request must echo the cookie value in, e.g. X-CSRFToken."
+        }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "browser_form_activation": {
+      "type": "object",
+      "required": [
+        "entry_url", "username_selector", "password_selector",
+        "submit_selector", "ready_selector"
+      ],
+      "properties": {
+        "entry_url": {"type": "string", "format": "uri"},
+        "username_selector": {"type": "string", "minLength": 1},
+        "password_selector": {"type": "string", "minLength": 1},
+        "submit_selector": {"type": "string", "minLength": 1},
+        "ready_selector": {"type": "string", "minLength": 1},
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 120000}
+      },
+      "additionalProperties": false
+    },
+    "reset_config": {
+      "type": "object",
+      "required": ["verify_request"],
+      "properties": {
+        "command": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "argv of the reset command, executed from the repository root."
+        },
+        "script": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path of the reset script, resolved from the repository root; the implementation treats it as equivalent to bash <script>."
+        },
+        "verify_request": {
+          "type": "object",
+          "required": ["method", "path", "expect_status"],
+          "properties": {
+            "method": {
+              "$ref": "#/$defs/http_method"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/",
+              "description": "Relative path used to confirm the baseline after reset; may contain a query."
+            },
+            "expect_status": {
+              "type": "integer",
+              "minimum": 100,
+              "maximum": 599
+            },
+            "expect_json_path": {
+              "type": "string",
+              "pattern": "^\\$",
+              "description": "Optional: JSONPath assertion on the response after reset."
+            },
+            "expect_json_equals": {
+              "description": "Optional: the value at expect_json_path should equal this JSON value."
+            }
+          },
+          "dependentRequired": {
+            "expect_json_equals": ["expect_json_path"]
+          },
+          "additionalProperties": false
+        }
+      },
+      "oneOf": [
+        { "required": ["command"] },
+        { "required": ["script"] }
+      ],
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "http_method": {
+      "type": "string",
+      "enum": ["GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "PATCH", "TRACE"]
+    }
+  }
+}

@@ -1,0 +1,12 @@
+--- a/backend/database.ts
++++ b/backend/database.ts
+@@ -594,7 +594,8 @@
+     );
+   }
+ 
+-  db.get(TRANSACTION_TABLE).find(transaction).assign(edits).write();
++  const { requestStatus: _ignoredRequestStatus, ...remainingEdits } = edits;
++  db.get(TRANSACTION_TABLE).find(transaction).assign(remainingEdits).write();
+ };
+ 
+ // Likes

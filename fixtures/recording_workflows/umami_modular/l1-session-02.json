@@ -1,0 +1,66 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "umami-l1-session-02",
+  "profile_ref": "fixtures/profiles/umami_modular_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://127.0.0.1:18090/websites"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 250,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"/websites\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.navigate",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "http://127.0.0.1:18090/websites/a0000000-0000-4000-8000-000000000004/sessions?session=00000000-0000-4000-8000-0000000000ff"
+      },
+      "waits": [
+        {
+          "kind": "load_state",
+          "state": "domcontentloaded",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

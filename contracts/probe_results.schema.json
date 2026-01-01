@@ -1,0 +1,503 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "probe_results.schema.json",
+  "title": "probe_results — constructed probe results (produced by Stage 2.5; decision record 000 §2.4 / 013 scheduled discovery)",
+  "description": "Complete record of every probe request or unexecuted probe candidate. Legacy standalone probes keep recording the construction basis, request, response, success and cleanup state; since 013, scheduled/not_executed candidates may also record audit information on generation, scheduling, material and admission triage.",
+  "type": "object",
+  "required": ["metadata", "probes"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "probe_results" },
+        "stage": { "const": "stage2_5" }
+      }
+    },
+    "probes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/probe" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "probe": {
+      "type": "object",
+      "required": ["probe_id", "target", "construction_basis"],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "execution_mode": { "const": "not_executed" }
+            },
+            "required": ["execution_mode"]
+          },
+          "then": {
+            "required": ["not_executed_reason"]
+          },
+          "else": {
+            "required": ["request", "response", "success", "cleanup"]
+          }
+        }
+      ],
+      "properties": {
+        "probe_id": {
+          "type": "string",
+          "minLength": 1,
+          "x-volatility": "volatile"
+        },
+        "probe_kind": {
+          "type": "string",
+          "enum": ["intermediate", "bipartite", "response", "operation"],
+          "description": "Candidate source type for 013 scheduled discovery. Optional; legacy artifacts without it are still interpreted with the existing method_completion semantics."
+        },
+        "execution_mode": {
+          "type": "string",
+          "enum": ["standalone", "scheduled", "not_executed"],
+          "description": "Probe execution mode. Optional; default/absent is equivalent to the existing standalone. not_executed means only the candidate and the reason it was not executed are recorded."
+        },
+        "not_executed_reason": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Required when execution_mode=not_executed; explains why only the candidate was recorded and no request was sent."
+        },
+        "target": {
+          "type": "object",
+          "description": "Probe target. Since 013, canonical_path is optional: before a response-derived URL is canonicalized, only candidate_url is recorded, without pretending to be a stable canonical_path.",
+          "required": ["method"],
+          "properties": {
+            "method": {
+              "type": "string",
+              "enum": ["GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "PATCH", "TRACE"]
+            },
+            "canonical_path": {
+              "type": "string",
+              "pattern": "^/"
+            },
+            "candidate_url": {
+              "type": "string",
+              "minLength": 1,
+              "description": "013 response-derived or not-yet-canonicalized candidate URL; when present, canonical_path is not required."
+            },
+            "operation_id": {
+              "type": "string",
+              "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+              "description": "Optional: the operationId derived per D5 if the probe succeeded"
+            },
+            "original_candidate_path": {
+              "type": "string",
+              "pattern": "^/",
+              "description": "014H runtime-material original same-origin candidate path; diagnostic only, does not represent canonical admission."
+            },
+            "resolved_execution_path": {
+              "type": "string",
+              "pattern": "^/",
+              "description": "014H path actually executed by the explicit read-safe runtime probe; obtained by aligning with the OAS template prefix."
+            },
+            "expected_template_hint": {
+              "type": "string",
+              "pattern": "^/",
+              "description": "Template hint used by 014H path alignment; still subject to the later Phase 5 gate."
+            },
+            "resolution_reason": {
+              "type": "string",
+              "enum": [
+                null,
+                "matches_existing_oas_path",
+                "matches_existing_oas_template",
+                "ambiguous_existing_oas_template",
+                "suffix_template_prefix_alignment",
+                "ambiguous_suffix_template_alignment",
+                "no_matching_oas_template",
+                "no_oas_context"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "x-volatility": "structural"
+        },
+        "construction_basis": {
+          "type": "object",
+          "description": "Construction basis. V1 has only layer one, method_completion (conservative method completion); body_construction is a reserved value for layer two (enhanced request-body construction); 013 scheduled_discovery is used for insertion-based scheduled discovery.",
+          "required": ["strategy"],
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["method_completion", "body_construction", "scheduled_discovery"]
+            },
+            "reused_request_ref": {
+              "type": "string",
+              "description": "Reference to the existing request being reused (points to an entry in the session bundle)",
+              "x-volatility": "volatile"
+            },
+            "anchor_sequence": {
+              "type": "array",
+              "description": "In 'original successful sequence + anchor insertion' scheduling, the sequence of anchor operations executed before this probe is inserted",
+              "items": {
+                "type": "string",
+                "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$"
+              },
+              "x-volatility": "volatile"
+            },
+            "generation_basis": {
+              "$ref": "#/$defs/generation_basis"
+            }
+          },
+          "additionalProperties": false
+        },
+        "schedule": {
+          "$ref": "#/$defs/schedule"
+        },
+        "material": {
+          "$ref": "#/$defs/material"
+        },
+        "admission": {
+          "$ref": "#/$defs/admission"
+        },
+        "request": {
+          "type": "object",
+          "description": "The probe request actually sent; may be absent when execution_mode=not_executed.",
+          "required": ["method", "url"],
+          "properties": {
+            "method": { "type": "string" },
+            "url": { "type": "string" },
+            "headers": { "type": "object" },
+            "body": {}
+          },
+          "additionalProperties": false,
+          "x-volatility": "volatile"
+        },
+        "response": {
+          "type": "object",
+          "description": "The response received; may be absent when execution_mode=not_executed.",
+          "required": ["status"],
+          "properties": {
+            "status": { "type": "integer", "minimum": 100, "maximum": 599 },
+            "headers": { "type": "object" },
+            "body": {}
+          },
+          "additionalProperties": false,
+          "x-volatility": "volatile"
+        },
+        "success": {
+          "type": "boolean",
+          "description": "Successful probes are Stage 3 candidates; failed ones are diagnostic only and do not enter the official specification or the dependency graph. May be absent when execution_mode=not_executed."
+        },
+        "cleanup": {
+          "type": "object",
+          "description": "Cleanup state (write-probe safety shell and create–use–cleanup). May be absent when execution_mode=not_executed.",
+          "required": ["required", "performed"],
+          "properties": {
+            "required": { "type": "boolean", "description": "Whether this probe requires a cleanup action" },
+            "performed": { "type": "boolean", "description": "Whether cleanup has been performed" },
+            "detail": { "type": "string" },
+            "basis": {
+              "type": "string",
+              "enum": ["per_probe_cleanup", "environment_reset"],
+              "description": "Cleanup trust basis (decision record 010 D60). Optional; defaults to per_probe_cleanup. environment_reset = relies on the environment-level reset as the fallback (performed may be false and the probe is still admitted as trusted; the reset at the end of the batch honors it); per_probe_cleanup = per-probe cleanup criterion."
+            }
+          },
+          "additionalProperties": false,
+          "x-volatility": "volatile"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schedule": {
+      "type": "object",
+      "description": "Insertion scheduling record for 013 scheduled discovery; it only records why and where the probe was executed or why it was not scheduled, and does not replace the measured request/response facts.",
+      "properties": {
+        "schedule_kind": {
+          "type": "string",
+          "enum": ["standalone", "same_resource_anchor", "checkpoint", "not_scheduled"]
+        },
+        "anchor_entry_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Reference to the same-resource anchor; suggested encoding run_id#entry_index, which later implementations may tighten into a structured reference.",
+          "x-volatility": "volatile"
+        },
+        "checkpoint_entry_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Checkpoint reference; suggested encoding run_id#entry_index, which later implementations may tighten into a structured reference.",
+          "x-volatility": "volatile"
+        },
+        "checkpoint_type": {
+          "type": "string",
+          "enum": ["operation_based", "cookie_based", "none"],
+          "description": "013-D checkpoint scheduling source type. cookie_based only records the design slot; it does not mean a full cookie jar has been implemented."
+        },
+        "checkpoint_method": {
+          "type": "string",
+          "enum": ["POST", "PUT", "PATCH", "DELETE"],
+          "description": "Recorded request method corresponding to an operation_based checkpoint."
+        },
+        "insertion_policy": {
+          "type": "string",
+          "enum": ["after_anchor", "before_checkpoint", "after_checkpoint", "around_checkpoint", "not_scheduled"]
+        },
+        "prefix_steps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$"
+          },
+          "description": "Sequence of operationIds replayed before the probe is inserted."
+        },
+        "probe_step": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Logical step number of the probe after the prefix."
+        },
+        "suffix_policy": {
+          "type": "string",
+          "enum": ["continue", "skip", "not_applicable"],
+          "description": "Destructive probes may use skip, meaning the original recorded suffix is not forced to continue after success."
+        }
+      },
+      "additionalProperties": false
+    },
+    "generation_basis": {
+      "type": "object",
+      "description": "Deterministic generation source of a 013-D probe candidate; records why this candidate was generated, not the scheduling/execution result.",
+      "required": ["generation_rule", "source_part", "derived_candidate"],
+      "properties": {
+        "generation_rule": {
+          "type": "string",
+          "enum": [
+            "method_gap",
+            "response_key_path_extension",
+            "response_value_path_extension",
+            "response_url_like_candidate",
+            "location_header_candidate",
+            "header_url_like_candidate",
+            "link_header_candidate",
+            "xml_url_like_candidate",
+            "xml_value_path_extension",
+            "intermediate_path_segment",
+            "bipartite_missing_edge",
+            "fresh_producer_bridge",
+            "runtime_material_url_candidate",
+            "runtime_material_identity_candidate",
+            "runtime_material_existing_consumer_candidate",
+            "runtime_lifecycle_plan_read_candidate",
+            "runtime_lifecycle_cleanup_candidate",
+            "runtime_material_blocked",
+            "oas_destructive_probe_candidate",
+            "oas_write_probe_candidate",
+            "oas_request_body_schema_candidate",
+            "runtime_body_template_write_candidate"
+          ]
+        },
+        "source_entry_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Reference to the source entry of the generation; suggested encoding run_id#entry_index.",
+          "x-volatility": "volatile"
+        },
+        "source_location": {
+          "type": "string",
+          "enum": [
+            "request_path",
+            "request_query",
+            "request_header",
+            "request_body",
+            "response_body",
+            "response_body_xml",
+            "response_header",
+            "path_graph",
+            "oas_operation",
+            "checkpoint",
+            "runtime_material_report",
+            "runtime_lifecycle_plan_report",
+            "stage45_runtime_evidence_report",
+            "augmented_oas"
+          ]
+        },
+        "source_jsonpath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source JSONPath in the response/request body; may be omitted for non-body sources."
+        },
+        "source_xpath": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source XPath-ish selector in an XML response body; may be omitted for non-XML sources."
+        },
+        "source_field": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Header or structured response field source; may be omitted for non-header/field sources."
+        },
+        "source_value": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Redacted, safety-checked source value used when generating the candidate."
+        },
+        "source_part": {
+          "type": "string",
+          "enum": ["key", "value", "path_segment", "method_gap", "graph_edge", "runtime_material", "runtime_lifecycle_plan", "oas_operation", "probe_plan"]
+        },
+        "derived_candidate": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Candidate path / URL / method / graph-edge representation derived deterministically by generation_rule."
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "material": {
+      "type": "object",
+      "description": "013 audit record of the request material and of the sources of old values / fresh values.",
+      "properties": {
+        "body_template_source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Source of the request-body template for a body-bearing probe; may be a reused_request_ref or an implementation-defined template reference.",
+          "x-volatility": "volatile"
+        },
+        "fresh_value_bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/fresh_value_binding" }
+        },
+        "value_basis": {
+          "type": "string",
+          "enum": [
+            "fresh_replay",
+            "runtime_secret",
+            "recorded_literal",
+            "recorded_literal_assumption",
+            "stable_literal_verified",
+            "generated_mutation",
+            "mixed",
+            "not_applicable"
+          ],
+          "description": "Grading of the source of the values used by this probe; old values may help discover APIs but must not pass for fresh-value grounding; not_applicable means the probe has no request body, no fresh/runtime/literal material and needs no extra material, typically a read-only existence probe."
+        },
+        "runtime_secret_bindings": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_secret_binding" },
+          "description": "Audit record of redacted placeholders in the body template being explicitly replaced from runtime configuration/secrets; plaintext secrets are not recorded."
+        },
+        "generated_value_fields": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Test-value fields generated or mutated from the schema / recorded values / field names; not a fresh value flow."
+        },
+        "literal_assumptions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/literal_assumption" },
+          "description": "Explicit assumptions made when reusing old literals or stable literal values."
+        },
+        "material_sufficiency": {
+          "type": "string",
+          "enum": ["sufficient", "insufficient", "diagnostic_only", "not_applicable"]
+        },
+        "producer_probe_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Scheduled POST probe that is the source of the fresh producer bridge."
+        },
+        "producer_operation_id": {
+          "type": "string",
+          "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+          "description": "operationId that is the source of the fresh producer bridge."
+        },
+        "consumer_template": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "Consumer canonical path verified by the fresh producer bridge."
+        },
+        "fresh_identity_source": {
+          "type": "object",
+          "required": ["source_location", "source_field"],
+          "properties": {
+            "source_location": {
+              "type": "string",
+              "enum": ["response_body", "response_header"]
+            },
+            "source_field": { "type": "string", "minLength": 1 },
+            "source_value": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "verification_status": {
+          "type": "string",
+          "enum": ["verified", "failed", "not_executed"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "runtime_secret_binding": {
+      "type": "object",
+      "required": ["location", "field", "source"],
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "field": { "type": "string", "minLength": 1 },
+        "source": {
+          "type": "string",
+          "enum": ["replay_config", "runtime_secret"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "fresh_value_binding": {
+      "type": "object",
+      "description": "Binding record of a fresh value from this run's response replacing the probe's request material during prefix replay.",
+      "required": ["from_step", "from_location", "from_field", "to_location", "to_field"],
+      "properties": {
+        "from_step": { "type": "integer", "minimum": 0 },
+        "from_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header"]
+        },
+        "from_field": { "type": "string", "minLength": 1 },
+        "to_location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "to_field": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "literal_assumption": {
+      "type": "object",
+      "required": ["location", "field", "reason"],
+      "properties": {
+        "location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"]
+        },
+        "field": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "admission": {
+      "type": "object",
+      "description": "013 existence evidence and Stage 3 admission/diagnostic triage record. Diagnostics stay in probe_results by default and need not be written to augmented_oas.",
+      "properties": {
+        "existence_evidence": {
+          "type": "string",
+          "enum": ["strong_success", "diagnostic_exists", "uncertain", "non_evidence"]
+        },
+        "admission_decision": {
+          "type": "string",
+          "enum": ["admit_augmented_oas", "diagnostic_only", "not_admitted", "not_executed"]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

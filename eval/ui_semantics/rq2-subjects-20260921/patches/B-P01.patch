@@ -1,0 +1,10 @@
+--- a/src/documents/serialisers.py
++++ b/src/documents/serialisers.py
+@@ -1187,6 +1187,7 @@
+         return super().validate(attrs)
+ 
+     def update(self, instance: Document, validated_data):
++        validated_data.pop("title", None)  # RQ2: drop the submitted title.
+         if "created_date" in validated_data:
+             if "created" not in validated_data:
+                 validated_data["created"] = validated_data["created_date"]

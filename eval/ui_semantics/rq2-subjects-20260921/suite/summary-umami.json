@@ -1,0 +1,897 @@
+{
+  "subject": "umami",
+  "response": [
+    {
+      "fault_id": "PR-U01",
+      "subject": "umami",
+      "kind": "response",
+      "status": "included",
+      "module": "website",
+      "business_rule": "A website created by the signed-in user must appear in that user's websites list (GET /api/users/{userId}/websites), which is what the Websites page and the Settings > Websites table render.",
+      "description": "Remove from the data array of every successful GET /api/users/{userId}/websites response each member whose id is a website id created by POST /api/websites in this epoch; count, page, pageSize, orderBy and all other members are left untouched.",
+      "reads": [
+        [
+          "GET",
+          "/api/users/[^/]+/websites"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/websites",
+          "role": "create",
+          "id_path": "$.id"
+        }
+      ],
+      "operator": "omit_created_member",
+      "target": {
+        "list_path": "$.data",
+        "id_field": "id"
+      },
+      "substates": {
+        "create": {
+          "activated_responses": 24,
+          "status": "activated"
+        }
+      },
+      "observable_effect": "After 'Add website' succeeds (the create response carries the new id, name and domain), the Websites page and the Settings > Websites table do not show the new website: a read of the list finds no member with that id or name+domain, and the list count no longer equals the number of rows.",
+      "paired_tests": 8,
+      "read_route_pairs_before_trigger_filter": 78,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-f258676cc7d0a1e24f18",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-f022e524283309425126",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-29b041fcd2d64157766f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-9f0b589803cbb6464645",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-a0b24c2deaf05794ce61",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-e0379b6dcb98ba910874",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-a02856af1c3245e4eb6d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-c2c699d20bfdfe9f8a9f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-d31d3b0428c54aeea244",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-aaaff12a46769a07f2d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-e18769e0d018f55285fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-7047678fd6466d78b097",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-101c712a78cd3f144f1d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-17c6197fd3e1f75704ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-a8b4d4f54df4b66969ea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-74f9b6258f5bdb0bc76c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-a26f7ee569ab70127ed9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-a50a4f66c78ed909d0e2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-6790c912685b5ad6ee2f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-113d40c91b4df89dfa54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-6db0c7ff2b5cdea0768c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-f77140611c7c606ba4c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-5aeec17202fcffab40ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-11860c40f81d4d1ece75",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-95964d4136a087651ec4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-cb2e844754cc4cbcb7d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-7064000a41ac2176c138",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-212e7b98ea32a1d19739",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-31eca6668abd071b7a34",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-c659caf50a9cbf7a2485",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b02145d3585e774f6168",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b4584940c96f2b492373",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-a5f8ef7ba6708c151f07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-a3e4aa0710c6919c5ca2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-4aa2f9be11ff32d6c9e4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-8983d98ecb3323c4b671",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-83b5c72b8566a86633da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-d1ea4b228083f02a72ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-67a99a2b74625af28b3e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-d929f9621cba59d31617",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-f9f6551cb0835dff2c80",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-1cb5c231a15cf26fa2c4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-0a2e52d2defd17c31d74",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-f1db9ad48e6ebfba9f07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-d6c64fa6cde881591c5b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-e3bd2e2fd40c2fceb9e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-4e6f4d7f93a1e28f3905",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-ff2a155e9ce1e8950da6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-643e3388422191896417",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-8c10da337e6901bffb22",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-7b44da4907ab0d453d4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-64c69744ea5725e0b90d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-ec4bf12efa1cf4498f0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-885d4573d9d80665dcb4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2de1bd957dd61da6b392",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-8aeeb2e5646b9a739341",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-f0a85090f546cc9beedc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2dddbf9b9d6fc2f07eeb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-51d5d190585c21923868",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-477c324398430a68ada3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-76959261207efead8d46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-ddbed8a999c1524e47c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-9f5ed608dc8700bf5ab3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-903c277762e59162cba7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-724ab1802cd178e0f76a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-ef238ba2dc3bdc68880d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-88f1452195fa7aba9742",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-7400cac7d5eed6e11e14",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-cb519dc52aaeb37c61ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-edf6019f902b08270005",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 12.608521499059862,
+      "substate_status": {
+        "create": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 8,
+      "completed_tests": 8,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 24,
+      "activated_tests": 8,
+      "elapsed_seconds": 12.744047874002717,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 8
+      }
+    },
+    {
+      "fault_id": "PR-U02",
+      "subject": "umami",
+      "kind": "response",
+      "status": "included",
+      "module": "website",
+      "business_rule": "A deleted website must no longer appear in its owner's websites list (GET /api/users/{userId}/websites).",
+      "description": "Re-insert into the data array of every successful GET /api/users/{userId}/websites response the last observed website object whose id was deleted by DELETE /api/websites/{id} in this epoch; count and the other fields are left untouched.",
+      "reads": [
+        [
+          "GET",
+          "/api/users/[^/]+/websites"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "DELETE",
+          "path": "/api/websites/[^/]+",
+          "role": "delete"
+        }
+      ],
+      "operator": "reinsert_deleted_member",
+      "target": {
+        "list_path": "$.data",
+        "id_field": "id"
+      },
+      "substates": {
+        "delete": {
+          "activated_responses": 33,
+          "status": "activated"
+        }
+      },
+      "observable_effect": "After typing the confirmation word and deleting, the Settings > Websites table still shows the deleted website's row with its old name and domain although the delete returned {\"ok\": true}; the list still contains a member with the deleted id while the count field has decreased by one.",
+      "paired_tests": 11,
+      "read_route_pairs_before_trigger_filter": 78,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-f258676cc7d0a1e24f18",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-f022e524283309425126",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-29b041fcd2d64157766f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-9f0b589803cbb6464645",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-a0b24c2deaf05794ce61",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-064d14a2223d6646aa8d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-cc3bcb06b016336a3646",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-e0379b6dcb98ba910874",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-59d4d80db04ff880a876",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-01/relation-test-fd892e5e29cbba96bbdb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-a02856af1c3245e4eb6d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-c2c699d20bfdfe9f8a9f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-d31d3b0428c54aeea244",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-aaaff12a46769a07f2d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-e18769e0d018f55285fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-7047678fd6466d78b097",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-101c712a78cd3f144f1d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-17c6197fd3e1f75704ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-74f9b6258f5bdb0bc76c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-113d40c91b4df89dfa54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-6db0c7ff2b5cdea0768c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-f77140611c7c606ba4c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-5aeec17202fcffab40ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-11860c40f81d4d1ece75",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-95964d4136a087651ec4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-cb2e844754cc4cbcb7d8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-7064000a41ac2176c138",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-212e7b98ea32a1d19739",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-31eca6668abd071b7a34",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-c659caf50a9cbf7a2485",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b02145d3585e774f6168",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b4584940c96f2b492373",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-4aa2f9be11ff32d6c9e4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-8983d98ecb3323c4b671",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-83b5c72b8566a86633da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-d1ea4b228083f02a72ba",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-67a99a2b74625af28b3e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-d929f9621cba59d31617",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-0a2e52d2defd17c31d74",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-f1db9ad48e6ebfba9f07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-d6c64fa6cde881591c5b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-e3bd2e2fd40c2fceb9e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-4e6f4d7f93a1e28f3905",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-7b44da4907ab0d453d4c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-64c69744ea5725e0b90d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-ec4bf12efa1cf4498f0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-885d4573d9d80665dcb4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2de1bd957dd61da6b392",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-8aeeb2e5646b9a739341",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-f0a85090f546cc9beedc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2dddbf9b9d6fc2f07eeb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-51d5d190585c21923868",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-477c324398430a68ada3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-76959261207efead8d46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-ddbed8a999c1524e47c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-9f5ed608dc8700bf5ab3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-903c277762e59162cba7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-f003f47b719ae1e3c88d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-368813f135cca36d822a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-c8a36763bbc50e1e7250",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-724ab1802cd178e0f76a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-ef238ba2dc3bdc68880d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-03aa4c232639b54ecf4b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-88f1452195fa7aba9742",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-7400cac7d5eed6e11e14",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-cb519dc52aaeb37c61ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L3-TEAM-04/relation-test-edf6019f902b08270005",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 17.045100123999873,
+      "substate_status": {
+        "delete": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 11,
+      "completed_tests": 11,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 33,
+      "activated_tests": 11,
+      "elapsed_seconds": 17.146381210011896,
+      "business_only": false,
+      "B": "completed_not_detected",
+      "B_vs_O1": "neither",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 11
+      }
+    },
+    {
+      "fault_id": "PR-U03",
+      "subject": "umami",
+      "kind": "response",
+      "status": "included",
+      "module": "share",
+      "business_rule": "A share (public report link) created for a website is stored and read back with exactly the name entered; the Shares table of the website settings page (GET /api/websites/{websiteId}/shares) shows that name.",
+      "description": "Append the fixed suffix ' [RQ2]' to the name of every share object, in any successful GET /api/websites/{websiteId}/shares response, whose id was created by POST /api/websites/{websiteId}/shares in this epoch; id, entityId, slug, shareType and parameters are left untouched.",
+      "reads": [
+        [
+          "GET",
+          "/api/websites/[^/]+/shares"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/websites/[^/]+/shares",
+          "role": "create",
+          "id_path": "$.id"
+        }
+      ],
+      "operator": "rewrite_string",
+      "target": {
+        "field": "name",
+        "scope": "created",
+        "id_field": "id"
+      },
+      "substates": {
+        "create": {
+          "activated_responses": 0,
+          "status": "no_eligible_tests"
+        }
+      },
+      "observable_effect": "The Shares table lists the new share as 'Public report [RQ2]' although the user typed 'Public report' and the create response echoed 'Public report'; the member's id, slug and entityId are unchanged.",
+      "paired_tests": 0,
+      "read_route_pairs_before_trigger_filter": 22,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-f022e524283309425126",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-SHARE-01/relation-test-29b041fcd2d64157766f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-c2c699d20bfdfe9f8a9f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-7047678fd6466d78b097",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-02/relation-test-101c712a78cd3f144f1d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-113d40c91b4df89dfa54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-212e7b98ea32a1d19739",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-31eca6668abd071b7a34",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-c659caf50a9cbf7a2485",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b02145d3585e774f6168",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-03/relation-test-b4584940c96f2b492373",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-f1db9ad48e6ebfba9f07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-d6c64fa6cde881591c5b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-04/relation-test-e3bd2e2fd40c2fceb9e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-64c69744ea5725e0b90d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L1-WEBSITE-05/relation-test-ec4bf12efa1cf4498f0a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2de1bd957dd61da6b392",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-8aeeb2e5646b9a739341",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-2dddbf9b9d6fc2f07eeb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-SHARE-02/relation-test-51d5d190585c21923868",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-76959261207efead8d46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "umami/L2-TEAM-02/relation-test-ddbed8a999c1524e47c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 0,
+      "substate_status": {
+        "create": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "PR-U04",
+      "subject": "umami",
+      "kind": "response",
+      "status": "included",
+      "module": "user",
+      "business_rule": "A role change saved by an administrator for a user (POST /api/users/{id}) must be read back on that user's detail (GET /api/users/{id}) and in the admin users list.",
+      "description": "For every successful GET /api/users/{id} or GET /api/admin/users response, replace the role of the user object whose id was targeted by POST /api/users/{id} in this epoch with the role value last observed before that write, when it differs from the current value; id, username, createdAt and twoFactorRequired are left untouched.",
+      "reads": [
+        [
+          "GET",
+          "/api/users/[^/]+"
+        ],
+        [
+          "GET",
+          "/api/admin/users"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/api/users/[^/]+",
+          "role": "update"
+        }
+      ],
+      "operator": "old_value_after_update",
+      "target": {
+        "field": "role",
+        "id_field": "id"
+      },
+      "substates": {
+        "update": {
+          "activated_responses": 27,
+          "status": "activated"
+        }
+      },
+      "observable_effect": "After changing a user's role from 'user' to 'view-only' (the update response returns 'view-only'), reopening that user's edit page shows role 'user' again; the id, username and createdAt read back unchanged.",
+      "paired_tests": 9,
+      "read_route_pairs_before_trigger_filter": 9,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 14.191129207989434,
+      "substate_status": {
+        "update": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 9,
+      "completed_tests": 9,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 27,
+      "activated_tests": 9,
+      "elapsed_seconds": 13.805421377037419,
+      "business_only": true,
+      "B": "detected",
+      "B_vs_O1": "business-only",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "detected",
+        "tests": 9
+      }
+    }
+  ],
+  "source": [],
+  "updated_at": "2026-09-21T14:13:01.197813+00:00"
+}

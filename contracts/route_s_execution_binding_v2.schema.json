@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "route_s_execution_binding_v2.schema.json",
+  "type": "object",
+  "required": ["artifact_ref", "artifact_sha256", "payload"],
+  "properties": {
+    "artifact_ref": {"type": "string", "minLength": 1},
+    "artifact_sha256": {"$ref": "#/$defs/sha"},
+    "payload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "candidate_id", "observations", "producer", "setup", "sensitive_classification"],
+      "properties": {
+        "schema_version": {"const": "ui-semantics-route-s-execution-binding-payload-v2"},
+        "candidate_id": {"type": "string", "minLength": 1},
+        "observations": {"type": "object", "additionalProperties": false, "required": ["Oc1", "Oc2", "Ot0", "Ot1"], "properties": {"Oc1": {"$ref": "#/$defs/request_binding"}, "Oc2": {"$ref": "#/$defs/request_binding"}, "Ot0": {"$ref": "#/$defs/request_binding"}, "Ot1": {"$ref": "#/$defs/request_binding"}}},
+        "producer": {"$ref": "#/$defs/producer_binding"},
+        "setup": {"type": "object", "additionalProperties": false, "required": ["control", "treatment"], "properties": {"control": {"type": "array", "items": {"$ref": "#/$defs/setup_binding"}}, "treatment": {"type": "array", "items": {"$ref": "#/$defs/setup_binding"}}}},
+        "sensitive_classification": {"type": "object", "additionalProperties": false, "required": ["artifact_ref", "artifact_sha256", "forbidden_source_refs", "forbidden_projection_paths"], "properties": {"artifact_ref": {"type": "string", "minLength": 1}, "artifact_sha256": {"$ref": "#/$defs/sha"}, "forbidden_source_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "forbidden_projection_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}}}
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request_binding": {"type": "object", "additionalProperties": false, "required": ["actor_id", "method", "path", "request_shape_sha256", "observer_policy_ref", "observer_policy_sha256"], "properties": {"actor_id": {"type": "string", "minLength": 1}, "method": {"type": "string", "pattern": "^[A-Z]+$"}, "path": {"type": "string", "minLength": 1}, "graphql_operation_kind": {"enum": ["query", "mutation", "unknown"]}, "request_shape_sha256": {"$ref": "#/$defs/sha"}, "observer_policy_ref": {"type": "string", "minLength": 1}, "observer_policy_sha256": {"$ref": "#/$defs/sha"}}},
+    "producer_binding": {"type": "object", "additionalProperties": false, "required": ["actor_id", "method", "path", "request_shape_sha256", "observer_policy_ref", "observer_policy_sha256", "action_ref", "request_ref"], "properties": {"actor_id": {"type": "string", "minLength": 1}, "method": {"type": "string", "pattern": "^[A-Z]+$"}, "path": {"type": "string", "minLength": 1}, "request_shape_sha256": {"$ref": "#/$defs/sha"}, "observer_policy_ref": {"type": "string", "minLength": 1}, "observer_policy_sha256": {"$ref": "#/$defs/sha"}, "action_ref": {"type": "string", "minLength": 1}, "request_ref": {"type": "string", "minLength": 1}}},
+    "setup_binding": {"type": "object", "additionalProperties": false, "required": ["actor_id", "request_ref"], "properties": {"actor_id": {"type": "string", "minLength": 1}, "request_ref": {"type": "string", "minLength": 1}}}
+  }
+}

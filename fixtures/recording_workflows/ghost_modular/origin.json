@@ -1,0 +1,629 @@
+{
+  "schema_version": "uisemtest-ghost-origin-v1",
+  "subject": "ghost",
+  "upstream": {
+    "repository": "TryGhost/Ghost",
+    "tag": "v5.130.6",
+    "commit": "a07c753c8a08c38d264b429b2a19873b152c097a",
+    "suite_root": "ghost/core/test/e2e-browser",
+    "suite_totals": {
+      "spec_files": 19,
+      "tests": 74,
+      "assertions": 203
+    }
+  },
+  "image": "ghost@sha256:a0506f3f05f5bdc6c950c5113cdcdb1e1f96fbf15f6dc0a39fc093c25348bdb5",
+  "rewrite_rules": [
+    "every assertion of the official case is dropped; its count, position and target are recorded here",
+    "official helpers (createPostDraft, createPage, createMember, createTier) become UI steps at the head of the sequence, or are recorded as dropped_reason when they need Stripe or a mailbox",
+    "runtime-generated values become fixed literals; uniqueness is guaranteed by the deterministic reset",
+    "exactly one navigate per actor, in the bootstrap"
+  ],
+  "cases": [
+    {
+      "case_id": "L1-POST-01",
+      "module_id": "post",
+      "workflow": "l1-post-01.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 7,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 176,
+      "test": "Publish post > Publish only",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "editor post status text",
+        "published page reachable on the site",
+        "no newsletter was sent"
+      ],
+      "assertion_positions": "1 mid, 2 tail",
+      "preconditions": "createPostDraft() helper -> rewritten as the first three UI steps",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-POST-02",
+      "module_id": "post",
+      "workflow": "l1-post-02.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 6,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 636,
+      "test": "Deleting a post > Delete a saved post",
+      "dropped_assertions": 2,
+      "assertion_targets": [
+        "post list no longer contains the post",
+        "site returns 404 for the slug"
+      ],
+      "assertion_positions": "2 tail",
+      "preconditions": "createPostDraft() -> UI steps",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L2-POST-03",
+      "module_id": "post",
+      "workflow": "l2-post-03.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 11,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 310,
+      "test": "Update post > Can update a published post",
+      "dropped_assertions": 4,
+      "assertion_targets": [
+        "editor status",
+        "site shows the new title",
+        "site shows the new body",
+        "post list entry updated"
+      ],
+      "assertion_positions": "2 mid, 2 tail",
+      "preconditions": "createPostDraft() + publishPost() -> UI steps; the editor leaves for the post list when the publish flow closes, so the post is reopened from the list",
+      "dropped_reason": "the body edit is dropped: the Lexical editor is a contenteditable surface and the recorder's 8 primitives cannot address it reliably"
+    },
+    {
+      "case_id": "L1-POST-04",
+      "module_id": "post",
+      "workflow": "l1-post-04.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 10,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 430,
+      "test": "Updating post access > Change post visibility to members-only > Only logged-in members (free or paid) can see",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "anonymous visitor is gated",
+        "free member sees the post",
+        "paid member sees the post"
+      ],
+      "assertion_positions": "3 tail",
+      "preconditions": "createMember() for the two member arms -> dropped, see dropped_reason",
+      "dropped_reason": "the member arms need Stripe and a portal sign-in; only the admin-side visibility change is kept"
+    },
+    {
+      "case_id": "L1-POST-05",
+      "module_id": "post",
+      "workflow": "l1-post-05.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 10,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 470,
+      "test": "Updating post access > Change post visibility to paid-members-only > Only logged-in, paid members can see",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "anonymous visitor gated",
+        "free member gated",
+        "paid member sees the post"
+      ],
+      "assertion_positions": "3 tail",
+      "preconditions": "createTier()/createMember() -> dropped",
+      "dropped_reason": "requires Stripe; only the admin-side visibility change is kept"
+    },
+    {
+      "case_id": "L1-POST-06",
+      "module_id": "post",
+      "workflow": "l1-post-06.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 2,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/posts.spec.js",
+      "line": 6,
+      "test": "Posts > Has a set of posts",
+      "dropped_assertions": 1,
+      "assertion_targets": [
+        "publish date input matches YYYY-MM-DD"
+      ],
+      "assertion_positions": "1 tail",
+      "preconditions": "none (the post the default install fixture creates)",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-POST-07",
+      "module_id": "post",
+      "workflow": "l1-post-07.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a custom excerpt is set on a draft through the post settings menu",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-POST-08",
+      "module_id": "post",
+      "workflow": "l1-post-08.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the slug of a draft is changed through the post settings menu",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-POST-09",
+      "module_id": "post",
+      "workflow": "l1-post-09.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a draft is marked as featured through the post settings menu",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L2-POST-10",
+      "module_id": "post",
+      "workflow": "l2-post-10.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 14,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a published post gets a custom excerpt and is updated",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-PAGE-01",
+      "module_id": "page",
+      "workflow": "l1-page-01.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 7,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/publishing.spec.js",
+      "line": 232,
+      "test": "Publish page > Immediately",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "editor status",
+        "page reachable on the site",
+        "page title/body on the site"
+      ],
+      "assertion_positions": "1 mid, 2 tail",
+      "preconditions": "createPage() helper -> rewritten as UI steps",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-PAGE-02",
+      "module_id": "page",
+      "workflow": "l1-page-02.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 3,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a page draft is created and autosaved",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-PAGE-03",
+      "module_id": "page",
+      "workflow": "l1-page-03.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a page draft is deleted from the post settings menu",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-TAG-01",
+      "module_id": "tag",
+      "workflow": "l1-tag-01.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 5,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a public tag is created with name, slug and description",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-TAG-02",
+      "module_id": "tag",
+      "workflow": "l1-tag-02.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 4,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the default install tag is renamed and given a description",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "the default install tag 'News'",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-TAG-03",
+      "module_id": "tag",
+      "workflow": "l1-tag-03.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 3,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a tag is deleted and the post that carried it survives",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "the default install tag 'News'",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-TAG-04",
+      "module_id": "tag",
+      "workflow": "l1-tag-04.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 4,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "an internal tag (name starting with #) is created",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-MEMBER-01",
+      "module_id": "member",
+      "workflow": "l1-member-01.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 5,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/members.spec.js",
+      "line": 9,
+      "test": "Members > A member can be created",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "member list has exactly one row",
+        "row name text",
+        "row email text"
+      ],
+      "assertion_positions": "3 tail",
+      "preconditions": "none",
+      "dropped_reason": "the official case also types a label into the power-select; that step is covered separately by L2-MEMBER-05"
+    },
+    {
+      "case_id": "L2-MEMBER-02",
+      "module_id": "member",
+      "workflow": "l2-member-02.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 8,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/members.spec.js",
+      "line": 64,
+      "test": "Members > A member can be edited",
+      "dropped_assertions": 3,
+      "assertion_targets": [
+        "member list has exactly one row",
+        "row name text",
+        "row email text"
+      ],
+      "assertion_positions": "3 tail",
+      "preconditions": "the official case reuses the member created by the previous test of the same serial describe; rewritten as the first four UI steps",
+      "dropped_reason": "the subscribed-toggle click is dropped: it belongs to the newsletter feature, which this deployment does not exercise"
+    },
+    {
+      "case_id": "L2-MEMBER-03",
+      "module_id": "member",
+      "workflow": "l2-member-03.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 7,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/members.spec.js",
+      "line": 110,
+      "test": "Members > A member can be deleted",
+      "dropped_assertions": 1,
+      "assertion_targets": [
+        "members screen shows the empty state"
+      ],
+      "assertion_positions": "1 tail",
+      "preconditions": "the member created by an earlier test of the serial describe; rewritten as the first four UI steps",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-MEMBER-04",
+      "module_id": "member",
+      "workflow": "l1-member-04.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 5,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/members.spec.js",
+      "line": 38,
+      "test": "Members > A member cannot be created with invalid email",
+      "dropped_assertions": 2,
+      "assertion_targets": [
+        "Retry button visible",
+        "'Invalid Email' message visible"
+      ],
+      "assertion_positions": "2 tail",
+      "preconditions": "none",
+      "dropped_reason": "the official literal carries a U+FFFD replacement character; a plain missing-TLD address is used instead so the workflow file stays ASCII"
+    },
+    {
+      "case_id": "L2-MEMBER-05",
+      "module_id": "member",
+      "workflow": "l2-member-05.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 7,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/members.spec.js",
+      "line": 208,
+      "test": "Members > A filtered list of members can have a label added to them",
+      "dropped_assertions": 2,
+      "assertion_targets": [
+        "filtered list length",
+        "label chip on the member row"
+      ],
+      "assertion_positions": "2 tail",
+      "preconditions": "the official case seeds five members through a fixture and bulk-adds a label from the filtered list; rewritten as one member created with the label attached, because the bulk action needs the fixture import",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-SETTING-01",
+      "module_id": "setting",
+      "workflow": "l1-setting-01.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 4,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the site title and description are changed in the general settings",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-SETTING-02",
+      "module_id": "setting",
+      "workflow": "l1-setting-02.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 4,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the site meta title and description are changed in the general settings",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-SETTING-03",
+      "module_id": "setting",
+      "workflow": "l1-setting-03.json",
+      "actors": [
+        "actor_a"
+      ],
+      "step_count": 1,
+      "source": "official",
+      "spec": "ghost/core/test/e2e-browser/admin/setup.spec.js",
+      "line": 11,
+      "test": "Setup > Is setup correctly",
+      "dropped_assertions": 1,
+      "assertion_targets": [
+        "nav menu shows the site title"
+      ],
+      "assertion_positions": "1 tail",
+      "preconditions": "none",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-AUTHOR-01",
+      "module_id": "author",
+      "workflow": "l1-author-01.json",
+      "actors": [
+        "actor_b"
+      ],
+      "step_count": 3,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "a staff user with the Author role creates their own post draft",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "actor_b holds the Author role (deploy/ghost/seed.sh)",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L1-AUTHOR-02",
+      "module_id": "author",
+      "workflow": "l1-author-02.json",
+      "actors": [
+        "actor_b"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the Author-role staff user sets a custom excerpt on their own draft",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "actor_b holds the Author role",
+      "dropped_reason": "the tag variant of this case was dropped: the Author role has no Tags entry in the admin navigation and #/tags redirects to #/site"
+    },
+    {
+      "case_id": "L2-AUTHOR-03",
+      "module_id": "author",
+      "workflow": "l2-author-03.json",
+      "actors": [
+        "actor_b"
+      ],
+      "step_count": 7,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the Author-role staff user publishes their own post",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "actor_b holds the Author role",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L2-PERM-01",
+      "module_id": "permission",
+      "workflow": "l2-perm-01.json",
+      "actors": [
+        "actor_a",
+        "actor_b"
+      ],
+      "step_count": 4,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the owner writes a draft; the Author-role staff user's own drafts list does not contain it",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "two actors; Ghost scopes the Author role's post list to its own posts",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L2-PERM-02",
+      "module_id": "permission",
+      "workflow": "l2-perm-02.json",
+      "actors": [
+        "actor_a",
+        "actor_b"
+      ],
+      "step_count": 8,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the owner publishes a post; the Author-role staff user's published list does not contain it",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "two actors",
+      "dropped_reason": null
+    },
+    {
+      "case_id": "L2-PERM-03",
+      "module_id": "permission",
+      "workflow": "l2-perm-03.json",
+      "actors": [
+        "actor_a",
+        "actor_b"
+      ],
+      "step_count": 6,
+      "source": "authored",
+      "spec": null,
+      "line": null,
+      "test": "the owner and the Author-role staff user each create a draft in the same reset epoch",
+      "dropped_assertions": 0,
+      "assertion_targets": [],
+      "assertion_positions": null,
+      "preconditions": "two actors",
+      "dropped_reason": "the tag-sharing variant of this case was dropped: the Author role has no Tags screen"
+    }
+  ]
+}

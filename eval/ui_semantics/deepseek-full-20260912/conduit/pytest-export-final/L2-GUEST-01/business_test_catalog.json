@@ -1,0 +1,846 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 8,
+    "canonical_relation_core_identities": [
+      "2bf4c2d1a048118323fb10398fe31e1f3cb6d7220d1423857f0933b1e425e4dd",
+      "2c04969ca068e4a308c3bb5ff3db6222ac8537950845d1c1a496db302f197e50",
+      "3b15e752b6fdc6c75448c3345a102ac80c2a3e5a1d8374b184031d081fb46c6a",
+      "40b203eec1d829e912fa35a37666cb8fd9b1d40cb62c51a8b8d7b79c4163f6f6",
+      "55448f9ca27d0de2feaa8700b2b37693d6b545647ceb6cef4b60b1ee2bf4c5d9",
+      "8e3ed885561242420ccd3bbb669895b3cada07fb88b214961a3f3d7b413820a1",
+      "8e553e04b63907430e1f1b99fa9a4d6f79748e1ad39d8da31e56b834af286d05",
+      "adbcf3369a243528b887d5e6464d994841c98153dabfd82807dc3d72e688aeec"
+    ],
+    "duplicate_core_occurrence_count": 2,
+    "generic_baseline_partial_overlap_candidate_ids": [
+      "v2-candidate-0005",
+      "v2-candidate-0006"
+    ],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0006",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009",
+      "v2-candidate-0011"
+    ],
+    "physical_retained_test_occurrence_count": 10,
+    "unique_canonical_relation_core_count": 8
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "delta": 1,
+          "family": "P12"
+        },
+        "predicate_type": "P12"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide/comments; business predicate P12 requires collection count after $.comments (array) minus before $.comments (array) to equal 1.",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "8e553e04b63907430e1f1b99fa9a4d6f79748e1ad39d8da31e56b834af286d05",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:4"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:8"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The unique collection_count transition fact at $.comments (before request:4 = 0, after request:8 = 1, signed_delta 1) is grounded to the unique target-relevant write request:7, the center comment-creation POST by the same actor/session; setup is the publish action whose locator lineage reaches the article slug used in the comment POST path. Transition-fact groundings are neutral observations, not proof of causality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Transition fact 0b2a5233733a469d6207cf29 is a collection_count observation on $.comments with grounding_status unique_target_relevant, groundable_effect_source_request_ref r...:request:7, before value 0 (request:4) and after value 1 (request:8), signed_delta +1; the same-actor POST request:7 is the only target-relevant write in the interval. delta and array path are copied from the fact. Setup workflow-action-0005 is the only eligible_setup_action_id for request:7 and is linked by the recorded locator lineage (created $.article.slug feeding the request path) and is replayed before the before read.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Recorded collection_count transition-fact-0b2a5233 measures $.comments at request:4 (0) and request:8 (1) with signed_delta +1, grounding_status unique_target_relevant and groundable_effect_source_request_ref exactly request:7, the center POST; the frozen array path/type and delta are copied from that fact, and ui-diff-0002 records the comment text appearing. Setup is the only eligible recorded action for the effect source and provides the article whose slug the reads use.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Recorded collection_count fact transition-fact-0b2a5233733a469d6207cf29 measures $.comments at 0 in request:4 and 1 in request:8 with signed_delta +1; its write_competition is unique_target_relevant and its groundable_effect_source_request_ref equals request:7, which is visible in this region. All three requests are actor_a/session r20260901-190527-7de9, and request:7's eligible setup domain plus its locator-lineage clue point to workflow-action-0005 as the article prerequisite.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Collection-count transition fact on $.comments (before request:4 count 0, after request:8 count 1, signed_delta 1) is unique_target_relevant with groundable effect source request:7, the center comment POST. Same actor/session/selector, so one recorded lifecycle branch of the comments collection. Setup workflow-action-0005 is the single eligible, locator-lineage-linked prerequisite (article slug) for request:7.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Transition fact transition-fact-0b2a5233733a469d6207cf29 measures $.comments on the same read operation (get_api_articles_public_reading_guide_comments) at request:4 (0) and request:8 (1) with signed_delta +1, and its write_competition is unique_target_relevant with groundable_effect_source_request_ref = request:7. Setup workflow-action-0005 is the single eligible setup action for request:7 and carries recorded locator lineage into that request's path selector.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1b0c3222bbaff0136e99"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article.slug",
+            "role": "before",
+            "value_type": "string"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article.slug",
+            "role": "after",
+            "value_type": "string"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide; business predicate P20 requires strict equality between before $.article.slug (string) and after $.article.slug (string).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "8e3ed885561242420ccd3bbb669895b3cada07fb88b214961a3f3d7b413820a1",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The center comment write sits between two same actor/session reads of the same article catalog operation and selector (request:5 before, request:9 after); the recorded value flow shows the article slug locator reused for the post-state read. The proposal freezes the article slug as an unchanged field through the comment action; it is a hypothesis, not a recorded equality.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-8f0a0de2b2714dd30314"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/public-reading-guide; business predicate P02 requires after $.article.title (string) to strictly equal producer_request $.article.title (string).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "3b15e752b6fdc6c75448c3345a102ac80c2a3e5a1d8374b184031d081fb46c6a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "Readback hypothesis: the body field $.article.title actually prepared for the create request:1 is compared with the same field in the fresh read-back request:9, whose locator lineage is the recorded $.article.slug value flow. Both the request body parameter evidence and the observer response shape carry $.article.title as a string; the recorded values need not already agree at proposal time.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "The prepared request body of request:1 records $.article.title as a string, and request:9 is the read of the resource identified by the flow of request:1's $.article.slug; the fresh read field is proposed to equal the value actually sent in the producer request, resolved from the prepared outgoing body at execution rather than from the recording.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4c5b97dde0a40fb9fdc8"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.title",
+            "$.description",
+            "$.body",
+            "$.tagList"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide; business predicate P20 requires strict equality between before $.article (object) and after $.article (object) for every frozen field ['$.title', '$.description', '$.body', '$.tagList']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "2c04969ca068e4a308c3bb5ff3db6222ac8537950845d1c1a496db302f197e50",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0003",
+          "candidate_ordinal": 5,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[4].rationale",
+          "raw_rationale": "Same-actor/session article reads bracket the comment write: request:5 (before, order 2) and request:9 (after, order 5) both read the same /api/articles/public-reading-guide resource, which value flow vf-3f5c1d5e6225ac01a96abf0b shows being reached via $.article.slug. The two recorded article responses carry the identical body_sha256 675862b4e33852cd6b469f0284b890182ac39ec83cbf95064c1b3d3bdf703e, so the listed article fields are proposed as preserved through the comment action request:7; every projected field is checked independently against a fresh response, and setup workflow-action-0005 (the only eligible setup action for request:7) is replayed before the before read.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-b32b50f05669c77e79bd"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "expected_type": "array",
+          "family": "P21",
+          "target": {
+            "path": "$.comments",
+            "role": "observation",
+            "value_type": "array"
+          }
+        },
+        "predicate_type": "P21"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/public-reading-guide/comments; basic constraint P21 requires observation $.comments (array) to have JSON type array; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "adbcf3369a243528b887d5e6464d994841c98153dabfd82807dc3d72e688aeec",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0005-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "observation",
+          "request_ref": "r20260901-190527-7de9:request:4"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "The recorded read response shape shows $.comments as an array; this isolated type constraint is a single mechanically read-only observation and asserts nothing about the write that preceded it.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-2a70023a538d4c024c28"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0006-business-01",
+        "class": "business",
+        "predicate": {
+          "absent_statuses": [],
+          "family": "P01",
+          "identity": null,
+          "member": null,
+          "operator": "present",
+          "target": {
+            "path": "$.article.slug",
+            "role": "observation",
+            "value_type": "string"
+          }
+        },
+        "predicate_type": "P01"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/public-reading-guide; basic constraint P01 requires field observation $.article.slug (string) to be present; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0006",
+      "canonical_relation_core_identity": "55448f9ca27d0de2feaa8700b2b37693d6b545647ceb6cef4b60b1ee2bf4c5d9",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [
+        {
+          "full_verdict_equivalent": false,
+          "generic_assertion_ids": [
+            "v2-candidate-0006-generic-response-schema"
+          ],
+          "overlap_kind": "same_field_partial_overlap",
+          "usable_for_net_increment_deduplication": false
+        }
+      ],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "observation",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 7,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[6].rationale",
+          "raw_rationale": "The recorded read response shape shows a string identifier at $.article.slug; this isolated presence constraint is a single mechanically read-only observation and asserts nothing about causality.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-e6ef2a7043c3bd44e535"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.title",
+            "$.description",
+            "$.body",
+            "$.slug"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide; business predicate P20 requires strict equality between before $.article (object) and after $.article (object) for every frozen field ['$.title', '$.description', '$.body', '$.slug']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "40b203eec1d829e912fa35a37666cb8fd9b1d40cb62c51a8b8d7b79c4163f6f6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The before read request:5 and the after read request:9 are the identical recorded catalog operation and selector on /api/articles/public-reading-guide (the same article object; vf-3f5c1d5e6225ac01a96abf0b shows the same $.article.slug reaching the after read path), while the center effect request:7 targets /api/articles/public-reading-guide/comments; preservation of the frozen article fields through that action plus a fresh read is therefore proposed, not proven.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-cbef45a2c0a1475e5f1b"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide; business predicate P20 requires strict equality between before $.article (object) and after $.article (object).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "2bf4c2d1a048118323fb10398fe31e1f3cb6d7220d1423857f0933b1e425e4dd",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0003",
+          "candidate_ordinal": 4,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[3].rationale",
+          "raw_rationale": "request:5 and request:9 are same-actor reads of the same article that bracket the comment write request:7, and their recorded response bodies share the same body_sha256, so the frozen article object is proposed to be preserved through the comment action. The comparison is a proposal (the caller re-reads after settle); no recorded state-change evidence ties request:7 to the article resource.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-bf7943fb91ef09b799df"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:1"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.article.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.article.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a POST /api/articles; observer actor_a GET /api/articles/public-reading-guide; business predicate P02 requires after $.article.title (string) to strictly equal producer_request $.article.title (string).",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "3b15e752b6fdc6c75448c3345a102ac80c2a3e5a1d8374b184031d081fb46c6a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:1"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The prepared producer request body carries $.article.title as a string and the linked same-actor/session read recorded after the write exposes the same path/type in its response shape. The proposition is that the fresh read returns the value actually sent in the prepared request (the recorded values need not already agree); the binding is a proposed rule, not a proven specification.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-263e4fbfc9f1448628fc"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/public-reading-guide/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190527-7de9:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0011-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$.article",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.slug",
+            "$.title",
+            "$.description",
+            "$.body"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$.article",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/public-reading-guide/comments; observer actor_a GET /api/articles/public-reading-guide; business predicate P20 requires strict equality between before $.article (object) and after $.article (object) for every frozen field ['$.slug', '$.title', '$.description', '$.body']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0011",
+      "canonical_relation_core_identity": "40b203eec1d829e912fa35a37666cb8fd9b1d40cb62c51a8b8d7b79c4163f6f6",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190527-7de9:request:5"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/public-reading-guide",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190527-7de9:request:9"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/public-reading-guide/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190527-7de9:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0003",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Request:5 and request:9 are the same recorded article read (GET /api/articles/public-reading-guide) and share the identical response body hash 675862b4e33852cd6b469f0280a4b890182ac39ec83cbf95064c1b3d3bdf703e, while the intervening write is request:7 (POST comment) in the same actor/session; the projected article fields are proposed to remain equal through that action, with setup workflow-action-0005 needed to re-establish the article prerequisite.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0003/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-713b355e4bb2f3d1e53d"
+    }
+  ]
+}

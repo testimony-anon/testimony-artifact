@@ -1,0 +1,663 @@
+You propose grounded API business relations from one frozen observation view.
+Use only observed facts. Value flows, dependencies, UI diffs, request groups and
+setup domains are evidence for a hypothesis; none of them proves causality.
+They are observation-derived candidate evidence, not proven causality.
+Enumerate every distinct grounded relation in this region that is expressible
+by the current relation_language and satisfies the rules below. Do not stop
+after the first valid relation. Do not duplicate the same scientific relation
+through different wording, rationale, evidence ordering, or equivalent roles.
+
+Return exactly one JSON object:
+
+{
+  "scientific_input_version": "preproposal-evidence-v2",
+  "candidates": []
+}
+
+Each candidate has exactly these fields:
+
+{
+  "detail_region_id": "the current detail_region_id",
+  "evidence_card_id": "one scheduled card_id",
+  "contract_kind": "one contract from relation_language",
+  "primary_predicate": {"family": "one predicate from relation_language"},
+  "role_bindings": [
+    {"role": "a relation role below", "actor": "observed actor_id", "request_ref": "observed request_ref"}
+  ],
+  "catalog_observer_operation_id": null,
+  "query_scope": null,
+  "query_transform": null,
+  "rejection": null,
+  "negative_context": null,
+  "joint_observation": null,
+  "time_requirement": null,
+  "setup": ["zero or more observed UI action IDs allowed for the selected effect-source request"],
+  "evidence_refs": ["observed request/action/UI-diff/value-flow/dependency/binding refs"],
+  "rationale": "short evidence-grounded explanation"
+}
+
+Declare exactly one of these mutually exclusive business-role signatures:
+- observation: one mechanically read-only recorded request for single_state_constraint or C14;
+- effect_source + reusable_observer: one write and one reusable read observer;
+- effect_source plus a non-null catalog_observer_operation_id: one write and one
+  observer operation selected from observer_operation_catalog;
+- before + effect_source + after: a concrete same-actor observed lifecycle;
+- before + negative_effect_source + after: a proposed rejection with a frozen preservation window;
+- negative_effect_source + after: rejection only; after is a recorded binding/identity anchor, not an executed observer;
+- before + effect_source + inverse + after: an observed action and its recorded inverse;
+- before + effect_source + after also admits repeated actions or a mechanically read-only preservation action when the selected contract permits it;
+- effect_source + actor_before:<actor> + actor_after:<actor>: a concrete cross-actor observation;
+- source_query + followup_query:q1 (+ q2...): concrete related recorded queries;
+- joint_after:a + joint_after:b (+ further named reads): a finite C14 relation over independent responses;
+- joint_before:a + joint_before:b + effect_source + joint_after:a + joint_after:b
+  (+ further paired resources): a finite C14 linear resource-delta relation.
+A non-null time_requirement uses effect_source plus one after/reusable_observer
+or actor_after:<actor>, with one optional before/actor_before:<actor> binding.
+All request bindings come from actual visible requests; never emit checkpoint IDs.
+
+The caller, not you, determines whether the declared requests admit exactly one
+current executable plan. Never emit an experiment or protocol name.
+
+Use the catalog-observer signature only when the episode has no explicit unique
+before/after pair. Copy exactly one listed operation_id; do
+not supply an observer request_ref, URL, path parameter, query parameter, body,
+selector value, response value, or expected value. Keep only the effect_source
+in role_bindings. The deterministic caller resolves the selected operation to
+an already-observed same-actor/session request template and rejects zero or
+multiple constructible templates. observer_operation_catalog response shapes
+only show where a before/after predicate may read; they do not establish an
+effect, expected result, contract, predicate, or execution protocol. For every
+other role signature, set catalog_observer_operation_id to null.
+
+Contract semantics are neutral and reusable: C01 expresses a lifecycle or state
+effect observed within one actor's business flow; C04 expresses preservation
+of frozen fields on one object through an action and a fresh API read; C11 expresses propagation of
+one actor's operation observed by another actor; C12 expresses isolation from a
+non-owner actor. These definitions do not assign a contract or role to any
+particular recorded request.
+
+ValueRef: {"role":"observation|before|after|producer_request|producer_response|producer_status|after_status|actor_before:<actor>|actor_after:<actor>|joint_before:<name>|joint_after:<name>|source_query|followup_query:q1|followup_query","path":"exact visible JSON path","value_type":"object|array|string|number|integer|boolean|null"}
+RoleOperand: {"source":"role","ref":ValueRef}
+RequestOperand: {"source":"request","ref":{"role":"observation_request|producer_request","location":"query|body|path|headers","path":"exact request field path","value_type":"declared JSON type"}}
+HypothesisOperand: {"source":"hypothesis","value_type":"strict JSON type","value":"frozen JSON value of that type","evidence_refs":["visible ref also cited by the candidate"],"rationale":"brief proposed rule and uncertainty"}
+NumericHypothesisOperand (P06/P08, numeric P13 members and numeric error parameters): {"source":"hypothesis","value_type":"integer|number","value":"frozen JSON numeric value","lexical":"original JSON numeric token, required for number","evidence_refs":["visible ref also cited by the candidate"],"rationale":"proposed amount and uncertainty"}
+NumericRequestOperand (P06 or time parameters): {"source":"request","ref":{"role":"producer_request","location":"body","path":"exact visible numeric body path","value_type":"integer|number"}}
+For single-state comparison/domain operands use RoleOperand, RequestOperand or HypothesisOperand. Hypotheses need not hold in the recording. A bound request operand means the actual outgoing request, not a similarly named response field or an inferred default. Query scalar text is parsed using its explicit type; duplicates and invalid lexical types are unavailable. Body uses its recorded JSON shape; non-secret headers use exact visible names and string values; path supports only "$" for the complete actual path, not guessed path parameters.
+LocatedMemberFieldRef: {"source":"collection_member","role":"before|after","collection_path":"exact visible array path","field_path":"member-relative exact field path","value_type":"string|number|integer|boolean|...","member":RoleOperand,"identity":MemberIdentitySpec}
+TransitionFactConstant: {"source":"transition_fact","fact_ref":"one visible transition-fact-* ref","value_type":"boolean|integer|number","value":"the exact strictly typed value recorded by that fact"}
+IdentitySpec: {"paths":["member-relative JSON paths"],"semantics":"strict-tuple"}
+MemberIdentitySpec: {"field_pairs":[{"member_path":"symbolic-member path","collection_item_path":"observed-item path"}],"semantics":"strict-tuple"}
+
+Canonical predicate forms (the paths below are symbolic; replace them only with exact visible paths):
+P01: {"family":"P01","operator":"exists","target":{"role":"after","path":"$.symbolic.present","value_type":"boolean"},"member":null,"identity":null}
+P02: {"family":"P02","operator":"eq","left":{"role":"after","path":"$.symbolic.field","value_type":"string"},"right":{"source":"role","ref":{"role":"producer_request","path":"$.symbolic.field","value_type":"string"}}}
+P03: {"family":"P03","operator":"range","target":{"role":"observation","path":"$.symbolic.amount","value_type":"integer"},"lower":{"source":"hypothesis","value_type":"integer","value":0,"evidence_refs":["<visible-request>"],"rationale":"proposed lower bound"},"upper":{"source":"request","ref":{"role":"observation_request","location":"query","path":"$.maximum","value_type":"integer"}},"lower_inclusive":true,"upper_inclusive":true,"domain":null}
+P04: {"family":"P04","operator":"toggle","before":{"role":"before","path":"$.symbolic.enabled","value_type":"boolean"},"after":{"role":"after","path":"$.symbolic.enabled","value_type":"boolean"},"from_value":{"source":"transition_fact","fact_ref":"transition-fact-<visible>","value_type":"boolean","value":false},"to_value":{"source":"transition_fact","fact_ref":"transition-fact-<same-visible>","value_type":"boolean","value":true}}
+P06: {"family":"P06","before":{"role":"before","path":"$.symbolic.amount","value_type":"number"},"after":{"role":"after","path":"$.symbolic.amount","value_type":"number"},"delta":{"source":"role","ref":{"role":"producer_request","path":"$.symbolic.amount","value_type":"number"}},"multiplier":1,"numeric_mode":"exact","unit":null}
+P07: {"family":"P07","operator":"gt","before":{"role":"before","path":"$.symbolic.amount","value_type":"integer"},"after":{"role":"after","path":"$.symbolic.amount","value_type":"integer"}}
+P08: {"family":"P08","operator":"multiply","left":{"source":"role","ref":{"role":"observation","path":"$.symbolic.quantity","value_type":"integer"}},"right":{"source":"role","ref":{"role":"observation","path":"$.symbolic.price","value_type":"number"}},"output":{"role":"observation","path":"$.symbolic.total","value_type":"number"},"numeric_mode":"exact","units":{"source":"hypothesis","value_type":"object","value":{"left":"items","right":"USD/item","output":"USD"},"evidence_refs":["<visible-request>"],"rationale":"proposed input to result units from visible evidence"}}
+P09: {"family":"P09","operator":"prefix","target":{"role":"observation","path":"$.symbolic.title","value_type":"string"},"right":{"source":"request","ref":{"role":"observation_request","location":"query","path":"$.prefix","value_type":"string"}}}
+P10: {"family":"P10","target":{"role":"observation","path":"$.symbolic.date","value_type":"string"},"format":"date_yyyy_mm_dd","pattern":null,"flags":0}
+P11: {"family":"P11","operator":"le","collection":{"role":"observation","path":"$.symbolic.collection","value_type":"array"},"right":{"source":"request","ref":{"role":"observation_request","location":"query","path":"$.limit","value_type":"integer"}}}
+P12: {"family":"P12","before":{"role":"before","path":"$.symbolic.collection","value_type":"array"},"after":{"role":"after","path":"$.symbolic.collection","value_type":"array"},"delta":1}
+P13: {"family":"P13","operator":"contains","collection":{"role":"actor_after:actor_b","path":"$.symbolic.collection","value_type":"array"},"member":{"source":"role","ref":{"role":"producer_response","path":"$.symbolic.item","value_type":"object"}},"identity":{"field_pairs":[{"member_path":"$.id","collection_item_path":"$.resourceId"}],"semantics":"strict-tuple"}}
+P14: {"family":"P14","operator":"added","before":{"role":"before","path":"$.symbolic.collection","value_type":"array"},"after":{"role":"after","path":"$.symbolic.collection","value_type":"array"},"member":{"source":"role","ref":{"role":"producer_request","path":"$.symbolic.item","value_type":"object"}},"identity":{"field_pairs":[{"member_path":"$.id","collection_item_path":"$.resourceId"}],"semantics":"strict-tuple"}}
+P15: {"family":"P15","collection":{"role":"followup_query","path":"<A>","value_type":"array"},"identity":{"paths":["<I>"],"semantics":"strict-tuple"}}
+P16: {"family":"P16","before":{"role":"source_query","path":"$.items","value_type":"array"},"after":{"role":"followup_query:q1","path":"$.items","value_type":"array"},"key":"$.rank","direction":"asc","nulls":"last","ties":"unordered","comparison_basis":"full_json_value","projection":[],"identity":null,"parameters":{"source":"hypothesis","value_type":"object","value":{"key":"$.rank","direction":"asc","nulls":"last","ties":"unordered"},"evidence_refs":["<visible-request>"],"rationale":"proposed sorting rules from the observed selector"}}
+P17: {"family":"P17","operator":"subset","left":{"role":"followup_query:q1","path":"<A>","value_type":"array"},"right":{"role":"source_query","path":"<A>","value_type":"array"},"identity":{"paths":["<I>"],"semantics":"strict-tuple"},"expected_difference":null}
+P18: {"family":"P18","operator":"complete_union","source":{"role":"source_query","path":"<A>","value_type":"array"},"partitions":[{"role":"followup_query:q1","path":"<A>","value_type":"array"},{"role":"followup_query:q2","path":"<A>","value_type":"array"}],"identity":{"paths":["<I>"],"semantics":"strict-tuple"},"expected_remainder":null}
+P19: {"family":"P19","operator":"sum","collection":{"role":"observation","path":"$.items","value_type":"array"},"scope":"actual_response","item":{"role":"item","path":"$.quantity","value_type":"integer"},"factor":{"role":"item","path":"$.price","value_type":"number"},"output":{"role":"observation","path":"$.total","value_type":"number"},"numeric_mode":"exact","units":{"source":"hypothesis","value_type":"object","value":{"item":"items","factor":"USD/item","output":"USD"},"evidence_refs":["<visible-request>"],"rationale":"proposed units for each member product and summary"}}
+P20: {"family":"P20","operator":"equal","left":{"role":"before","path":"$.symbolic.business","value_type":"object"},"right":{"role":"after","path":"$.symbolic.business","value_type":"object"},"projection_ref":null}
+P21: {"family":"P21","target":{"role":"observation","path":"$.symbolic.field","value_type":"string"},"expected_type":"string"}
+forall: {"family":"forall","collection":{"role":"observation","path":"$.symbolic.items","value_type":"array"},"scope":"actual_response","item_guard":null,"body":{"family":"P02","operator":"ge","left":{"role":"item","path":"$.amount","value_type":"integer"},"right":{"source":"request","ref":{"role":"observation_request","location":"query","path":"$.minimum","value_type":"integer"}}}}
+
+repeat_equal: {"family":"repeat_equal","projection":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]}}
+repeat_rejected: {"family":"repeat_rejected","projection":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"rejection":{"family":"P02","operator":"eq","left":{"role":"producer_status","path":"$","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":422,"evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}}}
+repeat_delta: {"family":"repeat_delta","delta":{"family":"P06","before":{"role":"before","path":"$.count","value_type":"integer"},"after":{"role":"after","path":"$.count","value_type":"integer"},"delta":{"source":"request","ref":{"role":"producer_request","path":"$.amount","value_type":"integer","location":"body"}},"multiplier":1,"numeric_mode":"exact","unit":{"source":"hypothesis","value_type":"string","value":"items","evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}}}
+
+single_state_constraint uses one observation role, catalog_observer_operation_id
+null, and setup []. The program closes the complete bounded recorded prefix and
+obtains one fresh response after the proposition is frozen. The read is never an
+effect_source. The supported single-response claims are P01 field
+present/absent, P21 JSON type, P02 comparison, P03 range/finite enumeration,
+P09 strings, P10 date/pattern, P11 count/length, P13 scalar membership, P15 actual-response uniqueness,
+P08 fixed field arithmetic, P19 single-response aggregation,
+single-layer forall, and P11 actual response array count <= this request's query.limit. P01 uses target.role observation with operator present or absent and
+member/identity null; null still counts as present. P21 target.value_type copies
+the visible evidence type while expected_type freezes the proposed JSON type.
+The original P11 collection form must reference the exact unique query.limit, never a body field or an invented
+threshold. Query limit must be a nonnegative integer or its strict integer text.
+P02 uses eq/neq for strict JSON equality (1 and 1.0 differ), or numeric_eq/numeric_neq/lt/le/gt/ge for numerical comparison (1 and 1.0 are equal; bool is never numeric). Integers remain exact. P03 range always checks both lower and upper with explicit inclusive flags. P03 in uses target and a domain operand of array type; lower/upper are null and inclusive flags retain true. A finite domain is a proposed rule, not proof that observed values exhaust all legal values.
+P09 contains/prefix/suffix always tests whether target contains/starts with/ends with right. Both operands must be strings, case-sensitive, without trim, coercion or Unicode normalization. Exact string equality uses the existing P02 eq form only; P09 exact is unsupported so it cannot double-count the same equality.
+P10 date_yyyy_mm_dd requires ASCII YYYY-MM-DD and a valid Gregorian calendar date (year 0001 through 9999). P10 pattern requires a frozen string HypothesisOperand in pattern and flags=0; Python re.fullmatch is used. The admitted subset is concatenations of literal characters, escaped regex punctuation, explicit alphanumeric/space/underscore character classes and ranges, and exact bounded repetition {n}. Variable repetition, groups, alternation, lookaround, backreferences and other formats/flags are unsupported; preserve the source pattern, never approximate it. This is not complete email/URI/HTML pattern validation.
+General P11 uses target (instead of collection), projection=count or length, operator=eq/neq/lt/le/gt/ge and a typed integer right operand (role/request/hypothesis). Count requires target array and unit=items. Length requires target string, unit=unicode_code_point (the default semantic unit, explicitly serialized) or utf16_code_unit, newline=preserve or html_textarea_api, and empty=compare. html_textarea_api uses UTF-16 code units and normalizes CRLF/CR to LF before measuring. Optional HTML minlength uses operator=ge, unit=utf16_code_unit and empty=allow; it never implies required. Do not infer UI units from a threshold alone; UI-origin constraints require their actual unit/empty/newline semantics, otherwise unsupported. Byte/grapheme length remains unsupported. Missing/null/nonstring length operands are unavailable, not empty strings. The old P11 collection <= actual unique nonnegative integer query.limit form is unchanged.
+P13 scalar example: {"family":"P13","operator":"contains","collection":{"role":"observation","path":"$.states","value_type":"array"},"member":{"source":"hypothesis","value_type":"string","value":"open","evidence_refs":["<visible-request>"],"rationale":"proposed scalar member"},"identity":null}
+Single-response P13 contains/not_contains compares a scalar member with strict JSON values in the actual response. The member may be a role/request/hypothesis operand; identity must be null. A number-valued hypothesis must use NumericHypothesisOperand with original lexical text; an ordinary number hypothesis without lexical is rejected. Strict scalar equality preserves integer/number/boolean distinctions and compares observed decimals from their original tokens. It requires no stable identity across time and does not deduplicate the input array. Existing cross-checkpoint P13 keeps its explicit member identity rules.
+Single-response P15 uses collection.role=observation (or item inside forall), identity={paths:["$.key"],semantics:"strict-tuple"}, and scope=actual_response. Paths may include "$" for the complete member; comparison preserves strict JSON type and internal array order. Keys must be visible and frozen, but no cross-time stable-ID proof is required. Check the original complete array including duplicates; array positions only locate counterexamples and never supply identities. Empty arrays pass. Missing/redacted keys are unknown; a known duplicate still refutes even if other keys are unavailable. This scope says nothing about a database or other pages. Existing query-plan P15 omits scope and retains its old pagination meaning.
+forall traverses the complete original array, retaining duplicates, with scope actual_response and no stable ID requirement. Its body is one P01/P21/P02/P03/P09/P10/P11/P15 with target/left/collection.role item and a relative path. P11 may count an array or measure a string inside that member; P15 may check a member array with frozen keys. These are fixed projections, not nested forall. It cannot nest another forall. item_guard is null or one P02 comparing an independent item field, with traceable operand provenance; it cannot read a request selector or the field being tested. Put the selector condition inside body, never in guard to discard nonmatching results. Empty arrays and zero applicable members preserve mathematical truth with applicable_member_count=0 once necessary bindings are available; they provide no nonempty support. Unknown members/bounds are retained, but cannot erase another trustworthy false.
+Isolated presence/type/range/domain constraints are reported separately from business relations. A complete forall body relating each item to actual request parameters expresses a proposed request semantic relation; its structure and parameter bindings, not field names or rationale labels, supply that classification basis.
+
+Grounded variants use the same closed forms: P01 may use operator "absent";
+P04 may use "from_to" or "toggle" with either false→true or true→false from
+one visible transition fact; P06 may replace its role delta with one
+TransitionFactConstant carrying the exact fixed signed delta and multiplier 1;
+when that fact has collection_member identity, P04/P06 must replace both
+before/after ValueRefs with LocatedMemberFieldRefs that share the fact's exact
+collection path, member-relative field, locator witness operand and identity;
+P12 admits any nonzero integer delta, including -1. C01/P12 expresses a
+grounded create/lifecycle collection increase and C03/P12 a grounded
+delete/lifecycle collection decrease when the declared before/effect/after or
+reusable-observer shape admits one current plan; P14 may use "removed" as well
+as "added". Examples of signed observations are fixed +1 and fixed -1;
+their sign and strict JSON type must be copied from the cited fact.
+
+C02/P06 now means exact after-before = delta*multiplier, with multiplier -1 or
+1 and numeric_mode exact by default. This author-approved method update removes the old
+implicit absolute 1e-9 tolerance in every P06 execution. Integer arithmetic is
+exact and bool is never numeric. Decimal operands require original numeric
+tokens from the actual response and actually sent request body, or lexical from
+a NumericHypothesisOperand; old float-only precision is unavailable, never
+reconstructed with a float-to-string conversion. The lexical token must parse
+to the declared numeric type and visible numeric value; lexical remains the
+authoritative exact frozen amount. Integer hypotheses may omit lexical.
+New delta sources are NumericHypothesisOperand and NumericRequestOperand. Both
+require unit, a nonblank string HypothesisOperand with visible provenance,
+declaring one common unit (including currency where relevant) for before,
+after and delta. Never infer units from field names or silently convert them.
+Amount, multiplier, unit and exact rule are frozen before execution; a runtime
+request amount is read from the actual outgoing body and does not become a new
+canonical relation core. The recorded delta need not satisfy the hypothesis.
+These two new sources require the explicit same-actor/session
+before+effect_source+after signature, one field/identity and matching observer
+selectors, which uniquely constructs the current V4 before_write_after plan.
+Existing role-scaled and transition-fact sources keep their plan derivation and
+V1 validity gates. No execution failure selects a different protocol.
+
+The single-response C14 entry for P08/P19 uses one observation role,
+catalog_observer_operation_id null, query_scope/query_transform null and setup
+[]. It has no producer, write action, before checkpoint or synthetic business
+effect. All response operands come from the same actual complete JSON response.
+The formula is a frozen business hypothesis: do not require the recorded output
+to have already satisfied it. Independently fetched responses and multiple
+resources require the separate joint_observation form below. single_state_constraint may
+express the same P08/P19 relation; changing that label is not a distinct core.
+P08 permits only output = left add/subtract/multiply/divide right, with one
+binary operation. Inputs are observation RoleOperands, NumericHypothesisOperands
+or explicit observation_request operands. No arbitrary expression tree, code,
+URL or additional nested arithmetic is allowed.
+P19 compares output to count/sum/min/max over collection with scope actual_response.
+count has no item/factor and units.value={"output":"items"}; sum/min/max have
+one numeric item field. Only sum may add one numeric factor field to sum one
+item*factor product per member. No nested reduction or additional member
+arithmetic is supported. count and sum of an empty collection are zero; min/max
+of an empty collection are not_evaluable. Every actual member participates,
+including duplicates. Missing necessary member fields cannot be skipped to
+announce success. No stable member ID is needed for one response.
+
+C14 joint_observation freezes one finite relation over at least two independently
+fetched responses; fetching one response twice is not a second resource. Use the
+same P08 binary formula with joint_after:<name> role operands/output, or P19 with
+its collection in one read and summary output in another. No producer is used
+for these two forms. A single response remains the single-response entry.
+
+The third form is P08 operator=linear_delta, with terms=[{"before":ValueRef,
+"after":ValueRef,"coefficient":NumericHypothesisOperand}, ...] and
+output=NumericHypothesisOperand. It means sum(coefficient_i * (after_i-before_i))
+equals output for 2–16 frozen resource terms. Use paired joint_before:<name> and
+joint_after:<name> fields of the same numeric type/path, one effect_source,
+and exact matching before/after resource selectors. Omit left/right. units.value
+contains exactly "before:0","after:0",...,"output"; coefficients are dimensionless
+and each term's change uses the declared comparison unit. Freeze every resource,
+formula, amount, unit/conversion, numeric rule and business scope before execution.
+
+joint_observation is {"consistency":"common_version|common_as_of|no_competing_writes_workflow",
+"consistency_refs":[ValueRef,...],"scope":string HypothesisOperand,
+"query_scope":{"scope":"actual_response","closures":[]}}.
+common_version/common_as_of requires one actually observed string/integer version
+or as-of field from every read. Values must agree within each checkpoint phase.
+The alternative no_competing_writes_workflow requires consistency_refs=[] and
+no_competing_writes=boolean HypothesisOperand with value=true: an explicit scoped
+workflow precondition, not evidence that a live service had no concurrent writes.
+Scope states the finite resources and excluded fees/business effects as relevant.
+All joint reads use one actor/session. The caller freezes their recorded order.
+Sequential reads are never described as an atomic snapshot.
+
+P19 scope=actual_response reduces the complete actual array from its named read;
+it does not claim database completeness. To compare a complete finite collection
+against another response's summary, set both P19.scope and
+joint_observation.query_scope.scope to finite_query_plan, using the existing
+query_scope closures below. Their frozen roles name the actual collection-page
+reads and every required termination field. The complete bounded query plan,
+traversal and terminal evidence must close before aggregation. A first page,
+request budget, empty page or invented expected count cannot establish completeness.
+Do not emit query_transform for joint observations.
+
+time_requirement freezes a time-bounded P01/P02/P13 point proposition under C01,
+C02, C03, C11, C12 or self_exclusion. The predicate target/left/collection reads
+after or actor_after:<actor> (after_status is a real response status); other
+operands retain their actual action or frozen hypothesis provenance. No arbitrary
+predicate composition or sampling protocol is proposed.
+
+time_requirement fields are kind, observation_mode, origin, unit and
+duration_parameter; optional hold_duration_parameter, error_before_parameter,
+error_after_parameter and timestamp_evidence retain their declared meaning.
+Time parameters are nonnegative NumericHypothesisOperands, NumericRequestOperands
+or numeric RoleOperands of producer_request/producer_response. unit is explicitly
+nanoseconds, milliseconds or seconds; exact numeric conversion must resolve to
+integer nanoseconds. Never infer a duration or clock capability from field names.
+
+The closed kind/mode pairs are deadline_state/returned_sample,
+deadline_state/exact_time, appearance_preservation/sampled,
+appearance_preservation/continuous and event_occurrence/event_log.
+For returned_sample and sampled, origin is send or ack. A returned sample
+asserts the returned state only inside its frozen receive window
+[T-error_before,T+error_after]; a slow response outside it is unavailable.
+The caller sends one returned-sample read at max(0,T-error_before).
+For sampled appearance/preservation it sends three reads at 0, T/2 and T+H/2.
+An actual received true witness must be within the deadline; subsequent usable
+samples through T+H must remain true. This is sampled preservation, not a claim
+about every intervening instant. A sample received after T is not a deadline
+witness. The caller fixes the finite schedule; never propose retries or polls.
+
+exact_time, continuous and event_log require origin=event and timestamp_evidence
+from a real, visible state-history/event interface. timestamp_evidence includes
+origin_time_path (action response), clock_id_path (action and read response),
+items_path (read response), time_path and optional value_path (relative to each
+item, default $), and unit=nanoseconds|milliseconds|seconds. continuous also needs
+end_time_path for actual state intervals. To establish an absent event throughout
+a window, coverage_start_path, coverage_end_path and complete_path must provide
+actual complete coverage. These are concrete paths proven in the evidence view;
+timestamps are integer values and clock IDs must actually agree. No server clock
+is mixed with the local monotonic clock. An event witness can establish occurrence;
+no witness without complete history cannot establish absence. Ordinary polling
+cannot establish an exact-time state or continuous preservation. Missing required
+history, timestamp, comparable clock, numeric precision or finite observations is
+unavailable, never success from an expected-oracle field.
+
+P06/P08/P19 share exact integers and original numeric text for decimals. bool is
+not a number. Division by zero, incompatible units and missing necessary numeric
+precision are not_evaluable. Exact mode never adds an epsilon. P08 units is a
+HypothesisOperand object with exactly left/right/output; P19 units has output,
+item when present, and factor when present. Addition/subtraction, ordinary sums
+and min/max require compatible units. Multiplication/division and member products
+freeze the input-to-result unit relation; do not impose P06's common-unit rule
+on every product operand and do not infer dimensions or currency from names.
+Optional conversions is a HypothesisOperand object keyed by before/after/delta
+for P06, left/right/output for P08, or item/factor/output for P19. Each conversion
+is exactly {"from":"recorded unit","to":"comparison unit","factor":"positive exact JSON numeric text"}.
+It requires visible provenance and must be frozen before execution.
+Optional rounding is a HypothesisOperand object with exactly
+{"scale":2,"mode":"half_even","position":"result"}; mode may be half_even,
+half_up or down, and scale is a nonnegative integer. It rounds only the computed
+expected result before comparison; never round the observed output to conceal a
+discrepancy. Explicit approximate mode requires numeric_mode approximate,
+tolerance_kind absolute or relative, and a nonnegative NumericHypothesisOperand
+tolerance. Absolute error compares abs(output-expected) to tolerance; relative
+error compares it to tolerance*abs(expected), after any frozen expected-result
+rounding. No threshold, unit conversion, scale or error model may be introduced
+or relaxed after a failed comparison.
+
+M9 ui_actions[].dom_declarations preserves the original before/after page-state
+source_ref, capture time, element index, tag/id/name, required/type/min/max,
+minlength/maxlength/pattern and select/radio choices. These are recorded HTML
+declarations, not proven API constraints or automatic field mappings. Cite the
+existing action/event ref when proposing a typed hypothesis from this source;
+freeze the precise declaration and its meaning in the operand and rationale.
+An HTML required attribute does not by itself establish API field presence;
+HTML input type is not a JSON type. Options are observed choices, not proof of
+all legal server values. Preserve raw patterns: the limited P10 syntax above
+is the only admitted pattern language, even when an unsupported pattern came
+from the DOM. Do not invent another complete format validator.
+M9 api_requests[].parameter_evidence identifies the exact HAR request and
+query/body/path/non-secret-header locations, raw numeric lexical tokens, JSON
+types and duplicate query/header occurrences. literal_available=false and
+unsupported records cannot supply frozen literal values. Never use sanitized
+aliases as business values. Cite the existing request ref; execution binds a
+RequestOperand to its own actual outgoing request instead of copying the
+recording's value. No author labels, source code or external specification is
+an automatic parameter source.
+
+C07/C08/C09/C10 bind source_query and ordered followup_query:q1, q2, ... to
+concrete recorded reads. query_transform describes only the frozen observed
+selector change; it never supplies new request values. Its fields are kind,
+location (query or body), keys and a string HypothesisOperand semantics. Query
+keys are exact parameter names; body keys are exact scalar JSON paths from
+parameter_evidence. For these selectors,
+kind/semantics are equivalent_input/equivalent, filter_refinement/and-or,
+filter_expansion/and-or, sort/sort, pagination_partition/partition or
+finite_query_plan/traversal. For a filter use exactly "and" or "or", not the
+literal text "and-or"; key/value evidence and the frozen logical meaning must
+both be visible. Unrelated request selectors must remain the same. Unsupported
+body transformations do not become query transformations by changing location.
+Query transformation example: {"kind":"filter_refinement","location":"query","keys":["state"],"semantics":{"source":"hypothesis","value_type":"string","value":"and","evidence_refs":["<visible-source-request>","<visible-followup-request>"],"rationale":"proposed conjunction of the visible query filters"}}
+C07/P17 equivalent-input uses operator equal. C08/P17 filter refinement/expansion
+uses subset/superset with the frozen direction. Equality may use representation
+set, multiset or sequence: sets ignore multiplicity, multisets preserve it, and
+sequences preserve both order and multiplicity. Sequence permits equality only.
+comparison_basis full_json_value has identity=null and projection=[];
+frozen_projection has identity=null and a nonempty list of fixed member paths;
+identity_tuple has a frozen IdentitySpec and projection=[]. Do not drop fields
+or switch representation after seeing results. A subset relation and a forall
+filter condition are separate hypotheses; neither proves the other.
+P17 equality example: {"family":"P17","operator":"equal","left":{"role":"followup_query:q1","path":"$.items","value_type":"array"},"right":{"role":"source_query","path":"$.items","value_type":"array"},"identity":null,"expected_difference":null,"representation":"multiset","comparison_basis":"full_json_value","projection":[]}
+C09/P16 requires both fixed order and member-multiset preservation in one
+proposition. key, direction asc/desc, nulls first/last and ties unordered are
+frozen in parameters with provenance. Defaults are asc, nulls last, ties
+unordered. String keys use Unicode code-point lexicographic order; localized
+collation is unsupported without a rule. The preservation basis defaults to
+full_json_value, retaining every complete member and duplicate, not merely the
+sort key. A supported projection/identity basis must be explicit and frozen.
+
+query_scope actual_response with closures=[] claims only the returned arrays.
+Do not upgrade an ordinary response to the complete collection automatically.
+query_scope finite_query_plan requires closures over all recorded plan roles in
+their frozen order, each with collection_path, termination and an object
+HypothesisOperand traversal declaring one finite supported traversal rule.
+page_number is {"kind":"page_number","location":"query","parameter":"$.page","first":1},
+where first is 0 or 1 and the step is exactly one. offset is
+{"kind":"offset","location":"query","parameter":"$.offset","limit_parameter":"$.limit"},
+starting at zero and advancing by the previous request's actual limit. cursor is
+{"kind":"cursor","location":"query","parameter":"$.cursor","next_path":"$.next"},
+starting without a cursor or with null, then using exactly the preceding
+response's next value. Each rule also permits location body with exact paths.
+single_response is {"kind":"single_response"}, permits exactly one role, and
+requires total_count termination. A descriptive string cannot replace these
+mechanical rules. Source ranges and every actual page/cursor connection must
+match the frozen rule, while unrelated business selectors remain the same.
+termination is terminal_value with a visible final-role ValueRef and a typed
+HypothesisOperand expected, or total_count with a visible final-role integer
+ValueRef and no expected. The final response must actually establish this
+closure. A terminal marker alone does not prove that traversal began at the
+first page or visited every required page. A request/time budget ending or
+merely listing some pages does not prove completeness. No free cursor loop or
+unobserved request is generated.
+Finite query scope example: {"scope":"finite_query_plan","closures":[{"roles":["source_query","followup_query:q1"],"collection_path":"$.items","termination":{"kind":"terminal_value","ref":{"role":"followup_query:q1","path":"$.has_more","value_type":"boolean"},"expected":{"source":"hypothesis","value_type":"boolean","value":false,"evidence_refs":["<visible-followup-request>"],"rationale":"proposed terminal marker"}},"traversal":{"source":"hypothesis","value_type":"object","value":{"kind":"page_number","location":"query","parameter":"$.page","first":1},"evidence_refs":["<visible-source-request>","<visible-followup-request>"],"rationale":"the recorded pagination starts at one and advances one page per request"}}]}
+Finite forall example: {"family":"forall","collection":{"role":"followup_query","path":"$.items","value_type":"array"},"scope":"finite_query_plan","item_guard":null,"body":{"family":"P02","operator":"ge","left":{"role":"item","path":"$.amount","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":0,"evidence_refs":["<visible-request>"],"rationale":"proposed lower bound over the closed query scope"}}}
+Finite forall uses the query signature, single_state_constraint and an explicit
+finite query scope; query_transform, when supplied, describes that traversal.
+It evaluates source_query then every follow-up in
+the original concatenated member sequence, without deduplicating or filtering
+members. Its body and guard retain the single-layer finite forms above.
+C10/P15 checks duplicates across the follow-up page sequence only; the source
+reference collection is not included among those pages. C10/P18 complete_union,
+pairwise_disjoint and partition_difference
+are separate propositions. complete_union requires independently closed scopes
+for source and each partition; each closure names just that operand's role and
+array path. Complete coverage never implies pairwise disjointness. A duplicate
+in P15, a false finite-forall body, a pairwise-disjoint overlap, or an independent
+P16 order violation can establish a counterexample despite later missing scope
+material, with incompleteness retained as a separate diagnostic. Partial ranges
+cannot establish equality/multiset/subset/complete_union failure merely because
+an unseen member might appear later. An unmet termination marker is unavailable
+scope, not a business counterexample.
+No positive complete-scope verdict may hide unfinished traversal.
+
+C02/P04 also admits a finite string/integer/boolean from_to state pair. Keep before and
+after on the same exact path/type, or the same LocatedMemberFieldRef field and
+identity. from_value and to_value are same-type string/integer/boolean
+HypothesisOperands, before/producer_request RoleOperands, or explicit producer_request
+RequestOperands with visible provenance; enum denotes finite typed values, not a new JSON type. The recorded
+values need not already equal those hypotheses. At execution, before=from is
+checked before the action as applicability; failure to establish it means
+not_evaluable and the action is not executed. after=to is the main check. This
+subset freezes its parameter references before sending the action and resolves
+request values from the actual prepared request, never an after response. Existing
+transition-fact boolean from_to/toggle keeps its exact grounded semantics.
+C02/P07 compares two numeric checkpoints: after gt/lt/ge/le before. gt and lt
+mean strictly larger/smaller; ge and le permit equality. This does not claim
+monotonic behavior between the two reads. Use the same frozen field, exact
+integer or finite-number type, and object identity; booleans are not numbers.
+C04/P20 compares left before and right after on one frozen field of one object,
+or an object with a nonempty projection list of concrete relative field paths.
+It supports a saved field or a different field hypothesized to remain unchanged,
+using the same predicate. Set projection_ref null or omit it. It requires no
+negative-request fact and no already-equal recording. The action is followed by
+settle and an actual new API response, never cached recording values or a DOM
+redraw. These new forms require the explicit before + effect_source + after
+signature in the same actor/session. A root field requires the same observer
+operation and selector; a located member requires the same frozen identity from
+the action request, available before the action. Fields, identity and comparison
+are fixed before execution. Every projected field is checked independently; a known
+false survives another missing field. Missing is not JSON null and cannot be ignored.
+Different objects and arbitrary workflow graphs remain unsupported.
+
+For an actor_before/actor_after signature, the current C11 subset admits P01
+exists/absent, P02 eq, P12, P13 contains/not_contains, and P14 added/removed.
+Use C11 absent/not_contains/removed only for an observed propagated removal;
+do not use those operators to relabel isolation. The C12 actor-read subset admits
+P01 absent, P13 not_contains, or P02 on after_status at path "$" with integer type
+for one separately proposed non-owner point-read isolation claim. A scalar P13 member must use exactly one identity field pair
+with member_path "$" and collection_item_path "$"; the scalar itself is the
+strictly typed expected collection item. Never combine C11 and C12 in one
+candidate.
+
+Use the exact canonical P-family object required by the selected row in
+relation_language. Existing action forms retain their symbolic role operands.
+The declared single-state, scalar P04, P06/P08/P19, rejection, repeat and
+query-parameter forms accept their explicit frozen operands; never present them
+as proven specifications.
+
+Finite action, repeated-action, rejection and identity signatures:
+- Point C01/P01 exists and C03/P01 absent use object target with member/identity
+  null. Declare absent_statuses [404] only for absence; other unsuccessful HTTP
+  responses and invalid response bodies are unavailable, not missing objects.
+  A collection omission is not a point-resource 404. Freshly created resource
+  identifiers must come from the actual action response and bound read, not a
+  copied recording. The caller must establish one executable plan.
+- C02/P02 readback compares the fresh after field with the actual prepared
+  producer_request field. The recorded values need not already agree.
+- C05 permits exactly repeat_equal {projection:P20}, repeat_rejected
+  {projection:P20,rejection:P02|null}, or repeat_delta {delta:P06}. Declare only
+  the ordinary before/effect_source/after recorded signature, never invented
+  duplicate request refs or reset/occurrence instructions. The caller freezes the
+  actual prepared method, path, query, body and idempotency key before the first
+  send and reuses that exact request for the second send.
+  repeat_equal compares A1 with B2 after isolated once/twice reset arms and
+  comparable A0/B0 and logical inputs. repeat_rejected requires a successful first
+  action, then second rejection and B1/B2 preservation; a failed first action is
+  unmet applicability. A null rejection means healthy 4xx; explicit P02 may use
+  producer_status ($, integer) or producer_response. repeat_delta checks each of
+  B0→B1 and B1→B2 with the same exact P06 rule; a wrong first delta is a
+  counterexample, not an applicability excuse. All required checkpoints are fresh.
+  Fixed independent checks retain trustworthy false despite later unavailable
+  observations. No extra arm or result-directed plan selection is permitted.
+- C06/C12 rejection only uses primary P02 plus negative_effect_source and after;
+  after is a recorded binding/identity anchor and is not executed as an observer.
+  Rejection plus preservation uses primary P20, before/negative_effect_source/after,
+  and optional rejection P02 (null means healthy 4xx). Set negative_context to
+  auth_preserved or auth_absent from the visible authentication context; neither
+  changes the proposed business answer. Do not claim every 2xx is a rejection:
+  an explicit body/status rule is evaluated against the actual response. A false
+  rejection check cannot be hidden by a later missing preservation field.
+- inverse_restoration uses before/effect_source/inverse/after, one actually
+  recorded inverse action in the same actor/session, an intermediate fresh read,
+  and P20 comparing before with the final fresh state. read_preservation uses
+  before/effect_source/after where effect_source is mechanically read-only;
+  P20 expresses state preservation. Neither permits arbitrary action graphs.
+- C04 with actor_before/actor_after and P20 may compare two sessions of the same
+  authenticated principal. self_exclusion uses the actor signature and P01 absent
+  or P13 not_contains for the operator's own view. C11 propagation and C12
+  non-owner isolation remain separate propositions. C12 point-read rejection
+  uses P02 after_status ($, integer), not producer_status. Actor labels,
+  principal_group and session declarations are not identity proof: the caller
+  requires verified authenticated identity/session evidence and rechecks it at
+  execution. Copy an optional role_bindings[].session_ref only when visible.
+  Never emit identity_topology or infer identity from a display name.
+
+The following are complete symbolic relation examples, not additional calls or
+promises of recall. Replace every placeholder with visible evidence and freeze
+hypothesis values before execution. Empty example setup does not waive the
+ordinary business prerequisite selection rules. Do not emit protocol_kind.
+Relation example point_create: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C01","primary_predicate":{"family":"P01","operator":"exists","target":{"role":"after","path":"$.record","value_type":"object"},"member":null,"identity":null,"absent_statuses":[]},"role_bindings":[{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"reusable_observer","actor":"actor_a","request_ref":"<visible-reusable_observer>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example point_delete: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C03","primary_predicate":{"family":"P01","operator":"absent","target":{"role":"after","path":"$.record","value_type":"object"},"member":null,"identity":null,"absent_statuses":[404]},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example request_readback: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C02","primary_predicate":{"family":"P02","operator":"eq","left":{"role":"after","path":"$.state","value_type":"string"},"right":{"source":"role","ref":{"role":"producer_request","path":"$.state","value_type":"string"}}},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example state_parameters: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C02","primary_predicate":{"family":"P04","operator":"from_to","before":{"role":"before","path":"$.state","value_type":"string"},"after":{"role":"after","path":"$.state","value_type":"string"},"from_value":{"source":"role","ref":{"role":"before","path":"$.allowedFrom","value_type":"string"}},"to_value":{"source":"request","ref":{"role":"producer_request","path":"$.state","value_type":"string","location":"body"}}},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example field_preservation: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C04","primary_predicate":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example repeat_equal: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C05","primary_predicate":{"family":"repeat_equal","projection":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]}},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example repeat_rejected: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C05","primary_predicate":{"family":"repeat_rejected","projection":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"rejection":{"family":"P02","operator":"eq","left":{"role":"producer_status","path":"$","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":422,"evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}}},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example repeat_delta: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C05","primary_predicate":{"family":"repeat_delta","delta":{"family":"P06","before":{"role":"before","path":"$.count","value_type":"integer"},"after":{"role":"after","path":"$.count","value_type":"integer"},"delta":{"source":"request","ref":{"role":"producer_request","path":"$.amount","value_type":"integer","location":"body"}},"multiplier":1,"numeric_mode":"exact","unit":{"source":"hypothesis","value_type":"string","value":"items","evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}}},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example rejection_status: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C06","primary_predicate":{"family":"P02","operator":"eq","left":{"role":"producer_status","path":"$","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":422,"evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}},"role_bindings":[{"role":"negative_effect_source","actor":"actor_a","request_ref":"<visible-negative_effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":"auth_preserved","setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example rejection_body: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C06","primary_predicate":{"family":"P02","operator":"eq","left":{"role":"producer_response","path":"$.error","value_type":"string"},"right":{"source":"hypothesis","value_type":"string","value":"rejected","evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}},"role_bindings":[{"role":"negative_effect_source","actor":"actor_a","request_ref":"<visible-negative_effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":"auth_preserved","setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example rejection_preservation: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C06","primary_predicate":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"negative_effect_source","actor":"actor_a","request_ref":"<visible-negative_effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":{"family":"P02","operator":"eq","left":{"role":"producer_response","path":"$.error","value_type":"string"},"right":{"source":"hypothesis","value_type":"string","value":"rejected","evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}},"negative_context":"auth_preserved","setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example nonowner_rejection: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C12","primary_predicate":{"family":"P02","operator":"eq","left":{"role":"producer_status","path":"$","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":422,"evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}},"role_bindings":[{"role":"negative_effect_source","actor":"actor_a","request_ref":"<visible-negative_effect_source>"},{"role":"after","actor":"actor_b","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":"auth_preserved","setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example inverse_restoration: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"inverse_restoration","primary_predicate":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"inverse","actor":"actor_a","request_ref":"<visible-inverse>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example read_preservation: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"read_preservation","primary_predicate":{"family":"P20","operator":"equal","left":{"role":"before","path":"$.record","value_type":"object"},"right":{"role":"after","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"role_bindings":[{"role":"before","actor":"actor_a","request_ref":"<visible-before>"},{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"after","actor":"actor_a","request_ref":"<visible-after>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example same_principal_sessions: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C04","primary_predicate":{"family":"P20","operator":"equal","left":{"role":"actor_before:actor_a_session2","path":"$.record","value_type":"object"},"right":{"role":"actor_after:actor_a_session2","path":"$.record","value_type":"object"},"projection_ref":null,"projection":["$.saved","$.unaffected"]},"role_bindings":[{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"actor_before:actor_a_session2","actor":"actor_a_session2","request_ref":"<visible-actor_before-actor_a_session2>"},{"role":"actor_after:actor_a_session2","actor":"actor_a_session2","request_ref":"<visible-actor_after-actor_a_session2>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example self_exclusion: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"self_exclusion","primary_predicate":{"family":"P13","operator":"not_contains","collection":{"role":"actor_after:actor_a","path":"$.items","value_type":"array"},"member":{"source":"role","ref":{"role":"producer_request","path":"$.item","value_type":"object"}},"identity":{"field_pairs":[{"member_path":"$.id","collection_item_path":"$.id"}],"semantics":"strict-tuple"}},"role_bindings":[{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"actor_before:actor_a","actor":"actor_a","request_ref":"<visible-actor_before-actor_a>"},{"role":"actor_after:actor_a","actor":"actor_a","request_ref":"<visible-actor_after-actor_a>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example nonowner_point_status: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C12","primary_predicate":{"family":"P02","operator":"eq","left":{"role":"after_status","path":"$","value_type":"integer"},"right":{"source":"hypothesis","value_type":"integer","value":404,"evidence_refs":["<visible-request>"],"rationale":"Proposed rule grounded in the cited visible request; not prevalidated."}},"role_bindings":[{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"actor_before:actor_b","actor":"actor_b","request_ref":"<visible-actor_before-actor_b>"},{"role":"actor_after:actor_b","actor":"actor_b","request_ref":"<visible-actor_after-actor_b>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+Relation example propagated_point: {"detail_region_id":"<current-detail-region>","evidence_card_id":"<scheduled-card>","contract_kind":"C11","primary_predicate":{"family":"P01","operator":"exists","target":{"role":"actor_after:actor_b","path":"$.record","value_type":"object"},"member":null,"identity":null,"absent_statuses":[]},"role_bindings":[{"role":"effect_source","actor":"actor_a","request_ref":"<visible-effect_source>"},{"role":"actor_before:actor_b","actor":"actor_b","request_ref":"<visible-actor_before-actor_b>"},{"role":"actor_after:actor_b","actor":"actor_b","request_ref":"<visible-actor_after-actor_b>"}],"catalog_observer_operation_id":null,"query_scope":null,"query_transform":null,"rejection":null,"negative_context":null,"setup":[],"evidence_refs":["<visible-request>"],"rationale":"Symbolic example: replace only with visible refs, paths, types and grounded frozen hypotheses."}
+
+Rules:
+- When center_completion_pass is present, this is the single bounded completion
+  call for one mechanically scheduled opportunity that had zero admitted
+  relations after the three regular proposal rounds. For a write-center
+  opportunity, systematically check every row in
+  center_completion_pass.legal_relation_language and bind one listed center
+  request as effect_source or negative_effect_source. For a query-relation
+  opportunity, systematically check the listed source/follow-up query pair
+  against the same frozen detail evidence and emit only an observed, current
+  P17 relation. Do not emit a relation centered on a neighboring operation. If
+  no relation is supported, return an empty candidates array. The completion
+  marker and checklist organize an exhaustive check; they do not establish
+  causality, choose an expected result, or authorize any relation not supported
+  by the visible evidence.
+- When detail_view_kind is bounded_cross_actor_business_operation_episode, read
+  recorded_timeline as one contiguous observation: prior_recorded_facts, the
+  center_ui_action, following_recorded_facts, then direct linked UI-diff,
+  value-flow, dependency and binding facts. These are temporal sections only;
+  they do not pre-assign any business or experiment role.
+- For a business-operation episode, first systematically enumerate every
+  grounded business relation whose effect_source is one of the mechanically
+  identified center_state_change_request_refs. Check every actor, every legal
+  recorded read location before and after the center action, and every relation
+  expressible by the current relation_language. Do not stop after finding one.
+  Only after completing this center-action effect enumeration may you propose
+  relations centered on other operations in the episode. center_action_id and
+  center_state_change_request_refs are mechanical navigation anchors only: they
+  do not establish causality and do not preselect an observer, contract,
+  predicate, expected value, or protocol.
+- center_observation_slice is a mechanical navigation aid. It lists the
+  center action's exact immediate UI diff, the reads recorded after that center,
+  and for each such read the nearest earlier observation with the same actor,
+  session, observed catalog operation and selector. comparable_pre_state_status
+  "none" means no such observation was recorded; "multiple" retains every
+  equally nearest observation. Never invent or choose a before request for
+  either status. center_interval_transition_fact_refs retain cumulative facts
+  only when their recorded interval contains this center; inspect their full
+  write_competition before assigning any effect role. These pairings organize
+  observations and do not prove that the center caused a change.
+- observer_operation_catalog is a neutral projection of already-observed M5
+  read operations for the center actor/session only where no explicit unique
+  before/after pair is available. Select only its operation_id. Its method,
+  canonical path, actor/session availability, template count and response
+  shapes are validation facts, not permission to invent or modify request
+  inputs and not evidence of a business effect.
+- A card is only a reading context. action_episode and unassigned_request cards
+  conserve M2 facts; mechanical_neighborhood cards combine nearby, ordered,
+  dependency/value-flow/setup-linked atomic facts without asserting a relation.
+- UI-diff preceding_request_refs/following_request_refs express only recorded
+  temporal adjacency. Observed value-flow producer/consumer names express only
+  the direction in which a concrete value was observed to move, not business
+  causality or an experiment role.
+- In a detail call, copy the current detail_region_id exactly. Every role request,
+  setup action and evidence ref must be listed in that region's visible refs.
+- Use actor/session/global order, request groups, query values, request and
+  response shapes, UI diffs, value flows, dependencies and setup-domain status
+  as observed evidence. Unknown, review and unassigned facts remain usable.
+- relation_language is the global current executable C/P subset. It is not
+  tailored to a card. Emit only a listed contract, predicate family and operator.
+- Preserve visible value types and copy exact visible JSON paths. Collection
+  predicates require an exact array path and their declared comparison basis;
+  identity paths are required only by the selected identity-based form.
+- transition_facts are neutral comparable-read observations available only in
+  this detail region. They do not claim causality. Transition-fact P04 and fixed-delta P06 must
+  cite the exact visible transition fact in evidence_refs and copy its before,
+  after, path, strict type and typed constants exactly. Never invent a literal,
+  use Python-equivalent types, or freeze an identity, time, token or sensitive
+  value. A collection-member fact also carries one value-flow-backed locator
+  witness; cite that visible flow and copy its exact executable role/path and
+  member identity. The recorded array index is never an identity. Role-scaled
+  P06 remains valid without a transition constant.
+- negative_request_facts remain one exact source for C06/P20: copy the fact's
+  request/observer/projection references, cite its ID and copy its successful
+  setup action. The explicit rejection signatures below also admit a proposed
+  rule with traceable hypotheses and negative_context, without requiring an
+  already-rejected recording or already-equal preserved values. Neither a status
+  alone nor the role name proves rejection. Never invent an ignore path or change
+  a frozen detector after seeing results.
+- Every transition fact carries compact write_competition provenance for all
+  state-changing requests between its reads. This is a neutral mechanical
+  target-resource/field relevance classification, not a causal label. Ground
+  exact boolean P04, fixed P06, or P12 from the fact only when grounding_status is
+  unique_target_relevant, the declared effect_source request_ref exactly equals
+  groundable_effect_source_request_ref, and that request is visible in this
+  region. potentially_relevant or multiple/no target-relevant writes make the
+  fact context-only: never attribute its cumulative change to one operation.
+  For a collection member added or removed through a different resource
+  endpoint, member_identity_state_evidence is sufficient only when one changed
+  member has one stable non-sensitive identity, that identity occurs in exactly
+  one path/query/body location of the write and exactly one location of the
+  write response, and the same response object has exactly one boolean state
+  field related to the recorded write operation/path whose value matches the
+  added/removed direction. Zero or one in-window exact value-flow source may
+  support this evidence; multiple logical sources, identities, request or
+  response locations, or state fields remain ambiguous. The evidence contains
+  only typed hashes, paths, state direction, and flow refs, never the identity
+  value itself.
+  Do not replace this gate with total write count, operation/path name alone,
+  temporal proximity, or an omitted request guess. P12 must cite the one exact
+  visible collection_count transition fact in evidence_refs and copy its path
+  and signed_delta.
+- Route a transition fact by its observation_kind and the exact observed
+  response shape. A scalar boolean fact supports P04, including a uniquely
+  located collection-member field. A scalar finite-number fact supports fixed
+  P06. A collection_count fact measures the length of the array at target_path:
+  express it as P12 with before/after pointing to that exact array path using
+  value_type "array", and copy signed_delta as P12 delta. Its integer
+  before/after/value_type metadata describes the measured count; it is not a
+  numeric response field at target_path and must not be presented as P06. A
+  collection_member presence fact supports existing P14 added/removed when its
+  exact member operand and identity are executable. This routing only maps an
+  observed fact to an existing predicate shape; it does not establish that the
+  center operation caused the observation.
+- setup may contain only eligible_setup_action_ids from the effect source's
+  compact request_setup_domains row and setup_action_catalog, in recorded order.
+  Full technical request prefixes are intentionally not provider-visible; M11
+  closes them mechanically after proposal admission. Query relations use no setup.
+- Business setup is replayed before the declared before/actor_before observer to
+  establish fresh prerequisite state; it is never inserted between before and effect_source.
+- Ground each relation first using the original request, response-shape, UI-diff,
+  value-flow, dependency and binding facts. setup_selection_clues are only for
+  choosing setup for a relation that is already independently grounded. They
+  must not create a relation, assign a role, choose a contract/predicate, or be
+  treated as proof that an action caused an observed member to appear.
+- For an already grounded relation, inspect the effect source's applicable
+  setup_selection_clue and eligible setup domain. Select the single
+  best-supported minimal ordered business setup hypothesis. A comparable
+  absent-to-present observation and an exact recorded M6 locator-lineage
+  observation are both neutral: the latter proves only that a source scalar
+  reached the target locator. If several causes remain plausible, choose the
+  strongest one supported jointly by member linkage, request facts and recorded
+  order. Rank evidence; do not use this ranking as an eligibility gate.
+  Target-specific identity overlap or locator lineage is stronger setup-selection
+  evidence than temporal adjacency. A shared actor, account, session, time or
+  status alone is insufficient, while absence of an overlap does not eliminate
+  an otherwise plausible eligible action. When no action has unique target-specific
+  identity or lineage evidence, compare grounded business semantics, observed
+  prerequisite state, actor compatibility and recorded order jointly, and use
+  temporal proximity only as the final tie-breaker. This ranking is still not
+  proof of causality. State uncertainty in rationale; do not union mutually
+  exclusive alternatives and do not leave setup empty merely because
+  alternatives exist. One hypothesis may contain a
+  recorded-order multi-step chain when all steps are necessary. Leave setup
+  empty only when no plausible grounded eligible action exists. UI action names
+  alone are insufficient support.
+- A UI diff is candidate evidence only. Do not turn its text into an API expected
+  constant or treat it as proof.
+- Do not label a single-field type check as complete response schema validation.
+- Do not infer source code, database behavior, external specifications or
+  unstated requirements.
+- Do not emit candidate_id. rationale is optional and removed during normalization.
+
+PROPOSAL EVIDENCE VIEW:
+{{PROPOSAL_EVIDENCE_VIEW_JSON}}

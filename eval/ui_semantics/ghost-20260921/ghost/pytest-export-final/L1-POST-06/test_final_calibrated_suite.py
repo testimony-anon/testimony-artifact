@@ -1,0 +1,412 @@
+"""Generated from a frozen UISemTest M14 suite; do not edit by hand."""
+
+def test_relation_test_6fa1a8233c469d4988b9(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:35', 'r20260920-170036-0998:request:36'], 'rationale': 'Both recorded post-list reads carry identical query selectors (filter status:published, fields id,url,title,visibility,published_at, order published_at desc, limit 5, formats mobiledoc,lexical), so the follow-up is an equivalent-input repeat.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0001\nCanonical relation core: 75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0001
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:35'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:36'}]
+    assertions = [{'assertion_id': 'v2-candidate-0001-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.posts', 'role': 'followup_query:q1', 'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.posts', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0001-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0001-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0001-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.posts',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-6fa1a8233c469d4988b9',
+        candidate_id='v2-candidate-0001',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='1063072b04653a23c0fde72dcb863fa6fbf0c49c6a19bef0f730b09e3d346ee1',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_cf27fedf9fb71257960b(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:28', 'r20260920-170036-0998:request:29'], 'rationale': 'Both recorded newsletter reads carry identical query selectors (status active, limit 100, include count.active_members, page 1), so the follow-up is an equivalent-input repeat.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0002\nCanonical relation core: 4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[3].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0002
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:28'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:29'}]
+    assertions = [{'assertion_id': 'v2-candidate-0002-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.newsletters',
+                             'role': 'followup_query:q1',
+                             'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.newsletters', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0002-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0002-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0002-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.newsletters',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-cf27fedf9fb71257960b',
+        candidate_id='v2-candidate-0002',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='f8e18b5876e3cfde9080f4cb374aaafaa989adaf3d75241aa933b09cca658f62',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_c60a2c4c76e8fda39d87(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['fields', 'filter', 'formats', 'limit', 'order'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:35', 'r20260920-170036-0998:request:36'], 'rationale': 'The two recorded reads use the same operation and byte-identical selectors (filter=status:published, fields=id,url,title,visibility,published_at, order=published_at desc, limit=5, formats=mobiledoc,lexical), so the frozen selector relation is equivalence; only the returned arrays are claimed.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0007\nCanonical relation core: 75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0007
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:35'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:36'}]
+    assertions = [{'assertion_id': 'v2-candidate-0007-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.posts', 'role': 'followup_query:q1', 'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.posts', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0007-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0007-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0007-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.posts',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-c60a2c4c76e8fda39d87',
+        candidate_id='v2-candidate-0007',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='db1b50b43b46065388686b03ae9ee8c640751491cf48c9e405166a41ee917e2b',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_65fa21329569165fb073(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['include', 'limit', 'page', 'status'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:28', 'r20260920-170036-0998:request:29'], 'rationale': 'The two recorded newsletter reads use the same operation and byte-identical selectors (status=active, limit=100, page=1, include=count.active_members), so the frozen selector relation is equivalence; only the returned arrays are claimed.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0008\nCanonical relation core: 4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0008
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:28'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:29'}]
+    assertions = [{'assertion_id': 'v2-candidate-0008-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.newsletters',
+                             'role': 'followup_query:q1',
+                             'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.newsletters', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0008-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0008-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0008-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.newsletters',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-65fa21329569165fb073',
+        candidate_id='v2-candidate-0008',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='16a53f1a1e9ab756dc3be98c58b11581caf0323e15e38bcdd851e0bff2c086d0',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_424295924bedfa4c8486(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P16 requires order by $.published_at desc, nulls last, ties unordered, AND multiset preservation; basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['order'], 'kind': 'sort', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:35', 'r20260920-170036-0998:request:36'], 'rationale': 'The two recorded reads carry the same observable order=published_at desc selector, so the frozen ordering selector is preserved and no other request selector changes.', 'source': 'hypothesis', 'value': 'sort', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0009\nCanonical relation core: 3b26d651e2806e951f7cea2fc6133bbac3cce9cae4a4faf0d8b58d70932dd192\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0009
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:35'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:36'}]
+    assertions = [{'assertion_id': 'v2-candidate-0009-business-01',
+      'class': 'business',
+      'predicate_type': 'P16',
+      'predicate': {'after': {'path': '$.posts', 'role': 'followup_query:q1', 'value_type': 'array'},
+                    'before': {'path': '$.posts', 'role': 'source_query', 'value_type': 'array'},
+                    'comparison_basis': 'full_json_value',
+                    'direction': 'desc',
+                    'family': 'P16',
+                    'identity': None,
+                    'key': '$.published_at',
+                    'nulls': 'last',
+                    'parameters': {'evidence_refs': ['r20260920-170036-0998:request:35',
+                                                     'r20260920-170036-0998:request:36'],
+                                   'rationale': 'Both recorded reads select order=published_at desc '
+                                                'and request fields including published_at, so '
+                                                'descending order by $.published_at with nulls last '
+                                                'and ties unordered is proposed; the recorded values '
+                                                'need not already satisfy it.',
+                                   'source': 'hypothesis',
+                                   'value': {'direction': 'desc',
+                                             'key': '$.published_at',
+                                             'nulls': 'last',
+                                             'ties': 'unordered'},
+                                   'value_type': 'object'},
+                    'projection': [],
+                    'ties': 'unordered'}},
+     {'assertion_id': 'v2-candidate-0009-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0009-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0009-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.posts',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-424295924bedfa4c8486',
+        candidate_id='v2-candidate-0009',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='330b56ebce0dd65bf56b02a068b5eb28914b6e0a3f8905488560a5e48677b5fa',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_1363648912ddf4fb8f73(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/newsletters/; followup_query:q1 actor_a GET /ghost/api/admin/newsletters/; business predicate P17 requires followup_query:q1 $.newsletters (array) equal source_query $.newsletters (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['status', 'limit', 'page', 'include'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:28', 'r20260920-170036-0998:request:29'], 'rationale': 'Both recorded reads use the identical newsletter selector status=active, limit=100, page=1, include=count.active_members; proposed equivalent-input reading of the recorded selector.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0010\nCanonical relation core: 4d4afa4906f11d39c65b3023c698c8c4ba4bf80ea5ef07548cdb626a545c91d8\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0010
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:28'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/newsletters/',
+      'request_ref': 'r20260920-170036-0998:request:29'}]
+    assertions = [{'assertion_id': 'v2-candidate-0010-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.newsletters',
+                             'role': 'followup_query:q1',
+                             'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.newsletters', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0010-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0010-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0010-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.newsletters',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-1363648912ddf4fb8f73',
+        candidate_id='v2-candidate-0010',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='62d2e2dc4c91b2eec07befb3a9bde1e3534592124ab55aa2cac1277747184848',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])
+
+
+def test_relation_test_082e9595419b2bfdc21e(uisemtest_runtime):
+    "Business summary: Queries source_query actor_a GET /ghost/api/admin/posts/; followup_query:q1 actor_a GET /ghost/api/admin/posts/; business predicate P17 requires followup_query:q1 $.posts (array) equal source_query $.posts (array); representation=multiset, basis=full_json_value, projection=[], identity=None; query scope={'closures': [], 'scope': 'actual_response'}; input transform={'keys': ['filter', 'fields', 'order', 'limit', 'formats'], 'kind': 'equivalent_input', 'location': 'query', 'semantics': {'evidence_refs': ['r20260920-170036-0998:request:35', 'r20260920-170036-0998:request:36'], 'rationale': 'Both recorded reads use the identical post selector filter=status:published, fields=id,url,title,visibility,published_at, order=published_at desc, limit=5; proposed equivalent-input reading of the recorded selector.', 'source': 'hypothesis', 'value': 'equivalent', 'value_type': 'string'}}.\nCandidate ID: v2-candidate-0011\nCanonical relation core: 75d1c8bc7b91218af06bdf89d3c5453272e25017835e79f2942c9085d946f37c\nOriginal M10 rationale sources (non-normative metadata):\n- ../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale\nschema_type scope: schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation."
+    # V3: v2-candidate-0011
+    steps = [{'kind': 'reset_and_authenticate', 'arm': 'metamorphic_query', 'actors': ['actor_a']},
+     {'kind': 'http',
+      'phase': 'source_query/producer',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:35'},
+     {'kind': 'http',
+      'phase': 'followup_query[1]',
+      'actor': 'actor_a',
+      'method': 'GET',
+      'path': '/ghost/api/admin/posts/',
+      'request_ref': 'r20260920-170036-0998:request:36'}]
+    assertions = [{'assertion_id': 'v2-candidate-0011-business-01',
+      'class': 'business',
+      'predicate_type': 'P17',
+      'predicate': {'comparison_basis': 'full_json_value',
+                    'expected_difference': None,
+                    'family': 'P17',
+                    'identity': None,
+                    'left': {'path': '$.posts', 'role': 'followup_query:q1', 'value_type': 'array'},
+                    'operator': 'equal',
+                    'projection': [],
+                    'representation': 'multiset',
+                    'right': {'path': '$.posts', 'role': 'source_query', 'value_type': 'array'}}},
+     {'assertion_id': 'v2-candidate-0011-generic-producer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'producer', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0011-generic-observer-status',
+      'class': 'generic',
+      'predicate_type': 'status_success',
+      'predicate': {'response_ref': 'after', 'type': 'status_success'}},
+     {'assertion_id': 'v2-candidate-0011-generic-projection-schema',
+      'class': 'generic',
+      'predicate_type': 'schema_type',
+      'predicate': {'expected_type': 'array',
+                    'response_ref': 'after',
+                    'target_path': '$.posts',
+                    'type': 'schema_type'}}]
+    result = uisemtest_runtime.run_case(
+        test_id='relation-test-082e9595419b2bfdc21e',
+        candidate_id='v2-candidate-0011',
+        protocol_kind='V3',
+        normal_runs=1,
+        source_test_sha256='0be86c901b93047d993c0520508bec57870bcb8dc79ed517307b5dfdd8c15a57',
+        steps=steps,
+        assertions=assertions,
+    )
+    assert result['final_status'] == 'normal_pass'
+    assert all(row['status'] == 'pass' for row in result['assertion_calibration'])

@@ -1,0 +1,680 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "conduit-modular-l1-feed-03",
+  "profile_ref": "fixtures/profiles/conduit_current_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.home",
+          "action": {
+            "kind": "navigate",
+            "url": "/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/editor\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-editor",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/editor\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/editor$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[placeholder=\"Article Title\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.fill-title",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Article Title\"]"
+        },
+        "value": "Seasonal Reading Story 1"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.fill-description",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"What's this article about?\"]"
+        },
+        "value": "Description for Seasonal Reading Story 1"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.fill-body",
+      "global_step_index": 3,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write your article (in markdown)\"]"
+        },
+        "value": "Body for Seasonal Reading Story 1 through the UI."
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.fill-tags",
+      "global_step_index": 4,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Enter tags\"]"
+        },
+        "value": "paginationtag"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.publish-article",
+      "global_step_index": 5,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Publish Article",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/article/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s001.fill-title",
+        "story.s002.fill-description",
+        "story.s003.fill-body",
+        "story.s004.fill-tags"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.open-editor",
+      "global_step_index": 6,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/editor\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/editor$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[placeholder=\"Article Title\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.fill-title",
+      "global_step_index": 7,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Article Title\"]"
+        },
+        "value": "Seasonal Reading Story 2"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s008",
+      "workflow_step_id": "story.s008.fill-description",
+      "global_step_index": 8,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"What's this article about?\"]"
+        },
+        "value": "Description for Seasonal Reading Story 2"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s009",
+      "workflow_step_id": "story.s009.fill-body",
+      "global_step_index": 9,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write your article (in markdown)\"]"
+        },
+        "value": "Body for Seasonal Reading Story 2 through the UI."
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s010",
+      "workflow_step_id": "story.s010.fill-tags",
+      "global_step_index": 10,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Enter tags\"]"
+        },
+        "value": "paginationtag"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s011",
+      "workflow_step_id": "story.s011.publish-article",
+      "global_step_index": 11,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Publish Article",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/article/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s007.fill-title",
+        "story.s008.fill-description",
+        "story.s009.fill-body",
+        "story.s010.fill-tags"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s012",
+      "workflow_step_id": "story.s012.open-editor",
+      "global_step_index": 12,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/editor\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/editor$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[placeholder=\"Article Title\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s013",
+      "workflow_step_id": "story.s013.fill-title",
+      "global_step_index": 13,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Article Title\"]"
+        },
+        "value": "Seasonal Reading Story 3"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s014",
+      "workflow_step_id": "story.s014.fill-description",
+      "global_step_index": 14,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"What's this article about?\"]"
+        },
+        "value": "Description for Seasonal Reading Story 3"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s015",
+      "workflow_step_id": "story.s015.fill-body",
+      "global_step_index": 15,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write your article (in markdown)\"]"
+        },
+        "value": "Body for Seasonal Reading Story 3 through the UI."
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s016",
+      "workflow_step_id": "story.s016.fill-tags",
+      "global_step_index": 16,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Enter tags\"]"
+        },
+        "value": "paginationtag"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s017",
+      "workflow_step_id": "story.s017.publish-article",
+      "global_step_index": 17,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Publish Article",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/article/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s013.fill-title",
+        "story.s014.fill-description",
+        "story.s015.fill-body",
+        "story.s016.fill-tags"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s018",
+      "workflow_step_id": "story.s018.open-editor",
+      "global_step_index": 18,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "a[href=\"#/editor\"]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/editor$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "input[placeholder=\"Article Title\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s019",
+      "workflow_step_id": "story.s019.fill-title",
+      "global_step_index": 19,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Article Title\"]"
+        },
+        "value": "Seasonal Reading Story 4"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s020",
+      "workflow_step_id": "story.s020.fill-description",
+      "global_step_index": 20,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"What's this article about?\"]"
+        },
+        "value": "Description for Seasonal Reading Story 4"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s021",
+      "workflow_step_id": "story.s021.fill-body",
+      "global_step_index": 21,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "textarea[placeholder=\"Write your article (in markdown)\"]"
+        },
+        "value": "Body for Seasonal Reading Story 4 through the UI."
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s022",
+      "workflow_step_id": "story.s022.fill-tags",
+      "global_step_index": 22,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "input[placeholder=\"Enter tags\"]"
+        },
+        "value": "paginationtag"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s023",
+      "workflow_step_id": "story.s023.publish-article",
+      "global_step_index": 23,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Publish Article",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": "form"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/#/article/[^/?#]+$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        }
+      ],
+      "binding_material_source_step_ids": [
+        "story.s019.fill-title",
+        "story.s020.fill-description",
+        "story.s021.fill-body",
+        "story.s022.fill-tags"
+      ]
+    },
+    {
+      "scenario_step_id": "story.s024",
+      "workflow_step_id": "story.s024.navigate-home",
+      "global_step_index": 24,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "/"
+      },
+      "waits": [
+        {
+          "kind": "load_state",
+          "state": "domcontentloaded",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "role",
+            "value": "button",
+            "name": "Global Feed",
+            "exact": true
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s025",
+      "workflow_step_id": "story.s025.select-global-feed",
+      "global_step_index": 25,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Global Feed",
+          "exact": true
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 250,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".article-preview",
+            "has_text": "Seasonal Reading Story 4"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s026",
+      "workflow_step_id": "story.s026.open-page-two",
+      "global_step_index": 26,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Page 2",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": ".pagination"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 200,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".article-preview",
+            "has_text": "Seasonal Reading Story 1"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s027",
+      "workflow_step_id": "story.s027.return-page-one",
+      "global_step_index": 27,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "role",
+          "value": "button",
+          "name": "Page 1",
+          "exact": true,
+          "scope": {
+            "kind": "css",
+            "value": ".pagination"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 200,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".article-preview",
+            "has_text": "Seasonal Reading Story 4"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

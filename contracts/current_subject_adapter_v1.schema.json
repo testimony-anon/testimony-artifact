@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "current_subject_adapter_v1.schema.json",
+  "title": "UISemTest current subject adapter v1",
+  "type": "object",
+  "required": [
+    "schema_version", "adapter_id", "subject_id", "runtime",
+    "request_mapping", "request_bindings", "fresh_materialization_policy", "observer_policy",
+    "settle_policy", "sensitive_classification"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-current-subject-adapter-v1"},
+    "adapter_id": {"$ref": "#/$defs/id"},
+    "subject_id": {"$ref": "#/$defs/id"},
+    "runtime": {
+      "oneOf": [
+        {"$ref": "#/$defs/fixture_runtime"},
+        {"$ref": "#/$defs/local_http_runtime"}
+      ]
+    },
+    "request_mapping": {
+      "type": "object",
+      "required": ["mode", "header_policy"],
+      "properties": {
+        "mode": {"enum": ["explicit_adapter", "current_recording_exact"]},
+        "header_policy": {"const": "accept_content_type_only"},
+        "static_headers": {
+          "type": "object",
+          "additionalProperties": {"type": "string"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "docker_single": {
+      "$ref": "#/$defs/docker_single_runtime",
+      "description": "Optional, additive (2026-09-20). Declarative configuration consumed only by subject_adapters.docker_single_local, the subject-agnostic single-container Docker lifecycle helper. Absent for every adapter written before this field existed; its presence changes no existing field's meaning and no method-core behaviour, because runtime.server_commands still decides which helper is executed."
+    },
+    "missing_collection_defaults": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^\\$\\.(?:[A-Za-z0-9_]+|\\*)(?:\\.(?:[A-Za-z0-9_]+|\\*))*$"
+      },
+      "additionalProperties": {"type": "array", "maxItems": 0}
+    },
+    "request_bindings": {
+      "type": "object",
+      "propertyNames": {"minLength": 1},
+      "additionalProperties": {"$ref": "#/$defs/request_binding"}
+    },
+    "fresh_materialization_policy": {
+      "type": "object",
+      "required": ["source", "selection", "allowed_target_locations", "allowed_scalar_types"],
+      "properties": {
+        "source": {"const": "current_observed_value_flow_set"},
+        "selection": {"const": "exact_setup_to_candidate_consumers_v1"},
+        "allowed_target_locations": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["path", "query", "header", "body"]}
+        },
+        "allowed_scalar_types": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["string", "integer", "number", "boolean"]}
+        }
+      },
+      "additionalProperties": false
+    },
+    "observer_policy": {
+      "type": "object",
+      "required": ["schema_version", "purity_domains_exact_set", "request_method_policy"],
+      "properties": {
+        "schema_version": {"const": "uisemtest-current-observer-policy-v1"},
+        "purity_domains_exact_set": {
+          "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true,
+          "items": {"enum": ["cache", "cookie", "last_seen", "token"]}
+        },
+        "request_method_policy": {"const": "read_only"}
+      },
+      "additionalProperties": false
+    },
+    "settle_policy": {
+      "type": "object",
+      "required": ["schema_version", "rule", "minimum_duration_ms", "poll_interval_ms", "consecutive_identical_observations", "maximum_duration_ms"],
+      "properties": {
+        "schema_version": {"const": "uisemtest-current-settle-policy-v2"},
+        "rule": {"const": "bounded_semantic_stability_v1"},
+        "minimum_duration_ms": {"const": 500},
+        "poll_interval_ms": {"const": 100},
+        "consecutive_identical_observations": {"const": 3},
+        "maximum_duration_ms": {"const": 2000}
+      },
+      "additionalProperties": false
+    },
+    "sensitive_classification": {
+      "type": "object",
+      "required": ["forbidden_source_refs", "forbidden_projection_paths"],
+      "properties": {
+        "forbidden_source_refs": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "forbidden_projection_paths": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+    "file_ref": {
+      "type": "object",
+      "required": ["path"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"}
+      },
+      "additionalProperties": false
+    },
+    "request_binding": {
+      "type": "object",
+      "required": ["actor_id", "method", "path"],
+      "properties": {
+        "actor_id": {"type": "string", "minLength": 1},
+        "method": {"enum": ["GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "PATCH", "TRACE"]},
+        "path": {"type": "string", "pattern": "^/[^?#]*$"},
+        "body": true,
+        "query": {"type": "object"},
+        "headers": {"type": "object", "additionalProperties": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "fixture_runtime": {
+      "type": "object",
+      "required": ["kind", "transport_tape"],
+      "properties": {
+        "kind": {"const": "deterministic_fixture"},
+        "transport_tape": {"$ref": "#/$defs/file_ref"}
+      },
+      "additionalProperties": false
+    },
+    "command": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "health_probe": {
+      "type": "object",
+      "required": ["url", "expect_status"],
+      "properties": {
+        "url": {"type": "string", "pattern": "^http://(?:127\\.0\\.0\\.1|localhost)(?::[0-9]{1,5})?/"},
+        "expect_status": {"type": "integer", "minimum": 100, "maximum": 599}
+      },
+      "additionalProperties": false
+    },
+    "docker_single_script": {
+      "type": "object",
+      "required": ["location", "command"],
+      "properties": {
+        "location": {"enum": ["host", "container"]},
+        "command": {"$ref": "#/$defs/command"},
+        "workdir": {"type": "string", "pattern": "^/.+"},
+        "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 900}
+      },
+      "additionalProperties": false
+    },
+    "docker_single_runtime": {
+      "type": "object",
+      "required": ["schema_version", "image", "ports", "readiness", "reset"],
+      "properties": {
+        "schema_version": {"const": "uisemtest-docker-single-runtime-v1"},
+        "container_name_prefix": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]{0,47}$"},
+        "instance_key_env": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]{0,127}$"},
+        "image": {
+          "type": "object",
+          "required": ["repository", "digest"],
+          "properties": {
+            "repository": {"type": "string", "pattern": "^[a-z0-9][a-zA-Z0-9_.:/-]{0,255}$"},
+            "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+            "tag": {"type": "string", "minLength": 1},
+            "pull_policy": {"enum": ["never", "if_absent", "always"]}
+          },
+          "additionalProperties": false
+        },
+        "command": {"$ref": "#/$defs/command"},
+        "ports": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["host", "container"],
+            "properties": {
+              "host": {"type": "integer", "minimum": 1, "maximum": 65535},
+              "container": {"type": "integer", "minimum": 1, "maximum": 65535},
+              "bind": {"enum": ["127.0.0.1"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "environment": {
+          "type": "object",
+          "propertyNames": {"type": "string", "pattern": "^[^=\\u0000]+$"},
+          "additionalProperties": {"type": "string", "pattern": "^[^\\u0000]*$"}
+        },
+        "volumes": {
+          "type": "array", "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["kind", "container_path"],
+            "properties": {
+              "kind": {"enum": ["named", "bind"]},
+              "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]{0,47}$"},
+              "source": {"type": "string", "minLength": 1},
+              "container_path": {"type": "string", "pattern": "^/.+"},
+              "read_only": {"type": "boolean"},
+              "reset_scope": {"enum": ["persistent", "fresh_on_reset"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "readiness": {
+          "type": "object",
+          "required": ["probes"],
+          "properties": {
+            "probes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/health_probe"}},
+            "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 900},
+            "poll_interval_ms": {"type": "integer", "minimum": 50, "maximum": 5000}
+          },
+          "additionalProperties": false
+        },
+        "reset": {
+          "type": "object",
+          "required": ["strategy"],
+          "properties": {
+            "strategy": {"enum": ["restart_container", "recreate_with_fresh_volume", "run_script"]},
+            "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 900},
+            "script": {"$ref": "#/$defs/docker_single_script"}
+          },
+          "allOf": [
+            {
+              "if": {"properties": {"strategy": {"const": "run_script"}}, "required": ["strategy"]},
+              "then": {"required": ["script"]}
+            }
+          ],
+          "additionalProperties": false
+        },
+        "seed": {"$ref": "#/$defs/docker_single_script"}
+      },
+      "additionalProperties": false
+    },
+    "local_http_runtime": {
+      "type": "object",
+      "required": [
+        "kind", "source_root", "environment", "materialize_commands", "server_commands",
+        "health_probes", "teardown_generated_paths", "loopback_only",
+        "reset_from_profile", "independent_arm_sessions"
+      ],
+      "properties": {
+        "kind": {"const": "local_http"},
+        "source_root": {"type": "string", "minLength": 1},
+        "environment": {
+          "type": "object",
+          "propertyNames": {"type": "string", "minLength": 1, "pattern": "^[^=\\u0000]+$"},
+          "additionalProperties": {"type": "string", "pattern": "^[^\\u0000]*$"}
+        },
+        "materialize_commands": {"type": "array", "items": {"$ref": "#/$defs/command"}},
+        "server_commands": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/command"}},
+        "health_probes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/health_probe"}},
+        "teardown_generated_paths": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"}
+        },
+        "loopback_only": {"const": true},
+        "reset_from_profile": {"const": true},
+        "independent_arm_sessions": {"const": true}
+      },
+      "additionalProperties": false
+    }
+  }
+}

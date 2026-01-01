@@ -1,0 +1,324 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dependency_graph.schema.json",
+  "title": "dependency_graph — dependency graph (produced by Stage 4; decision record 000 §2.6)",
+  "description": "A standalone graph JSON. Nodes = operationId (must exist in augmented_oas; enforced by the final OAS gate); edges = producer→consumer, with evidence type and confidence. V1 uses deterministic evidence only.",
+  "type": "object",
+  "required": ["metadata", "nodes", "edges"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "dependency_graph" },
+        "stage": { "const": "stage4" }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/operation_id" },
+      "x-volatility": "structural"
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" },
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "operation_id": {
+      "type": "string",
+      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+      "$comment": "operationId derived deterministically per D5",
+      "x-volatility": "structural"
+    },
+    "obs_ref": {
+      "type": "object",
+      "description": "Observation reference (to look up the real literal values in the session_bundle har entry; same shape as an augmented_oas observation)",
+      "required": ["run_id", "entry_index"],
+      "properties": {
+        "run_id": { "type": "string", "minLength": 1, "x-volatility": "volatile" },
+        "entry_index": { "type": "integer", "minimum": 0, "x-volatility": "volatile" }
+      },
+      "additionalProperties": false
+    },
+    "value_flow_detail": {
+      "type": "object",
+      "description": "exact_value_flow evidence detail (decision record 005 D36 + 012-A): the producer value exactly matches the literal at a location in the consumer request. The producer source location is expressed by the optional from_location; default/absent is equivalent to response_body.",
+      "required": ["from_field", "to_location", "to_field", "observation_refs"],
+      "properties": {
+        "from_location": {
+          "type": "string",
+          "enum": ["response_body", "response_header"],
+          "description": "Source location of the producer value. Optional; default/absent is equivalent to response_body. The first batch of 012-A supports only response_body / response_header; cookie is not in the enum.",
+          "x-volatility": "structural"
+        },
+        "from_field": {
+          "type": "string",
+          "description": "Producer value locator: when from_location=response_body, the existing JSONPath (e.g. $.article.slug); when from_location=response_header, a canonical lowercase header name (e.g. etag) or a controlled structured header selector (e.g. location.path[1]).",
+          "x-volatility": "structural"
+        },
+        "to_location": {
+          "type": "string",
+          "enum": ["path", "query", "header", "body"],
+          "description": "Location of the value within the consumer request",
+          "x-volatility": "structural"
+        },
+        "to_field": {
+          "type": "string",
+          "description": "Field locator within the consumer request (path parameter name / query name / header name / body JSON path)",
+          "x-volatility": "structural"
+        },
+        "observation_refs": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Pairs of producer+consumer observation references supporting this value flow; the D37 temporal order is decided on their timestamps (the D38 observation count can be taken as len)",
+          "items": {
+            "type": "object",
+            "required": ["producer_ref", "consumer_ref"],
+            "properties": {
+              "producer_ref": { "$ref": "#/$defs/obs_ref" },
+              "consumer_ref": { "$ref": "#/$defs/obs_ref" }
+            },
+            "additionalProperties": false
+          },
+          "x-volatility": "volatile"
+        }
+      },
+      "additionalProperties": false
+    },
+    "semantic_audit_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "record_id"],
+      "properties": {
+        "artifact_type": { "const": "semantic_edge_audit" },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 },
+        "record_id": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false,
+      "x-volatility": "volatile"
+    },
+    "business_semantic_detail": {
+      "type": "object",
+      "description": "Minimal summary of a semantic-order edge that passed deterministic two-arm validation; the full six-tuple and validation details are stored only in semantic_edge_audit.",
+      "required": ["semantic_edge_id", "audit_ref"],
+      "properties": {
+        "semantic_edge_id": { "type": "string", "minLength": 1, "x-volatility": "structural" },
+        "audit_ref": { "$ref": "#/$defs/semantic_audit_ref" }
+      },
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "edge": {
+      "type": "object",
+      "required": ["producer", "consumer", "evidence", "confidence"],
+      "properties": {
+        "producer": { "$ref": "#/$defs/operation_id" },
+        "consumer": { "$ref": "#/$defs/operation_id" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["exact_value_flow", "schema_family", "ui_temporal", "business_semantic"],
+                "description": "Evidence type. V1 produces only exact_value_flow (exact value flow); schema_family/ui_temporal are reserved for deterministic evidence and business_semantic for the language-model proposer; V1 does not produce them."
+              },
+              "detail": {
+                "type": "object",
+                "description": "Evidence detail. When type=exact_value_flow it must conform to value_flow_detail (D36); the detail shapes of the other types differ and V1 does not produce them."
+              }
+            },
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": { "type": { "const": "exact_value_flow" } },
+                  "required": ["type"]
+                },
+                "then": {
+                  "required": ["detail"],
+                  "properties": { "detail": { "$ref": "#/$defs/value_flow_detail" } }
+                }
+              },
+              {
+                "if": {
+                  "properties": { "type": { "const": "business_semantic" } },
+                  "required": ["type"]
+                },
+                "then": {
+                  "required": ["detail"],
+                  "properties": { "detail": { "$ref": "#/$defs/business_semantic_detail" } }
+                }
+              }
+            ]
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["data", "auth", "pagination", "semantic_order"],
+          "description": "Edge kind: data/auth/pagination keep their existing semantics; semantic_order = a deterministically validated business causal order that only constrains the producer to precede the consumer and provides no value binding. Defaults to data.",
+          "x-volatility": "structural"
+        },
+        "observation_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Optional (D38): number of independent observations supporting this edge. An implementation may take len(evidence) implicitly without writing this field, or count explicitly; one or the other."
+        },
+        "grounded": {
+          "type": "boolean",
+          "description": "grounded flag written back after Stage 6 replay confirmation (decision record 000 §2.8); initially false when produced by Stage 4."
+        },
+        "dependency_strength": {
+          "type": "string",
+          "enum": ["hard", "soft", "inconclusive"],
+          "description": "Dependency strength written back after Stage 6 counterexample validation (decision record 007 D50/D51, three-level decision): hard = the counterexample fails in the qualified way and requiredness is confirmed; soft = the positive value flow works but the counterexample does not fail (the consumer does not require the value, e.g. one edge among mutually substitutable sources); inconclusive = the counterexample was not run or the setup could not be established (never mislabel 'no counterexample run' as soft). Optional; not set when produced by Stage 4 (default); written back only by Stage 6.",
+          "x-volatility": "structural"
+        },
+        "x-carverflow-runtime-evidence": {
+          "$ref": "#/$defs/runtime_evidence_extension",
+          "description": "Read-only diagnostic annotation for this edge from the Runtime Material Phase 2 sidecar. The extension does not rewrite confidence / grounded / dependency_strength and does not promote replay-only or literal-only material to strong dependency evidence."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "semantic_order" } },
+            "required": ["kind"]
+          },
+          "then": {
+            "properties": {
+              "evidence": {
+                "contains": {
+                  "type": "object",
+                  "properties": { "type": { "const": "business_semantic" } },
+                  "required": ["type"]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "evidence": {
+                "contains": {
+                  "type": "object",
+                  "properties": { "type": { "const": "business_semantic" } },
+                  "required": ["type"]
+                }
+              }
+            },
+            "required": ["evidence"]
+          },
+          "then": {
+            "required": ["kind"],
+            "properties": { "kind": { "const": "semantic_order" } }
+          }
+        }
+      ],
+      "additionalProperties": false,
+      "x-volatility": "structural"
+    },
+    "runtime_evidence_ref": {
+      "type": "object",
+      "required": ["source", "reason"],
+      "properties": {
+        "source": { "type": "string" },
+        "material_id": { "type": ["string", "null"] },
+        "edge_id": { "type": ["string", "null"] },
+        "hypothesis_id": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "runtime_conflict_ref": {
+      "type": "object",
+      "required": ["conflict_id", "conflict_type", "scope", "operations", "explanation"],
+      "properties": {
+        "conflict_id": { "type": "string" },
+        "conflict_type": { "type": "string" },
+        "scope": { "type": "string" },
+        "operations": { "type": "array", "items": { "type": "string" } },
+        "explanation": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "runtime_evidence_policy": {
+      "type": "object",
+      "required": [
+        "core_fields_unchanged",
+        "does_not_change_confidence",
+        "does_not_set_grounded",
+        "does_not_set_dependency_strength",
+        "does_not_add_or_delete_edges"
+      ],
+      "properties": {
+        "core_fields_unchanged": { "const": true },
+        "does_not_change_confidence": { "const": true },
+        "does_not_set_grounded": { "const": true },
+        "does_not_set_dependency_strength": { "const": true },
+        "does_not_add_or_delete_edges": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "runtime_evidence_extension": {
+      "type": "object",
+      "required": [
+        "phase",
+        "report_ref",
+        "edge_annotation_id",
+        "matched_runtime_edge_diagnostics",
+        "positive_evidence",
+        "negative_evidence",
+        "suggested_trust",
+        "suggested_state",
+        "not_promoted_reason",
+        "conflicts",
+        "policy"
+      ],
+      "properties": {
+        "phase": { "const": "phase2_sidecar" },
+        "report_ref": { "type": "string", "minLength": 1 },
+        "edge_annotation_id": { "type": "string", "minLength": 1 },
+        "matched_runtime_edge_diagnostics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "positive_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_evidence_ref" }
+        },
+        "negative_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_evidence_ref" }
+        },
+        "suggested_trust": {
+          "type": "string",
+          "enum": ["high", "medium", "low", "blocked", "diagnostic_only"]
+        },
+        "suggested_state": {
+          "type": "string",
+          "enum": ["candidate", "blocked", "diagnostic_only"]
+        },
+        "not_promoted_reason": { "type": "string" },
+        "conflicts": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/runtime_conflict_ref" }
+        },
+        "policy": { "$ref": "#/$defs/runtime_evidence_policy" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "uisemtest-current-subject-adapter-v1",
+  "adapter_id": "ghost-current-local-http-v1",
+  "subject_id": "ghost",
+  "runtime": {
+    "kind": "local_http",
+    "source_root": "${UISEMTEST_REPO_ROOT}",
+    "environment": {
+      "PATH": "${UISEMTEST_OPERATOR_PATH}",
+      "PYTHONPATH": "${UISEMTEST_REPO_ROOT}/src",
+      "UISEMTEST_REPO_ROOT": "${UISEMTEST_REPO_ROOT}",
+      "NO_PROXY": "localhost,127.0.0.1,::1",
+      "no_proxy": "localhost,127.0.0.1,::1",
+      "UISEMTEST_PYTHON": "${UISEMTEST_PYTHON}",
+      "UISEMTEST_DOCKER_SINGLE_ADAPTER": "${UISEMTEST_REPO_ROOT}/fixtures/adapters/ghost_current_local.json",
+      "UISEMTEST_GHOST_OUTPUT_ROOT": "${UISEMTEST_GHOST_OUTPUT_ROOT}",
+      "UISEMTEST_GHOST_RUNTIME_ROOT": "${UISEMTEST_GHOST_RUNTIME_ROOT}",
+      "UISEMTEST_GHOST_BASE_URL": "http://127.0.0.1:18093",
+      "UISEMTEST_GHOST_CONTAINER_PREFIX": "uisemtest-ghost",
+      "UISEMTEST_GHOST_SITE_TITLE": "${UISEMTEST_GHOST_SITE_TITLE}",
+      "UISEMTEST_GHOST_ACTOR_A_NAME": "${UISEMTEST_GHOST_ACTOR_A_NAME}",
+      "UISEMTEST_GHOST_ACTOR_A_EMAIL": "${UISEMTEST_GHOST_ACTOR_A_EMAIL}",
+      "UISEMTEST_GHOST_ACTOR_A_PASSWORD": "${UISEMTEST_GHOST_ACTOR_A_PASSWORD}",
+      "UISEMTEST_GHOST_ACTOR_B_NAME": "${UISEMTEST_GHOST_ACTOR_B_NAME}",
+      "UISEMTEST_GHOST_ACTOR_B_EMAIL": "${UISEMTEST_GHOST_ACTOR_B_EMAIL}",
+      "UISEMTEST_GHOST_ACTOR_B_PASSWORD": "${UISEMTEST_GHOST_ACTOR_B_PASSWORD}",
+      "UISEMTEST_GHOST_ACTOR_B_ROLE": "${UISEMTEST_GHOST_ACTOR_B_ROLE}"
+    },
+    "materialize_commands": [[
+      "/bin/bash",
+      "${UISEMTEST_REPO_ROOT}/deploy/ghost/materialize.sh"
+    ]],
+    "server_commands": [[
+      "${UISEMTEST_PYTHON}",
+      "-m",
+      "subject_adapters.docker_single_local",
+      "supervise"
+    ]],
+    "health_probes": [
+      {"url": "http://127.0.0.1:18093/ghost/api/admin/site/", "expect_status": 200},
+      {"url": "http://127.0.0.1:18093/", "expect_status": 200}
+    ],
+    "teardown_generated_paths": [],
+    "loopback_only": true,
+    "reset_from_profile": true,
+    "independent_arm_sessions": true
+  },
+  "docker_single": {
+    "schema_version": "uisemtest-docker-single-runtime-v1",
+    "container_name_prefix": "uisemtest-ghost",
+    "instance_key_env": "UISEMTEST_GHOST_OUTPUT_ROOT",
+    "image": {
+      "repository": "ghost",
+      "tag": "5.130.6-alpine",
+      "digest": "sha256:a0506f3f05f5bdc6c950c5113cdcdb1e1f96fbf15f6dc0a39fc093c25348bdb5",
+      "pull_policy": "if_absent"
+    },
+    "ports": [
+      {"host": 18093, "container": 2368}
+    ],
+    "environment": {
+      "NODE_ENV": "development",
+      "url": "http://127.0.0.1:18093",
+      "database__client": "sqlite3",
+      "database__connection__filename": "/var/lib/ghost/content/data/ghost.db",
+      "database__useNullAsDefault": "true",
+      "mail__transport": "stub",
+      "security__staffDeviceVerification": "false",
+      "updateCheck": "false",
+      "logging__level": "error",
+      "paths__contentPath": "/var/lib/ghost/content"
+    },
+    "volumes": [
+      {
+        "kind": "bind",
+        "source": "${UISEMTEST_GHOST_RUNTIME_ROOT}/content",
+        "container_path": "/var/lib/ghost/content",
+        "reset_scope": "persistent"
+      }
+    ],
+    "readiness": {
+      "probes": [
+        {"url": "http://127.0.0.1:18093/ghost/api/admin/site/", "expect_status": 200}
+      ],
+      "timeout_seconds": 120,
+      "poll_interval_ms": 50
+    },
+    "reset": {
+      "strategy": "run_script",
+      "timeout_seconds": 90,
+      "script": {
+        "location": "host",
+        "command": ["/bin/bash", "${UISEMTEST_REPO_ROOT}/deploy/ghost/reset.sh"],
+        "timeout_seconds": 90
+      }
+    },
+    "seed": {
+      "location": "host",
+      "command": ["/bin/bash", "${UISEMTEST_REPO_ROOT}/deploy/ghost/seed.sh"],
+      "timeout_seconds": 180
+    }
+  },
+  "request_mapping": {
+    "mode": "current_recording_exact",
+    "header_policy": "accept_content_type_only",
+    "static_headers": {"Origin": "http://127.0.0.1:18093"}
+  },
+  "request_bindings": {},
+  "fresh_materialization_policy": {
+    "source": "current_observed_value_flow_set",
+    "selection": "exact_setup_to_candidate_consumers_v1",
+    "allowed_target_locations": ["path", "query", "header", "body"],
+    "allowed_scalar_types": ["string", "integer", "number", "boolean"]
+  },
+  "observer_policy": {
+    "schema_version": "uisemtest-current-observer-policy-v1",
+    "purity_domains_exact_set": ["cache", "cookie", "last_seen", "token"],
+    "request_method_policy": "read_only"
+  },
+  "settle_policy": {
+    "schema_version": "uisemtest-current-settle-policy-v2",
+    "rule": "bounded_semantic_stability_v1",
+    "minimum_duration_ms": 500,
+    "poll_interval_ms": 100,
+    "consecutive_identical_observations": 3,
+    "maximum_duration_ms": 2000
+  },
+  "sensitive_classification": {
+    "forbidden_source_refs": [],
+    "forbidden_projection_paths": ["$.password", "$.token", "$.invitation_token"]
+  }
+}

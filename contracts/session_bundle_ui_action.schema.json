@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "session_bundle_ui_action.schema.json",
+  "title": "session_bundle member: a single record of ui_action_log.jsonl (D1)",
+  "description": "One line per user/strategy action (session-bundle contract in design document 2: includes the timestamp, selector, page URL and the accessibility information of the triggering element). Raw facts only, no inference (D3).",
+  "type": "object",
+  "required": ["action_id", "timestamp", "action_type", "selector", "page_url", "element_accessibility", "scenario_step_id", "workflow_step_id", "global_step_index"],
+  "properties": {
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Action ID unique within the session, used by the page_state index and action_decision_log for association",
+      "x-volatility": "volatile"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "x-volatility": "volatile"
+    },
+    "action_type": {
+      "type": "string",
+      "description": "Action type (e.g. click, fill, navigate; the value table is frozen by the Stage 1 decision record)",
+      "x-volatility": "structural"
+    },
+    "selector": {
+      "type": "string",
+      "description": "Selector of the triggering element",
+      "x-volatility": "volatile"
+    },
+    "page_url": {
+      "type": "string",
+      "description": "URL of the page the action occurred on",
+      "x-volatility": "volatile"
+    },
+    "element_accessibility": {
+      "type": "object",
+      "description": "Raw snapshot of the triggering element's accessibility information (e.g. role, name)",
+      "x-volatility": "volatile"
+    },
+    "value": {
+      "type": "string",
+      "description": "Optional: input value carried by the action (input/change-type actions; needed by D16 replay re-fill). Values that hit the secret set are replaced with a redacted placeholder per D18. (Approved addition in decision record 002 §7.1)",
+      "x-volatility": "volatile"
+    },
+    "key": {
+      "type": "string",
+      "minLength": 1,
+      "x-volatility": "structural"
+    },
+    "binding_material_source_step_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1},
+      "x-volatility": "structural"
+    },
+    "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$", "x-volatility": "structural"},
+    "workflow_step_id": {"type": "string", "minLength": 1, "x-volatility": "structural"},
+    "global_step_index": {"type": "integer", "minimum": 0, "x-volatility": "structural"}
+  },
+  "additionalProperties": false
+}

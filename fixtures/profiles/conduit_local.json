@@ -1,0 +1,48 @@
+{
+  "base_url": "http://localhost:3001",
+  "auth": {
+    "method": "form_login",
+    "login_entry": "/#/login",
+    "credentials_ref": {
+      "email_env": "CONDUIT_TEST_EMAIL",
+      "password_env": "CONDUIT_TEST_PASSWORD"
+    },
+    "token_scheme": "Token",
+    "api_token": {
+      "method": "POST",
+      "path": "/api/users/login",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body_template": {
+        "user": {
+          "email": "${email}",
+          "password": "${password}"
+        }
+      },
+      "token_json_path": "$.user.token"
+    },
+    "probe_endpoint": {
+      "method": "GET",
+      "path": "/api/user"
+    }
+  },
+  "reset": {
+    "script": "deploy/conduit/reset.sh",
+    "verify_request": {
+      "method": "GET",
+      "path": "/api/articles?limit=1&offset=0",
+      "expect_status": 200,
+      "expect_json_path": "$.articlesCount",
+      "expect_json_equals": 0
+    }
+  },
+  "rate_limit": {
+    "max_concurrency": 2,
+    "min_interval_ms": 100,
+    "retry_on_429": {
+      "max_retries": 2
+    }
+  },
+  "drive_mode": "manual"
+}

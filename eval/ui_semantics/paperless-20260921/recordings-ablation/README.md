@@ -1,0 +1,1 @@
+recordings-01 minus L1-DOCLIST-01/02/04 for the RQ3 ablation of Paperless-ngx (2026-09-21): manifest = inventory-ablation.json, suite_recording_result.json recounted for 32 cases, case directories are byte copies of recordings-01 (the suite runner resolves case roots and requires them inside the recording root; raw recordings-01 untouched).

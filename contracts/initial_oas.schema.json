@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "initial_oas.schema.json",
+  "title": "initial_oas — specification skeleton (produced by Stage 2; decision record 000 §2.3, D4, D5)",
+  "description": "Specification skeleton recovered from session-bundle traffic. A standard OpenAPI 3.1 document (full OAS validity is checked by the vendored official meta-schema, approved supplementary choice point 2); the metadata envelope lives in x-carverflow-meta (approved supplementary choice point 1); every operation has an operationId derived deterministically per D5.",
+  "allOf": [
+    { "$ref": "vendor/openapi-3.1/schema.json" },
+    {
+      "type": "object",
+      "required": ["x-carverflow-meta", "paths"],
+      "properties": {
+        "x-carverflow-meta": {
+          "$ref": "metadata_envelope.schema.json",
+          "properties": {
+            "artifact_type": { "const": "initial_oas" },
+            "stage": { "const": "stage2" }
+          }
+        },
+        "openapi": {
+          "type": "string",
+          "pattern": "^3\\.1\\."
+        },
+        "paths": {
+          "type": "object",
+          "description": "Keys are canonical paths (parameterized template paths obtained by clustering and normalizing literal URLs, e.g. /articles/{slug})",
+          "patternProperties": {
+            "^/": {
+              "type": "object",
+              "patternProperties": {
+                "^(get|put|post|delete|options|head|patch|trace)$": {
+                  "type": "object",
+                  "required": ["operationId", "x-carverflow-observations"],
+                  "properties": {
+                    "operationId": {
+                      "type": "string",
+                      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$",
+                      "description": "Deterministic derivation per D5: {method}_{normalized canonical_path} (e.g. GET /articles/{slug} → get_articles_slug). All artifacts reference each other by operationId.",
+                      "x-volatility": "structural"
+                    },
+                    "x-carverflow-observations": {
+                      "type": "array",
+                      "minItems": 1,
+                      "description": "Join result (approved addition in decision record 003 §6/D20/D22): all raw observations of this operation. Every operation has at least one observation (initial_oas is recovered from observations). The declared consumption channel for Stage 2.5 (anchor scheduling) and Stage 4 (UI temporal / value-flow evidence); literal examples for templates are traced back through it.",
+                      "items": { "$ref": "#/$defs/observation" },
+                      "x-volatility": "volatile"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "description": "One API observation: source session bundle + har entry reference + action attribution (or orphan class; mutually exclusive).",
+      "required": ["run_id", "entry_index", "timestamp", "status", "auth_present"],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "run_id of the source session bundle (D20 reference shape)",
+          "x-volatility": "volatile"
+        },
+        "entry_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Entry index in har log.entries (D20 reference shape)",
+          "x-volatility": "volatile"
+        },
+        "action_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID of the ui_action the observation is attributed to (mutually exclusive with orphan_class, D22)",
+          "x-volatility": "volatile"
+        },
+        "orphan_class": {
+          "type": "string",
+          "enum": ["stage0_auth", "initial_load", "unmatched"],
+          "description": "Orphan class (mutually exclusive with action_id; D22 executable boundary rule)"
+        },
+        "confidence_tier": {
+          "type": "string",
+          "enum": ["strict_interval", "tail"],
+          "description": "Confidence tier of the action attribution (D22: strict hit within the interval / tail); absent for orphan observations"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Request start time (startedDateTime)",
+          "x-volatility": "volatile"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 599,
+          "description": "Observed response status (including 4xx/5xx; D21 is independent of the status; 0 = no response observed / load failure)",
+          "x-volatility": "volatile"
+        },
+        "auth_present": {
+          "type": "boolean",
+          "description": "Whether the request carried an authentication header (D24: authentication does not enter the parameters table; its presence is recorded on the observation)"
+        }
+      },
+      "oneOf": [
+        { "required": ["action_id"] },
+        { "required": ["orphan_class"] }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

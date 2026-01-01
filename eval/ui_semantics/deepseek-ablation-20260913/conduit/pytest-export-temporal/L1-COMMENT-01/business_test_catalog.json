@@ -1,0 +1,194 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 1,
+    "business_relation_occurrence_count": 1,
+    "canonical_relation_core_identities": [
+      "71cd90fd4e906300b488e8c2511a634d704b164ccaa19ccff6cca364d0083c92",
+      "9faeaf27d11dda9dcb4ac5f3f9facd3d19acd804fa2ed0473e477f01803d0104"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0002",
+      "v2-candidate-0003"
+    ],
+    "physical_retained_test_occurrence_count": 2,
+    "unique_canonical_relation_core_count": 2
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "POST",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "producer",
+          "request_ref": "r20260901-190305-64cb:request:7"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "after": {
+            "path": "$.comments",
+            "role": "after",
+            "value_type": "array"
+          },
+          "before": {
+            "path": "$.comments",
+            "role": "before",
+            "value_type": "array"
+          },
+          "family": "P14",
+          "identity": {
+            "field_pairs": [
+              {
+                "collection_item_path": "$.id",
+                "member_path": "$.id"
+              }
+            ],
+            "semantics": "strict-tuple"
+          },
+          "member": {
+            "ref": {
+              "path": "$.comment",
+              "role": "producer_response",
+              "value_type": "object"
+            },
+            "source": "role"
+          },
+          "operator": "added"
+        },
+        "predicate_type": "P14"
+      },
+      "business_summary": "Producer actor_a POST /api/articles/community-gardening-tips/comments; observer actor_a GET /api/articles/community-gardening-tips/comments; business predicate P14 requires producer_response $.comment (object) to be added between before $.comments (array) and after $.comments (array) by strict-tuple identity [$.id->$.id].",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "9faeaf27d11dda9dcb4ac5f3f9facd3d19acd804fa2ed0473e477f01803d0104",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "before_observer",
+          "request_ref": "r20260901-190305-64cb:request:4"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips/comments",
+          "phase": "after_observer",
+          "request_ref": "r20260901-190305-64cb:request:8"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "POST",
+        "path": "/api/articles/community-gardening-tips/comments",
+        "phase": "producer",
+        "request_ref": "r20260901-190305-64cb:request:7"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Proposed C01 lifecycle increment, not proven causality: the center write r20260901-190305-64cb:request:7 is POST /api/articles/community-gardening-tips/comments (201) whose prepared body carries $.comment.body, and its response shape exposes $.comment.id. The nearest same-actor/session comparable read before the center (request:4) and the fresh read after the center (request:8) are both GET /api/articles/community-gardening-tips/comments (200) exposing the array $.comments. ui-diff-0002 records 'There are no comments yet...' being replaced by a comment element. P14 added with a strict-tuple identity on the comment id is a proposed rule over these recorded reads; the recorded order alone does not establish that the center request caused the addition. Business setup workflow-action-0005 (article creation) is the only eligible setup action for request:7 and its created article path prefix matches the comment endpoint; setup is replayed before the before-read.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The center write's own response carries the created comment object at $.comment (shape includes $.comment.id integer, $.comment.body, $.comment.createdAt), and the fresh post-state read request:8 returns $.comments[*] members with the same member-relative field $.id. Comparing the pre-state collection $.comments (request:4) with the post-state collection $.comments (request:8) therefore proposes that this exact member was added, identified by the strict tuple on $.id; the UI diff also records one comment text appearing. Identity is frozen from the observed response shapes only.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The before GET comments (request:4) returned an empty comments array; the POST comment (request:7) created a comment (response $.comment with id); the after GET comments (request:8) contains one more comment matching the created comment's id. Grounded as a collection increase via P14 added.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-9133bbf2e3f1c416215d"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.article.tagList",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P13",
+          "identity": null,
+          "member": {
+            "evidence_refs": [
+              "r20260901-190305-64cb:request:1",
+              "ui-diff-0001"
+            ],
+            "rationale": "Proposed scalar member taken from the recorded create-article body tagList entry and the post-action UI text; the recording does not prove the read response contains it.",
+            "source": "hypothesis",
+            "value": "storytag",
+            "value_type": "string"
+          },
+          "operator": "contains"
+        },
+        "predicate_type": "P13"
+      },
+      "business_summary": "Observation actor_a GET /api/articles/community-gardening-tips; basic constraint P13 requires observation $.article.tagList (array) to contain frozen hypothesis 'storytag' (string) by strict JSON scalar equality; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "71cd90fd4e906300b488e8c2511a634d704b164ccaa19ccff6cca364d0083c92",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/articles/community-gardening-tips",
+          "phase": "observation",
+          "request_ref": "r20260901-190305-64cb:request:5"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 6,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[5].rationale",
+          "raw_rationale": "One mechanically read-only recorded GET response exposes the array $.article.tagList; the frozen scalar member 'storytag' is grounded in the recorded create-article body tagList entry ($.article.tagList.0) and the post-action UI diff text. Scalar membership in one actual response, no identity across time.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-89b41368b01eee14959d"
+    }
+  ]
+}

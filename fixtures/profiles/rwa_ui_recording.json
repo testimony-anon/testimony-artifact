@@ -1,0 +1,28 @@
+{
+  "base_url": "http://localhost:14000",
+  "auth": {
+    "method": "none"
+  },
+  "reset": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "scripts.e1.reset_adapters.rwa_reset",
+      "--output",
+      "eval/ui_semantics/e1/20260711/rwa/reset/profile-ui-recording-reset.json"
+    ],
+    "verify_request": {
+      "method": "GET",
+      "path": "/",
+      "expect_status": 200
+    }
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

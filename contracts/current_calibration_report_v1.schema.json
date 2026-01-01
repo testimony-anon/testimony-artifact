@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "current_calibration_report_v1.schema.json",
+  "title": "UISemTest current normal-state calibration report v1",
+  "type": "object",
+  "required": [
+    "schema_version", "status", "completion_reason", "mode", "suite_ref", "adapter_ref",
+    "suite_sha256_before", "suite_sha256_after", "suite_mutated", "execution_terminal",
+    "candidate_partition", "candidate_denominator", "test_denominator",
+    "assertion_definition_denominator", "physical_evaluation_denominator",
+    "assertion_calibration", "per_candidate", "results", "runtime_counts",
+    "external_provider_llm_calls", "external_network_calls",
+    "real_target_runs", "real_reset_runs"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-current-calibration-report-v1"},
+    "status": {"enum": ["pass", "complete_empty"]},
+    "completion_reason": {"enum": ["relations_calibrated", "no_confirmed_relations"]},
+    "mode": {"const": "qualifying-formal"},
+    "suite_ref": {"$ref": "#/$defs/file_ref"},
+    "adapter_ref": {"$ref": "#/$defs/file_ref"},
+    "suite_sha256_before": {"$ref": "#/$defs/sha"},
+    "suite_sha256_after": {"$ref": "#/$defs/sha"},
+    "suite_mutated": {"const": false},
+    "execution_terminal": {
+      "type": "object",
+      "required": ["status", "completed_result_count", "fatal_type"],
+      "properties": {
+        "status": {"const": "complete"},
+        "completed_result_count": {"$ref": "#/$defs/nonneg"},
+        "fatal_type": {"type": "null"}
+      },
+      "additionalProperties": false
+    },
+    "candidate_partition": {"$ref": "#/$defs/candidate_partition"},
+    "candidate_denominator": {"$ref": "#/$defs/candidate_denominator"},
+    "test_denominator": {"$ref": "#/$defs/test_denominator"},
+    "assertion_definition_denominator": {"$ref": "#/$defs/assertion_definition_denominator"},
+    "physical_evaluation_denominator": {"$ref": "#/$defs/physical_denominator"},
+    "assertion_calibration": {"$ref": "#/$defs/assertion_calibration"},
+    "assertion_layers": {
+      "type": "object",
+      "required": ["generic_baseline_assertion_count", "basic_constraint_candidate_ids", "business_relation_candidate_ids", "generic_baseline_overlap", "classification_basis"],
+      "properties": {
+        "generic_baseline_assertion_count": {"$ref": "#/$defs/nonneg"},
+        "basic_constraint_candidate_ids": {"$ref": "#/$defs/id_array"},
+        "business_relation_candidate_ids": {"$ref": "#/$defs/id_array"},
+        "classification_basis": {"type": "array", "items": {"type": "object", "required": ["candidate_id", "assertion_layer", "basis", "claim_source", "request_parameters"], "properties": {"candidate_id": {"type": "string", "minLength": 1}, "assertion_layer": {"enum": ["basic_constraint", "business_relation"]}, "basis": {"enum": ["field_arithmetic_or_aggregate_summary", "forall_body_compares_member_with_actual_request_parameter", "single_response_constraint", "action_or_query_relation"]}, "claim_source": {"const": "frozen_candidate_hypothesis"}, "request_parameters": {"type": "array", "items": {"type": "object", "required": ["operand", "role", "location", "path", "value_type"], "properties": {"operand": {"enum": ["right", "lower", "upper", "domain"]}, "role": {"const": "observation_request"}, "location": {"enum": ["query", "body", "path", "headers"]}, "path": {"type": "string", "minLength": 1}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"]}}, "additionalProperties": false}}}, "additionalProperties": false}},
+        "generic_baseline_overlap": {"type": "array", "items": {
+          "type": "object",
+          "required": ["candidate_id", "generic_assertion_ids", "overlap_kind", "full_verdict_equivalent", "usable_for_net_increment_deduplication"],
+          "properties": {
+            "candidate_id": {"type": "string", "minLength": 1},
+            "generic_assertion_ids": {"$ref": "#/$defs/id_array"},
+            "overlap_kind": {"const": "same_field_partial_overlap"},
+            "full_verdict_equivalent": {"const": false},
+            "usable_for_net_increment_deduplication": {"const": false}
+          },
+          "additionalProperties": false
+        }}
+      },
+      "additionalProperties": false
+    },
+    "per_candidate": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "candidate_id", "test_id", "final_status", "source",
+          "blueprint_sha256", "constraint_sha256", "test_definition_sha256",
+          "business_assertion_ids", "generic_assertion_ids", "assertion_calibration",
+          "normal_runs", "pass_count"
+        ],
+        "properties": {
+          "candidate_id": {"type": "string", "minLength": 1},
+          "test_id": {"type": "string", "minLength": 1},
+          "final_status": {"enum": ["normal_pass", "normal_fail", "normal_inconclusive", "not_run_due_run_fatal", "conversion_dropped", "conversion_inconclusive"]},
+          "normal_runs": {"$ref": "#/$defs/nonneg"},
+          "pass_count": {"$ref": "#/$defs/nonneg"},
+          "source": {"type": "object", "minProperties": 1},
+          "blueprint_sha256": {"$ref": "#/$defs/sha"},
+          "constraint_sha256": {"$ref": "#/$defs/sha"},
+          "test_definition_sha256": {"$ref": "#/$defs/sha"},
+          "business_assertion_ids": {"$ref": "#/$defs/id_array"},
+          "generic_assertion_ids": {"$ref": "#/$defs/id_array"},
+          "assertion_calibration": {"type": "array", "items": {"$ref": "#/$defs/assertion_record"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "test_id", "candidate_id", "final_status", "reason_code",
+          "normal_runs", "normal_runs_planned", "normal_runs_completed", "pass_count", "source",
+          "assertion_calibration", "runs"
+        ],
+        "properties": {
+          "test_id": {"type": "string", "minLength": 1},
+          "candidate_id": {"type": "string", "minLength": 1},
+          "final_status": {"enum": ["normal_pass", "normal_fail", "normal_inconclusive"]},
+          "reason_code": {"type": ["string", "null"]},
+          "normal_runs": {"$ref": "#/$defs/nonneg"},
+          "normal_runs_planned": {"$ref": "#/$defs/nonneg"},
+          "normal_runs_completed": {"$ref": "#/$defs/nonneg"},
+          "pass_count": {"$ref": "#/$defs/nonneg"},
+          "canonical_relation_core_identity": {"$ref": "#/$defs/sha"},
+          "source": {"type": "object", "minProperties": 1},
+          "assertion_calibration": {"type": "array", "items": {"$ref": "#/$defs/assertion_record"}},
+          "runs": {"type": "array", "items": {"type": "object", "minProperties": 1}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "runtime_counts": {
+      "type": "object",
+      "required": [
+        "reset_runs", "session_materializations", "setup_executions",
+        "request_executions", "settle_executions", "external_provider_llm_calls",
+        "external_network_calls", "real_target_runs", "real_server_runs",
+        "real_browser_runs", "real_docker_runs", "real_reset_runs"
+      ],
+      "properties": {
+        "reset_runs": {"$ref": "#/$defs/nonneg"},
+        "session_materializations": {"$ref": "#/$defs/nonneg"},
+        "setup_executions": {"$ref": "#/$defs/nonneg"},
+        "request_executions": {"$ref": "#/$defs/nonneg"},
+        "settle_executions": {"$ref": "#/$defs/nonneg"},
+        "external_provider_llm_calls": {"$ref": "#/$defs/nonneg"},
+        "external_network_calls": {"$ref": "#/$defs/nonneg"},
+        "real_target_runs": {"$ref": "#/$defs/nonneg"},
+        "real_server_runs": {"$ref": "#/$defs/nonneg"},
+        "real_browser_runs": {"$ref": "#/$defs/nonneg"},
+        "real_docker_runs": {"$ref": "#/$defs/nonneg"},
+        "real_reset_runs": {"$ref": "#/$defs/nonneg"}
+      },
+      "additionalProperties": false
+    },
+    "external_provider_llm_calls": {"$ref": "#/$defs/nonneg"},
+    "external_network_calls": {"$ref": "#/$defs/nonneg"},
+    "real_target_runs": {"$ref": "#/$defs/nonneg"},
+    "real_reset_runs": {"$ref": "#/$defs/nonneg"},
+    "retained_canonical_relation_core_identities": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/sha"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nonneg": {"type": "integer", "minimum": 0},
+    "file_ref": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha"}
+      },
+      "additionalProperties": false
+    },
+    "id_array": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "candidate_partition": {
+      "type": "object",
+      "required": ["retained", "failed", "inconclusive", "not_run"],
+      "properties": {
+        "retained": {"$ref": "#/$defs/id_array"},
+        "failed": {"$ref": "#/$defs/id_array"},
+        "inconclusive": {"$ref": "#/$defs/id_array"},
+        "not_run": {"$ref": "#/$defs/id_array"}
+      },
+      "additionalProperties": false
+    },
+    "candidate_denominator": {
+      "type": "object",
+      "required": [
+        "confirmed_input", "blueprint_generated", "constraint_complete",
+        "stage6_test_generated", "executable_eligible",
+        "normal_state_calibration_pass", "normal_state_calibration_fail",
+        "normal_state_calibration_inconclusive", "not_run_due_run_fatal",
+        "conversion_dropped", "conversion_inconclusive"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "confirmed_input": {"$ref": "#/$defs/nonneg"},
+        "blueprint_generated": {"$ref": "#/$defs/nonneg"},
+        "constraint_complete": {"$ref": "#/$defs/nonneg"},
+        "stage6_test_generated": {"$ref": "#/$defs/nonneg"},
+        "executable_eligible": {"$ref": "#/$defs/nonneg"},
+        "normal_state_calibration_pass": {"$ref": "#/$defs/nonneg"},
+        "normal_state_calibration_fail": {"$ref": "#/$defs/nonneg"},
+        "normal_state_calibration_inconclusive": {"$ref": "#/$defs/nonneg"},
+        "not_run_due_run_fatal": {"$ref": "#/$defs/nonneg"},
+        "conversion_dropped": {"$ref": "#/$defs/nonneg"},
+        "conversion_inconclusive": {"$ref": "#/$defs/nonneg"}
+      }
+    },
+    "test_denominator": {
+      "type": "object",
+      "required": ["generated", "eligible", "tests_with_business_assertion"],
+      "properties": {
+        "generated": {"$ref": "#/$defs/nonneg"},
+        "eligible": {"$ref": "#/$defs/nonneg"},
+        "tests_with_business_assertion": {"$ref": "#/$defs/nonneg"}
+      },
+      "additionalProperties": false
+    },
+    "assertion_definition_denominator": {
+      "type": "object",
+      "required": ["total", "business", "generic_status_schema"],
+      "properties": {
+        "total": {"$ref": "#/$defs/nonneg"},
+        "business": {"$ref": "#/$defs/nonneg"},
+        "generic_status_schema": {"$ref": "#/$defs/nonneg"}
+      },
+      "additionalProperties": false
+    },
+    "physical_class": {
+      "type": "object",
+      "required": ["planned", "completed", "passed", "failed", "unable", "not_executed"],
+      "properties": {
+        "planned": {"$ref": "#/$defs/nonneg"},
+        "completed": {"$ref": "#/$defs/nonneg"},
+        "passed": {"$ref": "#/$defs/nonneg"},
+        "failed": {"$ref": "#/$defs/nonneg"},
+        "unable": {"$ref": "#/$defs/nonneg"},
+        "not_executed": {"$ref": "#/$defs/nonneg"}
+      },
+      "additionalProperties": false
+    },
+    "physical_denominator": {
+      "type": "object",
+      "required": ["planned", "completed", "passed", "failed", "unable", "not_executed", "business", "generic_status_schema"],
+      "properties": {
+        "planned": {"$ref": "#/$defs/nonneg"},
+        "completed": {"$ref": "#/$defs/nonneg"},
+        "passed": {"$ref": "#/$defs/nonneg"},
+        "failed": {"$ref": "#/$defs/nonneg"},
+        "unable": {"$ref": "#/$defs/nonneg"},
+        "not_executed": {"$ref": "#/$defs/nonneg"},
+        "business": {"$ref": "#/$defs/physical_class"},
+        "generic_status_schema": {"$ref": "#/$defs/physical_class"}
+      },
+      "additionalProperties": false
+    },
+    "calibration_counts": {
+      "type": "object",
+      "required": ["pass", "fail", "inconclusive", "not_run"],
+      "properties": {
+        "pass": {"$ref": "#/$defs/nonneg"},
+        "fail": {"$ref": "#/$defs/nonneg"},
+        "inconclusive": {"$ref": "#/$defs/nonneg"},
+        "not_run": {"$ref": "#/$defs/nonneg"}
+      },
+      "additionalProperties": false
+    },
+    "assertion_calibration": {
+      "type": "object",
+      "required": ["pass", "fail", "inconclusive", "not_run", "business", "generic_status_schema"],
+      "properties": {
+        "pass": {"$ref": "#/$defs/nonneg"},
+        "fail": {"$ref": "#/$defs/nonneg"},
+        "inconclusive": {"$ref": "#/$defs/nonneg"},
+        "not_run": {"$ref": "#/$defs/nonneg"},
+        "business": {"$ref": "#/$defs/calibration_counts"},
+        "generic_status_schema": {"$ref": "#/$defs/calibration_counts"}
+      },
+      "additionalProperties": false
+    },
+    "assertion_record": {
+      "type": "object",
+      "required": ["assertion_id", "assertion_class", "assertion_source", "predicate_type", "definition_sha256", "status", "normal_run_verdicts"],
+      "properties": {
+        "assertion_id": {"type": "string", "minLength": 1},
+        "assertion_class": {"enum": ["business", "generic"]},
+        "assertion_source": {"enum": ["semantic_relation", "protocol_derived"]},
+        "predicate_type": {"type": "string", "minLength": 1},
+        "definition_sha256": {"$ref": "#/$defs/sha"},
+        "status": {"enum": ["pass", "fail", "inconclusive"]},
+        "normal_run_verdicts": {"type": "array", "items": {"enum": ["passed", "failed", "unable"]}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

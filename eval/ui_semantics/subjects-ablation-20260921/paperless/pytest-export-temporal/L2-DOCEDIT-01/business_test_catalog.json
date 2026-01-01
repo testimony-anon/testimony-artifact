@@ -1,0 +1,708 @@
+{
+  "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+  "schema_version": "uisemtest-post-m14-business-test-catalog-v1",
+  "scope": "post_M14_non_scientific_reporting_metadata",
+  "summary": {
+    "basic_constraint_occurrence_count": 2,
+    "business_relation_occurrence_count": 6,
+    "canonical_relation_core_identities": [
+      "05d1c4ee20e0192b1a90579184214033cf48b09d2f9ad97de563941477d05582",
+      "083d05266421653f5e8062a4a470219d821a94b06cbd07e9da0dfa11c7e42e86",
+      "0e5f378063b6467852d89e86cd258ea021ec34b2005ae8ef0c065f8111b33de4",
+      "44a0123915b8e85ebac6ac9dbb8b6a7290b06a340ced08b61bad17e96b42ec1a",
+      "5ca3617d29fe51c0a31fb1f39fd1e6bc81eff2c69f7ad48e6ae9733c0cabf7e5",
+      "b2fad2174c959239b559981868a606d6f4c048095d3cbea64195a97ae2614beb",
+      "bba71dc32611a75ac9366bb879064e33a0070c34c1870fb3bff55c881870d5f9",
+      "e025c67e1d697bfe855cc79000e1c5d407f307e1d1a7f11717ef5e9dfd9d5f0b"
+    ],
+    "duplicate_core_occurrence_count": 0,
+    "generic_baseline_partial_overlap_candidate_ids": [],
+    "physical_candidate_ids": [
+      "v2-candidate-0001",
+      "v2-candidate-0002",
+      "v2-candidate-0003",
+      "v2-candidate-0004",
+      "v2-candidate-0005",
+      "v2-candidate-0007",
+      "v2-candidate-0008",
+      "v2-candidate-0009"
+    ],
+    "physical_retained_test_occurrence_count": 8,
+    "unique_canonical_relation_core_count": 8
+  },
+  "tests": [
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0001-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.title",
+            "role": "after",
+            "value_type": "string"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.title",
+              "role": "producer_request",
+              "value_type": "string"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P02 requires after $.title (string) to strictly equal producer_request $.title (string).",
+      "candidate_id": "v2-candidate-0001",
+      "canonical_relation_core_identity": "e025c67e1d697bfe855cc79000e1c5d407f307e1d1a7f11717ef5e9dfd9d5f0b",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The center click (workflow-action-0003, submit button on /documents/1/details) is followed in the same actor/session by PATCH /api/documents/1/?version=1 whose visible body carries $.title (string, 'authored edited title'); request:13 is the only earlier recorded GET of the same operation get_api_documents_1 with the same selector (full_perms=true) and request:23 the recorded fresh read after the write. Proposed readback: the fresh after $.title equals the actual prepared producer request title. The recorded after body is a hypothesis check target, not proof; setup uses the single eligible setup action for request:22 (navigation to the document detail page, whose anchor read is /documents/1/details, i.e. the same document identity) with uncertainty noted.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "The center PATCH request:22 sends body $.title (string, recorded literal) and its request group is followed by the same-actor read request:23 of the same document operation/selector as the earlier request:13. Proposed readback: the fresh after field $.title equals the actual prepared producer body field $.title; the recorded values need not already agree. Setup is the single eligible recorded setup action for request:22 (navigation to the document detail page).",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Same-actor/session lifecycle around the center PATCH request:22: the recorded PATCH body carries a string $.title ('authored edited title'), and the fresh after-read request:23 re-issues the same observed operation get_api_documents_1 with the same selector (full_perms=true) as the nearest earlier read request:13. Proposes that the fresh document title equals the actually prepared request body title; the recorded values are not assumed to already satisfy this.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center PATCH request:22 sends body $.title (string) and the immediately following same-actor/session read request:23 re-reads the same document (nearest comparable pre-state request:13, same catalog operation and selector). Proposes that the fresh after read-back field equals the actual prepared producer request field; the recorded values need not already agree.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 1,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[0].rationale",
+          "raw_rationale": "Center PATCH /api/documents/1/ (request:22) carries a prepared body $.title string; the fresh same-actor/session read request:23 (same catalog operation and selector as its unique nearest pre-state read request:13, per center_observation_slice) is the after read. The recorded values need not already agree; the caller issues the actual prepared request. Setup is the single eligible recorded page-navigation action, which loaded this document detail state; it is replayed before the before read, not between before and effect.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-dfd297d5a596be826c06"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0002-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P02",
+          "left": {
+            "path": "$.id",
+            "role": "after",
+            "value_type": "integer"
+          },
+          "operator": "eq",
+          "right": {
+            "ref": {
+              "path": "$.id",
+              "role": "producer_request",
+              "value_type": "integer"
+            },
+            "source": "role"
+          }
+        },
+        "predicate_type": "P02"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P02 requires after $.id (integer) to strictly equal producer_request $.id (integer).",
+      "candidate_id": "v2-candidate-0002",
+      "canonical_relation_core_identity": "0e5f378063b6467852d89e86cd258ea021ec34b2005ae8ef0c065f8111b33de4",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "The center PATCH body carries integer $.id (raw lexical token recorded in parameter_evidence) and the fresh same-actor document read request:23 exposes integer $.id in the same response shape. Proposed identity readback: after $.id equals the actual prepared producer_request body $.id; strictly typed integer equality, not a copied recording default.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Distinct field-level readback on the same action: the recorded PATCH request:22 body contains integer $.id (lexical 1) and the fresh after-read request:23 exposes integer $.id on the same single document object. Proposes that the identity value echoed in the action body matches the fresh read; this is a separate predicate target from the title readback.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        },
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Distinct read-back relation on the identity field: request:22 carries integer body $.id and the fresh after read request:23 returns the same document object with an integer $.id. Same before/effect/after lifecycle shape; the recorded values need not already agree.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-a308824a573115b362c3"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0003-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.id",
+            "$.added",
+            "$.created",
+            "$.created_date",
+            "$.correspondent",
+            "$.document_type",
+            "$.owner",
+            "$.storage_path",
+            "$.mime_type",
+            "$.original_file_name",
+            "$.content",
+            "$.tags"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.id', '$.added', '$.created', '$.created_date', '$.correspondent', '$.document_type', '$.owner', '$.storage_path', '$.mime_type', '$.original_file_name', '$.content', '$.tags']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0003",
+      "canonical_relation_core_identity": "5ca3617d29fe51c0a31fb1f39fd1e6bc81eff2c69f7ad48e6ae9733c0cabf7e5",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0001:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "request:13 and request:23 are the same actor/session catalog operation and identical selector for document 1 (the center slice pairs them as nearest comparable pre/post states), so before and after denote the same document object. The recorded PATCH body only proposes id/title/remove_inbox_tags, so the listed identity and provenance fields are proposed to be preserved across the action and a fresh read; every projected field is checked independently and a known false is not excused by a later missing field.",
+          "source_ref": "../attempts/attempt-0001/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-962679dbcaf06d338657"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0004-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.id",
+            "$.content",
+            "$.created",
+            "$.correspondent",
+            "$.document_type",
+            "$.original_file_name",
+            "$.storage_path"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.id', '$.content', '$.created', '$.correspondent', '$.document_type', '$.original_file_name', '$.storage_path']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0004",
+      "canonical_relation_core_identity": "bba71dc32611a75ac9366bb879064e33a0070c34c1870fb3bff55c881870d5f9",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0001",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "Field preservation on the same document object: the recorded PATCH request:22 body only declares $.title (plus $.id and a boolean flag), while the shared response shape of request:13 and request:23 exposes the same concrete relative fields. Proposes that these non-submitted fields stay equal across the before read, the write and the fresh after read; every projected field is checked independently and the changed title is excluded.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-87d950f58cd8a515c687"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0005-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.created",
+            "$.mime_type"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.created', '$.mime_type']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0005",
+      "canonical_relation_core_identity": "44a0123915b8e85ebac6ac9dbb8b6a7290b06a340ced08b61bad17e96b42ec1a",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0002:detail-0002",
+          "candidate_ordinal": 3,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json#content(from-json).candidates[2].rationale",
+          "raw_rationale": "The center PATCH body only carries id/title/remove_inbox_tags, and both pre (request:13) and post (request:23) reads use the same document observer operation and selector. Proposes that the frozen untouched fields $.created and $.mime_type of the same document object remain equal through the action and a fresh API read; no already-equal recording is required.",
+          "source_ref": "../attempts/attempt-0002/M10/calls/detail-0002/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-8a9be54d851091d0e795"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0007-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.tags",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /api/documents/1/; basic constraint P15 requires observation $.tags (array) (actual_response) to have unique members by strict-tuple identity [$]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0007",
+      "canonical_relation_core_identity": "b2fad2174c959239b559981868a606d6f4c048095d3cbea64195a97ae2614beb",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "observation",
+          "request_ref": "r20260920-090301-1906:request:13"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 11,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[10].rationale",
+          "raw_rationale": "Recorded read of /api/documents/1/ returns $.tags as an array of integers. Proposed actual-response uniqueness: no duplicated tag id in the returned array. Only the returned array is claimed.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-4f3948bf5be362b500b9"
+    },
+    {
+      "actions": [],
+      "assertion_layer": "basic_constraint",
+      "basis": "single_response_constraint",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0008-business-01",
+        "class": "business",
+        "predicate": {
+          "collection": {
+            "path": "$.versions",
+            "role": "observation",
+            "value_type": "array"
+          },
+          "family": "P15",
+          "identity": {
+            "paths": [
+              "$.id"
+            ],
+            "semantics": "strict-tuple"
+          },
+          "scope": "actual_response"
+        },
+        "predicate_type": "P15"
+      },
+      "business_summary": "Observation actor_a GET /api/documents/1/; basic constraint P15 requires observation $.versions (array) (actual_response) to have unique members by strict-tuple identity [$.id]; one fresh response (same_input_fresh_replay).",
+      "candidate_id": "v2-candidate-0008",
+      "canonical_relation_core_identity": "083d05266421653f5e8062a4a470219d821a94b06cbd07e9da0dfa11c7e42e86",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "observation",
+          "request_ref": "r20260920-090301-1906:request:13"
+        }
+      ],
+      "producer": null,
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0001",
+          "candidate_ordinal": 12,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json#content(from-json).candidates[11].rationale",
+          "raw_rationale": "Recorded read of /api/documents/1/ returns $.versions as an array of objects each carrying an integer $.id. Proposed actual-response uniqueness of the version id tuple in the returned array; no cross-page or database claim.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0001/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-8d57846e029aea13e423"
+    },
+    {
+      "actions": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "PATCH",
+          "path": "/api/documents/1/",
+          "phase": "producer",
+          "request_ref": "r20260920-090301-1906:request:22"
+        }
+      ],
+      "assertion_layer": "business_relation",
+      "basis": "action_or_query_relation",
+      "business_predicate": {
+        "assertion_id": "v2-candidate-0009-business-01",
+        "class": "business",
+        "predicate": {
+          "family": "P20",
+          "left": {
+            "path": "$",
+            "role": "before",
+            "value_type": "object"
+          },
+          "operator": "equal",
+          "projection": [
+            "$.added",
+            "$.correspondent",
+            "$.created",
+            "$.document_type",
+            "$.id",
+            "$.original_file_name",
+            "$.owner",
+            "$.storage_path"
+          ],
+          "projection_ref": null,
+          "right": {
+            "path": "$",
+            "role": "after",
+            "value_type": "object"
+          }
+        },
+        "predicate_type": "P20"
+      },
+      "business_summary": "Producer actor_a PATCH /api/documents/1/; observer actor_a GET /api/documents/1/; business predicate P20 requires strict equality between before $ (object) and after $ (object) for every frozen field ['$.added', '$.correspondent', '$.created', '$.document_type', '$.id', '$.original_file_name', '$.owner', '$.storage_path']; known false survives another unavailable field.",
+      "candidate_id": "v2-candidate-0009",
+      "canonical_relation_core_identity": "05d1c4ee20e0192b1a90579184214033cf48b09d2f9ad97de563941477d05582",
+      "claim_source": "frozen_candidate_hypothesis",
+      "generic_baseline_overlap": [],
+      "observers": [
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "before_observer",
+          "request_ref": "r20260920-090301-1906:request:13"
+        },
+        {
+          "actor": "actor_a",
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/documents/1/",
+          "phase": "after_observer",
+          "request_ref": "r20260920-090301-1906:request:23"
+        }
+      ],
+      "producer": {
+        "actor": "actor_a",
+        "kind": "http",
+        "method": "PATCH",
+        "path": "/api/documents/1/",
+        "phase": "producer",
+        "request_ref": "r20260920-090301-1906:request:22"
+      },
+      "rationale_semantics": "non_normative_raw_M10_proposal_metadata_not_used_by_identity_dedup_setup_verdict_or_retention",
+      "rationale_sources": [
+        {
+          "call_id": "round-0003:detail-0004",
+          "candidate_ordinal": 2,
+          "normative": false,
+          "rationale_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json#content(from-json).candidates[1].rationale",
+          "raw_rationale": "Before (request:13) and after (request:23) are the same observer operation and selector on the same document object; the PATCH body carries only id, title and remove_inbox_tags, so the listed concrete document fields are hypothesized to remain unchanged (the modification timestamps are deliberately excluded). Recorded values need not already be equal; the caller re-reads through a fresh API response after the action.",
+          "source_ref": "../attempts/attempt-0003/M10/calls/detail-0004/provider_response_envelope.json"
+        }
+      ],
+      "request_parameters": [],
+      "schema_type_assertion_scope": "schema_type checks only the JSON type at one frozen target JSONPath; it is not full response-schema or OpenAPI validation.",
+      "test_id": "relation-test-1e0d05b53ec81aea6499"
+    }
+  ]
+}

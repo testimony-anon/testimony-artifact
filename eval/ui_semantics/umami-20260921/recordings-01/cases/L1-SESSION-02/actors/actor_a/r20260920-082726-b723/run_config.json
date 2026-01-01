@@ -1,0 +1,144 @@
+{
+  "metadata": {
+    "artifact_type": "run_config",
+    "schema_version": "1.0.0",
+    "run_id": "r20260920-082726-b723",
+    "stage": "stage0",
+    "created_at": "2026-09-20T08:27:26.302+00:00",
+    "tool_version": "carverflow 0.1.0",
+    "upstream_refs": []
+  },
+  "app_profile": {
+    "base_url": "http://127.0.0.1:18090",
+    "auth": {
+      "method": "none",
+      "token_scheme": "Token"
+    },
+    "reset": {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "subject_adapters.docker_single_local",
+        "reset",
+        "--adapter",
+        "fixtures/adapters/umami_current_local.json",
+        "--output",
+        "unused.json"
+      ],
+      "verify_request": {
+        "method": "GET",
+        "path": "/api/heartbeat",
+        "expect_status": 200,
+        "expect_json_path": "$.ok",
+        "expect_json_equals": true
+      }
+    },
+    "rate_limit": {
+      "max_concurrency": 1,
+      "min_interval_ms": 50,
+      "retry_on_429": {
+        "max_retries": 1
+      }
+    },
+    "drive_mode": "replay",
+    "actors": [
+      {
+        "actor_id": "actor_a",
+        "auth": {
+          "method": "api_token",
+          "login_entry": "/login",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_UMAMI_ACTOR_A_USERNAME",
+            "password_env": "UISEMTEST_UMAMI_ACTOR_A_PASSWORD"
+          },
+          "token_scheme": "Bearer",
+          "probe_endpoint": {
+            "method": "POST",
+            "path": "/api/auth/verify",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.username"
+          },
+          "api_token": {
+            "method": "POST",
+            "path": "/api/auth/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "token_json_path": "$.token",
+            "recording_activation": "api_then_inject",
+            "browser_activation": {
+              "storage": "local_storage",
+              "key": "umami.auth",
+              "value_template": "\"${token}\"",
+              "entry_url": "/websites",
+              "timeout_ms": 30000
+            }
+          }
+        }
+      },
+      {
+        "actor_id": "actor_b",
+        "auth": {
+          "method": "api_token",
+          "login_entry": "/login",
+          "credentials_ref": {
+            "email_env": "UISEMTEST_UMAMI_ACTOR_B_USERNAME",
+            "password_env": "UISEMTEST_UMAMI_ACTOR_B_PASSWORD"
+          },
+          "token_scheme": "Bearer",
+          "probe_endpoint": {
+            "method": "POST",
+            "path": "/api/auth/verify",
+            "expect_status": 200,
+            "unauthenticated_status": 401,
+            "expect_json_path": "$.username"
+          },
+          "api_token": {
+            "method": "POST",
+            "path": "/api/auth/login",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "body_template": {
+              "username": "${email}",
+              "password": "${password}"
+            },
+            "token_json_path": "$.token",
+            "recording_activation": "api_then_inject",
+            "browser_activation": {
+              "storage": "local_storage",
+              "key": "umami.auth",
+              "value_template": "\"${token}\"",
+              "entry_url": "/websites",
+              "timeout_ms": 30000
+            }
+          }
+        }
+      }
+    ]
+  },
+  "auth_context": {
+    "verified": true,
+    "method": "api_token",
+    "auth_mode": "auto_login",
+    "actor_id": "actor_a",
+    "recording_activation": "api_then_inject",
+    "probe_status": 200,
+    "verified_at": "2026-09-20T08:27:26.181+00:00",
+    "probe_identity_observed": true,
+    "session_ref": "actor_a"
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

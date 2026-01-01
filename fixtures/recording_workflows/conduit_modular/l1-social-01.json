@@ -1,0 +1,146 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "conduit-modular-l1-social-01",
+  "profile_ref": "fixtures/profiles/conduit_current_local.json",
+  "actors": [
+    {
+      "actor_id": "actor_a",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.actor_a.home",
+          "action": {
+            "kind": "navigate",
+            "url": "/"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "a[href=\"#/editor\"]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-profile-route",
+      "global_step_index": 0,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "navigate",
+        "url": "/#/profile/uisemtest_actor_b"
+      },
+      "waits": [
+        {
+          "kind": "load_state",
+          "state": "domcontentloaded",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": ".profile-page .user-info"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.follow-profile",
+      "global_step_index": 1,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "button:has(i.ion-plus-round)",
+          "scope": {
+            "kind": "css",
+            "value": ".profile-page .user-info"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 200,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "button:has(i.ion-minus-round)",
+            "has_text": "( 1 )",
+            "scope": {
+              "kind": "css",
+              "value": ".profile-page .user-info"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.unfollow-profile",
+      "global_step_index": 2,
+      "actor_id": "actor_a",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "button:has(i.ion-minus-round)",
+          "scope": {
+            "kind": "css",
+            "value": ".profile-page .user-info"
+          }
+        }
+      },
+      "waits": [
+        {
+          "kind": "dom_quiet",
+          "quiet_ms": 200,
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "button:has(i.ion-plus-round)",
+            "has_text": "( 0 )",
+            "scope": {
+              "kind": "css",
+              "value": ".profile-page .user-info"
+            }
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

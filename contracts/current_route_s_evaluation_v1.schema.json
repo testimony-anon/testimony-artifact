@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://carverflow.local/contracts/current_route_s_evaluation_v1.schema.json",
+  "title": "Current Route-S evaluation documents v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "document_kind", "candidate", "projection_plan", "protocol", "sessions", "cross_arm_reuse_refs"],
+      "properties": {
+        "schema_version": {"const": "uisemtest-current-route-s-execution-evidence-v1"},
+        "document_kind": {"const": "execution_evidence"},
+        "candidate": {"type": "object"},
+        "projection_plan": {"type": "object"},
+        "protocol": {"type": "object", "minProperties": 11},
+        "sessions": {"type": "array"},
+        "cross_arm_reuse_refs": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "document_kind", "execution_evidence_sha256", "execution_binding", "producer_dual_view_attestation", "request_binding_attestation", "route_s_certificate"],
+      "properties": {
+        "schema_version": {"const": "uisemtest-current-route-s-certificate-v1"},
+        "document_kind": {"const": "certificate"},
+        "execution_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "execution_binding": {"type": "object"},
+        "producer_dual_view_attestation": {"type": "object"},
+        "request_binding_attestation": {"type": "object"},
+        "route_s_certificate": {"type": "object"}
+      }
+    }
+  ]
+}

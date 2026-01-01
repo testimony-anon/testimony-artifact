@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui_trace.schema.json",
+  "title": "ui_trace — multi-actor UI/API binding sidecar (produced after Stage 2)",
+  "description": "Aggregates several single-actor session bundles and records the global event order, API observation references, complete per-action request groups, confirmed bindings and pending bindings. Must not copy credentials or response bodies.",
+  "type": "object",
+  "required": ["metadata", "actors", "events", "api_requests", "bindings", "binding_reviews", "request_groups", "unassigned_requests"],
+  "properties": {
+    "metadata": {
+      "$ref": "metadata_envelope.schema.json",
+      "properties": {
+        "artifact_type": { "const": "ui_trace" },
+        "stage": { "const": "stage2" }
+      }
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/actor" },
+      "x-volatility": "structural"
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/event" },
+      "x-volatility": "structural"
+    },
+    "api_requests": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/api_request" },
+      "x-volatility": "structural"
+    },
+    "bindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/confirmed_binding" },
+      "x-volatility": "structural"
+    },
+    "binding_reviews": {
+      "type": "array",
+      "description": "Records deterministic ambiguous cases only. This round carries no LLM binding proposals; if taken up in the future, the contract must be changed separately.",
+      "items": { "$ref": "#/$defs/binding_review" },
+      "x-volatility": "structural"
+    },
+    "request_groups": {
+      "type": "array",
+      "description": "Complete ordered request group of each UI action. anchor only denotes the original deterministic primary; weak_roles must not be used for filtering or as semantic conclusions.",
+      "items": { "$ref": "#/$defs/request_group" },
+      "x-volatility": "structural"
+    },
+    "unassigned_requests": {
+      "type": "array",
+      "description": "Explicit conservation outlet for requests that have entered api_requests but belong to no action-window request group.",
+      "items": { "$ref": "#/$defs/unassigned_request" },
+      "x-volatility": "structural"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "actor_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+    },
+    "operation_id": {
+      "type": "string",
+      "pattern": "^(get|put|post|delete|options|head|patch|trace)_[a-z0-9_]+$"
+    },
+    "session_ref": {
+      "type": "object",
+      "required": ["artifact_type", "run_id", "path"],
+      "properties": {
+        "artifact_type": { "const": "session_bundle" },
+        "run_id": { "type": "string", "minLength": 1 },
+        "path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "observation_ref": {
+      "type": "object",
+      "required": ["run_id", "entry_index"],
+      "properties": {
+        "run_id": { "type": "string", "minLength": 1 },
+        "entry_index": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false,
+      "x-volatility": "volatile"
+    },
+    "actor": {
+      "type": "object",
+      "required": ["actor_id", "session_bundle_ref"],
+      "properties": {
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "session_bundle_ref": { "$ref": "#/$defs/session_ref" }
+      },
+      "additionalProperties": false
+    },
+    "event": {
+      "type": "object",
+      "required": ["event_id", "actor_id", "action_ref", "global_order", "scenario_step_id", "workflow_step_id", "global_step_index", "binding_material_source_step_ids"],
+      "properties": {
+        "event_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "action_ref": {
+          "type": "object",
+          "required": ["run_id", "action_id"],
+          "properties": {
+            "run_id": { "type": "string", "minLength": 1 },
+            "action_id": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "global_order": { "type": "integer", "minimum": 0 },
+        "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "workflow_step_id": {"type": "string", "minLength": 1},
+        "global_step_index": {"type": "integer", "minimum": 0},
+        "binding_material_source_step_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "api_request": {
+      "type": "object",
+      "required": ["request_ref", "actor_id", "observation_ref", "operation_id", "method", "canonical_path", "global_order"],
+      "properties": {
+        "request_ref": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "observation_ref": { "$ref": "#/$defs/observation_ref" },
+        "operation_id": { "$ref": "#/$defs/operation_id" },
+        "method": { "type": "string", "enum": ["GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "PATCH", "TRACE"] },
+        "canonical_path": { "type": "string", "pattern": "^/" },
+        "body_encoding": { "type": "string", "enum": ["json", "form_urlencoded", "multipart", "none"] },
+        "graphql_operation_kind": { "type": "string", "enum": ["query", "mutation", "unknown"] },
+        "declared_read_semantic": { "type": "boolean", "description": "Present (true) only when the profile declares this method/path pair as read-semantic." },
+        "global_order": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "deterministic_evidence": {
+      "type": "string",
+      "enum": ["action_window", "actor_session", "url_transition", "parameter_overlap", "form_field_overlap", "graphql_operation_name", "adjacent_input_literal_match", "explicit_input_material_match", "locator_leaf_exact_match"]
+    },
+    "confirmed_binding": {
+      "type": "object",
+      "required": ["binding_id", "event_id", "request_ref", "status", "deterministic_evidence"],
+      "properties": {
+        "binding_id": { "type": "string", "minLength": 1 },
+        "event_id": { "type": "string", "minLength": 1 },
+        "request_ref": { "type": "string", "minLength": 1 },
+        "status": { "const": "confirmed" },
+        "deterministic_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/deterministic_evidence" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "binding_review": {
+      "type": "object",
+      "required": ["review_id", "event_id", "candidate_request_refs", "status", "reason"],
+      "properties": {
+        "review_id": { "type": "string", "minLength": 1 },
+        "event_id": { "type": "string", "minLength": 1 },
+        "candidate_request_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "status": { "const": "review_required" },
+        "reason": { "type": "string", "minLength": 1 },
+        "deterministic_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/deterministic_evidence" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "weak_request_role": {
+      "type": "string",
+      "enum": ["anchor", "state_change_like", "read_like", "repeated_operation_like", "background_initiated", "review_candidate", "unknown"]
+    },
+    "request_group_member": {
+      "type": "object",
+      "required": ["request_ref", "global_order", "group_order", "weak_roles"],
+      "properties": {
+        "request_ref": { "type": "string", "minLength": 1 },
+        "global_order": { "type": "integer", "minimum": 0 },
+        "group_order": { "type": "integer", "minimum": 0 },
+        "weak_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/weak_request_role" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "request_group": {
+      "type": "object",
+      "required": ["group_id", "event_id", "actor_id", "status", "anchor_request_ref", "members", "deterministic_evidence", "reason"],
+      "properties": {
+        "group_id": { "type": "string", "pattern": "^request-group-[0-9]{4,}$" },
+        "event_id": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "status": { "type": "string", "enum": ["anchored", "review_required", "unanchored", "no_request"] },
+        "anchor_request_ref": { "type": ["string", "null"], "minLength": 1 },
+        "members": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/request_group_member" }
+        },
+        "deterministic_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/deterministic_evidence" }
+        },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "unassigned_request": {
+      "type": "object",
+      "required": ["request_ref", "actor_id", "global_order", "weak_roles", "status", "reason"],
+      "properties": {
+        "request_ref": { "type": "string", "minLength": 1 },
+        "actor_id": { "$ref": "#/$defs/actor_id" },
+        "global_order": { "type": "integer", "minimum": 0 },
+        "weak_roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/weak_request_role" }
+        },
+        "status": { "const": "unassigned" },
+        "reason": { "const": "outside_action_window" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

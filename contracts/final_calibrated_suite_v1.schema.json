@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "final_calibrated_suite_v1.schema.json",
+  "title": "UISemTest self-contained final calibrated suite v1",
+  "type": "object",
+  "required": [
+    "schema_version", "status", "completion_reason", "source_suite", "source_calibration",
+    "source_final_view", "retained_count", "retained_candidate_ids",
+    "retained_tests", "retained_tests_sha256", "candidate_denominator",
+    "test_denominator", "assertion_definition_denominator",
+    "physical_evaluation_denominator", "m13_suite_mutated"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-final-calibrated-suite-v1"},
+    "status": {"enum": ["pass", "complete_empty"]},
+    "completion_reason": {"enum": ["relations_calibrated", "no_confirmed_relations"]},
+    "source_suite": {"$ref": "current_calibration_report_v1.schema.json#/$defs/file_ref"},
+    "source_calibration": {"$ref": "current_calibration_report_v1.schema.json#/$defs/file_ref"},
+    "source_final_view": {"$ref": "current_calibration_report_v1.schema.json#/$defs/file_ref"},
+    "retained_count": {"type": "integer", "minimum": 0},
+    "retained_candidate_ids": {"$ref": "current_calibration_report_v1.schema.json#/$defs/id_array"},
+    "retained_tests": {
+      "type": "array",
+      "items": {"$ref": "certified_relation_tests.schema.json#/$defs/test"}
+    },
+    "retained_tests_sha256": {"$ref": "current_calibration_report_v1.schema.json#/$defs/sha"},
+    "candidate_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/candidate_denominator"},
+    "test_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/test_denominator"},
+    "assertion_definition_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/assertion_definition_denominator"},
+    "physical_evaluation_denominator": {"$ref": "current_calibration_report_v1.schema.json#/$defs/physical_denominator"},
+    "m13_suite_mutated": {"const": false}
+  },
+  "additionalProperties": false
+}

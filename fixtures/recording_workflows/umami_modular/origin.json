@@ -1,0 +1,1402 @@
+{
+  "schema_version": "uisemtest-recording-origin-v1",
+  "subject": "umami",
+  "suite_id": "umami-modular-v1",
+  "generated_by": "scripts/experiments/subject_survey/spec_to_workflow.py + manual completion (phase B)",
+  "official_suite": {
+    "repository": "https://github.com/umami-software/umami",
+    "tag": "v3.4.0",
+    "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+    "playwright_test_id_attribute": "data-test",
+    "ui_spec_files": [
+      "tests/e2e/login.spec.ts",
+      "tests/e2e/website.spec.ts",
+      "tests/e2e/user.spec.ts",
+      "tests/e2e/session-modal-dismiss.spec.ts"
+    ],
+    "api_spec_files_not_converted": [
+      "tests/e2e/api-board.spec.ts",
+      "tests/e2e/api-team.spec.ts",
+      "tests/e2e/api-user.spec.ts",
+      "tests/e2e/api-website.spec.ts"
+    ],
+    "ui_test_count": 11,
+    "staleness": "At v3.4.0 the official UI suite no longer matches its own UI: button-website-add, dropdown-role and item-logout occur nowhere in the v3.4.0 source, button-profile's component is not mounted by any page, and /settings/users returns 404. The operation sequences of the 11 cases were kept; the locators and the routes hosting them were corrected against the pinned image and every correction is listed per case under locator_rewrites."
+  },
+  "subject_under_test": {
+    "image": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+    "umami_version": "3.4.0",
+    "base_url": "http://127.0.0.1:18090"
+  },
+  "locator_channel_rewrite": "Every getByTestId('x') is written as css [data-test=\"x\"]: the pipeline resolves the test_id locator through Playwright's default data-testid attribute (src/stage1_record/workflow.py:467 calls get_by_test_id and src/ never calls selectors.set_test_id_attribute), while umami's playwright.config.ts:16 sets testIdAttribute: 'data-test'. Same attribute, same element; this channel change is not counted as a locator rewrite.",
+  "locator_verification": {
+    "input-username": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "login page and the create/edit user forms"
+    },
+    "input-password": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "login page and the create/edit user forms"
+    },
+    "button-submit": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "every form's submit button"
+    },
+    "input-name": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "Add-website dialog on /websites and the website settings form"
+    },
+    "input-domain": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "same as input-name"
+    },
+    "button-create-user": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "on /admin/users, not on the spec's /settings/users"
+    },
+    "link-button-edit": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": "after_interaction",
+      "note": "only inside a row's MenuButton popup on /admin/*; never on /settings/websites"
+    },
+    "link-button-delete": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": "after_interaction",
+      "note": "the per-row delete action on /admin/*"
+    },
+    "text-field-websiteId": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "/websites/<id>/settings"
+    },
+    "button-delete": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": true,
+      "note": "/websites/<id>/settings"
+    },
+    "dropdown-item-user": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": "after_interaction",
+      "note": "only after the role Select is opened"
+    },
+    "dropdown-item-viewOnly": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": "after_interaction",
+      "note": "only after the role Select is opened"
+    },
+    "button-confirm": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": "after_interaction",
+      "note": "inside a ConfirmationForm dialog"
+    },
+    "button-website-add": {
+      "in_v3_4_0_source": false,
+      "in_pinned_image_dom": false,
+      "note": "MISSING: no occurrence in the v3.4.0 source or in the image bundle"
+    },
+    "dropdown-role": {
+      "in_v3_4_0_source": false,
+      "in_pinned_image_dom": false,
+      "note": "MISSING: the role Select trigger carries no data-test (it is button[data-slot=select-trigger])"
+    },
+    "item-logout": {
+      "in_v3_4_0_source": false,
+      "in_pinned_image_dom": false,
+      "note": "MISSING: the profile menu items carry no data-test"
+    },
+    "button-profile": {
+      "in_v3_4_0_source": true,
+      "in_pinned_image_dom": false,
+      "note": "declared in src/components/input/ProfileButton.tsx but that component is not mounted by any v3.4.0 page"
+    }
+  },
+  "route_verification": {
+    "/login": {
+      "exists_in_pinned_image": true,
+      "note": "redirects to /websites when the browser already holds a session, hence the guest profile for L1-AUTH-01/02"
+    },
+    "/settings/websites": {
+      "exists_in_pinned_image": true,
+      "note": "exists, but carries neither button-website-add nor link-button-edit in v3.4.0"
+    },
+    "/settings/users": {
+      "exists_in_pinned_image": false,
+      "note": "404 'Page not found'; user administration moved to /admin/users"
+    },
+    "/admin/users": {
+      "exists_in_pinned_image": true,
+      "note": "where button-create-user and the per-row menu live"
+    },
+    "/websites": {
+      "exists_in_pinned_image": true,
+      "note": "where the Add website affordance lives"
+    },
+    "/settings/teams": {
+      "exists_in_pinned_image": true,
+      "note": ""
+    },
+    "/settings/profile": {
+      "exists_in_pinned_image": true,
+      "note": ""
+    }
+  },
+  "cases": [
+    {
+      "case_id": "L1-AUTH-01",
+      "origin": "official",
+      "workflow": "l1-auth-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_guest_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/login.spec.ts",
+        "test_name": "logs user in with correct credentials and logs user out",
+        "test_line": 9
+      },
+      "goal": "A correct username and password start an authenticated session; logging out ends it.",
+      "step_count": 6,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "getByTestId(\"button-profile\")",
+          "rewritten": ":nth-match(button[data-slot=\"menu-trigger\"], 1)",
+          "why": "ProfileButton.tsx is not mounted by any v3.4.0 page; the profile menu opens from the sidebar menu-trigger"
+        },
+        {
+          "official": "getByTestId(\"item-logout\")",
+          "rewritten": "role=menuitem name=\"Logout\"",
+          "why": "the profile menu items carry no data-test in v3.4.0"
+        }
+      ],
+      "assertion_count": 2,
+      "assertions": [
+        {
+          "source_line": 12,
+          "source": "await expect(page).toHaveURL(/\\/dashboard$/)",
+          "position": "mid",
+          "checks": "url"
+        },
+        {
+          "source_line": 3,
+          "source": "await expect(page).toHaveURL(/\\/login$/)",
+          "position": "helper:logout()",
+          "checks": "url"
+        }
+      ],
+      "assertion_positions": {
+        "helper:logout()": 1,
+        "mid": 1
+      },
+      "assertion_checks": {
+        "url": 2
+      },
+      "setup_moved_out": [],
+      "runtime_values_pinned": [
+        "umamiUser.username/password -> value_env UISEMTEST_UMAMI_ACTOR_A_{USERNAME,PASSWORD}"
+      ],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            401
+          ],
+          [
+            "POST",
+            "/api/auth/login",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/logout",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            401
+          ]
+        ],
+        "final_url": "/login"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-AUTH-02",
+      "origin": "official",
+      "workflow": "l1-auth-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_guest_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/login.spec.ts",
+        "test_name": "shows validation for blank inputs or incorrect credentials",
+        "test_line": 19
+      },
+      "goal": "Blank and wrong credentials are rejected and start no session.",
+      "step_count": 5,
+      "locator_source": "official_verbatim",
+      "locator_rewrites": [],
+      "assertion_count": 2,
+      "assertions": [
+        {
+          "source_line": 20,
+          "source": "await expect(page.getByText(/Required/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 25,
+          "source": "await expect(page.getByText(/Incorrect username and\\/or password./i)).toBeVisible()",
+          "position": "final",
+          "checks": "dom_visibility"
+        }
+      ],
+      "assertion_positions": {
+        "final": 1,
+        "mid": 1
+      },
+      "assertion_checks": {
+        "dom_visibility": 2
+      },
+      "setup_moved_out": [],
+      "runtime_values_pinned": [
+        "umamiUser.username -> value_env UISEMTEST_UMAMI_ACTOR_A_USERNAME"
+      ],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            401
+          ],
+          [
+            "POST",
+            "/api/auth/login",
+            401
+          ]
+        ],
+        "final_url": "/login"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-SESSION-01",
+      "origin": "official",
+      "workflow": "l1-session-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/session-modal-dismiss.spec.ts",
+        "test_name": "clicking in the left side margin dismisses the modal",
+        "test_line": 49
+      },
+      "goal": "Front-end only: the session modal opens from the ?session= query parameter.",
+      "step_count": 1,
+      "locator_source": "official_verbatim",
+      "locator_rewrites": [],
+      "assertion_count": 4,
+      "assertions": [
+        {
+          "source_line": 41,
+          "source": "await expect(page.getByRole('dialog')).toBeVisible()",
+          "position": "beforeEach",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 52,
+          "source": "expect(marginX).toBeLessThan(box.x)",
+          "position": "mid",
+          "checks": "client_geometry"
+        },
+        {
+          "source_line": 55,
+          "source": "await expect(page.getByRole('dialog')).toBeHidden()",
+          "position": "final",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 57,
+          "source": "await expect(page).not.toHaveURL(/session=/)",
+          "position": "final",
+          "checks": "url"
+        }
+      ],
+      "assertion_positions": {
+        "beforeEach": 1,
+        "final": 2,
+        "mid": 1
+      },
+      "assertion_checks": {
+        "client_geometry": 1,
+        "dom_visibility": 2,
+        "url": 1
+      },
+      "setup_moved_out": [
+        "session-modal-dismiss.createWebsite(uuid()) -> deploy/umami/seed.sh (website a0000000-...-0004)",
+        "helpers.deleteWebsite(...) in afterEach -> profile.reset"
+      ],
+      "runtime_values_pinned": [
+        "?session=<uuid()> -> ?session=00000000-0000-4000-8000-0000000000ff",
+        "const websiteId = uuid() -> a0000000-0000-4000-8000-000000000004 (seeded)"
+      ],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [
+        "page.mouse.click(marginX, midY) - the workflow action set has no coordinate click",
+        "test.use({ viewport: 1600x900 }) - the workflow schema has no viewport control",
+        "getSheetBox() reads the dialog's bounding box - no read action exists"
+      ],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/websites/a0000000-0000-4000-8000-000000000004/sessions?session=00000000-0000-4000-8000-0000000000ff"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-SESSION-02",
+      "origin": "official",
+      "workflow": "l1-session-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/session-modal-dismiss.spec.ts",
+        "test_name": "clicking in the right side margin dismisses the modal",
+        "test_line": 61
+      },
+      "goal": "Front-end only: the session modal opens from the ?session= query parameter.",
+      "step_count": 1,
+      "locator_source": "official_verbatim",
+      "locator_rewrites": [],
+      "assertion_count": 4,
+      "assertions": [
+        {
+          "source_line": 41,
+          "source": "await expect(page.getByRole('dialog')).toBeVisible()",
+          "position": "beforeEach",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 64,
+          "source": "expect(marginX).toBeGreaterThan(box.x + box.width)",
+          "position": "final",
+          "checks": "client_geometry"
+        },
+        {
+          "source_line": 67,
+          "source": "await expect(page.getByRole('dialog')).toBeHidden()",
+          "position": "final",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 69,
+          "source": "await expect(page).not.toHaveURL(/session=/)",
+          "position": "final",
+          "checks": "url"
+        }
+      ],
+      "assertion_positions": {
+        "beforeEach": 1,
+        "final": 3
+      },
+      "assertion_checks": {
+        "client_geometry": 1,
+        "dom_visibility": 2,
+        "url": 1
+      },
+      "setup_moved_out": [
+        "session-modal-dismiss.createWebsite(uuid()) -> deploy/umami/seed.sh (website a0000000-...-0004)",
+        "helpers.deleteWebsite(...) in afterEach -> profile.reset"
+      ],
+      "runtime_values_pinned": [
+        "?session=<uuid()> -> ?session=00000000-0000-4000-8000-0000000000ff",
+        "const websiteId = uuid() -> a0000000-0000-4000-8000-000000000004 (seeded)"
+      ],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [
+        "page.mouse.click(marginX, midY) - the workflow action set has no coordinate click",
+        "test.use({ viewport: 1600x900 }) - the workflow schema has no viewport control",
+        "getSheetBox() reads the dialog's bounding box - no read action exists"
+      ],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/websites/a0000000-0000-4000-8000-000000000004/sessions?session=00000000-0000-4000-8000-0000000000ff"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-SESSION-03",
+      "origin": "official",
+      "workflow": "l1-session-03.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/session-modal-dismiss.spec.ts",
+        "test_name": "control: clicking inside the sheet keeps the modal open",
+        "test_line": 73
+      },
+      "goal": "Front-end only: the session modal opens from the ?session= query parameter.",
+      "step_count": 1,
+      "locator_source": "official_verbatim",
+      "locator_rewrites": [],
+      "assertion_count": 3,
+      "assertions": [
+        {
+          "source_line": 41,
+          "source": "await expect(page.getByRole('dialog')).toBeVisible()",
+          "position": "beforeEach",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 76,
+          "source": "await expect(page.getByRole('dialog')).toBeVisible()",
+          "position": "final",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 78,
+          "source": "await expect(page).toHaveURL(/session=/)",
+          "position": "final",
+          "checks": "url"
+        }
+      ],
+      "assertion_positions": {
+        "beforeEach": 1,
+        "final": 2
+      },
+      "assertion_checks": {
+        "dom_visibility": 2,
+        "url": 1
+      },
+      "setup_moved_out": [
+        "session-modal-dismiss.createWebsite(uuid()) -> deploy/umami/seed.sh (website a0000000-...-0004)",
+        "helpers.deleteWebsite(...) in afterEach -> profile.reset"
+      ],
+      "runtime_values_pinned": [
+        "?session=<uuid()> -> ?session=00000000-0000-4000-8000-0000000000ff",
+        "const websiteId = uuid() -> a0000000-0000-4000-8000-000000000004 (seeded)"
+      ],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [
+        "page.mouse.click(box centre) - the workflow action set has no coordinate click",
+        "test.use({ viewport: 1600x900 }) - the workflow schema has no viewport control",
+        "getSheetBox() reads the dialog's bounding box - no read action exists"
+      ],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/websites/a0000000-0000-4000-8000-000000000004/sessions?session=00000000-0000-4000-8000-0000000000ff"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-SHARE-01",
+      "origin": "author",
+      "workflow": "l1-share-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "Adding a share link to a website creates a share record with a public slug for that website.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-TEAM-01",
+      "origin": "author",
+      "workflow": "l1-team-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "A new team created from the Teams settings page is persisted and owned by actor_a.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-TEAM-03",
+      "origin": "author",
+      "workflow": "l1-team-03.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "A second user who joins a team with its access code becomes a member of that team.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-USER-01",
+      "origin": "official",
+      "workflow": "l1-user-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/user.spec.ts",
+        "test_name": "adds a user",
+        "test_line": 12
+      },
+      "goal": "An admin creating a user with role 'user' persists that account with that role.",
+      "step_count": 7,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "page.goto(\"/settings/users\")",
+          "rewritten": "page.goto(\"/admin/users\")",
+          "why": "/settings/users returns 404 in v3.4.0; user administration moved to /admin/users"
+        },
+        {
+          "official": "getByTestId(\"dropdown-role\")",
+          "rewritten": "button[data-slot=\"select-trigger\"]",
+          "why": "no data-test on the role Select trigger in v3.4.0; the open dialog has exactly one"
+        },
+        {
+          "official": "getByTestId(\"input-username\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-username\"] (no descendant input)",
+          "why": "in UserAddForm/UserEditForm v3.4.0 puts data-test on the <input> itself, not on a wrapper; only the login form still wraps it"
+        },
+        {
+          "official": "getByTestId(\"input-password\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-password\"] (no descendant input)",
+          "why": "same as input-username"
+        }
+      ],
+      "assertion_count": 3,
+      "assertions": [
+        {
+          "source_line": 12,
+          "source": "await expect(page.getByText(/Create user/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 20,
+          "source": "await expect(page.locator('td[label=\"Username\"]')).toContainText('Test-user')",
+          "position": "final",
+          "checks": "dom_text"
+        },
+        {
+          "source_line": 22,
+          "source": "await expect(page.locator('td[label=\"Role\"]')).toContainText('User')",
+          "position": "final",
+          "checks": "dom_text"
+        }
+      ],
+      "assertion_positions": {
+        "final": 2,
+        "mid": 1
+      },
+      "assertion_checks": {
+        "dom_text": 2,
+        "dom_visibility": 1
+      },
+      "setup_moved_out": [],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/users",
+            200
+          ]
+        ],
+        "final_url": "/admin/users"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-USER-03",
+      "origin": "official",
+      "workflow": "l1-user-03.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/user.spec.ts",
+        "test_name": "deletes a user",
+        "test_line": 50
+      },
+      "goal": "A deleted user is removed from the account list.",
+      "step_count": 10,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "page.goto(\"/settings/users\")",
+          "rewritten": "page.goto(\"/admin/users\")",
+          "why": "/settings/users returns 404 in v3.4.0"
+        },
+        {
+          "official": "getByTestId(\"dropdown-role\")",
+          "rewritten": "button[data-slot=\"select-trigger\"]",
+          "why": "no data-test on the role Select trigger in v3.4.0; the open dialog has exactly one"
+        },
+        {
+          "official": "getByTestId(\"input-username\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-username\"] (no descendant input)",
+          "why": "in UserAddForm/UserEditForm v3.4.0 puts data-test on the <input> itself, not on a wrapper; only the login form still wraps it"
+        },
+        {
+          "official": "getByTestId(\"input-password\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-password\"] (no descendant input)",
+          "why": "same as input-username"
+        },
+        {
+          "official": "userRow.getByTestId(\"button-delete\")",
+          "rewritten": "click tr:has-text(\"test-user\") button, then [data-test=\"link-button-delete\"]",
+          "why": "the per-row delete action is link-button-delete inside the row MenuButton; button-delete is the website settings delete button"
+        },
+        {
+          "official": "getByTestId(\"button-confirm\")",
+          "rewritten": "button[data-slot=\"alert-dialog-action\"]",
+          "why": "the user-delete confirmation in v3.4.0 is an AlertDialog whose action button carries no data-test; button-confirm belongs to the generic ConfirmationForm used elsewhere"
+        }
+      ],
+      "assertion_count": 1,
+      "assertions": [
+        {
+          "source_line": 55,
+          "source": "await expect(page.getByText(/Are you sure you want to delete Test-user?/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        }
+      ],
+      "assertion_positions": {
+        "mid": 1
+      },
+      "assertion_checks": {
+        "dom_visibility": 1
+      },
+      "setup_moved_out": [],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": "user.spec.ts runs under mode:'serial'; the 6 operations of 'adds a user' (line 12) are inlined at the head so the case is self-contained under a per-case reset.",
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/users",
+            200
+          ],
+          [
+            "DELETE",
+            "/api/users/50a15cb6-d133-4c86-821c-5333fb12b324",
+            200
+          ]
+        ],
+        "final_url": "/admin/users"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-USER-04",
+      "origin": "author",
+      "workflow": "l1-user-04.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "An admin lowering a user's role to view-only persists that role on the user record.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-WEBSITE-01",
+      "origin": "official",
+      "workflow": "l1-website-01.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/website.spec.ts",
+        "test_name": "adds a website",
+        "test_line": 5
+      },
+      "goal": "A website added through the add-website form is persisted and appears in the owner's list.",
+      "step_count": 8,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "page.goto(\"/settings/websites\") then getByTestId(\"button-website-add\")",
+          "rewritten": "page.goto(\"/websites\") then role=button name=\"Add website\"",
+          "why": "button-website-add exists nowhere in v3.4.0; the add-website affordance lives on /websites"
+        },
+        {
+          "official": "getByTestId(\"link-button-edit\").first()",
+          "rewritten": "tr:has-text(\"Add test\") a[href$=\"/settings\"] on /settings/websites",
+          "why": "link-button-edit only exists inside the /admin/* row menus; the website list row links straight to the settings page. One navigate back to /settings/websites is inserted because the add now happens on /websites"
+        },
+        {
+          "official": "getByTestId(\"input-name\"/\"input-domain\"/\"button-submit\")",
+          "rewritten": "the same data-test scoped to [role=dialog]",
+          "why": "the website settings form behind the dialog carries the same attributes; workflow locators must match uniquely"
+        }
+      ],
+      "assertion_count": 6,
+      "assertions": [
+        {
+          "source_line": 9,
+          "source": "await expect(page.getByText(/Add website/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 13,
+          "source": "await expect(page.locator('td[label=\"Name\"]')).toContainText('Add test')",
+          "position": "mid",
+          "checks": "dom_text"
+        },
+        {
+          "source_line": 15,
+          "source": "await expect(page.locator('td[label=\"Domain\"]')).toContainText('addtest.com')",
+          "position": "mid",
+          "checks": "dom_text"
+        },
+        {
+          "source_line": 18,
+          "source": "await expect(page.getByText(/Details/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 4,
+          "source": "expect(response.status()).toBe(200)",
+          "position": "helper:deleteWebsite()",
+          "checks": "network_status"
+        },
+        {
+          "source_line": 24,
+          "source": "await expect(page.getByText(/Add test/i)).toHaveCount(0)",
+          "position": "final",
+          "checks": "element_count"
+        }
+      ],
+      "assertion_positions": {
+        "final": 1,
+        "helper:deleteWebsite()": 1,
+        "mid": 4
+      },
+      "assertion_checks": {
+        "dom_text": 2,
+        "dom_visibility": 2,
+        "element_count": 1,
+        "network_status": 1
+      },
+      "setup_moved_out": [
+        "helpers.deleteWebsite(...) -> profile.reset"
+      ],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [
+        "const websiteId = ...inputValue() - no read action exists; the id was only needed by the API cleanup, which is profile.reset here"
+      ],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/websites",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/settings/websites"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-WEBSITE-02",
+      "origin": "official",
+      "workflow": "l1-website-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/website.spec.ts",
+        "test_name": "edits a website",
+        "test_line": 28
+      },
+      "goal": "Editing a website's name and domain persists both on the website record.",
+      "step_count": 7,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "getByTestId(\"link-button-edit\").first()",
+          "rewritten": "tr:has-text(\"Update test\") a[href$=\"/settings\"]",
+          "why": "same as L1-WEBSITE-01; the .first() of the official suite relied on the list holding a single row"
+        },
+        {
+          "official": "page.getByText(/Details/i).click()",
+          "rewritten": null,
+          "why": "removed: v3.4.0's website settings page is one scrolling page of panels, it has no Details tab. The step only existed to return to the panel holding the website id, which the next official statement read through inputValue() -- itself unconvertible"
+        }
+      ],
+      "assertion_count": 7,
+      "assertions": [
+        {
+          "source_line": 10,
+          "source": "expect(response.status()).toBe(200)",
+          "position": "helper:addWebsite()",
+          "checks": "network_status"
+        },
+        {
+          "source_line": 34,
+          "source": "await expect(page.getByText(/Details/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 38,
+          "source": "await expect(page.getByTestId('input-name').locator('input')).toHaveValue('Updated website')",
+          "position": "mid",
+          "checks": "input_value"
+        },
+        {
+          "source_line": 40,
+          "source": "await expect(page.getByTestId('input-domain').locator('input')).toHaveValue( 'updatedwebsite.com', )",
+          "position": "mid",
+          "checks": "input_value"
+        },
+        {
+          "source_line": 45,
+          "source": "await expect(page.locator('textarea')).toContainText('/script.js')",
+          "position": "mid",
+          "checks": "dom_text"
+        },
+        {
+          "source_line": 4,
+          "source": "expect(response.status()).toBe(200)",
+          "position": "helper:deleteWebsite()",
+          "checks": "network_status"
+        },
+        {
+          "source_line": 52,
+          "source": "await expect(page.getByText(/Update test/i)).toHaveCount(0)",
+          "position": "final",
+          "checks": "element_count"
+        }
+      ],
+      "assertion_positions": {
+        "final": 1,
+        "helper:addWebsite()": 1,
+        "helper:deleteWebsite()": 1,
+        "mid": 4
+      },
+      "assertion_checks": {
+        "dom_text": 1,
+        "dom_visibility": 1,
+        "element_count": 1,
+        "input_value": 2,
+        "network_status": 2
+      },
+      "setup_moved_out": [
+        "helpers.addWebsite('Update test','updatetest.com') -> deploy/umami/seed.sh (website a0000000-...-0002)",
+        "helpers.deleteWebsite(...) -> profile.reset"
+      ],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [
+        "const websiteId = ...inputValue() - same as L1-WEBSITE-01"
+      ],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/websites/a0000000-0000-4000-8000-000000000002",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/settings/websites"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-WEBSITE-03",
+      "origin": "official",
+      "workflow": "l1-website-03.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/website.spec.ts",
+        "test_name": "deletes a website",
+        "test_line": 56
+      },
+      "goal": "A website deleted through the typed DELETE confirmation disappears from the owner's list.",
+      "step_count": 5,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "getByTestId(\"link-button-edit\").first()",
+          "rewritten": "tr:has-text(\"Delete test\") a[href$=\"/settings\"]",
+          "why": "same as L1-WEBSITE-01"
+        },
+        {
+          "official": "page.getByText(/Data/i).click()",
+          "rewritten": null,
+          "why": "removed: there is no Data tab in v3.4.0; the delete affordance sits directly on the website settings page"
+        },
+        {
+          "official": "input[name=\"confirm\"] / button[type=\"submit\"]",
+          "rewritten": "the same selectors scoped to [role=dialog]",
+          "why": "the page behind the confirmation dialog carries another submit button; workflow locators must match uniquely"
+        }
+      ],
+      "assertion_count": 5,
+      "assertions": [
+        {
+          "source_line": 10,
+          "source": "expect(response.status()).toBe(200)",
+          "position": "helper:addWebsite()",
+          "checks": "network_status"
+        },
+        {
+          "source_line": 62,
+          "source": "await expect(page.getByText(/Data/i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 64,
+          "source": "await expect(page.getByText(/All website data will be deleted./i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 66,
+          "source": "await expect(page.getByText(/Type DELETE in the box below to confirm./i)).toBeVisible()",
+          "position": "mid",
+          "checks": "dom_visibility"
+        },
+        {
+          "source_line": 69,
+          "source": "await expect(page.getByText(/Delete test/i)).toHaveCount(0)",
+          "position": "final",
+          "checks": "element_count"
+        }
+      ],
+      "assertion_positions": {
+        "final": 1,
+        "helper:addWebsite()": 1,
+        "mid": 3
+      },
+      "assertion_checks": {
+        "dom_visibility": 3,
+        "element_count": 1,
+        "network_status": 1
+      },
+      "setup_moved_out": [
+        "helpers.addWebsite('Delete test','deletetest.com') -> deploy/umami/seed.sh (website a0000000-...-0003)"
+      ],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": null,
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "DELETE",
+            "/api/websites/a0000000-0000-4000-8000-000000000003",
+            200
+          ]
+        ],
+        "final_url": "/websites"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-WEBSITE-04",
+      "origin": "author",
+      "workflow": "l1-website-04.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "Deleting a website from its settings page removes it from the owner's website list.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L1-WEBSITE-05",
+      "origin": "author",
+      "workflow": "l1-website-05.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "Renaming a website from its settings page persists the new name and domain on the website record.",
+      "step_count": 4,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L2-SHARE-02",
+      "origin": "author",
+      "workflow": "l2-share-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "A share link that is added and then removed leaves no share record on the website.",
+      "step_count": 6,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L2-TEAM-02",
+      "origin": "author",
+      "workflow": "l2-team-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "Transferring a personal website to a team moves its ownership from the user to the team.",
+      "step_count": 5,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L2-USER-02",
+      "origin": "official",
+      "workflow": "l2-user-02.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": {
+        "repository": "https://github.com/umami-software/umami",
+        "tag": "v3.4.0",
+        "commit": "ec0ff50388c264ed8ce46f00967e92f7e71476ae",
+        "spec_file": "tests/e2e/user.spec.ts",
+        "test_name": "edits a user role and password",
+        "test_line": 26
+      },
+      "goal": "Changing a user's role to view-only and resetting their password persists both, and the new password authenticates.",
+      "step_count": 19,
+      "locator_source": "rewritten_from_official",
+      "locator_rewrites": [
+        {
+          "official": "page.goto(\"/settings/users\")",
+          "rewritten": "page.goto(\"/admin/users\")",
+          "why": "/settings/users returns 404 in v3.4.0"
+        },
+        {
+          "official": "getByTestId(\"dropdown-role\")",
+          "rewritten": "button[data-slot=\"select-trigger\"]",
+          "why": "no data-test on the role Select trigger in v3.4.0; the open dialog has exactly one"
+        },
+        {
+          "official": "getByTestId(\"input-username\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-username\"] (no descendant input)",
+          "why": "in UserAddForm/UserEditForm v3.4.0 puts data-test on the <input> itself, not on a wrapper; only the login form still wraps it"
+        },
+        {
+          "official": "getByTestId(\"input-password\").locator(\"input\")",
+          "rewritten": "[data-test=\"input-password\"] (no descendant input)",
+          "why": "same as input-username"
+        },
+        {
+          "official": "userRow.getByTestId(\"link-button-edit\")",
+          "rewritten": "click tr:has-text(\"test-user\") button, then [data-test=\"link-button-edit\"]",
+          "why": "link-button-edit lives inside a per-row MenuButton popup in v3.4.0, so opening that menu is one extra step. The row text is lowercase because POST /api/users lowercases the username (src/app/api/users/route.ts)"
+        },
+        {
+          "official": "getByTestId(\"dropdown-role\")",
+          "rewritten": "button[data-slot=\"select-trigger\"]",
+          "why": "no data-test on the role Select trigger; the user edit page has exactly one"
+        },
+        {
+          "official": "getByTestId(\"button-profile\")",
+          "rewritten": ":nth-match(button[data-slot=\"menu-trigger\"], 1)",
+          "why": "ProfileButton.tsx is not mounted by any v3.4.0 page; the profile menu opens from the sidebar menu-trigger"
+        },
+        {
+          "official": "getByTestId(\"item-logout\")",
+          "rewritten": "role=menuitem name=\"Logout\"",
+          "why": "the profile menu items carry no data-test in v3.4.0"
+        }
+      ],
+      "assertion_count": 3,
+      "assertions": [
+        {
+          "source_line": 37,
+          "source": "await expect( page.locator('table tbody tr').filter({ has: page.locator('td', { hasText: /Test-user/i }) }), ).toContainText('View only')",
+          "position": "mid",
+          "checks": "dom_text"
+        },
+        {
+          "source_line": 3,
+          "source": "await expect(page).toHaveURL(/\\/login$/)",
+          "position": "helper:logout()",
+          "checks": "url"
+        },
+        {
+          "source_line": 45,
+          "source": "await expect(page).toHaveURL(/\\/dashboard$/)",
+          "position": "final",
+          "checks": "url"
+        }
+      ],
+      "assertion_positions": {
+        "final": 1,
+        "helper:logout()": 1,
+        "mid": 1
+      },
+      "assertion_checks": {
+        "dom_text": 1,
+        "url": 2
+      },
+      "setup_moved_out": [],
+      "runtime_values_pinned": [],
+      "serial_predecessor_inlined": "user.spec.ts runs under mode:'serial'; the 6 operations of 'adds a user' (line 12) are inlined at the head so the case is self-contained under a per-case reset.",
+      "unconvertible_statements": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true,
+        "api_writes_observed": [
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/users",
+            200
+          ],
+          [
+            "POST",
+            "/api/users/e0636b3c-257d-4cc5-86ca-473aac65ff49",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/logout",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            401
+          ],
+          [
+            "POST",
+            "/api/auth/login",
+            200
+          ],
+          [
+            "POST",
+            "/api/auth/verify",
+            200
+          ]
+        ],
+        "final_url": "/websites"
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L2-USER-06",
+      "origin": "author",
+      "workflow": "l2-user-06.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "A user who changes their own password can no longer sign in with the old one and signs in with the new one.",
+      "step_count": 11,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L3-TEAM-04",
+      "origin": "author",
+      "workflow": "l3-team-04.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "A website created by actor_a and transferred to a team becomes readable by actor_b after actor_b joins that team.",
+      "step_count": 17,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    },
+    {
+      "case_id": "L3-USER-05",
+      "origin": "author",
+      "workflow": "l3-user-05.json",
+      "profile_ref": "fixtures/profiles/umami_modular_local.json",
+      "official_source": null,
+      "goal": "After the admin sets the second user to view-only, that user can still read websites but the create-website affordance is gone.",
+      "step_count": 6,
+      "locator_source": "authored_against_pinned_image",
+      "locator_rewrites": [],
+      "assertion_count": 0,
+      "assertions": [],
+      "live_verification": {
+        "executed_against": "ghcr.io/umami-software/umami@sha256:85909afc45bdcda1917394594a087421fdbb05610fded0fa9f6fb861abb2f367",
+        "all_locators_resolved": true
+      },
+      "recordable_against_pinned_image": true
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "base_url": "http://localhost:14001",
+  "auth": {
+    "method": "cookie_session",
+    "credentials_ref": {
+      "email_env": "E1_RWA_SENDER_USERNAME",
+      "password_env": "E1_RWA_PASSWORD"
+    },
+    "probe_endpoint": {
+      "method": "GET",
+      "path": "/checkAuth",
+      "expect_status": 200,
+      "unauthenticated_status": 401,
+      "expect_json_path": "$.user"
+    },
+    "cookie_session": {
+      "method": "POST",
+      "path": "/login",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body_template": {
+        "username": "${email}",
+        "password": "${password}"
+      },
+      "cookie_name": "connect.sid",
+      "cookie_path": "/",
+      "browser_activation": {
+        "entry_url": "http://localhost:14000/signin",
+        "username_selector": "[data-test=signin-username] input",
+        "password_selector": "[data-test=signin-password] input",
+        "submit_selector": "[data-test=signin-submit]",
+        "ready_selector": "[data-test=nav-top-new-transaction]",
+        "timeout_ms": 30000
+      }
+    }
+  },
+  "actors": [
+    {
+      "actor_id": "sender",
+      "auth": {
+        "method": "cookie_session",
+        "credentials_ref": {
+          "email_env": "E1_RWA_SENDER_USERNAME",
+          "password_env": "E1_RWA_PASSWORD"
+        },
+        "probe_endpoint": {
+          "method": "GET",
+          "path": "/checkAuth",
+          "expect_status": 200,
+          "unauthenticated_status": 401,
+          "expect_json_path": "$.user"
+        },
+        "cookie_session": {
+          "method": "POST",
+          "path": "/login",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body_template": {
+            "username": "${email}",
+            "password": "${password}"
+          },
+          "cookie_name": "connect.sid",
+          "cookie_path": "/",
+          "browser_activation": {
+            "entry_url": "http://localhost:14000/signin",
+            "username_selector": "[data-test=signin-username] input",
+            "password_selector": "[data-test=signin-password] input",
+            "submit_selector": "[data-test=signin-submit]",
+            "ready_selector": "[data-test=nav-top-new-transaction]",
+            "timeout_ms": 30000
+          }
+        }
+      }
+    },
+    {
+      "actor_id": "receiver",
+      "auth": {
+        "method": "cookie_session",
+        "credentials_ref": {
+          "email_env": "E1_RWA_RECEIVER_USERNAME",
+          "password_env": "E1_RWA_PASSWORD"
+        },
+        "probe_endpoint": {
+          "method": "GET",
+          "path": "/checkAuth",
+          "expect_status": 200,
+          "unauthenticated_status": 401,
+          "expect_json_path": "$.user"
+        },
+        "cookie_session": {
+          "method": "POST",
+          "path": "/login",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body_template": {
+            "username": "${email}",
+            "password": "${password}"
+          },
+          "cookie_name": "connect.sid",
+          "cookie_path": "/",
+          "browser_activation": {
+            "entry_url": "http://localhost:14000/signin",
+            "username_selector": "[data-test=signin-username] input",
+            "password_selector": "[data-test=signin-password] input",
+            "submit_selector": "[data-test=signin-submit]",
+            "ready_selector": "[data-test=nav-top-new-transaction]",
+            "timeout_ms": 30000
+          }
+        }
+      }
+    }
+  ],
+  "reset": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "subject_adapters.rwa_local",
+      "reset",
+      "--output",
+      "unused.json"
+    ],
+    "verify_request": {
+      "method": "GET",
+      "path": "/",
+      "expect_status": 200
+    }
+  },
+  "rate_limit": {
+    "max_concurrency": 1,
+    "min_interval_ms": 50,
+    "retry_on_429": {
+      "max_retries": 1
+    }
+  },
+  "drive_mode": "replay"
+}

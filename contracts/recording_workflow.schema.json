@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recording_workflow.schema.json",
+  "title": "Current deterministic N-actor recording workflow",
+  "type": "object",
+  "required": ["schema_version", "workflow_id", "profile_ref", "actors", "steps"],
+  "properties": {
+    "schema_version": {"const": "uisemtest-recording-workflow-v1"},
+    "workflow_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+    "profile_ref": {"type": "string", "minLength": 1},
+    "actors": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/actor"}},
+    "steps": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/step"}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {"enum": ["role", "label", "text", "test_id", "css"]},
+        "value": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "exact": {"type": "boolean"},
+        "has_text": {"type": "string", "minLength": 1},
+        "has_text_env": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "scope": {"$ref": "#/$defs/scope_locator"}
+      },
+      "additionalProperties": false
+    },
+    "scope_locator": {
+      "type": "object",
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {"enum": ["role", "label", "text", "test_id", "css"]},
+        "value": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "exact": {"type": "boolean"},
+        "has_text": {"type": "string", "minLength": 1},
+        "has_text_env": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"}
+      },
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {"enum": ["navigate", "click", "fill", "type", "hover", "press", "select_option", "scroll_until_visible"]},
+        "locator": {"$ref": "#/$defs/locator"},
+        "scroll_locator": {"$ref": "#/$defs/locator"},
+        "url": {"type": "string", "minLength": 1},
+        "value": {"type": "string"},
+        "value_env": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "key": {"type": "string", "minLength": 1},
+        "option": {"type": "string"},
+        "max_attempts": {"type": "integer", "minimum": 1, "maximum": 20},
+        "attempt_timeout_ms": {"type": "integer", "minimum": 1, "maximum": 30000},
+        "optional_if_absent": {"type": "boolean"},
+        "accept_confirm": {"const": true},
+        "dismiss_confirm": {"const": true},
+        "close_alert": {"const": true},
+        "wait_for_clicked_target_detached": {"const": true}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["accept_confirm"]},
+          "then": {"properties": {"kind": {"const": "click"}}}
+        },
+        {
+          "if": {"required": ["dismiss_confirm"]},
+          "then": {"properties": {"kind": {"const": "click"}}}
+        },
+        {
+          "if": {"required": ["close_alert"]},
+          "then": {"properties": {"kind": {"const": "click"}}}
+        },
+        {
+          "if": {"required": ["wait_for_clicked_target_detached"]},
+          "then": {"properties": {"kind": {"const": "click"}}}
+        }
+      ],
+      "additionalProperties": false
+    },
+    "wait": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": {"enum": ["load_state", "url", "locator", "dom_quiet", "network_quiet", "bounded_delay"]},
+        "state": {"enum": ["domcontentloaded", "load", "visible", "hidden", "attached", "detached"]},
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 120000},
+        "exact_url": {"type": "string", "minLength": 1},
+        "pattern": {"type": "string", "minLength": 1},
+        "locator": {"$ref": "#/$defs/locator"},
+        "quiet_ms": {"type": "integer", "minimum": 50, "maximum": 5000},
+        "duration_ms": {"type": "integer", "minimum": 1, "maximum": 5000}
+      },
+      "additionalProperties": false
+    },
+    "bootstrap": {
+      "type": "object",
+      "required": ["bootstrap_step_id", "action"],
+      "properties": {
+        "bootstrap_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "action": {
+          "allOf": [
+            {"$ref": "#/$defs/action"},
+            {"properties": {"kind": {"const": "navigate"}}}
+          ]
+        },
+        "waits": {"type": "array", "items": {"$ref": "#/$defs/wait"}}
+      },
+      "additionalProperties": false
+    },
+    "actor": {
+      "type": "object",
+      "required": ["actor_id", "ready_waits"],
+      "properties": {
+        "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+        "principal_group": {"type": ["string", "null"], "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "session_ref": {"type": ["string", "null"], "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "bootstrap": {"type": "array", "items": {"$ref": "#/$defs/bootstrap"}},
+        "ready_waits": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/wait"}}
+      },
+      "additionalProperties": false
+    },
+    "step": {
+      "type": "object",
+      "required": ["scenario_step_id", "workflow_step_id", "global_step_index", "actor_id", "action"],
+      "properties": {
+        "scenario_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "workflow_step_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"},
+        "global_step_index": {"type": "integer", "minimum": 0},
+        "actor_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+        "action": {"$ref": "#/$defs/action"},
+        "binding_material_source_step_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]{0,127}$"}
+        },
+        "waits": {"type": "array", "items": {"$ref": "#/$defs/wait"}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recording_suite.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "suite_id",
+    "subject",
+    "modules",
+    "case_count",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-recording-suite-v1"},
+    "suite_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "subject": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+    "case_count": {"type": "integer", "minimum": 1},
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["module_id", "case_ids"],
+        "properties": {
+          "module_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+          "case_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9-]{0,127}$"}
+          }
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "layer", "actors", "initial_auth", "workflow"],
+        "properties": {
+          "case_id": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9-]{0,127}$"},
+          "layer": {"type": "integer", "minimum": 1, "maximum": 4},
+          "actors": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"}
+          },
+          "initial_auth": {"enum": ["none", "authenticated"]},
+          "workflow": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*\\.json$"}
+        }
+      }
+    }
+  }
+}

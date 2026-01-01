@@ -1,0 +1,304 @@
+{
+  "schema_version": "uisemtest-recording-workflow-v1",
+  "workflow_id": "rwa-modular-l2-onboard-02",
+  "profile_ref": "fixtures/profiles/rwa_modular_guest_local.json",
+  "actors": [
+    {
+      "actor_id": "guest",
+      "bootstrap": [
+        {
+          "bootstrap_step_id": "bootstrap.guest.entry",
+          "action": {
+            "kind": "navigate",
+            "url": "http://localhost:14000/signin"
+          },
+          "waits": [
+            {
+              "kind": "load_state",
+              "state": "domcontentloaded",
+              "timeout_ms": 30000
+            },
+            {
+              "kind": "dom_quiet",
+              "quiet_ms": 200,
+              "timeout_ms": 30000
+            }
+          ]
+        }
+      ],
+      "ready_waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-username] input"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ],
+  "steps": [
+    {
+      "scenario_step_id": "story.s000",
+      "workflow_step_id": "story.s000.open-signup",
+      "global_step_index": 0,
+      "actor_id": "guest",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/signup"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signup-title]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s001",
+      "workflow_step_id": "story.s001.signup-first",
+      "global_step_index": 1,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-first-name] input"
+        },
+        "value": "Atlas"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s002",
+      "workflow_step_id": "story.s002.signup-last",
+      "global_step_index": 2,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-last-name] input"
+        },
+        "value": "NewUser"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s003",
+      "workflow_step_id": "story.s003.signup-username",
+      "global_step_index": 3,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-username] input"
+        },
+        "value_env": "UISEMTEST_RWA_NEW_USER_USERNAME"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s004",
+      "workflow_step_id": "story.s004.signup-password",
+      "global_step_index": 4,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-password] input"
+        },
+        "value_env": "UISEMTEST_RWA_NEW_USER_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s005",
+      "workflow_step_id": "story.s005.signup-confirm",
+      "global_step_index": 5,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-confirmPassword] input"
+        },
+        "value_env": "UISEMTEST_RWA_NEW_USER_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s006",
+      "workflow_step_id": "story.s006.submit-signup",
+      "global_step_index": 6,
+      "actor_id": "guest",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signup-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/signin$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-submit]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s007",
+      "workflow_step_id": "story.s007.fill-username",
+      "global_step_index": 7,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-username] input"
+        },
+        "value_env": "UISEMTEST_RWA_NEW_USER_USERNAME"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s008",
+      "workflow_step_id": "story.s008.fill-password",
+      "global_step_index": 8,
+      "actor_id": "guest",
+      "action": {
+        "kind": "fill",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-password] input"
+        },
+        "value_env": "UISEMTEST_RWA_NEW_USER_PASSWORD"
+      },
+      "waits": []
+    },
+    {
+      "scenario_step_id": "story.s009",
+      "workflow_step_id": "story.s009.submit-signin",
+      "global_step_index": 9,
+      "actor_id": "guest",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=signin-submit]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s010",
+      "workflow_step_id": "story.s010.onboarding-logout",
+      "global_step_index": 10,
+      "actor_id": "guest",
+      "action": {
+        "kind": "click",
+        "locator": {
+          "kind": "css",
+          "value": "[data-test=user-onboarding-logout]"
+        }
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/signin$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-submit]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s011",
+      "workflow_step_id": "story.s011.reload-signin",
+      "global_step_index": 11,
+      "actor_id": "guest",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/signin"
+      },
+      "waits": [
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=signin-submit]"
+          },
+          "state": "visible",
+          "timeout_ms": 30000
+        }
+      ]
+    },
+    {
+      "scenario_step_id": "story.s012",
+      "workflow_step_id": "story.s012.open-protected-personal",
+      "global_step_index": 12,
+      "actor_id": "guest",
+      "action": {
+        "kind": "navigate",
+        "url": "http://localhost:14000/personal"
+      },
+      "waits": [
+        {
+          "kind": "url",
+          "pattern": ".*/signin$",
+          "timeout_ms": 30000
+        },
+        {
+          "kind": "locator",
+          "locator": {
+            "kind": "css",
+            "value": "[data-test=nav-top-new-transaction]"
+          },
+          "state": "hidden",
+          "timeout_ms": 30000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4033 @@
+{
+  "subject": "ghost",
+  "response": [
+    {
+      "fault_id": "PR-G01",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "A post created in this epoch appears in the posts list reads that select it (Published tab, filter=id:<id>, filter=status:published).",
+      "description": "Every 2xx GET /ghost/api/admin/posts/ response has the members of $.posts whose id was created by a POST /ghost/api/admin/posts/ of this epoch removed.",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/ghost/api/admin/posts/?",
+          "role": "create",
+          "id_path": "$.posts[0].id"
+        }
+      ],
+      "operator": "omit_created_member",
+      "target": {
+        "list_path": "$.posts",
+        "id_field": "id"
+      },
+      "substates": {
+        "create": {
+          "activated_responses": 0,
+          "status": "no_eligible_tests"
+        }
+      },
+      "observable_effect": "After POST posts/ (201, id at $.posts[0].id) and publishing, the Published list (filter=status:[published,sent]), the filter=id:<id> read and the filter=status:published read come back without the new post (recorded chains: L1-POST-01, L1-POST-04, L1-POST-05, L2-POST-03, L2-POST-10, L2-AUTHOR-03, L2-PERM-02).",
+      "paired_tests": 0,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-2721b453dfaae014fb3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-62bf4e2f8b731d873fd5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-13c63bc760bfa1cf9803",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-3977723400965d3eeee3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-d602c5ac844d4b0dffbc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-9714228f9fc70b951e10",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-b00770e529b615c2f687",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-15c729f7bc00bc29c4fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-1ee039aa205ce00b4efe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-b5816a1abbbeb86b0b81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-3e505888737e11707a21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-5dbc44acbb742206b160",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-cdf8063053d7ed3c6228",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-02dce1c862ca1227d3e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-7ccf01eaaf3b84ecf642",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-a1d701dc0a06cc7dc10f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-7fb05250ab48866968c1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-bfbf5ec018787a9f2184",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-37af820426cb450ca80c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-32a92f34f4a8fc535313",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-8c69a56707167181e282",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-26b9d2c60ae2fa63c04d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-4946ab1da784148aacaa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-65920d1051d0de49acc6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-f66659061e2eaf07cece",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-93c80b4f589d7d76c72d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-8a2b0dc9f9deb1479f42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-59231e8c052c086eeef2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-06c6016f9d816a78c95b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-2560e0547fb67b985af8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-200ed823c69926d046dc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-1c479aa6fcd5c6e95c3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-53002aaa773db5ea9279",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f5d13c8520aaa5022ac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-16417c53a5c6c970e0c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-365e00d9fb67f9be8a31",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-b3db849bd60e4f79fc90",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-a8315847fa65f5fbe51a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e69026886562d692d896",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-acc06e689573cd41b41b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-085499e88cef33236cc3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dca5b11b67e942857d81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-03b3a5ec0e615993b2dd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4d9bef4180fd35d8705b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f302ad7bbe71475af797",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-7b93fa782e6225577c80",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-097e26ffa208e94ff5b8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dcf466347aca05c0ff65",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-6cd6ec91831cd1c30309",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e35c1af5efd0da7eb985",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-86fcb86ec4757aef6f04",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-807b9cb80769c8c2143f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-216ba8983455c8b66812",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f11ff4b66209cfcd6f93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-3c2bd35721b1b4b6c5e6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-ab47083e803d6ded464c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-6e0d30cea79434cb1394",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-71d276c0b3dcfdbab7fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-18a3c623872d4a424aa1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-76e7235b2b3e6f69706d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f9be8feeba57c6ae12a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e4dedaa52b9f077e7db4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-66cd2e53ac2613e8a2a0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-afa7eace599ed3458f35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-a0e23c49b82b63f03435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4851773cdc5361c54c73",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dccf1ae0d53d9cba7462",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-8478e53692c49d2c61a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4344b24a8be8dd55f5fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-8a1a01bf27e774a5dfe4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-1494c8fa03b1251997fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-ce07371a69b7b281c160",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-83800f4f0962986c452c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-0908813f44710c34ea08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-faaaa5bada414ba640ab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-119e85eab3a28bc4d2e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f78d9401c915a7bffc1e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f6f5a69d4d462283737e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4abde96096e106ee9bd7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-b07e95bb4974eca91249",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-5080cd02f25233fbfc39",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-809ba88fe65fba153b17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-43d14834159fb62f1dc9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-f780dcf494851db1b548",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-462efe0f99d7b7a40aa7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-03b01985e6b0fc52480f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-5be7dd0e6a5e7f1b4eb6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-83e5c58d9e1b5363c1f7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-3c5668f0773aafa9705e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-efb9752e742b5f341b87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-3bf6dcb70a2f59b77190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-9ffb27420d17837bc924",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-ced8642c70d5e2ab4ba8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-7a2b22e85ec54dd238f4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-8025326c144a44da930d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-67a9cfb2f0d40fcca213",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-d775c6bb511a35079ac1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-42d32a2f234babb6428c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-667cd6545e7d6c1a03ed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-894f93c1eae3d78ac343",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-b2af711f8cfd4f64d0e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-a584001d69ccbfe1fcec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-9b84eed2387adcf78d9c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-e821069abff380a5ce1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-1b3a5d28a7719d4f678c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-83045190fb3709c1bba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-287f486fbf95065aa72f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-7d7fc0080b18a86657b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-3a64c15437a8948e6e82",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-dd47cca7791ca5318ee7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-ac4d0ea8ea9221ce40de",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-90a25021986a59791c93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-9fe5e4cef063073beeb2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-7ac8329c27b319fda1fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-434463182d757309cca9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-20f2bf577ca8b681d051",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-992df312e188d54083c0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2f1a6b83bcec0928949d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-392158920c73ee41b16b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-89566d010d654dad0d93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-3539bbea4d1e0c078aa7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5d28266206e21f26fca5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b7c4b64b27d3983bbf67",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1b5ac488525119444c03",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-19486f0633d7e4f1a0c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-fcbf6f6230a7376fd6c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-94e15bd9e639b1b43772",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-3f9ec78d16c292806d28",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b71bb87496c6643802b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-debc7cdd0324713ee5ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-fded8cbc2bd3ebb64625",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-99e28b6ad50e9d5268c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-82379cfa5eaa45ac32b6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-a8483f5acf5df28f1e69",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-0b2f8ce773e441adc678",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6a463ed1906e49488ce1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ed45696fddac9e07b90c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-4fd25048da2e9a42b3e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f3b46bafa0d02c51a32a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-59deb9be171b51c047c0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-8b49e17c6ab682939e45",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-454b45c441ec758afdbe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b3253d29975214d2a017",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-00aac980ce44b698669f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-aece8f782ff704561c51",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-426782eed52aeac49dd0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6a445cec79c59aebc926",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-43494908715ab9e2a97b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1887cfbf2c33163acc57",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ded01a9caa6a80d3346e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b5d49a2e9470b6db1ec5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ceeea910ce52325dc258",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-94facda799d01884373a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6ee81117d278dca4296c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-a36cc64cb1ef987bad5d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f165dee63961c8a9c315",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b5c08ce76d5e7c90bafc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-06cf716d06d196df9c8a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-08a467b083c26796c7c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-e7f15f5f87993afc0a62",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-65ddfc49827e9613726b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5b8979edf119fc00b865",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-52e9bfdda8d2a715436f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-cf739eb62cfc3ba285f1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-9f76201b9dd4d66c8224",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-63bbf82722b6488da20a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-7a076fdd7528f6be0776",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-0948f5e1dbf5a3a86f80",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2e3c961bcb30cecf0488",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6c40d5b584047121ecfd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-157c80d92ce750c1d100",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-56d972d64ad644e76e3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5031e14f7e7cd8b7115b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b6648442ac698bce2e5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-620cea3c3f1562b8cc14",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ce29d53ba1db12e85ce3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-debd4639e76b99dd6e2a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-911e5dde680529417ce6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ac9600f3a835883c8986",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-9089d300a738e1bd9bc1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-82cf5b3103e7264dee84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b69e0d8132a5dbe4b6bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-19da64aefc5dd7f3d2b8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-dcbf1c8a7c6d7d3fa436",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-84578bb9f01a50755d41",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2c69d69644bc2a15f6eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-52010cac43f88e1660fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ef1d27ae3ed1f7a9e901",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1a3febea6b42cf12b67c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-d63c708cd341cf8829e3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-862b91ff4f8a0c0e7853",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f272ea755365ba20850e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-39619c6b028b64ffc657",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-008bc699ccbd344bc973",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-11a327661197098b0ef3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-8e544693190df41e8588",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-3a17ef8f4016633c28e1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-b6e1c45400b6c1ac7190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-af8b7df67ab6e3b9ea81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-5e3b038962577cb79f72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-e6e6c2a5fa666ec7a8bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-0558c7a66c1221ccb9d7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-49221079cf8cd85a14c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-ad9b5eaa4fe9383b3418",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-c7d318327756cf772327",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-f24822880c6b8c97ba89",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-f2f681ab976f0887acd2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-fc5574712b69a6eb1ebf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-20e26bc3828f200c8830",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-04c9220a9e28b2869253",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-5a5e097b07fda8fd9b69",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fb76404fc33099e9a594",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-f55e8e33fa768ebdfcdc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4bf0df45b6c07727f9cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-03b5de8cbdc741264b1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-516de8430be85c1f0fd1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-df69ee365369ef971a7f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-595a6042e1c535a75190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3bed835f62d6c575a991",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-65af2798b4e8eac40435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fc0af7b525b1c6006212",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b0568e475ba03f216bed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e2ad2cd322abdd67753f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6d5d7e07beab4e461af7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-8b64599d832f16620704",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e45085dac511613a55cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3cf41de279832927d503",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ddc85a371c4fa104d250",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e1995d59e869d8b7ce6a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fc3da830721583937797",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4609a0e2d2e7f56d453a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-37a684570b542db70fff",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-89ef13e009d3ed08c4ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4c93f311e71ffeb652e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-49599cd3d05f67171339",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-81eef403bf7fd40d3f92",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6315ab0cf5f103a354ee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bb9f2c93a20ea31ff2b0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-9419cbad53861277a9d7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d75b09fcc04f2eb03ac8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fac3616cefe67093cd70",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bf87a929ca35ad0393a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d71c2a94df1052d0d345",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bbdcfc8d03dbb583554e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-7d6004f3e0274facbf1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-5f35767fd611a34c6169",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-9bfc62faa0e58d4a6b94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-09ae8407b2eb65e08725",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-a33c0c34df5e3f25ff1a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d90f87aead00620f2f4f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-58a2d352c12464802ac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fa6c645e6b876aa5efce",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-a3c5360e881a61874b05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-465f64cdd5433f20a692",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b72d1cd092298038b8b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-01f23d37cb60367b2ded",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c23c84d3b2dcd765981f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c0dcc41659dddf9e2e6e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-1617510917e2a2418676",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-942a922aa5a0f7d45e84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e906bca2fd3b12a7ded0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3f7d325dd0ee32932f27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-2c0a70bd44bb15ac3c54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ec84deb3f56cc0fd942d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-69804dedbfe34534839f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-2d9ca7afcd724b2fba30",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-0c4db95556d3d8c63167",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-205b5b84b6f92a042a9a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-1c3b1c62294ceb192fa5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b13644c0a5f91fb143da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-576c4581a48e6470c017",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b518679a5ffad22638ed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d1e19759f5f4a0c09f38",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-7156676ae91c253381b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-da67d6cf61d08b60e435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ba572f2571c9a04579ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-558805774bcd00030fb6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c015309a3ff11d59bb89",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3c7ed657136b5b8d3c59",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6988a6b43deed3831a79",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ca734f59cc98b3d3223e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-75df0ef8de30be7df5de",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0dcd634e4d19b6a876df",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a9206a61e68ae33b7e91",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-25070198d0ab7fd6152f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-60239fdbb3dcb64f8868",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b15f3a79e362b81c2fd1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0b9020597049692af611",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-7872b4d499921c66969f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-85c705f44d7d61a393c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-2cb7fcd7c16fea8eab17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f602bcdd061a253b2589",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3fa7536173d04e5fa170",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-14d03e0833143645e411",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-eb71447093cc7fabc474",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-9e9fd84c0bcb8cef3ad6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-16064b497831483fecc2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-c27f909929f4e018458f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-9dffa3649b4dfb85f824",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-8275430b66695e68d5ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-c3bffb2151e322d5c39a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a8d6572f294688ef145b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d9d3e6bc0576a49a6edc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-95812fccf1b93d4a313d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-380f535408b4147772cc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b092e406cffa3fe7a1fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3b29367982b64c76c388",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0c0c65f41c8148e2bf72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d16885b4b14f48f17d60",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-065b534c6b09face6939",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-dc010099493619fbde17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f651a66689c974761bd2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-ebb7c48f2a666fbc0948",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f1bd86cd78e0a4a7fbc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-2179ff36625cf11fa9f8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-15f8ba7dedfdd7e534b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-20b368bfcda79cb6263a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-de78184c8facf4e66311",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-6777531dca7260648f99",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-26d5a4263a7b57684628",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-ed958a01cd8427902b53",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b8508fb0907f67d1ccda",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d88f978a576e0807cc5a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-e1c87cf06cfea6cd2d7e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a1931fb62047d9a789a3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b186cf0073ad08ef52fd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-366a2a144400a5799ab8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-82d0b0d2cdf2851d3532",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3a8c3c5528d131bd93c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-33447e3a8dd00a6b5e68",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-6fa1a8233c469d4988b9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-c60a2c4c76e8fda39d87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-424295924bedfa4c8486",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-082e9595419b2bfdc21e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-a90c9ced16ac56b483ea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-e102d1fac31c641a615a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-03efedf0db1322ea6b12",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-211c04a5e6e6f9f36d36",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-1cf4c2e8325082955f85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-1386eb446cabda76ba85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-c0a2fa88b7de26496b71",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-fac657d07bfab35afaf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-386942cadbbca2a37e55",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-505f479250785e5a393f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-85d62685e4c5a705e0c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1fd929da0e8dcf7e78a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-e38c579b4b10213ce438",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-2585d0f5cb16e0bb0ebf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1c8a1c30aeb64db04d46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-8d6477d71ff6797647c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-9b5056b6f2cd988cb110",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-6f9336cd2e23a78cf397",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-162d4dc51a717e36c785",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1a33e10c1b86890dd0b9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-342ea43701983510f559",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-546e924d6c522a4be826",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-165cb622aa19fbd2a4b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-295869f59bef088a5a15",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-733c40eced44bcc79cce",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-caeda864410fbedbdcfa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-978874e238d13130f83e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-547e585fc07716431e6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-a73a3dd13cb760240eab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-8701b6efb1d92211131a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-c75e5e2b7bcfb53d2b5c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-efa73ba663c0177306c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-1747c0311d04a64bdbf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-7ca056c9ef01661070cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6113581f7ea0fa7de452",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-ed32cd54e7cc0cbf0f31",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-25e0c38c87647ee123cb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6a9236ccfcf8923df9fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-aec6fdbaaff322d3b5cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-937807ff740a5d4e0b0e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-e4bf190d273f0e06ed54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-dc6b98332d18b5a9c9bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-dc26dcd09751e47e6aee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-b614f1dace70c8af8dee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-1551310f43fbe051b8a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5760dccf5ba15858fbf8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-2139904fe81c7f7590c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-bf09bf4b77a6c313679a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-3de0aa365b396c72be60",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-36676fef1ea96fdd43ab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-931462c0d4eebcc69d3c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-8680e3baf0963e98be6c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6ad8d7e7d1faee2a273e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5a5e82508495308df12e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-9b509c91933df497950e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-f12e013adcb0efcce997",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-fec1fe7edd7b452f806a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-c460e410016b7f609319",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-9b340ffd3efe5615873e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-935f39f01b088f0513fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5d415efb203555405e7c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-45ccec143a0d661f8d42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-8cf574e93b9cf8926012",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-eab84333c705551f1ea8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-74268113e9e73e672389",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-4192e69b82b44e6dd4a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-fdbd91defdf743850a5a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-6ef17d55b3e5c901f089",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-e8a3c38e38630c5dcf42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-2b984a59793f9011300e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-006ad31ce8503a047a86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-838bf232002bab9f56bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-9214b4b725906ed417a6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-d92bb8c1033a942d454d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-287a75fad19ee5e86416",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a865c8615c1dc964526e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e728c20f83e292b986fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-0551032dfe5ca65e293f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-4b33182fd5586f93ffa0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a42f92e62c5b4f14745e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-358fe352a629d1bf858c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-904422830c6dec34d771",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-c81529be63b6771e49d3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-da79dbb7f43a7f93b4f3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-4b8a97232a36fce32776",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-72e8bbf71e9d2db84633",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-292ef03ae8c8e1087a1a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e7feeb5c341ec7286b58",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-ab5f6050e237e402dd07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-25af333130a0a39fba0c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-9bdfb663c5cea31873e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-fa4779dc40d4153c48ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-2ef721de35a16a8c3512",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e30153d1f101d86f29d6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-746bab848b6301f96858",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-727a38f6e63a2bc95b76",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-7c7251355d29c0881375",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-0f6837ba0e956443d911",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-6718ee065e13675be7f6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-b0a5bc3e5bcd866fc784",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a173917b4630e8ff0bf2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-6bd46be04da0e770b2bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-27d47b7f2109ac610a03",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-7e1ab726a86129b1ff77",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 0,
+      "substate_status": {
+        "create": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "PR-G02",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "After a post or page is published (PUT with status=published) every later read of that post or page reports status 'published'.",
+      "description": "In every 2xx read of posts or pages (list or detail) the object whose id was targeted by a PUT of this epoch gets its `status` replaced by the value last observed before that PUT ('draft' in the recorded publish flows) whenever it differs from the current value.",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ],
+        [
+          "GET",
+          "/ghost/api/admin/posts/[0-9a-f]{24}/?"
+        ],
+        [
+          "GET",
+          "/ghost/api/admin/pages/?"
+        ],
+        [
+          "GET",
+          "/ghost/api/admin/pages/[0-9a-f]{24}/?"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "PUT",
+          "path": "/ghost/api/admin/posts/[0-9a-f]{24}/?",
+          "role": "update"
+        },
+        {
+          "method": "PUT",
+          "path": "/ghost/api/admin/pages/[0-9a-f]{24}/?",
+          "role": "update"
+        }
+      ],
+      "operator": "old_value_after_update",
+      "target": {
+        "field": "status",
+        "id_field": "id"
+      },
+      "substates": {
+        "update": {
+          "activated_responses": 0,
+          "status": "no_eligible_tests"
+        }
+      },
+      "observable_effect": "After PUT posts/{id} status draft->published, the Published-tab list, the filter=id:<id> read and GET posts/{id}/ show status 'draft' again (recorded chains: L1-POST-01, L1-POST-04, L1-POST-05, L2-POST-03, L2-POST-10, L2-AUTHOR-03, L2-PERM-02; pages: L1-PAGE-01).",
+      "paired_tests": 0,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-2721b453dfaae014fb3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-62bf4e2f8b731d873fd5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-13c63bc760bfa1cf9803",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-3977723400965d3eeee3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-d602c5ac844d4b0dffbc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-9714228f9fc70b951e10",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-b00770e529b615c2f687",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-15c729f7bc00bc29c4fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-1ee039aa205ce00b4efe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-b5816a1abbbeb86b0b81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-3e505888737e11707a21",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-5dbc44acbb742206b160",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-cdf8063053d7ed3c6228",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-01/relation-test-02dce1c862ca1227d3e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-7ccf01eaaf3b84ecf642",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-a1d701dc0a06cc7dc10f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-7fb05250ab48866968c1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-bfbf5ec018787a9f2184",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-37af820426cb450ca80c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-32a92f34f4a8fc535313",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-8c69a56707167181e282",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-26b9d2c60ae2fa63c04d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-4946ab1da784148aacaa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-65920d1051d0de49acc6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-f66659061e2eaf07cece",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-93c80b4f589d7d76c72d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-8a2b0dc9f9deb1479f42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-59231e8c052c086eeef2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-06c6016f9d816a78c95b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-2560e0547fb67b985af8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-200ed823c69926d046dc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-AUTHOR-02/relation-test-1c479aa6fcd5c6e95c3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-53002aaa773db5ea9279",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f5d13c8520aaa5022ac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-16417c53a5c6c970e0c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-365e00d9fb67f9be8a31",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-b3db849bd60e4f79fc90",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-a8315847fa65f5fbe51a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e69026886562d692d896",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-acc06e689573cd41b41b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-085499e88cef33236cc3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dca5b11b67e942857d81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-03b3a5ec0e615993b2dd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4d9bef4180fd35d8705b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f302ad7bbe71475af797",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-7b93fa782e6225577c80",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-097e26ffa208e94ff5b8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dcf466347aca05c0ff65",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-6cd6ec91831cd1c30309",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e35c1af5efd0da7eb985",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-86fcb86ec4757aef6f04",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-807b9cb80769c8c2143f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-216ba8983455c8b66812",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f11ff4b66209cfcd6f93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-3c2bd35721b1b4b6c5e6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-ab47083e803d6ded464c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-6e0d30cea79434cb1394",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-71d276c0b3dcfdbab7fc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-18a3c623872d4a424aa1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-76e7235b2b3e6f69706d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f9be8feeba57c6ae12a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-e4dedaa52b9f077e7db4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-66cd2e53ac2613e8a2a0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-afa7eace599ed3458f35",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-a0e23c49b82b63f03435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4851773cdc5361c54c73",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-dccf1ae0d53d9cba7462",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-8478e53692c49d2c61a5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4344b24a8be8dd55f5fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-8a1a01bf27e774a5dfe4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-1494c8fa03b1251997fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-ce07371a69b7b281c160",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-83800f4f0962986c452c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-0908813f44710c34ea08",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-faaaa5bada414ba640ab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-119e85eab3a28bc4d2e9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f78d9401c915a7bffc1e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-f6f5a69d4d462283737e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-01/relation-test-4abde96096e106ee9bd7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-b07e95bb4974eca91249",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-5080cd02f25233fbfc39",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-809ba88fe65fba153b17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-43d14834159fb62f1dc9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-f780dcf494851db1b548",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-462efe0f99d7b7a40aa7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-03b01985e6b0fc52480f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-5be7dd0e6a5e7f1b4eb6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-83e5c58d9e1b5363c1f7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-3c5668f0773aafa9705e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-efb9752e742b5f341b87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-3bf6dcb70a2f59b77190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-9ffb27420d17837bc924",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-ced8642c70d5e2ab4ba8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-7a2b22e85ec54dd238f4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-02/relation-test-8025326c144a44da930d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-67a9cfb2f0d40fcca213",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-d775c6bb511a35079ac1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-42d32a2f234babb6428c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-667cd6545e7d6c1a03ed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-894f93c1eae3d78ac343",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-b2af711f8cfd4f64d0e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-a584001d69ccbfe1fcec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-9b84eed2387adcf78d9c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-e821069abff380a5ce1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-1b3a5d28a7719d4f678c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-83045190fb3709c1bba4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-287f486fbf95065aa72f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-7d7fc0080b18a86657b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-3a64c15437a8948e6e82",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-dd47cca7791ca5318ee7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-ac4d0ea8ea9221ce40de",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-90a25021986a59791c93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-PAGE-03/relation-test-9fe5e4cef063073beeb2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-7ac8329c27b319fda1fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-434463182d757309cca9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-20f2bf577ca8b681d051",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-992df312e188d54083c0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2f1a6b83bcec0928949d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-392158920c73ee41b16b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-89566d010d654dad0d93",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-3539bbea4d1e0c078aa7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5d28266206e21f26fca5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b7c4b64b27d3983bbf67",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1b5ac488525119444c03",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-19486f0633d7e4f1a0c7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-fcbf6f6230a7376fd6c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-94e15bd9e639b1b43772",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-3f9ec78d16c292806d28",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b71bb87496c6643802b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-debc7cdd0324713ee5ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-fded8cbc2bd3ebb64625",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-99e28b6ad50e9d5268c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-82379cfa5eaa45ac32b6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-a8483f5acf5df28f1e69",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-0b2f8ce773e441adc678",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6a463ed1906e49488ce1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ed45696fddac9e07b90c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-4fd25048da2e9a42b3e7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f3b46bafa0d02c51a32a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-59deb9be171b51c047c0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-8b49e17c6ab682939e45",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-454b45c441ec758afdbe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b3253d29975214d2a017",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-00aac980ce44b698669f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-aece8f782ff704561c51",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-426782eed52aeac49dd0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6a445cec79c59aebc926",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-43494908715ab9e2a97b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1887cfbf2c33163acc57",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ded01a9caa6a80d3346e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b5d49a2e9470b6db1ec5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ceeea910ce52325dc258",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-94facda799d01884373a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6ee81117d278dca4296c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-a36cc64cb1ef987bad5d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f165dee63961c8a9c315",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b5c08ce76d5e7c90bafc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-06cf716d06d196df9c8a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-08a467b083c26796c7c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-e7f15f5f87993afc0a62",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-65ddfc49827e9613726b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5b8979edf119fc00b865",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-52e9bfdda8d2a715436f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-cf739eb62cfc3ba285f1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-9f76201b9dd4d66c8224",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-63bbf82722b6488da20a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-7a076fdd7528f6be0776",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-0948f5e1dbf5a3a86f80",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2e3c961bcb30cecf0488",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-6c40d5b584047121ecfd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-157c80d92ce750c1d100",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-56d972d64ad644e76e3a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-5031e14f7e7cd8b7115b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b6648442ac698bce2e5f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-620cea3c3f1562b8cc14",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ce29d53ba1db12e85ce3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-debd4639e76b99dd6e2a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-911e5dde680529417ce6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ac9600f3a835883c8986",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-9089d300a738e1bd9bc1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-82cf5b3103e7264dee84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-b69e0d8132a5dbe4b6bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-19da64aefc5dd7f3d2b8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-dcbf1c8a7c6d7d3fa436",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-84578bb9f01a50755d41",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-2c69d69644bc2a15f6eb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-52010cac43f88e1660fa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-ef1d27ae3ed1f7a9e901",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-1a3febea6b42cf12b67c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-d63c708cd341cf8829e3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-862b91ff4f8a0c0e7853",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-01/relation-test-f272ea755365ba20850e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-39619c6b028b64ffc657",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-008bc699ccbd344bc973",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-11a327661197098b0ef3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-8e544693190df41e8588",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-3a17ef8f4016633c28e1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-b6e1c45400b6c1ac7190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-af8b7df67ab6e3b9ea81",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-5e3b038962577cb79f72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-e6e6c2a5fa666ec7a8bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-0558c7a66c1221ccb9d7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-49221079cf8cd85a14c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-ad9b5eaa4fe9383b3418",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-c7d318327756cf772327",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-f24822880c6b8c97ba89",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-f2f681ab976f0887acd2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-fc5574712b69a6eb1ebf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-02/relation-test-20e26bc3828f200c8830",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-04c9220a9e28b2869253",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-5a5e097b07fda8fd9b69",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fb76404fc33099e9a594",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-f55e8e33fa768ebdfcdc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4bf0df45b6c07727f9cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-03b5de8cbdc741264b1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-516de8430be85c1f0fd1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-df69ee365369ef971a7f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-595a6042e1c535a75190",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3bed835f62d6c575a991",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-65af2798b4e8eac40435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fc0af7b525b1c6006212",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b0568e475ba03f216bed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e2ad2cd322abdd67753f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6d5d7e07beab4e461af7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-8b64599d832f16620704",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e45085dac511613a55cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3cf41de279832927d503",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ddc85a371c4fa104d250",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e1995d59e869d8b7ce6a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fc3da830721583937797",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4609a0e2d2e7f56d453a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-37a684570b542db70fff",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-89ef13e009d3ed08c4ec",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-4c93f311e71ffeb652e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-49599cd3d05f67171339",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-81eef403bf7fd40d3f92",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6315ab0cf5f103a354ee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bb9f2c93a20ea31ff2b0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-9419cbad53861277a9d7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d75b09fcc04f2eb03ac8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fac3616cefe67093cd70",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bf87a929ca35ad0393a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d71c2a94df1052d0d345",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-bbdcfc8d03dbb583554e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-7d6004f3e0274facbf1f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-5f35767fd611a34c6169",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-9bfc62faa0e58d4a6b94",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-09ae8407b2eb65e08725",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-a33c0c34df5e3f25ff1a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d90f87aead00620f2f4f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-58a2d352c12464802ac7",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-fa6c645e6b876aa5efce",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-a3c5360e881a61874b05",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-465f64cdd5433f20a692",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b72d1cd092298038b8b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-01f23d37cb60367b2ded",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c23c84d3b2dcd765981f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c0dcc41659dddf9e2e6e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-1617510917e2a2418676",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-942a922aa5a0f7d45e84",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-e906bca2fd3b12a7ded0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3f7d325dd0ee32932f27",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-2c0a70bd44bb15ac3c54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ec84deb3f56cc0fd942d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-69804dedbfe34534839f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-2d9ca7afcd724b2fba30",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-0c4db95556d3d8c63167",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-205b5b84b6f92a042a9a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-1c3b1c62294ceb192fa5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b13644c0a5f91fb143da",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-576c4581a48e6470c017",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-b518679a5ffad22638ed",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-d1e19759f5f4a0c09f38",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-7156676ae91c253381b1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-da67d6cf61d08b60e435",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ba572f2571c9a04579ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-558805774bcd00030fb6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-c015309a3ff11d59bb89",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-3c7ed657136b5b8d3c59",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-6988a6b43deed3831a79",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-04/relation-test-ca734f59cc98b3d3223e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-75df0ef8de30be7df5de",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0dcd634e4d19b6a876df",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a9206a61e68ae33b7e91",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-25070198d0ab7fd6152f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-60239fdbb3dcb64f8868",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b15f3a79e362b81c2fd1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0b9020597049692af611",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-7872b4d499921c66969f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-85c705f44d7d61a393c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-2cb7fcd7c16fea8eab17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f602bcdd061a253b2589",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3fa7536173d04e5fa170",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-14d03e0833143645e411",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-eb71447093cc7fabc474",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-9e9fd84c0bcb8cef3ad6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-16064b497831483fecc2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-c27f909929f4e018458f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-9dffa3649b4dfb85f824",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-8275430b66695e68d5ae",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-c3bffb2151e322d5c39a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a8d6572f294688ef145b",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d9d3e6bc0576a49a6edc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-95812fccf1b93d4a313d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-380f535408b4147772cc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b092e406cffa3fe7a1fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3b29367982b64c76c388",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-0c0c65f41c8148e2bf72",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d16885b4b14f48f17d60",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-065b534c6b09face6939",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-dc010099493619fbde17",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f651a66689c974761bd2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-ebb7c48f2a666fbc0948",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-f1bd86cd78e0a4a7fbc8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-2179ff36625cf11fa9f8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-15f8ba7dedfdd7e534b4",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-20b368bfcda79cb6263a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-de78184c8facf4e66311",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-6777531dca7260648f99",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-26d5a4263a7b57684628",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-ed958a01cd8427902b53",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b8508fb0907f67d1ccda",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-d88f978a576e0807cc5a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-e1c87cf06cfea6cd2d7e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-a1931fb62047d9a789a3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-b186cf0073ad08ef52fd",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-366a2a144400a5799ab8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-82d0b0d2cdf2851d3532",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-3a8c3c5528d131bd93c3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-05/relation-test-33447e3a8dd00a6b5e68",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-6fa1a8233c469d4988b9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-c60a2c4c76e8fda39d87",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-424295924bedfa4c8486",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-06/relation-test-082e9595419b2bfdc21e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-a90c9ced16ac56b483ea",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-e102d1fac31c641a615a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-03efedf0db1322ea6b12",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-211c04a5e6e6f9f36d36",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-1cf4c2e8325082955f85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-1386eb446cabda76ba85",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-c0a2fa88b7de26496b71",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-fac657d07bfab35afaf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-386942cadbbca2a37e55",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-07/relation-test-505f479250785e5a393f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-85d62685e4c5a705e0c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1fd929da0e8dcf7e78a2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-e38c579b4b10213ce438",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-2585d0f5cb16e0bb0ebf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1c8a1c30aeb64db04d46",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-8d6477d71ff6797647c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-9b5056b6f2cd988cb110",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-6f9336cd2e23a78cf397",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-162d4dc51a717e36c785",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-1a33e10c1b86890dd0b9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-342ea43701983510f559",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-08/relation-test-546e924d6c522a4be826",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-165cb622aa19fbd2a4b5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-295869f59bef088a5a15",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-733c40eced44bcc79cce",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-caeda864410fbedbdcfa",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-978874e238d13130f83e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-547e585fc07716431e6f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-a73a3dd13cb760240eab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-8701b6efb1d92211131a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L1-POST-09/relation-test-c75e5e2b7bcfb53d2b5c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-efa73ba663c0177306c2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-1747c0311d04a64bdbf0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-7ca056c9ef01661070cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6113581f7ea0fa7de452",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-ed32cd54e7cc0cbf0f31",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-25e0c38c87647ee123cb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6a9236ccfcf8923df9fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-aec6fdbaaff322d3b5cf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-937807ff740a5d4e0b0e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-e4bf190d273f0e06ed54",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-dc6b98332d18b5a9c9bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-dc26dcd09751e47e6aee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-b614f1dace70c8af8dee",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-1551310f43fbe051b8a1",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5760dccf5ba15858fbf8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-2139904fe81c7f7590c9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-bf09bf4b77a6c313679a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-3de0aa365b396c72be60",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-36676fef1ea96fdd43ab",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-931462c0d4eebcc69d3c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-8680e3baf0963e98be6c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-6ad8d7e7d1faee2a273e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5a5e82508495308df12e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-9b509c91933df497950e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-f12e013adcb0efcce997",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-fec1fe7edd7b452f806a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-c460e410016b7f609319",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-9b340ffd3efe5615873e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-935f39f01b088f0513fe",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-AUTHOR-03/relation-test-5d415efb203555405e7c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-45ccec143a0d661f8d42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-8cf574e93b9cf8926012",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-eab84333c705551f1ea8",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-74268113e9e73e672389",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-4192e69b82b44e6dd4a9",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-fdbd91defdf743850a5a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-6ef17d55b3e5c901f089",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-e8a3c38e38630c5dcf42",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-01/relation-test-2b984a59793f9011300e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-006ad31ce8503a047a86",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-838bf232002bab9f56bc",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-9214b4b725906ed417a6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-d92bb8c1033a942d454d",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-287a75fad19ee5e86416",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a865c8615c1dc964526e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e728c20f83e292b986fb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-0551032dfe5ca65e293f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-4b33182fd5586f93ffa0",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a42f92e62c5b4f14745e",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-358fe352a629d1bf858c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-904422830c6dec34d771",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-c81529be63b6771e49d3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-da79dbb7f43a7f93b4f3",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-4b8a97232a36fce32776",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-72e8bbf71e9d2db84633",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-292ef03ae8c8e1087a1a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e7feeb5c341ec7286b58",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-ab5f6050e237e402dd07",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-25af333130a0a39fba0c",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-9bdfb663c5cea31873e5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-fa4779dc40d4153c48ca",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-2ef721de35a16a8c3512",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-e30153d1f101d86f29d6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-746bab848b6301f96858",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-727a38f6e63a2bc95b76",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-7c7251355d29c0881375",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-0f6837ba0e956443d911",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-6718ee065e13675be7f6",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-b0a5bc3e5bcd866fc784",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-a173917b4630e8ff0bf2",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-6bd46be04da0e770b2bb",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-27d47b7f2109ac610a03",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-PERM-03/relation-test-7e1ab726a86129b1ff77",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 0,
+      "substate_status": {
+        "update": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "PR-G03",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "members",
+      "business_rule": "A member deleted in this epoch does not appear in later members list reads.",
+      "description": "Every 2xx GET /ghost/api/admin/members/ response gets, for each member id deleted by a DELETE /ghost/api/admin/members/{id} of this epoch, the last observed object of that member re-inserted into $.members.",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/members/?"
+        ]
+      ],
+      "writes": [
+        {
+          "method": "DELETE",
+          "path": "/ghost/api/admin/members/[0-9a-f]{24}/?",
+          "role": "delete"
+        }
+      ],
+      "operator": "reinsert_deleted_member",
+      "target": {
+        "list_path": "$.members",
+        "id_field": "id"
+      },
+      "substates": {
+        "delete": {
+          "activated_responses": 0,
+          "status": "no_eligible_tests"
+        }
+      },
+      "observable_effect": "After DELETE members/{id} (204) the members list reads (filter=created_at:<=... and order=id&limit=1) still contain the deleted member although meta.pagination.total and the count endpoints report 0 (recorded chain: L2-MEMBER-03).",
+      "paired_tests": 0,
+      "read_route_pairs_before_trigger_filter": 5,
+      "structurally_impossible_tests": [
+        {
+          "test_key": "ghost/L1-MEMBER-01/relation-test-70e359194db4df880fe5",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-MEMBER-03/relation-test-e9c580fa3674ddd61a92",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-MEMBER-05/relation-test-ad2a1f8596705e7761bf",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-MEMBER-05/relation-test-0d24789467650174c80f",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        },
+        {
+          "test_key": "ghost/L2-MEMBER-05/relation-test-978b4a7ee938159ad87a",
+          "skip_basis": "complete_normal_plan_has_no_required_business_write"
+        }
+      ],
+      "estimated_seconds_from_normal": 0,
+      "substate_status": {
+        "delete": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "PR-G04",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "A column projection (fields=) must not change which posts a read returns: the posts listed by a projected read are the posts listed by the same read without the projection.",
+      "description": "Every 2xx GET /ghost/api/admin/posts/ response whose query string contains the key fields loses the member of $.posts with the smallest id; reads without fields are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "omit_first_member",
+      "target": {
+        "list_path": "$.posts",
+        "id_field": "id",
+        "when_query_key": "fields"
+      },
+      "substates": {
+        "read": {
+          "activated_responses": 0,
+          "status": "not_activated"
+        }
+      },
+      "observable_effect": "The dashboard read GET posts/?filter=status:published&fields=id,url,title,visibility,published_at&order=published_at desc&limit=5 (recorded 44x) comes back as {\"posts\":[],\"meta\":{...}} while GET posts/?filter=status:published&limit=1 (no fields, recorded 15x) still returns 'Coming soon'.",
+      "paired_tests": 438,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 1004.2455004579679,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 438,
+      "completed_tests": 438,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "detected",
+      "O2": "detected",
+      "business_direct_alarm": true,
+      "changed_responses": 833,
+      "activated_tests": 438,
+      "elapsed_seconds": 1009.4570446616272,
+      "business_only": false,
+      "B": "detected",
+      "B_vs_O1": "both",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "detected",
+        "O2": "detected",
+        "tests": 438
+      }
+    },
+    {
+      "fault_id": "PR-G05",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "newsletters",
+      "business_rule": "Asking for relation counts (include=count.active_members) must not change which newsletters a read returns: the newsletters listed with include are the newsletters listed without it.",
+      "description": "Every 2xx GET /ghost/api/admin/newsletters/ response whose query string contains the key include loses the last member of $.newsletters; reads without include (filter=status:active) are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/newsletters/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "drop_last_member",
+      "target": {
+        "list_path": "$.newsletters",
+        "when_query_key": "include"
+      },
+      "substates": {
+        "read": {
+          "activated_responses": 0,
+          "status": "not_activated"
+        }
+      },
+      "observable_effect": "GET newsletters/?status=active&limit=100&include=count.active_members&page=1 (recorded 44x) and newsletters/?filter=status:active&include=none&limit=1 (5x) come back with an empty newsletters list, while GET newsletters/?filter=status:active (6x) still returns the default newsletter 'UISemTest-Ghost'.",
+      "paired_tests": 248,
+      "read_route_pairs_before_trigger_filter": 248,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 560.1975646271603,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 248,
+      "completed_tests": 248,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 470,
+      "activated_tests": 235,
+      "elapsed_seconds": 560.1861618748808,
+      "business_only": false,
+      "B": "completed_not_detected",
+      "B_vs_O1": "neither",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 235
+      }
+    },
+    {
+      "fault_id": "PR-G06",
+      "subject": "ghost",
+      "kind": "response",
+      "status": "included",
+      "module": "posts",
+      "business_rule": "An explicit sort order (order=) must not alter the members it sorts: a post reads back with the same title whether or not the read specifies order.",
+      "description": "Every 2xx GET /ghost/api/admin/posts/ response whose query string contains the key order has the fixed suffix ' [RQ2]' appended to the title of every post object; reads without order are untouched (no trigger write).",
+      "reads": [
+        [
+          "GET",
+          "/ghost/api/admin/posts/?"
+        ]
+      ],
+      "writes": [],
+      "operator": "rewrite_string",
+      "target": {
+        "field": "title",
+        "scope": "all",
+        "when_query_key": "order"
+      },
+      "substates": {
+        "read": {
+          "activated_responses": 0,
+          "status": "not_activated"
+        }
+      },
+      "observable_effect": "The dashboard read (order=published_at desc, recorded 44x) and the post-list reads (order=published_at desc / updated_at desc) show 'Coming soon [RQ2]' while GET posts/?filter=status:published&limit=1 (no order) shows 'Coming soon'.",
+      "paired_tests": 438,
+      "read_route_pairs_before_trigger_filter": 438,
+      "structurally_impossible_tests": [],
+      "estimated_seconds_from_normal": 1004.2455004579679,
+      "substate_status": {
+        "read": "pending_activation_evaluation"
+      },
+      "definition_ref": "<ARTIFACT_ROOT>/eval/ui_semantics/rq2-subjects-20260921/inputs/FAULT-CATALOG-SPEC.md",
+      "planned_tests": 438,
+      "completed_tests": 438,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 833,
+      "activated_tests": 438,
+      "elapsed_seconds": 994.8421009919839,
+      "business_only": false,
+      "B": "completed_not_detected",
+      "B_vs_O1": "neither",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 438
+      }
+    }
+  ],
+  "source": [
+    {
+      "fault_id": "B-G01",
+      "subject": "ghost",
+      "kind": "source",
+      "module": "posts",
+      "business_rule": "The post access level (visibility: public / members / paid) chosen in the post settings menu is persisted by the post update and returned by every later read of that post.",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "B-G02",
+      "subject": "ghost",
+      "kind": "source",
+      "module": "members",
+      "business_rule": "Deleting a member removes it: after DELETE members/{id} the member is absent from the members list and detail reads and the member counts drop accordingly.",
+      "planned_tests": 0,
+      "completed_tests": 0,
+      "missing_tests": 0,
+      "O0": "no_eligible_tests",
+      "O1": "no_eligible_tests",
+      "O2": "no_eligible_tests",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 0,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "unknown",
+      "conditional": {
+        "O0": "no_eligible_tests",
+        "O1": "no_eligible_tests",
+        "O2": "no_eligible_tests",
+        "tests": 0
+      }
+    },
+    {
+      "fault_id": "B-G03",
+      "subject": "ghost",
+      "kind": "source",
+      "module": "settings",
+      "business_rule": "Every setting submitted in one PUT settings/ batch (title and description, or meta_title and meta_description) is persisted and returned by the following settings reads.",
+      "planned_tests": 3,
+      "completed_tests": 3,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 6.8595657070109155,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "no_business_tests",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 3
+      }
+    },
+    {
+      "fault_id": "B-G04",
+      "subject": "ghost",
+      "kind": "source",
+      "module": "posts",
+      "business_rule": "A column projection (fields=) must not change which posts a browse returns: GET posts/ returns posts (type:post) and never pages, whatever projection is requested.",
+      "planned_tests": 438,
+      "completed_tests": 438,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 995.5775131269475,
+      "business_only": false,
+      "B": "completed_not_detected",
+      "B_vs_O1": "neither",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 438
+      }
+    },
+    {
+      "fault_id": "B-G05",
+      "subject": "ghost",
+      "kind": "source",
+      "module": "posts",
+      "business_rule": "The admin search index for posts (GET search-index/posts/) lists posts (type:post) only; pages have their own index (search-index/pages/), and the posts index agrees with GET posts/ on which posts exist.",
+      "planned_tests": 32,
+      "completed_tests": 32,
+      "missing_tests": 0,
+      "O0": "completed_not_detected",
+      "O1": "completed_not_detected",
+      "O2": "completed_not_detected",
+      "business_direct_alarm": false,
+      "changed_responses": 0,
+      "activated_tests": 0,
+      "elapsed_seconds": 73.9658532080357,
+      "business_only": false,
+      "B": "no_business_tests",
+      "B_vs_O1": "no_business_tests",
+      "conditional": {
+        "O0": "completed_not_detected",
+        "O1": "completed_not_detected",
+        "O2": "completed_not_detected",
+        "tests": 32
+      }
+    }
+  ],
+  "updated_at": "2026-09-21T18:11:26.490520+00:00"
+}

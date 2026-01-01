@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "current_route_s_execution_material_v1.schema.json",
+  "title": "Current Route-S execution material v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "document_kind", "candidate_id",
+    "bound_candidate_sha256", "candidate_sha256", "execution_binding", "projection_plan",
+    "observer_policy", "settle_policy", "sensitive_classification",
+    "resource_binding_plans", "protocol_shape"
+  ],
+  "properties": {
+    "schema_version": {"const": "uisemtest-current-route-s-execution-material-v1"},
+    "document_kind": {"const": "execution_material"},
+    "candidate_id": {"type": "string", "minLength": 1},
+    "bound_candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "candidate_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_binding": {"type": "object"},
+    "projection_plan": {"type": "object"},
+    "observer_policy": {"type": "object"},
+    "settle_policy": {"type": "object"},
+    "sensitive_classification": {"type": "object"},
+    "resource_binding_plans": {
+      "type": "object"
+    },
+    "request_material_bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/request_material_binding"
+      }
+    },
+    "protocol_shape": {"oneOf":[{"type":"object","required":["shape_kind","roles","observation_plan","sampling"],"properties":{"shape_kind":{"const":"single_state"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"roles":{"type":"object","required":["observation"],"properties":{"observation":{"$ref":"#/$defs/role"}},"additionalProperties":false},"observation_plan":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"object","required":["role","actor","request_ref"],"properties":{"role":{"const":"observation"},"actor":{"type":"string","minLength":1},"request_ref":{"type":"string","minLength":1}},"additionalProperties":false}},"sampling":{"type":"object","required":["instance_count","input_relation_to_generation","observation_source","generation_request_refs"],"properties":{"instance_count":{"const":1},"input_relation_to_generation":{"const":"same_input_fresh_replay"},"observation_source":{"const":"new_run"},"generation_request_refs":{"type":"array","minItems":1,"maxItems":1,"items":{"type":"string","minLength":1}}},"additionalProperties":false}},"additionalProperties":false},{"type":"object","required":["shape_kind"],"properties":{"shape_kind":{"const":"causal_two_arm"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"observer_catalog_selection":{"$ref":"#/$defs/observer_catalog_selection"}},"additionalProperties":false},{"type":"object","required":["shape_kind","roles","workflow_plan"],"properties":{"shape_kind":{"const":"lifecycle_workflow"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"workflow_kind":{"enum":["before_write_after","create_capture_read","postcondition_read","inverse_restoration","read_preservation"]},"deferred_fresh_binding":{"type":"object"},"postcondition_flow":{"type":"object","required":["producer_request_ref","after_request_ref","source_role","source_path","target_role","target_path","value_type","witness_flow_id"],"properties":{"producer_request_ref":{"type":"string","minLength":1},"after_request_ref":{"type":"string","minLength":1},"source_role":{"enum":["producer_request","producer_response"]},"source_path":{"type":"string","pattern":"^\\$"},"target_role":{"const":"after"},"target_path":{"type":"string","pattern":"^\\$"},"value_type":{"enum":["string","number","integer","boolean"]},"witness_flow_id":{"type":"string","minLength":1},"session_continuity":{"type":"object","required":["kind","actor_id","producer_request_ref","after_request_ref","response_path","target_header","witness_flow_id"],"properties":{"kind":{"const":"api_token"},"actor_id":{"type":"string","minLength":1},"producer_request_ref":{"type":"string","minLength":1},"after_request_ref":{"type":"string","minLength":1},"response_path":{"type":"string","pattern":"^\\$"},"target_header":{"const":"Authorization"},"witness_flow_id":{"type":"string","minLength":1}},"additionalProperties":false}},"additionalProperties":false},"roles":{"type":"object","required":["producer","after"],"properties":{"before":{"$ref":"#/$defs/role"},"producer":{"$ref":"#/$defs/role"},"after":{"$ref":"#/$defs/role"},"inverse":{"$ref":"#/$defs/role"}},"additionalProperties":false},"workflow_plan":{"type":"array","minItems":3,"items":{"$ref":"#/$defs/workflow_step"}}},"additionalProperties":false,"allOf":[{"if":{"properties":{"workflow_kind":{"const":"create_capture_read"}},"required":["workflow_kind"]},"then":{"required":["deferred_fresh_binding"],"properties":{"roles":{"not":{"required":["before"]}}},"not":{"required":["postcondition_flow"]}},"else":{"if":{"properties":{"workflow_kind":{"const":"postcondition_read"}},"required":["workflow_kind"]},"then":{"required":["postcondition_flow"],"properties":{"roles":{"not":{"required":["before"]}}},"not":{"required":["deferred_fresh_binding"]}},"else":{"properties":{"roles":{"required":["before"]}},"not":{"anyOf":[{"required":["deferred_fresh_binding"]},{"required":["postcondition_flow"]}]}}}},{"if":{"required":["workflow_kind"],"properties":{"workflow_kind":{"const":"inverse_restoration"}}},"then":{"properties":{"roles":{"required":["inverse"]},"workflow_plan":{"$ref":"#/$defs/inverse_restoration_plan"}}},"else":{"properties":{"roles":{"not":{"required":["inverse"]}}}}},{"if":{"required":["workflow_kind"],"properties":{"workflow_kind":{"const":"read_preservation"}}},"then":{"properties":{"workflow_plan":{"$ref":"#/$defs/read_preservation_plan"}}}}]},{"type":"object","required":["shape_kind","roles","actor_plan","identity_topology"],"properties":{"shape_kind":{"const":"actor_matrix"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"roles":{"type":"object","minProperties":3,"additionalProperties":{"$ref":"#/$defs/role"}},"actor_plan":{"$ref":"#/$defs/actor_plan"},"identity_topology":{"$ref":"#/$defs/identity_topology"}},"additionalProperties":false},{"type":"object","required":["shape_kind","transform_kind","roles","query_plan","query_scope","query_transform"],"properties":{"shape_kind":{"const":"metamorphic_query"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"transform_kind":{"enum":["filter_refinement","filter_expansion","pagination_partition","equivalent_input","sort","finite_query_plan"]},"roles":{"type":"object","minProperties":3,"additionalProperties":{"$ref":"#/$defs/role"}},"query_plan":{"type":"array","minItems":2,"items":{"type":"object"}},"query_scope":{"$ref":"#/$defs/QueryScope"},"query_transform":{"oneOf":[{"type":"null"},{"$ref":"#/$defs/QueryTransform"}]}},"additionalProperties":false},{"type":"object","required":["shape_kind","roles","projection","rejection_detector","session_boundary","negative_plan","negative_kind"],"properties":{"shape_kind":{"const":"negative_no_effect"},"roles":{"type":"object","required":["producer","before","after"],"properties":{"producer":{"$ref":"#/$defs/role"},"before":{"$ref":"#/$defs/role"},"after":{"$ref":"#/$defs/role"}},"additionalProperties":false},"negative_request_fact_ref":{"type":"string","pattern":"^negative-request-fact-[0-9a-f]{24}$"},"projection":{"oneOf":[{"$ref":"#/$defs/frozen_business_projection"},{"$ref":"test_suite.schema.json#/$defs/preservation_predicate"},{"type":"null"}]},"rejection_detector":{"$ref":"#/$defs/rejection_detector"},"session_boundary":{"$ref":"#/$defs/session_boundary"},"negative_plan":{"type":"array","minItems":2,"maxItems":5,"items":{"$ref":"#/$defs/negative_step"}},"negative_kind":{"enum":["rejection","rejection_preservation"]},"identity_topology":{"$ref":"#/$defs/identity_topology"}},"additionalProperties":false,"allOf":[{"if":{"properties":{"negative_kind":{"const":"rejection"}}},"then":{"properties":{"projection":{"type":"null"},"negative_plan":{"$ref":"#/$defs/negative_rejection_plan"},"rejection_detector":{"properties":{"kind":{"const":"predicate"}}}}},"else":{"properties":{"projection":{"not":{"type":"null"}},"negative_plan":{"$ref":"#/$defs/negative_preservation_plan"}}}}]},{"type":"object","required":["shape_kind","repetition_kind","roles","required_checks","repeated_plan"],"properties":{"shape_kind":{"const":"repeated_execution"},"repetition_kind":{"enum":["repeat_equal","repeat_rejected","repeat_delta"]},"roles":{"type":"object","required":["producer","before","after"],"properties":{"producer":{"$ref":"#/$defs/role"},"before":{"$ref":"#/$defs/role"},"after":{"$ref":"#/$defs/role"}},"additionalProperties":false},"required_checks":{"type":"array","minItems":1,"maxItems":2,"uniqueItems":true,"items":{"enum":["projection_equal","second_rejection","preservation","first_delta","second_delta"]}},"repeated_plan":{"type":"array","minItems":5,"maxItems":8,"items":{"$ref":"#/$defs/repeated_step"}},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"}},"additionalProperties":false,"allOf":[{"if":{"properties":{"repetition_kind":{"const":"repeat_equal"}}},"then":{"properties":{"required_checks":{"const":["projection_equal"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_once","step_id":"A0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_once","step_id":"A_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_once","step_id":"A1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]}}}},{"if":{"properties":{"repetition_kind":{"const":"repeat_rejected"}}},"then":{"properties":{"required_checks":{"const":["second_rejection","preservation"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]}}}},{"if":{"properties":{"repetition_kind":{"const":"repeat_delta"}}},"then":{"properties":{"required_checks":{"const":["first_delta","second_delta"]},"repeated_plan":{"const":[{"reset_epoch":"repeat_twice","step_id":"B0","kind":"observe","role":"before","occurrence_index":0},{"reset_epoch":"repeat_twice","step_id":"B_action1","kind":"request","role":"producer","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B1","kind":"observe","role":"after","occurrence_index":1},{"reset_epoch":"repeat_twice","step_id":"B_action2","kind":"request","role":"producer","occurrence_index":2},{"reset_epoch":"repeat_twice","step_id":"B2","kind":"observe","role":"after","occurrence_index":2}]}}}}]},{"type":"object","required":["shape_kind","roles","observation_plan","joint_observation"],"properties":{"shape_kind":{"const":"multi_resource"},"roles":{"type":"object","minProperties":2,"additionalProperties":{"$ref":"#/$defs/role"}},"observation_plan":{"type":"array","minItems":2,"items":{"type":"object","required":["role","phase","actor","request_ref"],"properties":{"role":{"type":"string","minLength":1},"phase":{"enum":["before","after"]},"actor":{"type":"string","minLength":1},"request_ref":{"type":"string","minLength":1}},"additionalProperties":false}},"joint_observation":{"$ref":"#/$defs/JointObservation"},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"}},"additionalProperties":false},{"type":"object","required":["shape_kind","roles","observation_plan","time_requirement"],"properties":{"shape_kind":{"const":"temporal"},"roles":{"type":"object","minProperties":2,"additionalProperties":{"$ref":"#/$defs/role"}},"observation_plan":{"type":"array","minItems":1,"items":{"type":"object","required":["role","phase","actor","request_ref"],"properties":{"role":{"type":"string","minLength":1},"phase":{"enum":["before","after"]},"actor":{"type":"string","minLength":1},"request_ref":{"type":"string","minLength":1}},"additionalProperties":false}},"read_execution_evidence":{"$ref":"#/$defs/read_execution_evidence"},"time_requirement":{"$ref":"#/$defs/TemporalRequirement"},"identity_topology":{"$ref":"#/$defs/identity_topology"}},"additionalProperties":false}]}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "single_state"}}}}},
+      "then": {
+        "properties": {
+          "execution_binding": {"required": ["producer", "observations", "setup"], "properties": {"producer": {"type": "null"}, "observations": {"type": "object", "required": ["observation"], "properties": {"observation": {"type": "object"}}, "additionalProperties": false}, "setup": {"type": "object", "required": ["single_state"], "properties": {"single_state": {"type": "array"}}, "additionalProperties": false}}},
+          "resource_binding_plans": {"required": ["single_state"], "properties": {"single_state": {"type": "object"}}, "additionalProperties": false}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "causal_two_arm"}}}}},
+      "then": {
+        "properties": {
+          "resource_binding_plans": {
+            "required": ["control", "treatment"],
+            "properties": {"control": {"type": "object"}, "treatment": {"type": "object"}},
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "lifecycle_workflow"}}}}},
+      "then": {
+        "properties": {
+          "resource_binding_plans": {
+            "required": ["workflow"],
+            "properties": {"workflow": {"type": "object"}},
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "actor_matrix"}}}}},
+      "then": {
+        "properties": {
+          "resource_binding_plans": {
+            "required": ["actor_matrix"],
+            "properties": {"actor_matrix": {"type": "object"}},
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "metamorphic_query"}}}}},
+      "then": {
+        "properties": {
+          "resource_binding_plans": {
+            "required": ["metamorphic_query"],
+            "properties": {"metamorphic_query": {"type": "object"}},
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"protocol_shape": {"properties": {"shape_kind": {"const": "negative_no_effect"}}}}},
+      "then": {
+        "properties": {
+          "resource_binding_plans": {
+            "required": ["negative_no_effect"],
+            "properties": {"negative_no_effect": {"type": "object"}},
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {"if":{"properties":{"protocol_shape":{"properties":{"shape_kind":{"const":"repeated_execution"}}}}},"then":{"allOf":[{"if":{"properties":{"protocol_shape":{"properties":{"repetition_kind":{"const":"repeat_equal"}}}}},"then":{"properties":{"execution_binding":{"required":["producer","setup","observations"],"properties":{"producer":{"$ref":"#/$defs/bound_endpoint"},"setup":{"type":"object","required":["repeat_once","repeat_twice"],"properties":{"repeat_once":{"type":"array"},"repeat_twice":{"type":"array"}},"additionalProperties":false},"observations":{"type":"object","required":["A0","A1","B0","B1","B2"],"properties":{"A0":{"$ref":"#/$defs/bound_endpoint"},"A1":{"$ref":"#/$defs/bound_endpoint"},"B0":{"$ref":"#/$defs/bound_endpoint"},"B1":{"$ref":"#/$defs/bound_endpoint"},"B2":{"$ref":"#/$defs/bound_endpoint"}},"additionalProperties":false}}},"resource_binding_plans":{"type":"object","required":["repeat_once","repeat_twice"],"properties":{"repeat_once":{"type":"object"},"repeat_twice":{"type":"object"}},"additionalProperties":false}}}},{"if":{"properties":{"protocol_shape":{"properties":{"repetition_kind":{"const":"repeat_rejected"}}}}},"then":{"properties":{"execution_binding":{"required":["producer","setup","observations"],"properties":{"producer":{"$ref":"#/$defs/bound_endpoint"},"setup":{"type":"object","required":["repeat_twice"],"properties":{"repeat_twice":{"type":"array"}},"additionalProperties":false},"observations":{"type":"object","required":["B0","B1","B2"],"properties":{"B0":{"$ref":"#/$defs/bound_endpoint"},"B1":{"$ref":"#/$defs/bound_endpoint"},"B2":{"$ref":"#/$defs/bound_endpoint"}},"additionalProperties":false}}},"resource_binding_plans":{"type":"object","required":["repeat_twice"],"properties":{"repeat_twice":{"type":"object"}},"additionalProperties":false}}}},{"if":{"properties":{"protocol_shape":{"properties":{"repetition_kind":{"const":"repeat_delta"}}}}},"then":{"properties":{"execution_binding":{"required":["producer","setup","observations"],"properties":{"producer":{"$ref":"#/$defs/bound_endpoint"},"setup":{"type":"object","required":["repeat_twice"],"properties":{"repeat_twice":{"type":"array"}},"additionalProperties":false},"observations":{"type":"object","required":["B0","B1","B2"],"properties":{"B0":{"$ref":"#/$defs/bound_endpoint"},"B1":{"$ref":"#/$defs/bound_endpoint"},"B2":{"$ref":"#/$defs/bound_endpoint"}},"additionalProperties":false}}},"resource_binding_plans":{"type":"object","required":["repeat_twice"],"properties":{"repeat_twice":{"type":"object"}},"additionalProperties":false}}}}]}},
+    {"if":{"properties":{"protocol_shape":{"properties":{"shape_kind":{"const":"lifecycle_workflow"},"workflow_kind":{"const":"inverse_restoration"}},"required":["workflow_kind"]}}},"then":{"properties":{"execution_binding":{"required":["inverse"],"properties":{"inverse":{"$ref":"#/$defs/bound_endpoint"},"observations":{"required":["workflow_intermediate"],"properties":{"workflow_intermediate":{"$ref":"#/$defs/bound_endpoint"}}}}}}}}
+  ],
+  "$defs": {"JointObservation":{"additionalProperties":false,"properties":{"consistency":{"enum":["common_version","common_as_of","no_competing_writes_workflow"],"title":"Consistency","type":"string"},"consistency_refs":{"items":{"$ref":"#/$defs/ValueRef"},"title":"Consistency Refs","type":"array"},"no_competing_writes":{"anyOf":[{"$ref":"#/$defs/HypothesisOperand"},{"type":"null"}],"default":null},"scope":{"$ref":"#/$defs/HypothesisOperand"},"query_scope":{"$ref":"#/$defs/QueryScope"}},"required":["consistency","scope"],"title":"JointObservation","type":"object"},"NumericHypothesisOperand":{"additionalProperties":false,"description":"P06-only decimal lexical source, frozen before execution.","properties":{"source":{"const":"hypothesis","title":"Source","type":"string"},"value_type":{"enum":["integer","number"],"title":"Value Type","type":"string"},"value":{"title":"Value"},"evidence_refs":{"items":{"type":"string"},"minItems":1,"title":"Evidence Refs","type":"array"},"rationale":{"minLength":1,"title":"Rationale","type":"string"},"lexical":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Lexical"}},"required":["source","value_type","value","evidence_refs","rationale"],"title":"NumericHypothesisOperand","type":"object"},"NumericRequestOperand":{"additionalProperties":false,"properties":{"source":{"const":"request","title":"Source","type":"string"},"ref":{"$ref":"#/$defs/NumericRequestValueRef"}},"required":["source","ref"],"title":"NumericRequestOperand","type":"object"},"NumericRequestValueRef":{"additionalProperties":false,"properties":{"role":{"const":"producer_request","title":"Role","type":"string"},"location":{"const":"body","title":"Location","type":"string"},"path":{"pattern":"^\\$(?:\\.[^.*\\[\\]]+)*$","title":"Path","type":"string"},"value_type":{"enum":["integer","number"],"title":"Value Type","type":"string"}},"required":["role","location","path","value_type"],"title":"NumericRequestValueRef","type":"object"},"RoleOperand":{"additionalProperties":false,"properties":{"source":{"const":"role","title":"Source","type":"string"},"ref":{"$ref":"#/$defs/ValueRef"}},"required":["source","ref"],"title":"RoleOperand","type":"object"},"TimestampEvidence":{"additionalProperties":false,"properties":{"origin_time_path":{"title":"Origin Time Path","type":"string"},"clock_id_path":{"title":"Clock Id Path","type":"string"},"items_path":{"title":"Items Path","type":"string"},"time_path":{"title":"Time Path","type":"string"},"unit":{"enum":["nanoseconds","milliseconds","seconds"],"title":"Unit","type":"string"},"value_path":{"default":"$","title":"Value Path","type":"string"},"end_time_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"End Time Path"},"coverage_start_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Coverage Start Path"},"coverage_end_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Coverage End Path"},"complete_path":{"anyOf":[{"type":"string"},{"type":"null"}],"default":null,"title":"Complete Path"}},"required":["origin_time_path","clock_id_path","items_path","time_path","unit"],"title":"TimestampEvidence","type":"object"},"TemporalRequirement":{"additionalProperties":false,"properties":{"kind":{"enum":["deadline_state","appearance_preservation","event_occurrence"],"title":"Kind","type":"string"},"observation_mode":{"enum":["returned_sample","sampled","exact_time","continuous","event_log"],"title":"Observation Mode","type":"string"},"origin":{"enum":["send","ack","event"],"title":"Origin","type":"string"},"unit":{"enum":["nanoseconds","milliseconds","seconds"],"title":"Unit","type":"string"},"duration_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"}],"title":"Duration Parameter"},"hold_duration_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Hold Duration Parameter"},"error_before_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Error Before Parameter"},"error_after_parameter":{"anyOf":[{"$ref":"#/$defs/NumericHypothesisOperand"},{"$ref":"#/$defs/NumericRequestOperand"},{"$ref":"#/$defs/RoleOperand"},{"type":"null"}],"default":null,"title":"Error After Parameter"},"timestamp_evidence":{"anyOf":[{"$ref":"#/$defs/TimestampEvidence"},{"type":"null"}],"default":null}},"required":["kind","observation_mode","origin","unit","duration_parameter"],"title":"TemporalRequirement","type":"object"},
+    "negative_rejection_plan": {"type":"array","minItems":2,"maxItems":2,"prefixItems":[{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"negative_producer"}}}]},{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"rejection_gate"}}}]}],"items":false},
+    "negative_preservation_plan": {"type":"array","minItems":5,"maxItems":5,"prefixItems":[{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"before"}}}]},{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"negative_producer"}}}]},{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"rejection_gate"}}}]},{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"settle"}}}]},{"allOf":[{"$ref":"#/$defs/negative_step"},{"properties":{"step_id":{"const":"after"}}}]}],"items":false},
+    "inverse_restoration_plan": {"type":"array","minItems":6,"maxItems":6,"prefixItems":[{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"before"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"producer"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"intermediate"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"inverse"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"settle"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"after"}}}]}],"items":false},
+    "read_preservation_plan": {"type":"array","minItems":4,"maxItems":4,"prefixItems":[{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"before"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"producer"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"settle"}}}]},{"allOf":[{"$ref":"#/$defs/workflow_step"},{"properties":{"step_id":{"const":"after"}}}]}],"items":false},
+    "actor_plan": {"type":"array","minItems":4,"maxItems":4,"prefixItems":[{"allOf":[{"$ref":"#/$defs/actor_step"},{"properties":{"step_id":{"const":"before"}}}]},{"allOf":[{"$ref":"#/$defs/actor_step"},{"properties":{"step_id":{"const":"producer"}}}]},{"allOf":[{"$ref":"#/$defs/actor_step"},{"properties":{"step_id":{"const":"settle"}}}]},{"allOf":[{"$ref":"#/$defs/actor_step"},{"properties":{"step_id":{"const":"after"}}}]}],"items":false},
+    "repeated_step": {"oneOf":[{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_once"},"step_id":{"const":"A1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B0"},"kind":{"const":"observe"},"role":{"const":"before"},"occurrence_index":{"const":0}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action1"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":1}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B1"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":1}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B_action2"},"kind":{"const":"request"},"role":{"const":"producer"},"occurrence_index":{"const":2}},"additionalProperties":false},{"type":"object","required":["reset_epoch","step_id","kind","role","occurrence_index"],"properties":{"reset_epoch":{"const":"repeat_twice"},"step_id":{"const":"B2"},"kind":{"const":"observe"},"role":{"const":"after"},"occurrence_index":{"const":2}},"additionalProperties":false}]},
+    "identity_topology": {"type":"object","required":["left_actor_id","right_actor_id","left_session_ref","right_session_ref","principal_relation","session_relation","verification_source","verified"],"properties":{"left_actor_id":{"type":"string","minLength":1},"right_actor_id":{"type":"string","minLength":1},"left_session_ref":{"type":"string","minLength":1},"right_session_ref":{"type":"string","minLength":1},"principal_relation":{"enum":["same","different"]},"session_relation":{"enum":["same","different"]},"verification_source":{"enum":["authenticated_probe","same_authenticated_session"]},"verified":{"const":true}},"additionalProperties":false},
+    "session_boundary": {"type":"object","required":["kind","negative_request_ref"],"properties":{"kind":{"enum":["recorded_logout_and_runtime_auth_absence","recorded_auth_preserved"]},"event_id":{"type":"string","minLength":1},"setup_request_ref":{"type":"string","minLength":1},"negative_request_ref":{"type":"string","minLength":1}},"additionalProperties":false},
+    "rejection_detector": {"oneOf":[{"$ref":"#/$defs/client_error_detector"},{"type":"object","required":["kind","predicate"],"properties":{"kind":{"const":"predicate"},"predicate":{"$ref":"test_suite.schema.json#/$defs/rejection_predicate"}},"additionalProperties":false}]},
+    "workflow_step": {"oneOf":[{"type":"object","required":["step_id","request_ref"],"properties":{"step_id":{"enum":["before","after"]},"request_ref":{"type":"string","minLength":1},"source":{"const":"recorded_checkpoint"}},"additionalProperties":false},{"type":"object","required":["step_id","request_ref"],"properties":{"step_id":{"enum":["producer","inverse","intermediate"]},"request_ref":{"type":"string","minLength":1}},"additionalProperties":false},{"type":"object","required":["step_id","source"],"properties":{"step_id":{"const":"settle"},"source":{"const":"profile_settle_policy"}},"additionalProperties":false},{"type":"object","required":["step_id","source_role"],"properties":{"step_id":{"const":"capture_fresh_identity"},"source_role":{"const":"producer_response"}},"additionalProperties":false}]},
+    "negative_step": {"oneOf":[{"type":"object","required":["step_id","request_ref"],"properties":{"step_id":{"enum":["before","after"]},"request_ref":{"type":"string","minLength":1},"source":{"const":"recorded_checkpoint"}},"additionalProperties":false},{"type":"object","required":["step_id","request_ref"],"properties":{"step_id":{"const":"negative_producer"},"request_ref":{"type":"string","minLength":1}},"additionalProperties":false},{"type":"object","required":["step_id"],"properties":{"step_id":{"const":"rejection_gate"},"detector":{"const":"client_error"}},"additionalProperties":false},{"type":"object","required":["step_id","source"],"properties":{"step_id":{"const":"settle"},"source":{"const":"profile_settle_policy"}},"additionalProperties":false}]},
+    "actor_step": {"oneOf":[{"type":"object","required":["step_id","role"],"properties":{"step_id":{"enum":["before","after"]},"role":{"type":"string","pattern":"^actor_(?:before|after):[A-Za-z][A-Za-z0-9_-]{0,63}$"}},"additionalProperties":false},{"type":"object","required":["step_id","role"],"properties":{"step_id":{"const":"producer"},"role":{"const":"producer"}},"additionalProperties":false},{"type":"object","required":["step_id","source"],"properties":{"step_id":{"const":"settle"},"source":{"const":"profile_settle_policy"}},"additionalProperties":false}]},
+    "bound_endpoint": {"type":"object","required":["actor_id","method","path","request_ref","request_shape_sha256"],"properties":{"actor_id":{"type":"string","minLength":1},"method":{"type":"string","pattern":"^[A-Z]+$"},"path":{"type":"string","minLength":1},"request_ref":{"type":"string","minLength":1},"request_shape_sha256":{"type":"string","pattern":"^[0-9a-f]{64}$"},"graphql_operation_kind":{"enum":["query","mutation","unknown"]},"action_ref":{"type":"string","minLength":1}},"additionalProperties":false},
+    "observer_catalog_selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source", "operation_id", "catalog_operation_sha256", "request_ref",
+        "actor_id", "session_run_id", "method", "canonical_path",
+        "selector_snapshot_sha256", "response_body_shape_sha256", "template_sha256"
+      ],
+      "properties": {
+        "source": {"const": "observed_api_catalog"},
+        "operation_id": {"type": "string", "minLength": 1},
+        "catalog_operation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "request_ref": {"type": "string", "minLength": 1},
+        "actor_id": {"type": "string", "minLength": 1},
+        "session_run_id": {"type": "string", "minLength": 1},
+        "method": {"type": "string", "pattern": "^[A-Z]+$"},
+        "canonical_path": {"type": "string", "minLength": 1},
+        "selector_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "response_body_shape_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "template_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "request_material_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "provenance_kind",
+        "request_ref",
+        "actor_id",
+        "session_run_id",
+        "request_entry_index",
+        "location",
+        "target_path",
+        "scalar_type",
+        "redaction_token_sha256",
+        "source_action_ref",
+        "source_event_id",
+        "source_workflow_step_id",
+        "source_global_order",
+        "target_event_id",
+        "target_global_order",
+        "source_action_sha256"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "uisemtest-current-recorded-input-material-binding-v1"
+        },
+        "provenance_kind": {
+          "const": "unique_preceding_unmatched_input"
+        },
+        "request_ref": {"type": "string", "minLength": 1},
+        "actor_id": {"type": "string", "minLength": 1},
+        "session_run_id": {"type": "string", "minLength": 1},
+        "request_entry_index": {"type": "integer", "minimum": 0},
+        "location": {"const": "body"},
+        "target_path": {"type": "string", "pattern": "^\\$"},
+        "scalar_type": {"const": "string"},
+        "redaction_token_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_action_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["run_id", "action_id"],
+          "properties": {
+            "run_id": {"type": "string", "minLength": 1},
+            "action_id": {"type": "string", "minLength": 1}
+          }
+        },
+        "source_event_id": {"type": "string", "minLength": 1},
+        "source_workflow_step_id": {"type": "string", "minLength": 1},
+        "source_global_order": {"type": "integer", "minimum": 0},
+        "target_event_id": {"type": "string", "minLength": 1},
+        "target_global_order": {"type": "integer", "minimum": 0},
+        "source_material_kind": {
+          "enum": ["recorded_action_value", "workflow_value_env"]
+        },
+        "source_value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "source_value_env": {"type": "string", "minLength": 1},
+        "source_action_kind": {"enum": ["fill", "input", "type"]},
+        "source_global_step_index": {"type": "integer", "minimum": 0},
+        "source_workflow_ref": {
+          "type": "string",
+          "pattern": "^inputs/recording/workflows/[0-9a-f]{64}\\.json$"
+        },
+        "source_workflow_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "recorded_value_hash_prefix": {
+          "type": "string",
+          "pattern": "^[0-9a-f]+$"
+        },
+        "source_action_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "source_material_kind": {"const": "recorded_action_value"}
+          },
+          "required": ["source_material_kind", "source_value_sha256"]
+        },
+        {
+          "properties": {
+            "source_material_kind": {"const": "workflow_value_env"}
+          },
+          "required": [
+            "source_material_kind", "source_value_env", "source_action_kind",
+            "source_global_step_index", "source_workflow_ref",
+            "source_workflow_sha256", "recorded_value_hash_prefix"
+          ]
+        }
+      ]
+    },
+    "read_execution_evidence": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind", "selector_paths", "selector_body_sha256", "response_collection_paths",
+          "repeated_observation_request_refs"
+        ],
+        "properties": {
+          "kind": {"const": "recorded_post_query"},
+          "selector_paths": {
+            "type": "array", "minItems": 1,
+            "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+          },
+          "selector_body_sha256": {
+            "type": "string", "pattern": "^[0-9a-f]{64}$"
+          },
+          "response_collection_paths": {
+            "type": "array", "minItems": 1,
+            "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+          },
+          "repeated_observation_request_refs": {
+            "type": "array", "minItems": 1,
+            "items": {"type": "string", "minLength": 1}, "uniqueItems": true
+          }
+        }
+      }
+    },
+    "role": {
+      "type": "object",
+      "required": ["actor", "request_ref"],
+      "properties": {
+        "actor": {"type": "string", "minLength": 1},
+        "request_ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "client_error_detector": {
+      "type": "object",
+      "required": ["kind", "expected_class"],
+      "properties": {
+        "kind": {"const": "http_status_class"},
+        "expected_class": {"const": "client_error"}
+      },
+      "additionalProperties": false
+    },
+    "frozen_business_projection": {
+      "type": "object",
+      "required": [
+        "projection_ref", "before_request_ref", "after_request_ref",
+        "operation_id", "resource_identity", "path", "value_type",
+        "normalization", "excluded_paths"
+      ],
+      "properties": {
+        "projection_ref": {
+          "type": "string",
+          "pattern": "^state-projection-[0-9a-f]{24}$"
+        },
+        "before_request_ref": {"type": "string", "minLength": 1},
+        "after_request_ref": {"type": "string", "minLength": 1},
+        "operation_id": {"type": "string", "minLength": 1},
+        "resource_identity": {
+          "const": "exact_recorded_request_target_equal_value_not_persisted"
+        },
+        "path": {"type": "string", "pattern": "^\\$"},
+        "value_type": {
+          "enum": ["object", "array", "string", "number", "integer", "boolean", "null"]
+        },
+        "normalization": {
+          "const": "typed_canonical_json_object_keys_array_order_preserved_no_coercion"
+        },
+        "excluded_paths": {"type": "array", "maxItems": 0}
+      },
+      "additionalProperties": false
+    },
+    "HypothesisOperand": {"additionalProperties": false, "properties": {"source": {"const": "hypothesis", "title": "Source", "type": "string"}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"], "title": "Value Type", "type": "string"}, "value": {"title": "Value"}, "evidence_refs": {"items": {"type": "string"}, "minItems": 1, "title": "Evidence Refs", "type": "array"}, "rationale": {"minLength": 1, "title": "Rationale", "type": "string"}}, "required": ["source", "value_type", "value", "evidence_refs", "rationale"], "title": "HypothesisOperand", "type": "object"},
+    "QueryClosure": {"additionalProperties": false, "properties": {"roles": {"items": {"type": "string"}, "minItems": 1, "title": "Roles", "type": "array"}, "collection_path": {"pattern": "^\\$(?:\\.[^.*\\[\\]]+)*$", "title": "Collection Path", "type": "string"}, "termination": {"$ref": "#/$defs/QueryTermination"}, "traversal": {"$ref": "#/$defs/HypothesisOperand"}}, "required": ["roles", "collection_path", "termination", "traversal"], "title": "QueryClosure", "type": "object"},
+    "QueryTermination": {"additionalProperties": false, "properties": {"kind": {"enum": ["terminal_value", "total_count"], "title": "Kind", "type": "string"}, "ref": {"$ref": "#/$defs/ValueRef"}, "expected": {"anyOf": [{"$ref": "#/$defs/HypothesisOperand"}, {"type": "null"}], "default": null}}, "required": ["kind", "ref"], "title": "QueryTermination", "type": "object"},
+    "ValueRef": {"additionalProperties": false, "properties": {"role": {"minLength": 1, "title": "Role", "type": "string"}, "path": {"minLength": 1, "title": "Path", "type": "string"}, "value_type": {"enum": ["object", "array", "string", "number", "integer", "boolean", "null"], "title": "Value Type", "type": "string"}}, "required": ["role", "path", "value_type"], "title": "ValueRef", "type": "object"},
+    "QueryScope": {"additionalProperties": false, "properties": {"scope": {"default": "actual_response", "enum": ["actual_response", "finite_query_plan"], "title": "Scope", "type": "string"}, "closures": {"items": {"$ref": "#/$defs/QueryClosure"}, "title": "Closures", "type": "array"}}, "title": "QueryScope", "type": "object"},
+    "QueryTransform": {"additionalProperties": false, "properties": {"kind": {"enum": ["equivalent_input", "filter_refinement", "filter_expansion", "sort", "pagination_partition", "finite_query_plan"], "title": "Kind", "type": "string"}, "location": {"enum": ["query", "body"], "title": "Location", "type": "string"}, "keys": {"items": {"type": "string"}, "minItems": 1, "title": "Keys", "type": "array"}, "semantics": {"$ref": "#/$defs/HypothesisOperand"}}, "required": ["kind", "location", "keys", "semantics"], "title": "QueryTransform", "type": "object"}
+  }
+}
